@@ -1,5 +1,12 @@
 #version 120
 
+in vec4 color;
+in vec2 texCoord;
+
+uniform sampled2D albedo;
+
+varying out vec4 outColor;
+
 void main() {
-	gl_FragColor = vec4(1.0, 0.0, 0.5, 1.0);
+	outColor = color;
 }

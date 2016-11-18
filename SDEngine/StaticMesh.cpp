@@ -11,8 +11,18 @@ StaticMesh::StaticMesh(Vertex* Verticies, unsigned int NumVertecies) {
 	glBindBuffer(GL_ARRAY_BUFFER, S_VertexArrayBuffers[POSITION_VB]);
 	glBufferData(GL_ARRAY_BUFFER, NumVertecies * sizeof(Verticies[0]), Verticies, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0); //Skip over Vertex Colors
+	GLint posAttrib;
+	glEnableVertexAttribArray(posAttrib);
+	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, false, NumVertecies * sizeof(Verticies[0]), 0);
+
+	GLint texCoordAttrib;
+	glEnableVertexAttribArray(texCoordAttrib);
+	glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, false, NumVertecies * sizeof(Verticies[0]), (void*)(3 * sizeof(float)));
+
+	GLuint colorBuffer;
+	glGenBuffers(1, &colorBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, NumVertecies * sizeof(Verticies[0]), (void*)(5 * sizeof(float)), GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 }

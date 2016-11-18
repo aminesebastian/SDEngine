@@ -14,6 +14,7 @@ Shader::Shader(const std::string& ShaderName) {
 	}
 
 	glBindAttribLocation(S_Program, 0, "position");
+	glBindFragDataLocation(S_Program, 0, "outColor");
 
 	glLinkProgram(S_Program);
 	CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed: ");
@@ -86,7 +87,9 @@ void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 		std::cerr << errorMessage << ": '" << error << "'" << std::endl;
 	}
 }
-
+GLuint Shader::GetShaderProgram() {
+	return S_Program;
+}
 
 void Shader::Bind() {
 	glUseProgram(S_Program);

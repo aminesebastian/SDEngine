@@ -5,13 +5,14 @@
 #include "StaticMesh.h"
 
 #undef main
+using namespace glm;
 int main(int argc, char* argv[]) {
 	Display display(1280, 720, "SD Engine", 8);
 	Shader shader("./Res/BasicShader");
 
-	Vertex verticies[] = { Vertex(glm::vec3(-0.5,-0.5,0)) ,
-							Vertex(glm::vec3(0,0.5,0)) ,
-							Vertex(glm::vec3(0.5,-0.5,0)) };
+	Vertex verticies[] = { Vertex(vec3(-0.5,-0.5,0)) ,
+							Vertex(vec3(0,0.75,0)) ,
+							Vertex(vec3(0.5,-0.5,0))};
 
 	StaticMesh mesh(verticies, sizeof(verticies) / sizeof(verticies[0]));
 

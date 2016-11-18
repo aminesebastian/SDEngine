@@ -9,10 +9,12 @@ enum class EShaderType {
 class Shader {
 
 public:
+	Shader() {}
 	Shader(const std::string& ShaderName);
 	virtual ~Shader();
 
 	void Bind();
+	GLuint GetShaderProgram();
 
 private:
 	Shader(const Shader& other) {}
