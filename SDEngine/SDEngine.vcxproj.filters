@@ -22,6 +22,12 @@
     <ClCompile Include="StaticMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImageUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -31,6 +37,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="StaticMesh.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtils.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
