@@ -1,0 +1,24 @@
+﻿Build started 11/17/2016 9:51:55 PM.
+     1>Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I.\Include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Display.cpp Main.cpp
+         Display.cpp
+         Generating Code...
+         Compiling...
+         Main.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\SD_Engine\SDEngine\Debug\SDEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\Lib glew32.lib glew32s.lib SDL2.lib SDL2main.lib SDL2test.lib OpenGL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"G:\SD_Engine\SDEngine\Debug\SDEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\SD_Engine\SDEngine\Debug\SDEngine.lib" /MACHINE:X86 Debug\Display.obj
+         Debug\Main.obj
+     1>MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+     1>.\Lib\glew32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+     1>.\Lib\glew32s.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+     1>.\Lib\SDL2.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+     1>.\Lib\SDL2main.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+     1>.\Lib\SDL2test.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+     1>G:\SD_Engine\SDEngine\Debug\SDEngine.exe : fatal error LNK1120: 1 unresolved externals
+     1>Done Building Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.47
