@@ -11,6 +11,7 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, BitDepth);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, BitDepth);
 
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, BitDepth*2);
 	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, BitDepth*4);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -24,6 +25,11 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 	}
 
 	bIsClosed = false;
+
+	glEnable(GL_DEPTH_TEST);
+
+	S_Width = Width;
+	S_Height = Height;
 }
 Display::~Display() {
 	SDL_GL_DeleteContext(S_GLContext);
@@ -37,15 +43,10 @@ bool Display::IsClosed() {
 void Display::Clear(float R, float G, float B, float A) {
 	glClearColor(R, G, B, A);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 }
 void Display::Update() {
 	SDL_GL_SwapWindow(S_Window);
 
-	SDL_Event e;
-
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
-			bIsClosed = true;
-		}
-	}
+	//SDL_Event e;
 }

@@ -3,51 +3,52 @@
 #include <GLEW/glew.h>
 #include <string>
 #include "Shader.h"
+#include "ObjLoader.h"
+#include "Entity.h"
+#include "Material.h"
 
 using namespace glm;
 
 class Vertex {
 
 public:
-	Vertex(const vec3& Position, const vec2& TextureCoord, const vec4& Color) {
+	Vertex(const vec3& Position, const vec2& TexCoord = vec2(0,0), const vec4& Color = vec4(1,1,1,1), const vec3& Normal = vec3(0, 0, 0)) {
 		this->Position = Position;
-		this->TextureCoord = TextureCoord;
+		this->TexCoord = TexCoord;
 		this->Color = Color;
+		this->Normal = Normal;
 	}
-	Vertex(const vec3& Position, const vec2& TextureCoord) {
-		this->Position = Position;
-		this->TextureCoord = TextureCoord;
-		this->Color = { 1,1,1,1 };
-	}
-	Vertex(const vec3& Position, const vec4& Color) {
-		this->Position = Position;
-		this->TextureCoord = { 1,1 };
-		this->Color = Color;
-	}
-	Vertex(const vec3& Position) {
-		this->Position = Position;
-		this->TextureCoord = { 1,1 };
-		this->Color = { 1,1,1,1 };
-	}
+
+	inline vec3 GetPosition() { return Position; }
+	inline vec2 GetTexCoord() { return TexCoord; }
+	inline vec3 GetNormal() { return Normal; }
+
 private:
 	vec3 Position;
-	vec2 TextureCoord;
+	vec2 TexCoord;
+	vec3 Normal;
 	vec4 Color;
 };
 
-class StaticMesh {
+class StaticMesh : public Entity {
 
 public:
-	StaticMesh(Vertex* Verticies, unsigned int NumVertecies);
+	StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
+	StaticMesh(const Transform& SpawnTransform, const std::string& FileName);
+
 	virtual ~StaticMesh();
 
-	void Draw();
+	virtual void Draw() override;
 
 private:
 	void operator=(const StaticMesh& other) {}
+	void InitMesh(const IndexedModel& model);
 
 	enum {
 		POSITION_VB,
+		TEXCOORD_VB,
+		NORMAL_VB,
+		INDEX_VB,
 
 		NUM_BUFFERS
 	};
@@ -55,6 +56,5 @@ private:
 	GLuint S_VertexArrayObject;
 	GLuint S_VertexArrayBuffers[NUM_BUFFERS];
 	unsigned int S_DrawCount;
-
 };
 
