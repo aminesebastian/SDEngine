@@ -1,32 +1,10 @@
-﻿Build started 11/20/2016 12:58:06 AM.
-     1>Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I./Include /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Main.cpp
-         Main.cpp
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(38): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(41): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(44): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(47): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(66): warning C4305: '=': truncation from 'double' to 'float'
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(77): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\main.cpp(82): warning C4305: 'argument': truncation from 'double' to 'float'
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\Lib glew32.lib glew32s.lib SDL2.lib SDL2main.lib SDL2test.lib AntTweakBar64.lib OpenGL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.lib" /MACHINE:X64 x64\Debug\Camera.obj
-         x64\Debug\Display.obj
-         x64\Debug\Entity.obj
-         x64\Debug\GBuffer.obj
-         x64\Debug\Main.obj
-         x64\Debug\Material.obj
-         x64\Debug\ObjLoader.obj
-         x64\Debug\Shader.obj
-         x64\Debug\StaticMesh.obj
-         x64\Debug\ImageUtils.obj
-         x64\Debug\Texture2D.obj
-         x64\Debug\Transform.obj
-         x64\Debug\World.obj
-         SDEngine.vcxproj -> G:\SD_Engine\SDEngine\x64\Debug\SDEngine.exe
-     1>Done Building Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:01.15
+﻿  Main.cpp
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(42): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(45): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(48): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(51): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(106): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(116): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(120): warning C4305: 'argument': truncation from 'double' to 'float'
+  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\SDEngine\x64\Debug\SDEngine.exe
+  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\SDEngine\x64\Debug\SDEngine.pdb (Full PDB)

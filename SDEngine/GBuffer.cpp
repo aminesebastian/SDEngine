@@ -1,63 +1,46 @@
-#include <stdio.h>
-
 #include "GBuffer.h"
+#include <iostream>
 
 GBuffer::GBuffer() {
 	S_FBO = 0;
-	S_DepthBuffer = 0;
 }
 
 GBuffer::~GBuffer() {
 	if (S_FBO != 0) {
 		glDeleteFramebuffers(1, &S_FBO);
 	}
-
 	if (S_Textures[0] != 0) {
 		glDeleteTextures(GBUFFER_NUM_TEXTURES, S_Textures);
 	}
-
-	if (S_Textures != 0) {
-		glDeleteTextures(1, &S_DepthBuffer);
-	}
 }
 
-
 bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
-	// Create the FBO
 	glGenFramebuffers(1, &S_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, S_FBO);
 
-	// Create the gbuffer textures
-	glGenTextures(GBUFFER_NUM_TEXTURES, S_Textures);
-	glGenTextures(1, &S_DepthBuffer);
-
-	for (unsigned int i = 0; i < GBUFFER_NUM_TEXTURES; i++) {
+	for (int i = 0; i < GBUFFER_NUM_TEXTURES; i++) {
+		glGenTextures(1, &S_Textures[i]);
 		glBindTexture(GL_TEXTURE_2D, S_Textures[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, WindowWidth, WindowHeight, 0, GL_RGB, GL_FLOAT, NULL);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, S_Textures[i], 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, WindowWidth, WindowHeight, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, S_Textures[i], 0);
 	}
 
-	// depth
-	glBindTexture(GL_TEXTURE_2D, S_DepthBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, WindowWidth, WindowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, S_DepthBuffer, 0);
+	GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
+	glDrawBuffers(4, attachments);
 
-	GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0,
-		GL_COLOR_ATTACHMENT1,
-		GL_COLOR_ATTACHMENT2,
-		GL_COLOR_ATTACHMENT3 };
+	glGenRenderbuffers(1, &S_DepthBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, S_DepthBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, WindowWidth, WindowHeight);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, S_DepthBuffer);
 
-	glDrawBuffers(4, DrawBuffers);
-
-	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-	if (Status != GL_FRAMEBUFFER_COMPLETE) {
-		printf("FB error, status: 0x%x\n", Status);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cerr << "Framebuffer not complete!" << std::endl;
 		return false;
 	}
 
-	// restore default FBO
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return true;
 }

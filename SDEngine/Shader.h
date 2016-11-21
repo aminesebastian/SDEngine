@@ -20,12 +20,9 @@ public:
 		const vec3& LightColor, const float& LightIntensity);
 	void RecompileShader();
 
-	GLuint* GetShaderProgram();
+	GLuint S_Program;
 
 private:
-	Shader(const Shader& other) {}
-	void operator=(const Shader& other) {}
-
 	enum {
 		TRANSFORM_U,
 		AMBIENT_COLOR_U,
@@ -47,7 +44,7 @@ private:
 	GLuint CreateShader(const std::string& text, GLenum ShaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
 
-	GLuint S_Program;
+
 	GLuint S_Shaders[NUM_SHADERS];
 	GLuint S_Uniforms[NUM_UNIFORMS];
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.h"
+#include "Shader.h"
 
 class Entity {
 
@@ -10,7 +11,7 @@ public:
 	Entity() {}
 	virtual ~Entity();
 
-	virtual void Draw() {}
+	virtual void Draw(Shader shader) {}
 
 	Transform& GetTransform() { return S_Transform; }
 protected:

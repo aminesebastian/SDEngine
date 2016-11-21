@@ -176,6 +176,10 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\DefferedShader.fs" />
+    <None Include="Res\DefferedShader.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -4,7 +4,10 @@
 #include "ImageUtils.h"
 
 
-Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour) {
+Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour, const std::string& Type, int ID) {
+	this->Type = Type;
+	this->ID = ID;
+	
 	int width, height, numComponents;
 	unsigned char* imageData = stbi_load((FileName).c_str(), &width, &height, &numComponents, ExpectedComponents);
 

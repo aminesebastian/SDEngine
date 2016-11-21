@@ -6,6 +6,7 @@
 #include "ObjLoader.h"
 #include "Entity.h"
 #include "Material.h"
+#include "Texture2D.h"
 
 using namespace glm;
 
@@ -38,8 +39,9 @@ public:
 
 	virtual ~StaticMesh();
 
-	virtual void Draw() override;
+	virtual void Draw(Shader shader) override;
 
+	void RegisterTexture(Texture2D texture) { Textures.push_back(texture); }
 private:
 	void operator=(const StaticMesh& other) {}
 	void InitMesh(const IndexedModel& model);
@@ -56,5 +58,6 @@ private:
 	GLuint S_VertexArrayObject;
 	GLuint S_VertexArrayBuffers[NUM_BUFFERS];
 	unsigned int S_DrawCount;
+	std::vector<Texture2D> Textures;
 };
 

@@ -1,5 +1,6 @@
 #include "StaticMesh.h"
 #include <vector>
+#include <sstream>
 
 StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& FileName) {
 	InitMesh(OBJModel(FileName).ToIndexedModel());
@@ -64,10 +65,30 @@ void StaticMesh::InitMesh(const IndexedModel& model) {
 
 	glBindVertexArray(0);
 }
-void StaticMesh::Draw() {
+void StaticMesh::Draw(Shader shader) {
+	GLuint albedoCount = 1;
+	GLuint roughCount = 1;
+	for (GLuint i = 0; i < this->Textures.size(); i++) {
+		glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
+										  // Retrieve texture number (the N in diffuse_textureN)
+		std::stringstream ss;
+		std::string number;
+		std::string name = this->Textures[i].GetType();
+		if (name == "tex_albedo") {
+			ss << albedoCount++;
+		}else if (name == "tex_roughness") {
+			ss << roughCount++;
+		}
+		number = ss.str();
+
+
+		glUniform1f(glGetUniformLocation(shader.S_Program, (name + number).c_str()), i);
+		glBindTexture(GL_TEXTURE_2D, this->Textures[i].GetID());
+	}
+	glActiveTexture(GL_TEXTURE0);
+
+	// Draw mesh
 	glBindVertexArray(S_VertexArrayObject);
-
 	glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
-
 	glBindVertexArray(0);
 }

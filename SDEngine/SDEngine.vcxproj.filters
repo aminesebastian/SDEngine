@@ -8,6 +8,9 @@
     <Filter Include="Headers">
       <UniqueIdentifier>{ca49810e-d583-4551-8709-1898e938dfb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{13a7b081-ef44-4d30-b7b2-3e2df88b24ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -84,6 +87,16 @@
     <ClInclude Include="GBuffer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h" />
+    <ClInclude Include="Material.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\DefferedShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\DefferedShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

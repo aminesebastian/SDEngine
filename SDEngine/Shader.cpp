@@ -101,9 +101,6 @@ void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 		std::cerr << errorMessage << ": '" << error << "'" << std::endl;
 	}
 }
-GLuint* Shader::GetShaderProgram() {
-	return &S_Program;
-}
 
 void Shader::Bind() {
 	glUseProgram(S_Program);

@@ -16,15 +16,19 @@ using namespace glm;
 float deltaTime = 0.0f;
 float worldTime = 0.0f;
 std::vector<Entity*> entityList;
-Display display(1680, 1050, "SD Engine", 8);
+Display display(1280, 720, "SD Engine", 8);
 GBuffer S_Buffer;
+Shader shader("./Res/DefferedShader");
+int lastMouseX = 0;
+int lastMouseY = 0;
+Camera camera(vec3(0, 0, -3), 70, display.GetAspectRatio(), 0.01f, 1000.0f);
 
 void statUnit() {
 	system("cls");
 	std::cout << "Delta Time: " << deltaTime * 1000 << "ms" << std::endl;
 	std::cout << "Frame Rate: " << 1.0f / deltaTime << "fps" << std::endl;
 }
-void DSLightPass() {
+void LightPass() {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -37,7 +41,7 @@ void DSLightPass() {
 	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glBlitFramebuffer(0, 0, display.GetDimensions().x, display.GetDimensions().y, 0, HalfHeight, HalfWidth, display.GetDimensions().y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL); 
+	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
 	glBlitFramebuffer(0, 0, display.GetDimensions().x, display.GetDimensions().y, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
@@ -47,17 +51,53 @@ void DSLightPass() {
 	glBlitFramebuffer(0, 0, display.GetDimensions().x, display.GetDimensions().y, HalfWidth, 0, display.GetDimensions().x, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 }
+void DSGeometryPass() {
+	S_Buffer.BindForWriting();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+}
+void Movement() {
+	SDL_Event e;
+	while (SDL_PollEvent(&e)) {
+		if (e.type == SDL_QUIT) {
+			display.CloseDisplay();
+		}
+		if (e.type == SDL_KEYDOWN) {
+			shader.RecompileShader();
+		}
+		if (e.type == SDL_MOUSEMOTION) {
+			if (e.motion.state & SDL_BUTTON_LMASK) {
+				entityList[0]->GetTransform().GetRotation().y += (float)(e.motion.x - lastMouseX) / 250.0f;
+				entityList[0]->GetTransform().GetRotation().x += (float)(e.motion.y - lastMouseY) / 250.0f;
+
+				lastMouseX = e.motion.x;
+				lastMouseY = e.motion.y;
+			}
+			else if (e.motion.state & SDL_BUTTON_MMASK) {
+				entityList[0]->GetTransform().GetPosition().x -= (float)(e.motion.x - lastMouseX) / 250.0f;
+				entityList[0]->GetTransform().GetPosition().y -= (float)(e.motion.y - lastMouseY) / 250.0f;
+				lastMouseX = e.motion.x;
+				lastMouseY = e.motion.y;
+			}
+			else {
+				lastMouseX = e.motion.x;
+				lastMouseY = e.motion.y;
+			}
+		}
+		if (e.type == SDL_MOUSEWHEEL) {
+			camera.GetCameraPosition().z = clamp(camera.GetCameraPosition().z + ((float)e.wheel.y / 35.0f), -3.0f, -1.5f);
+		}
+	}
+}
 int main(int argc, char* argv[]) {
-	Shader shader("./Res/DefferedShader");
 	Texture2D texture("./res/T_BookBaseColor.tga");
 
 	vec3 ambientColor(1.0, 1.0, 0.9);
 	vec3 directionalLight(0.0, 0.0, 1.0);
 	float ambientIntensity = 0.1f;
 	float directionalIntensity = 15.0f;
-
-	Camera camera(vec3(0, 0, -3), 70, display.GetAspectRatio(), 0.01f, 1000.0f);
-
 
 	Transform transform1;
 	transform1.GetScale().x = 0.04f;
@@ -67,56 +107,27 @@ int main(int argc, char* argv[]) {
 
 	StaticMesh monkeyHead(transform1, "./res/Book.obj");
 	entityList.push_back(&monkeyHead);
+	monkeyHead.RegisterTexture(texture);
 
 	long last = 0;
 	int currentCount = 0;
 	int debugCount = 5;
-	int lastMouseX = 0;
-	int lastMouseY = 0;
 
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
 
 	while (!display.IsClosed()) {	
-		shader.Bind();
 		S_Buffer.BindForWriting();
 		display.Clear(0.1, 0.1, 0.1, 1);
+		shader.Bind();
 
 		for (int i = 0; i < entityList.size(); i++) {	
 			texture.Bind(0);
 			shader.Update(entityList[i]->GetTransform(), camera, directionalLight, ambientColor, ambientIntensity, ambientColor, directionalIntensity);
-			entityList[i]->Draw();
+			entityList[i]->Draw(shader);
 		}
 
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				display.CloseDisplay();
-			}
-			if (e.type == SDL_KEYDOWN) {
-				shader.RecompileShader();
-			}
-			if (e.type == SDL_MOUSEMOTION) {
-				if (e.motion.state & SDL_BUTTON_LMASK) {
-					entityList[0]->GetTransform().GetRotation().y += (float)(e.motion.x - lastMouseX) / 250.0f;
-					entityList[0]->GetTransform().GetRotation().x += (float)(e.motion.y - lastMouseY) / 250.0f;
-
-					lastMouseX = e.motion.x;
-					lastMouseY = e.motion.y;
-				}else if (e.motion.state & SDL_BUTTON_MMASK) {
-					entityList[0]->GetTransform().GetPosition().x -= (float)(e.motion.x - lastMouseX) / 250.0f;
-					entityList[0]->GetTransform().GetPosition().y -= (float)(e.motion.y - lastMouseY) / 250.0f;
-					lastMouseX = e.motion.x;
-					lastMouseY = e.motion.y;
-				}else{
-					lastMouseX = e.motion.x;
-					lastMouseY = e.motion.y;
-				}
-			}
-			if (e.type == SDL_MOUSEWHEEL) {
-				camera.GetCameraPosition().z = clamp(camera.GetCameraPosition().z + ((float)e.wheel.y/35.0f), -3.0f, -1.5f);
-			}
-		}
-		DSLightPass();
+		Movement();
+		LightPass();
 		display.Update();
 
 		long now = SDL_GetTicks();
@@ -131,12 +142,5 @@ int main(int argc, char* argv[]) {
 		worldTime += deltaTime;
 	}
 	return 0;
-}
-void DSGeometryPass() {
-	S_Buffer.BindForWriting();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 }
 
