@@ -5,6 +5,8 @@
 #include "GBuffer.h"
 #include "Shader.h"
 
+using namespace std;
+
 class DefferedCompositor {
 public:
 

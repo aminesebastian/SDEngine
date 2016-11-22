@@ -159,7 +159,7 @@ void StaticMesh::Draw(Shader& shader) {
 	shader.Bind();
 
 	for (int i = 0; i < this->Textures.size(); i++) {
-		glUniform1i(glGetUniformLocation(shader.S_Program, Textures[i]->GetType().c_str()), i);
+		glUniform1i(glGetUniformLocation(shader.GetProgram(), Textures[i]->GetType().c_str()), i);
 		Textures[i]->Bind(i);
 	}
 

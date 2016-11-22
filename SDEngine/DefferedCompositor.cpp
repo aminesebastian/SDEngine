@@ -1,6 +1,6 @@
 #include "DefferedCompositor.h"
 #include <iostream>
-
+#include "Texture2D.h"
 
 
 DefferedCompositor::DefferedCompositor() {
@@ -41,12 +41,15 @@ void DefferedCompositor::Composite(GBuffer* Buffer) {
 
 	S_LightingShader.Bind();
 
-	std::string uniformNames[8]{"worldPosition", "albedo", "roughness", "metalness", "emissive", "AO", "normal", "texCoord"};
+	string uniformNames[8]{"worldPosition", "albedo", "roughness", "metalness", "emissive", "AO", "normal", "texCoord"};
 
+	Texture2D albdeo("./res/T_BookBaseColor.tga");
 	for (int i = 0; i < Buffer->GBUFFER_NUM_TEXTURES; i++) {
-		glUniform1i(glGetUniformLocation(S_LightingShader.S_Program, uniformNames[i].c_str()), i);
+		GLuint tempLocation = glGetUniformLocation(S_LightingShader.GetProgram(), uniformNames[i].c_str());
+		glUniform1i(tempLocation, i);
 		glActiveTexture(GL_TEXTURE0+i);
 		glBindTexture(GL_TEXTURE_2D, Buffer->S_Textures[i]);
+		//glBindTexture(GL_TEXTURE_2D, albdeo.GetTexture());
 	}
 
 	DrawToScreen();

@@ -29,7 +29,7 @@ GLuint quadVBO;
 
 void StatUnit();
 void DebugGBuffer();
-void LightPass();
+//void LightPass();
 void Movement();
 void RenderQuad();
 
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 	transform1.GetScale().x = 0.04f;
 	transform1.GetScale().y = 0.04f;
 	transform1.GetScale().z = 0.04f;
-	transform1.GetRotation().y = 3.2;
+	transform1.GetRotation().y = 6.2;
 
 	SDL_GL_SetSwapInterval(-1);
 	StaticMesh monkeyHead(transform1, "./res/Book.fbx");
@@ -65,21 +65,19 @@ int main(int argc, char* argv[]) {
 
 	while (!display.IsClosed()) {	
 		S_Buffer.BindForWriting();
-		display.Clear(0.1, 0.1, 0.1, 1);
-
+		display.Clear(0.4, 0.1, 0.1, 1);
 
 		glEnable(GL_DEPTH_TEST);
 		for (int i = 0; i < entityList.size(); i++) {	
 			shader.Update(entityList[i]->GetTransform(), camera);
 			entityList[i]->Draw(shader);
 		}
-
 		glDisable(GL_DEPTH_TEST);
 		
-	
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
 		display.Clear(0.1, 0.1, 0.5, 1.0);
 		S_DefferedCompositor.Composite(&S_Buffer);
-
 
 		//DebugGBuffer();
 
@@ -162,7 +160,7 @@ void Movement() {
 			}
 		}
 		if (e.type == SDL_MOUSEWHEEL) {
-			camera.GetCameraPosition().z = clamp(camera.GetCameraPosition().z + ((float)e.wheel.y / 35.0f), -3.0f, -1.5f);
+			camera.GetCameraPosition().z = clamp(camera.GetCameraPosition().z - ((float)e.wheel.y / 35.0f), 1.5f, 3.0f);
 		}
 	}
 }

@@ -26,7 +26,7 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 
 	bIsClosed = false;
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
 	S_Width = Width;
 	S_Height = Height;

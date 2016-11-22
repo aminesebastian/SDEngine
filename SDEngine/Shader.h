@@ -19,7 +19,7 @@ public:
 	void Update(const Transform& Transform, Camera& Camera);
 	void RecompileShader();
 
-	GLuint S_Program;
+	GLuint& GetProgram() { return S_Program; }
 
 private:
 	enum {
@@ -44,7 +44,7 @@ private:
 	GLuint CreateShader(const std::string& text, GLenum ShaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
 
-
+	GLuint S_Program;
 	GLuint S_Shaders[NUM_SHADERS];
 	GLuint S_Uniforms[NUM_UNIFORMS];
 };

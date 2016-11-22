@@ -1,4 +1,4 @@
-#version 330
+#version 400
                                                                         
 in vec2 texCoord0;                                                                       
 in mat3 tbnMatrix0;                                                                 
@@ -17,8 +17,7 @@ layout (location = 4) out vec4 EmissiveOut;
 layout (location = 5) out vec4 AOOut;	
 layout (location = 6) out vec3 NormalOut;     
 layout (location = 7) out vec3 TexCoordOut;	
-							
-								
+														
 void main()	{											
 	WorldPosOut     = worldPos0;					
 	AlbedoOut       = texture(tex_albedo, texCoord0);				

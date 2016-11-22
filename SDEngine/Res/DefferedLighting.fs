@@ -1,4 +1,4 @@
-#version 330
+#version 400
                                                                         
 in vec2 texCoord0;                                                                  
   
@@ -13,10 +13,9 @@ uniform sampler2D AO;
 uniform sampler2D normal;
 uniform sampler2D texCoord;
 
-out vec3 fragColor;
+out vec4 fragColor;
 								
 void main()	{															
-	fragColor	= texture(worldPosition, texCoord0).xyz;
-	//vec4(texCoord0, 0, 0);
-	//vec4(1, 0, 0, 1);		
+	fragColor	=	texture(albedo, texCoord0);
+	//vec4(texCoord0, 0, 1);	
 }
