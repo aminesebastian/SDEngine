@@ -4,10 +4,10 @@
 #include "ImageUtils.h"
 
 
-Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour, const std::string& Type, int ID) {
-	this->Type = Type;
-	this->ID = ID;
-	
+Texture2D::Texture2D(const std::string& FileName, const std::string& Type, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour) {
+	this->S_Type = Type;
+	this->S_FileName = FileName;
+
 	int width, height, numComponents;
 	unsigned char* imageData = stbi_load((FileName).c_str(), &width, &height, &numComponents, ExpectedComponents);
 
@@ -23,17 +23,20 @@ Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponent
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, FilterBehaviour);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, FilterBehaviour);
 
-	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
 	stbi_image_free(imageData);
+	glBindTextureUnit(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
 }
 Texture2D::~Texture2D() {
 	glDeleteTextures(1, &S_Texture);
 }
 
 void Texture2D::Bind(unsigned int Unit) {
-	assert(Unit >= 0 && Unit <= 31);
-
-	glActiveTexture(GL_TEXTURE0 + Unit);
-	glBindTextureUnit(GL_TEXTURE_2D, S_Texture);	
+	assert(Unit <= 31);
+	this->S_Unit = Unit;
+	glActiveTexture(GL_TEXTURE0 + S_Unit);
+	glBindTexture(GL_TEXTURE_2D, S_Texture);
 }

@@ -18,6 +18,8 @@ bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
 	glGenFramebuffers(1, &S_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, S_FBO);
 
+
+	//Optimize Bit Depths Later
 	for (int i = 0; i < GBUFFER_NUM_TEXTURES; i++) {
 		glGenTextures(1, &S_Textures[i]);
 		glBindTexture(GL_TEXTURE_2D, S_Textures[i]);
@@ -27,8 +29,10 @@ bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, S_Textures[i], 0);
 	}
 
-	GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
-	glDrawBuffers(4, attachments);
+	GLuint attachments[8] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
+		GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7};
+
+	glDrawBuffers(8, attachments);
 
 	glGenRenderbuffers(1, &S_DepthBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, S_DepthBuffer);

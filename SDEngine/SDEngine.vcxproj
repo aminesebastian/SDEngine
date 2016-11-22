@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;AntTweakBar64.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;AntTweakBar64.lib;OpenGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DefferedCompositor.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GBuffer.cpp" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DefferedCompositor.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GBuffer.h" />
@@ -177,8 +179,12 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Res\DefferedLighting.fs" />
+    <None Include="Res\DefferedLighting.vs" />
     <None Include="Res\DefferedShader.fs" />
     <None Include="Res\DefferedShader.vs" />
+    <None Include="Res\ForwardShader.fs" />
+    <None Include="Res\ForwardShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

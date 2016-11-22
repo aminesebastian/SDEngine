@@ -11,7 +11,7 @@ public:
 	Entity() {}
 	virtual ~Entity();
 
-	virtual void Draw(Shader shader) {}
+	virtual void Draw(Shader& shader) {}
 
 	Transform& GetTransform() { return S_Transform; }
 protected:

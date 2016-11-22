@@ -1,7 +1,7 @@
 #ifndef OBJ_LOADER_H_INCLUDED
 #define OBJ_LOADER_H_INCLUDED
 
-#include <glm/glm.hpp>
+#include <GLM/glm.hpp>
 #include <vector>
 #include <string>
 
@@ -10,6 +10,7 @@ struct OBJIndex
 	unsigned int vertexIndex;
 	unsigned int uvIndex;
 	unsigned int normalIndex;
+	unsigned int tangentIndex;
 
 	bool operator<(const OBJIndex& r) const { return vertexIndex < r.vertexIndex; }
 };
@@ -20,6 +21,7 @@ public:
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texCoords;
 	std::vector<glm::vec3> normals;
+	std::vector<glm::vec3> tangents;
 	std::vector<unsigned int> indices;
 
 	void CalcNormals();
@@ -32,6 +34,7 @@ public:
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
+	std::vector<glm::vec3> tangents;
 	bool hasUVs;
 	bool hasNormals;
 

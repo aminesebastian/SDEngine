@@ -28,7 +28,8 @@ void Shader::RecompileShader() {
 	glValidateProgram(S_Program);
 	CheckShaderError(S_Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
 
-	S_Uniforms[TRANSFORM_U] = glGetUniformLocation(S_Program, "transform");
+	S_Uniforms[MODEL_MATRIX_U] = glGetUniformLocation(S_Program, "modelMatrix");
+	S_Uniforms[MVP_MATRIX_U] = glGetUniformLocation(S_Program, "MVP");
 	S_Uniforms[AMBIENT_COLOR_U] = glGetUniformLocation(S_Program, "ambientColor");
 	S_Uniforms[AMBIENT_INTENSITY_U] = glGetUniformLocation(S_Program, "ambientIntensity");
 	S_Uniforms[LIGHT_DIRECTION_U] = glGetUniformLocation(S_Program, "lightDirection");
@@ -105,15 +106,16 @@ void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 void Shader::Bind() {
 	glUseProgram(S_Program);
 }
-void Shader::Update(const Transform& Transform, Camera& Camera, const vec3& LightDirection, const vec3& AmbientColor, const float& AmbientIntensity,
-	const vec3& LightColor, const float& LightIntensity) {
+void Shader::Update(const Transform& Transform, Camera& Camera) {
 
-	mat4 modelMatrix = Camera.GetViewProjection() * Transform.GetModelMatrix();
-	glUniformMatrix4fv(S_Uniforms[TRANSFORM_U], 1, GL_FALSE, &modelMatrix[0][0]);
-	glUniform3fv(S_Uniforms[LIGHT_DIRECTION_U], 1, &LightDirection[0]);
-	glUniform3fv(S_Uniforms[LIGHT_COLOR_U], 1, &LightColor[0]);
-	glUniform1f(S_Uniforms[LIGHT_INTENSITY_U], LightIntensity);
-	glUniform3fv(S_Uniforms[AMBIENT_COLOR_U], 1, &AmbientColor[0]);
-	glUniform1f(S_Uniforms[AMBIENT_INTENSITY_U], AmbientIntensity);
-	glUniform3fv(S_Uniforms[CAMERA_VIEW_POSITION_U], 1, &Camera.GetCameraPosition()[0]);
+	mat4 tempMVP = Camera.GetViewProjection() * Transform.GetModelMatrix();
+
+	glUniformMatrix4fv(S_Uniforms[MODEL_MATRIX_U], 1, GL_FALSE, &Transform.GetModelMatrix()[0][0]);
+	glUniformMatrix4fv(S_Uniforms[MVP_MATRIX_U], 1, GL_FALSE, &tempMVP[0][0]);
+	//glUniform3fv(S_Uniforms[LIGHT_DIRECTION_U], 1, &LightDirection[0]);
+	//glUniform3fv(S_Uniforms[LIGHT_COLOR_U], 1, &LightColor[0]);
+	//glUniform1f(S_Uniforms[LIGHT_INTENSITY_U], LightIntensity);
+	//glUniform3fv(S_Uniforms[AMBIENT_COLOR_U], 1, &AmbientColor[0]);
+	//glUniform1f(S_Uniforms[AMBIENT_INTENSITY_U], AmbientIntensity);
+	//glUniform3fv(S_Uniforms[CAMERA_VIEW_POSITION_U], 1, &Camera.GetCameraPosition()[0]);
 }

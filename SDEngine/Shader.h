@@ -16,15 +16,15 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const Transform& Transform, Camera& Camera, const vec3& LightDirection, const vec3& AmbientColor, const float& AmbientIntensity,
-		const vec3& LightColor, const float& LightIntensity);
+	void Update(const Transform& Transform, Camera& Camera);
 	void RecompileShader();
 
 	GLuint S_Program;
 
 private:
 	enum {
-		TRANSFORM_U,
+		MODEL_MATRIX_U,
+		MVP_MATRIX_U,
 		AMBIENT_COLOR_U,
 		AMBIENT_INTENSITY_U,
 		LIGHT_DIRECTION_U,

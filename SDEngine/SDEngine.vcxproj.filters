@@ -52,6 +52,9 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DefferedCompositor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -90,12 +93,27 @@
     <ClInclude Include="Material.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="DefferedCompositor.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\DefferedShader.vs">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Res\DefferedShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\DefferedLighting.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\ForwardShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\ForwardShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\DefferedLighting.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
