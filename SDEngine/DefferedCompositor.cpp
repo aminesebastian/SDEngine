@@ -1,5 +1,6 @@
 #include "DefferedCompositor.h"
 #include <iostream>
+#include <string>
 #include "Texture2D.h"
 
 
@@ -10,9 +11,6 @@ DefferedCompositor::DefferedCompositor() {
 }
 DefferedCompositor::~DefferedCompositor() {}
 
-void DefferedCompositor::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
-
-}
 void DefferedCompositor::DrawToScreen() {
 	if (quadVAO == 0) {
 		GLfloat quadVertices[] = {
@@ -36,29 +34,24 @@ void DefferedCompositor::DrawToScreen() {
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
-void DefferedCompositor::Composite(GBuffer* Buffer) {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light*>& Lights) {
 	S_LightingShader.Bind();
+
+	for (GLuint i = 0; i < Lights.size(); i++) {
+		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Intensity").c_str()), Lights[i]->GetLightInfo().Intensity);
+		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Attenuation").c_str()), Lights[i]->GetLightInfo().Attenuation);
+		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &Lights[i]->GetLightInfo().Color[0]);
+		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &Lights[i]->GetTransform().GetPosition()[0]);
+		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Direction").c_str()), 1, &Lights[i]->GetTransform().GetForwardVector()[0]);
+	}
 
 	string uniformNames[8]{"worldPosition", "albedo", "roughness", "metalness", "emissive", "AO", "normal", "texCoord"};
 
-	Texture2D albdeo("./res/T_BookBaseColor.tga");
-	for (int i = 0; i < Buffer->GBUFFER_NUM_TEXTURES; i++) {
-		GLuint tempLocation = glGetUniformLocation(S_LightingShader.GetProgram(), uniformNames[i].c_str());
-		glUniform1i(tempLocation, i);
-		glActiveTexture(GL_TEXTURE0+i);
-		glBindTexture(GL_TEXTURE_2D, Buffer->S_Textures[i]);
-		//glBindTexture(GL_TEXTURE_2D, albdeo.GetTexture());
+	for (int i = 0; i < Buffer->GBUFFER_NUM_TEXTURES; i++) {	
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, Buffer->GetTexture(i));
+		glUniform1i(glGetUniformLocation(S_LightingShader.GetProgram(), uniformNames[i].c_str()), i);
 	}
-
 	DrawToScreen();
 }
-
-//std::string uniformNames[8] = { "worldPosition", "albedo", "roughness", "metalness", "emissive", "AO", "normal", "texCoord" };
-//
-//for (int i = 0; i < Buffer.GBUFFER_NUM_TEXTURES; i++) {
-//	glUniform1i(glGetUniformLocation(LightingShader.S_Program, uniformNames[i].c_str()), 0);
-//	glActiveTexture(GL_TEXTURE0 + i);
-//	glBindTexture(GL_TEXTURE_2D, Buffer.GetTexture(i));
-//}

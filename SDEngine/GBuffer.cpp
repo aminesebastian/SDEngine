@@ -9,12 +9,15 @@ GBuffer::~GBuffer() {
 	if (S_FBO != 0) {
 		glDeleteFramebuffers(1, &S_FBO);
 	}
-	if (S_Textures[0] != 0) {
-		glDeleteTextures(GBUFFER_NUM_TEXTURES, S_Textures);
-	}
+	//if (S_Textures[0] != 0) {
+	//	glDeleteTextures(GBUFFER_NUM_TEXTURES, S_Textures);
+	//}
 }
 
 bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
+	glDeleteFramebuffersEXT(1, &S_FBO);
+	glDeleteTextures(GBUFFER_NUM_TEXTURES, S_Textures);
+
 	glGenFramebuffers(1, &S_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, S_FBO);
 
@@ -23,11 +26,11 @@ bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
 	for (int i = 0; i < GBUFFER_NUM_TEXTURES; i++) {
 		glGenTextures(1, &S_Textures[i]);
 		glBindTexture(GL_TEXTURE_2D, S_Textures[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, WindowWidth, WindowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, WindowWidth, WindowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+i, GL_TEXTURE_2D, S_Textures[i], 0);
 	}
 
@@ -40,6 +43,9 @@ bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight) {
 	glBindRenderbuffer(GL_RENDERBUFFER, S_DepthBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, WindowWidth, WindowHeight);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, S_DepthBuffer);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cerr << "Framebuffer not complete!" << std::endl;

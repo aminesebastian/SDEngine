@@ -29,9 +29,22 @@ Texture2D::Texture2D(const std::string& FileName, const std::string& Type, unsig
 	stbi_image_free(imageData);
 	glBindTextureUnit(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
+	glDisable(GL_TEXTURE0);
+}
+Texture2D::Texture2D(int Width, int Height) {
+	glGenTextures(1, &S_Texture);
+	glBindTexture(GL_TEXTURE_2D, S_Texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 }
 Texture2D::~Texture2D() {
-	glDeleteTextures(1, &S_Texture);
+	if (&S_Texture != 0) {
+		glDeleteTextures(1, &S_Texture);
+	}
 }
 
 void Texture2D::Bind(unsigned int Unit) {

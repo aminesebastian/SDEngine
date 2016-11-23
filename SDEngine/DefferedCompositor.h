@@ -4,6 +4,8 @@
 #include <cassert>
 #include "GBuffer.h"
 #include "Shader.h"
+#include "Light.h"
+#include <vector>
 
 using namespace std;
 
@@ -13,13 +15,13 @@ public:
 	DefferedCompositor();
 	~DefferedCompositor();
 
-	void Init(unsigned int WindowWidth, unsigned int WindowHeight);
-	void Composite(GBuffer* Buffer);
+	void Composite(GBuffer* Buffer, vector<Light*>& Lights);
 	void DrawToScreen();
-	Shader S_LightingShader;
+	Shader& GetLightingShader() { return S_LightingShader; }
+
 private:
 
-
+	Shader S_LightingShader;
 	GLuint quadVAO = 0;
 	GLuint quadVBO;
 };

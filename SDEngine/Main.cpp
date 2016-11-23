@@ -10,6 +10,7 @@
 #include "GBuffer.h"
 #include "DefferedCompositor.h"
 #include "Material.h"
+#include "Light.h"
 
 #undef main
 using namespace glm;
@@ -17,19 +18,33 @@ using namespace glm;
 float deltaTime = 0.0f;
 float worldTime = 0.0f;
 std::vector<Entity*> entityList;
+std::vector<Light*> lightList;
 Display display(1280, 720, "SD Engine", 8);
 GBuffer S_Buffer;
 DefferedCompositor S_DefferedCompositor;
-Shader shader("./Res/DefferedShader");
+Shader shader("./Res/GeometryPassShader");
 int lastMouseX = 0;
 int lastMouseY = 0;
-Camera camera(vec3(0, 0, 3), vec3(0, 0, -1), 70, display.GetAspectRatio(), 0.01f, 1000.0f);
+Camera* camera;
 GLuint quadVAO = 0;
 GLuint quadVBO;
 
+float movementSpeed = 0.05f;
+float lookSpeed = 200.0f;
+
+struct FKeyInfo {
+	bool bWDown;
+	bool bADown;
+	bool bSDown;
+	bool bDDown;
+	bool bQDown;
+	bool bEDown;
+};
+FKeyInfo keyInfo;
+
 void StatUnit();
 void DebugGBuffer();
-//void LightPass();
+void LightPass();
 void Movement();
 void RenderQuad();
 
@@ -38,47 +53,61 @@ int main(int argc, char* argv[]) {
 	Texture2D roughness("./res/T_BookRMAO.tga", "tex_RMAO");
 	Texture2D normal("./res/T_BookNormal.tga", "tex_Normal");
 
-	vec3 ambientColor(1.0, 1.0, 0.9);
-	vec3 directionalLight(0.0, 0.0, 1.0);
-	float ambientIntensity = 0.1f;
-	float directionalIntensity = 15.0f;
+	Transform cameraTransform(vec3(0, 0, 3));
+	cameraTransform.SetRotation(0, -180, 0);
+	camera = &Camera(cameraTransform, 70, display.GetAspectRatio(), 0.01f, 1000.0f);
 
-	Transform transform1;
-	transform1.GetScale().x = 0.04f;
-	transform1.GetScale().y = 0.04f;
-	transform1.GetScale().z = 0.04f;
-	transform1.GetRotation().y = 6.2;
+	Transform lightTransform;
+	lightTransform.GetPosition().y = 2.0f;
+	lightTransform.SetUniformScale(0.02f);
+	Light tempLight(lightTransform, 5);
+	lightList.push_back(&tempLight);
 
-	SDL_GL_SetSwapInterval(-1);
-	StaticMesh monkeyHead(transform1, "./res/Book.fbx");
-	monkeyHead.RegisterTexture(&roughness);
-	monkeyHead.RegisterTexture(&albdeo);
-	monkeyHead.RegisterTexture(&normal);
+	Transform transform;
+	transform.SetUniformScale(0.02f);
+	transform.GetRotation().y = 6.2;
 
-	entityList.push_back(&monkeyHead);
+	StaticMesh book1(transform, "./res/Book.fbx");
+	book1.RegisterTexture(&roughness);
+	book1.RegisterTexture(&albdeo);
+	book1.RegisterTexture(&normal);
+	entityList.push_back(&book1);
 	
+	transform.GetPosition().y = 1;
+	StaticMesh book2(transform, "./res/Book.fbx");
+	book2.RegisterTexture(&roughness);
+	book2.RegisterTexture(&albdeo);
+	book2.RegisterTexture(&normal);
+	entityList.push_back(&book2);
+
+	StaticMesh arrow(lightTransform, "./res/Arrow.fbx");
+	entityList.push_back(&arrow);
+
 	long last = 0;
 	int currentCount = 0;
 	int debugCount = 5;
 
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
-
 	while (!display.IsClosed()) {	
-		S_Buffer.BindForWriting();
-		display.Clear(0.4, 0.1, 0.1, 1);
 
+		S_Buffer.BindForWriting();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shader.Bind();
 		glEnable(GL_DEPTH_TEST);
 		for (int i = 0; i < entityList.size(); i++) {	
-			shader.Update(entityList[i]->GetTransform(), camera);
+			shader.Update(entityList[i]->GetTransform(), *camera);
 			entityList[i]->Draw(shader);
 		}
-		glDisable(GL_DEPTH_TEST);
-		
+		tempLight.GetTransform().SetRotation(worldTime * 10, 0, 0);
+		arrow.GetTransform().GetRotation() = tempLight.GetTransform().GetRotation();
+
+		//std::cout << arrow.GetTransform().ForwardVectorToString() << std::endl;
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-		display.Clear(0.1, 0.1, 0.5, 1.0);
-		S_DefferedCompositor.Composite(&S_Buffer);
-
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		S_DefferedCompositor.Composite(&S_Buffer, lightList);
 		//DebugGBuffer();
 
 		display.Update();
@@ -136,32 +165,52 @@ void Movement() {
 		if (e.type == SDL_QUIT) {
 			display.CloseDisplay();
 		}
-		if (e.type == SDL_KEYDOWN) {
-			shader.RecompileShader();
-			S_DefferedCompositor.S_LightingShader.RecompileShader();
-		}
 		if (e.type == SDL_MOUSEMOTION) {
-			if (e.motion.state & SDL_BUTTON_LMASK) {
-				entityList[0]->GetTransform().GetRotation().y += (float)(e.motion.x - lastMouseX) / 250.0f;
-				entityList[0]->GetTransform().GetRotation().x += (float)(e.motion.y - lastMouseY) / 250.0f;
-
+			if (e.motion.state & SDL_BUTTON_RMASK) {
+				camera->AddOrbit((float)(e.motion.y - lastMouseY) / lookSpeed, -(float)(e.motion.x - lastMouseX) / lookSpeed);
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
-			}
-			else if (e.motion.state & SDL_BUTTON_MMASK) {
-				entityList[0]->GetTransform().GetPosition().x += (float)(e.motion.x - lastMouseX) / 250.0f;
-				entityList[0]->GetTransform().GetPosition().y -= (float)(e.motion.y - lastMouseY) / 250.0f;
+			}else if (e.motion.state & SDL_BUTTON_MMASK) {
+				camera->GetCameraTransform().GetPosition().x -= (float)(e.motion.x - lastMouseX) / 250.0f;
+				camera->GetCameraTransform().GetPosition().y += (float)(e.motion.y - lastMouseY) / 250.0f;
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
-			}
-			else {
+			}else {
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
 			}
 		}
 		if (e.type == SDL_MOUSEWHEEL) {
-			camera.GetCameraPosition().z = clamp(camera.GetCameraPosition().z - ((float)e.wheel.y / 35.0f), 1.5f, 3.0f);
+			movementSpeed = clamp(movementSpeed + ((float)e.wheel.y / 100.0f), 0.01f, 0.5f);
 		}
+		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_RETURN]) {
+			shader.RecompileShader();
+			S_DefferedCompositor.GetLightingShader().RecompileShader();
+		}
+		keyInfo.bWDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_W];
+		keyInfo.bSDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_S];
+		keyInfo.bDDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_A];
+		keyInfo.bADown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_D];
+		keyInfo.bQDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_Q];
+		keyInfo.bEDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_E];
+	}
+	if (keyInfo.bWDown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetForwardVector() * movementSpeed;
+	}
+	if (keyInfo.bSDown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetForwardVector() * movementSpeed;
+	}
+	if (keyInfo.bADown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetRightVector() * movementSpeed;
+	}
+	if (keyInfo.bDDown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetRightVector() * movementSpeed;
+	}
+	if (keyInfo.bQDown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetUpVector() * movementSpeed;
+	}
+	if (keyInfo.bEDown) {
+		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetUpVector() * movementSpeed;
 	}
 }
 void RenderQuad() {
@@ -173,7 +222,7 @@ void RenderQuad() {
 			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 		};
-		// Setup plane VAO
+		 //Setup plane VAO
 		glGenVertexArrays(1, &quadVAO);
 		glGenBuffers(1, &quadVBO);
 		glBindVertexArray(quadVAO);

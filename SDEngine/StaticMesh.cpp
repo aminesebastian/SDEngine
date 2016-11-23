@@ -156,8 +156,9 @@ void StaticMesh::InitMesh() {
 	glBindVertexArray(0);
 }
 void StaticMesh::Draw(Shader& shader) {
-	shader.Bind();
+	//shader.Bind();
 
+	glEnable(GL_TEXTURE_2D);
 	for (int i = 0; i < this->Textures.size(); i++) {
 		glUniform1i(glGetUniformLocation(shader.GetProgram(), Textures[i]->GetType().c_str()), i);
 		Textures[i]->Bind(i);
@@ -168,5 +169,5 @@ void StaticMesh::Draw(Shader& shader) {
 	glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-
+	glDisable(GL_TEXTURE_2D);
 }

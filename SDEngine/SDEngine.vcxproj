@@ -153,6 +153,7 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GBuffer.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GBuffer.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="Shader.h" />
@@ -181,10 +183,10 @@
   <ItemGroup>
     <None Include="Res\DefferedLighting.fs" />
     <None Include="Res\DefferedLighting.vs" />
-    <None Include="Res\DefferedShader.fs" />
-    <None Include="Res\DefferedShader.vs" />
     <None Include="Res\ForwardShader.fs" />
     <None Include="Res\ForwardShader.vs" />
+    <None Include="Res\GeometryPassShader.fs" />
+    <None Include="Res\GeometryPassShader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

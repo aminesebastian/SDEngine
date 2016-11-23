@@ -2,6 +2,8 @@
 #include <GLEW/glew.h>
 #include <stdio.h>
 #include <cassert>
+#include "Texture2D.h"
+#include <vector>
 
 class GBuffer {
 public:
@@ -29,8 +31,9 @@ public:
 	void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 	GLuint& GetTexture(unsigned int i) { assert(i < GBUFFER_NUM_TEXTURES);  return S_Textures[i]; }
 	GLuint S_Textures[GBUFFER_NUM_TEXTURES];
-private:
-
 	GLuint S_FBO;
+private:
+	
+
 	GLuint S_DepthBuffer;
 };

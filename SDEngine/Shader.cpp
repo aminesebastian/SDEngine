@@ -36,6 +36,8 @@ void Shader::RecompileShader() {
 	S_Uniforms[LIGHT_INTENSITY_U] = glGetUniformLocation(S_Program, "lightIntensity");
 	S_Uniforms[LIGHT_COLOR_U] = glGetUniformLocation(S_Program, "lightColor");
 	S_Uniforms[CAMERA_VIEW_POSITION_U] = glGetUniformLocation(S_Program, "viewPosition");
+
+	std::cout << "Compilation Success!" << std::endl;
 }
 Shader::~Shader() {
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
@@ -108,14 +110,15 @@ void Shader::Bind() {
 }
 void Shader::Update(const Transform& Transform, Camera& Camera) {
 
-	mat4 tempMVP = Camera.GetViewProjection() * Transform.GetModelMatrix();
+	mat4 tempMVP = Camera.GetProjectionMatrix()* Camera.GetViewMatrix() * Transform.GetModelMatrix();
 
 	glUniformMatrix4fv(S_Uniforms[MODEL_MATRIX_U], 1, GL_FALSE, &Transform.GetModelMatrix()[0][0]);
 	glUniformMatrix4fv(S_Uniforms[MVP_MATRIX_U], 1, GL_FALSE, &tempMVP[0][0]);
+	glUniform3fv(S_Uniforms[CAMERA_VIEW_POSITION_U], 1, &Camera.GetCameraTransform().GetPosition()[0]);
 	//glUniform3fv(S_Uniforms[LIGHT_DIRECTION_U], 1, &LightDirection[0]);
 	//glUniform3fv(S_Uniforms[LIGHT_COLOR_U], 1, &LightColor[0]);
 	//glUniform1f(S_Uniforms[LIGHT_INTENSITY_U], LightIntensity);
 	//glUniform3fv(S_Uniforms[AMBIENT_COLOR_U], 1, &AmbientColor[0]);
 	//glUniform1f(S_Uniforms[AMBIENT_INTENSITY_U], AmbientIntensity);
-	//glUniform3fv(S_Uniforms[CAMERA_VIEW_POSITION_U], 1, &Camera.GetCameraPosition()[0]);
+
 }

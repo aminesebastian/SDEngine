@@ -55,6 +55,9 @@
     <ClCompile Include="DefferedCompositor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -96,14 +99,9 @@
     <ClInclude Include="DefferedCompositor.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\DefferedShader.vs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\DefferedShader.fs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Res\DefferedLighting.fs">
       <Filter>Shaders</Filter>
     </None>
@@ -114,6 +112,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Res\DefferedLighting.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\GeometryPassShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\GeometryPassShader.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
