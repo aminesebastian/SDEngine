@@ -99,15 +99,15 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < entityList.size(); i++) {	
 			shader.Update(entityList[i]->GetTransform(), *camera);
 			entityList[i]->Draw(shader);
+			entityList[i]->GetTransform().SetRotation(worldTime * 10, 0, 0);
 		}
-		tempLight.GetTransform().SetRotation(worldTime * 10, 0, 0);
-		arrow.GetTransform().GetRotation() = tempLight.GetTransform().GetRotation();
+		//tempLight.GetTransform().SetRotation(worldTime * 10, 0, 0);
+		//arrow.GetTransform().GetRotation() = tempLight.GetTransform().GetRotation();
 
-		//std::cout << arrow.GetTransform().ForwardVectorToString() << std::endl;
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		S_DefferedCompositor.Composite(&S_Buffer, lightList);
+		S_DefferedCompositor.Composite(&S_Buffer, lightList, camera);
 		//DebugGBuffer();
 
 		display.Update();
@@ -155,7 +155,7 @@ void DebugGBuffer() {
 	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glBlitFramebuffer(0, 0, display.GetDimensions().x, display.GetDimensions().y, ThirdWidth, ThirdHeight, display.GetDimensions().x, display.GetDimensions().y, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_AO);
+	S_Buffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_RMAO);
 	glBlitFramebuffer(0, 0, display.GetDimensions().x, display.GetDimensions().y, ThirdWidth, 0, display.GetDimensions().x, ThirdHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 }

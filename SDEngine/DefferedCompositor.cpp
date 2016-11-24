@@ -34,9 +34,9 @@ void DefferedCompositor::DrawToScreen() {
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
-void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light*>& Lights) {
+void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light*>& Lights, Camera* camera) {
 	S_LightingShader.Bind();
-
+	glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), "viewVector"), 1, &camera->GetCameraTransform().GetPosition()[0]);
 	for (GLuint i = 0; i < Lights.size(); i++) {
 		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Intensity").c_str()), Lights[i]->GetLightInfo().Intensity);
 		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Attenuation").c_str()), Lights[i]->GetLightInfo().Attenuation);
@@ -45,7 +45,7 @@ void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light*>& Lights) {
 		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Direction").c_str()), 1, &Lights[i]->GetTransform().GetForwardVector()[0]);
 	}
 
-	string uniformNames[8]{"worldPosition", "albedo", "roughness", "metalness", "emissive", "AO", "normal", "texCoord"};
+	string uniformNames[8]{"worldPosition", "albedo", "emissive", "RMAO", "normal", "texCoord"};
 
 	for (int i = 0; i < Buffer->GBUFFER_NUM_TEXTURES; i++) {	
 		glEnable(GL_TEXTURE_2D);

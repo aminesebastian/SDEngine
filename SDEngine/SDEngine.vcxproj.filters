@@ -99,7 +99,9 @@
     <ClInclude Include="DefferedCompositor.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h" />
+    <ClInclude Include="Light.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\DefferedLighting.fs">
