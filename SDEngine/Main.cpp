@@ -11,14 +11,17 @@
 #include "DefferedCompositor.h"
 #include "Material.h"
 #include "Light.h"
+#include <random>
+#include "Grid.h"
 
 #undef main
 using namespace glm;
 
 float deltaTime = 0.0f;
 float worldTime = 0.0f;
+int frameRate = 0.016f;
 std::vector<Entity*> entityList;
-std::vector<Light*> lightList;
+std::vector<Light> lightList;
 Display display(1280, 720, "SD Engine", 8);
 GBuffer S_Buffer;
 DefferedCompositor S_DefferedCompositor;
@@ -28,8 +31,9 @@ int lastMouseY = 0;
 Camera* camera;
 GLuint quadVAO = 0;
 GLuint quadVBO;
+World S_World;
 
-float movementSpeed = 0.05f;
+float movementSpeed = 0.5f;
 float lookSpeed = 200.0f;
 
 struct FKeyInfo {
@@ -49,44 +53,60 @@ void Movement();
 void RenderQuad();
 
 int main(int argc, char* argv[]) {
-	Texture2D albdeo("./res/T_BookBaseColor.tga");
-	Texture2D roughness("./res/T_BookRMAO.tga", "tex_RMAO");
-	Texture2D normal("./res/T_BookNormal.tga", "tex_Normal");
+	TwInit(TW_OPENGL, NULL);
+	TwWindowSize(display.GetDimensions().x, display.GetDimensions().y);
 
-	Transform cameraTransform(vec3(0, 0, 3));
-	cameraTransform.SetRotation(0, -180, 0);
+	TwBar *infoBar;
+	infoBar = TwNewBar("StatUnit");
+	TwDefine(" StatUnit refresh=0.1 ");
+	TwAddVarRO(infoBar, "Frame Time", TW_TYPE_FLOAT, &deltaTime, "");
+	TwAddVarRO(infoBar, "Frame Rate", TW_TYPE_INT32, &frameRate, "");
+
+	Texture2D albdeo("./res/T_TorusBaseColor.tga");
+	Texture2D roughness("./res/T_TorusRMAO.tga", "tex_RMAO");
+	Texture2D normal("./res/T_TorusNormal.tga", "tex_Normal");
+
+	Transform cameraTransform(vec3(0, 15, 5));
+	cameraTransform.SetRotation(50, -180, 0);
 	camera = &Camera(cameraTransform, 70, display.GetAspectRatio(), 0.01f, 1000.0f);
 
-	Transform lightTransform;
-	lightTransform.GetPosition().y = 2.0f;
-	lightTransform.SetUniformScale(0.02f);
-	Light tempLight(lightTransform, 5);
-	lightList.push_back(&tempLight);
-
 	Transform transform;
-	transform.SetUniformScale(0.02f);
-	transform.GetRotation().y = 6.2;
+	transform.SetUniformScale(3.0f);
+	transform.SetRotation(0, 0, 0);
 
-	StaticMesh book1(transform, "./res/Book.fbx");
+	StaticMesh book1(S_World, transform, "./res/Torus.fbx");
 	book1.RegisterTexture(&roughness);
 	book1.RegisterTexture(&albdeo);
 	book1.RegisterTexture(&normal);
 	entityList.push_back(&book1);
-	
-	transform.GetPosition().y = 1;
-	StaticMesh book2(transform, "./res/Book.fbx");
-	book2.RegisterTexture(&roughness);
-	book2.RegisterTexture(&albdeo);
-	book2.RegisterTexture(&normal);
-	entityList.push_back(&book2);
 
-	StaticMesh arrow(lightTransform, "./res/Arrow.fbx");
-	entityList.push_back(&arrow);
+	Grid grid(40, 2);
 
 	long last = 0;
 	int currentCount = 0;
 	int debugCount = 5;
 
+
+	//for (int i = 0; i < 10; i++) {
+	//	for (int j = 0; j < 10; j++) {
+	//		float r = (float)(rand()) / (float)(RAND_MAX);
+	//		float g = (float)(rand()) / (float)(RAND_MAX);
+	//		float b = (float)(rand()) / (float)(RAND_MAX);
+	//		Transform tempTransform;
+	//		tempTransform.GetPosition().x = (float)j*3 - 12.0f;
+	//		tempTransform.GetPosition().y = 0.2;
+	//		tempTransform.GetPosition().z = (float)i*3 - 13.5f;
+	//		vec3 tempColor = vec3(r, g, b);
+	//		Light tempLight = Light(S_World, tempTransform, 1, tempColor, 5);
+	//		lightList.push_back(tempLight);
+	//	}
+	//}
+	Transform tempTransform;
+	tempTransform.GetPosition().y = 1;
+	vec3 tempColor = vec3(1, 1, 1);
+	Light tempLight = Light(S_World, tempTransform, 1, tempColor, 5);
+	lightList.push_back(tempLight);
+	entityList.push_back(&tempLight);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
@@ -98,22 +118,31 @@ int main(int argc, char* argv[]) {
 		glEnable(GL_DEPTH_TEST);
 		for (int i = 0; i < entityList.size(); i++) {	
 			shader.Update(entityList[i]->GetTransform(), *camera);
-			entityList[i]->Draw(shader);
-			entityList[i]->GetTransform().SetRotation(worldTime * 10, 0, 0);
+			if (entityList[i]->IsVisible()) {
+				entityList[i]->Draw(shader);
+			}
+			if (entityList[i]->NeedsTick()) {
+				entityList[i]->Tick(deltaTime);
+			}
 		}
-		//tempLight.GetTransform().SetRotation(worldTime * 10, 0, 0);
-		//arrow.GetTransform().GetRotation() = tempLight.GetTransform().GetRotation();
-
+		shader.Update(grid.GetTransform(), *camera);
+		//grid.Draw(shader);
+		for (int i = 0; i < lightList.size(); i++) {
+			lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime)*2;
+			lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + cos(worldTime)*2;
+			lightList[i].SetLightIntensity(cos(worldTime) + 1.5f);
+		}
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		S_DefferedCompositor.Composite(&S_Buffer, lightList, camera);
 		//DebugGBuffer();
-
+		TwDraw();
 		display.Update();
 
 		long now = SDL_GetTicks();
 		deltaTime = ((float)(now - last))/1000;
+		frameRate = 1.0f / deltaTime;
 		last = now;
 
 		if (currentCount >= debugCount) {
@@ -181,7 +210,7 @@ void Movement() {
 			}
 		}
 		if (e.type == SDL_MOUSEWHEEL) {
-			movementSpeed = clamp(movementSpeed + ((float)e.wheel.y / 100.0f), 0.01f, 0.5f);
+			movementSpeed = clamp(movementSpeed + ((float)e.wheel.y / 100.0f), 0.01f, 2.5f);
 		}
 		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_RETURN]) {
 			shader.RecompileShader();

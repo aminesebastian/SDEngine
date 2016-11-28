@@ -153,6 +153,7 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GBuffer.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GBuffer.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ObjLoader.h" />
@@ -181,12 +183,12 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\DefferedLighting.fs" />
-    <None Include="Res\DefferedLighting.vs" />
-    <None Include="Res\ForwardShader.fs" />
-    <None Include="Res\ForwardShader.vs" />
-    <None Include="Res\GeometryPassShader.fs" />
-    <None Include="Res\GeometryPassShader.vs" />
+    <None Include="Res\DefferedLighting.frag" />
+    <None Include="Res\DefferedLighting.vert" />
+    <None Include="Res\ForwardShader.frag" />
+    <None Include="Res\ForwardShader.vert" />
+    <None Include="Res\GeometryPassShader.frag" />
+    <None Include="Res\GeometryPassShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -34,15 +34,11 @@ void DefferedCompositor::DrawToScreen() {
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
-void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light*>& Lights, Camera* camera) {
+void DefferedCompositor::Composite(GBuffer* Buffer, vector<Light>& Lights, Camera* camera) {
 	S_LightingShader.Bind();
-	glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), "viewVector"), 1, &camera->GetCameraTransform().GetPosition()[0]);
+	glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), "cameraPos"), 1, &camera->GetCameraTransform().GetPosition()[0]);
 	for (GLuint i = 0; i < Lights.size(); i++) {
-		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Intensity").c_str()), Lights[i]->GetLightInfo().Intensity);
-		glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Attenuation").c_str()), Lights[i]->GetLightInfo().Attenuation);
-		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &Lights[i]->GetLightInfo().Color[0]);
-		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &Lights[i]->GetTransform().GetPosition()[0]);
-		glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), ("lights[" + std::to_string(i) + "].Direction").c_str()), 1, &Lights[i]->GetTransform().GetForwardVector()[0]);
+		Lights[i].SendShaderInformation(S_LightingShader, i);
 	}
 
 	string uniformNames[8]{"worldPosition", "albedo", "emissive", "RMAO", "normal", "texCoord"};

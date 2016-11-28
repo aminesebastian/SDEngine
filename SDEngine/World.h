@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Entity.h"
+
+class Entity;
 
 class World {
 public:

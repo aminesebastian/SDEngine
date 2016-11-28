@@ -29,6 +29,7 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 
 	S_Width = Width;
 	S_Height = Height;
+	SDL_GL_SetSwapInterval(0);
 }
 Display::~Display() {
 	SDL_GL_DeleteContext(S_GLContext);

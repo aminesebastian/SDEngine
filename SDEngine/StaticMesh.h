@@ -40,8 +40,8 @@ private:
 class StaticMesh : public Entity {
 
 public:
-	StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
-	StaticMesh(const Transform& SpawnTransform, const std::string& ModelName);
+	StaticMesh(const World& World, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
+	StaticMesh(const World& World, const Transform& SpawnTransform, const std::string& ModelName);
 
 	virtual ~StaticMesh();
 

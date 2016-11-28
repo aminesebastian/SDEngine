@@ -15,7 +15,7 @@ public:
 	DefferedCompositor();
 	~DefferedCompositor();
 
-	void Composite(GBuffer* Buffer, vector<Light*>& Lights, Camera* camera);
+	void Composite(GBuffer* Buffer, vector<Light>& Lights, Camera* camera);
 	void DrawToScreen();
 	Shader& GetLightingShader() { return S_LightingShader; }
 

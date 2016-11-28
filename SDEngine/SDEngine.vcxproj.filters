@@ -58,6 +58,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -102,24 +105,25 @@
     <ClInclude Include="Light.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Grid.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\DefferedLighting.fs">
+    <None Include="Res\DefferedLighting.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\ForwardShader.fs">
+    <None Include="Res\DefferedLighting.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\ForwardShader.vs">
+    <None Include="Res\ForwardShader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\DefferedLighting.vs">
+    <None Include="Res\ForwardShader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\GeometryPassShader.fs">
+    <None Include="Res\GeometryPassShader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\GeometryPassShader.vs">
+    <None Include="Res\GeometryPassShader.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

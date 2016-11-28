@@ -8,7 +8,7 @@ using namespace glm;
 class Transform {
 
 public:
-	Transform(const vec3& Position = vec3(), const vec3& Rotation = vec3(), const vec3& Scale = vec3(1,1,1)) :
+	Transform(const vec3 Position = vec3(), const vec3 Rotation = vec3(), const vec3 Scale = vec3(1,1,1)) :
 		S_Position(Position),
 		S_Rotation(Rotation),
 		S_Scale(Scale) {}
@@ -31,6 +31,10 @@ public:
 		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 		return posMatrix * combinedRotMatrix * scaleMatrix;
+	}
+	inline vec3 GetProjectedPosition() {
+		mat4 posMatrix = translate(S_Position);
+		return posMatrix * vec4(S_Position, 1.0);
 	}
 	inline vec3 GetForwardVector() { 
 		mat4 rotXMatrix = rotate(S_Rotation.x, vec3(1, 0, 0));

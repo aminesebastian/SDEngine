@@ -2,12 +2,13 @@
 #include <iostream>
 
 
-StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& ModelName) {
+StaticMesh::StaticMesh(const World& World, const Transform& SpawnTransform, const std::string& ModelName)
+	: Entity(World, SpawnTransform) {
 	loadModel(ModelName);
 	InitMesh();
-	S_Transform = SpawnTransform;
 }
-StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides) {
+StaticMesh::StaticMesh(const World& World, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
+	: Entity(World, SpawnTransform) {
 	for (int i = 0; i < NumVertecies; i++) {
 		S_Positions.push_back(Verticies[i].GetPosition());
 		S_TexCoords.push_back(Verticies[i].GetTexCoord());
@@ -27,7 +28,8 @@ void StaticMesh::loadModel(const std::string& ModelName) {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(ModelName, aiProcess_Triangulate | 
 													  aiProcess_FlipUVs |
-													  aiProcess_CalcTangentSpace);
+													  aiProcess_CalcTangentSpace |
+													  aiProcess_GenSmoothNormals);
 
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		std::cerr << "Error: Failed to import model. " << import.GetErrorString() << std::endl;

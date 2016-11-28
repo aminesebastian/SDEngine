@@ -1,15 +1,33 @@
-﻿  Main.cpp
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(68): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(92): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(150): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(153): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(156): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(159): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(190): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(191): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(192): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(193): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(194): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\amine\onedrive\documents\sdengine\sdengine\main.cpp(195): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\SDEngine\x64\Debug\SDEngine.exe
-  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\SDEngine\x64\Debug\SDEngine.pdb (Full PDB)
+﻿Build started 11/27/2016 6:28:14 PM.
+     1>Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I./Include /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt DefferedCompositor.cpp Light.cpp Main.cpp
+         Light.cpp
+     1>g:\sd_engine\sdengine\sdengine\light.h(15): warning C4305: 'initializing': truncation from 'double' to 'float'
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         Main.cpp
+         DefferedCompositor.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\Lib glew32.lib glew32s.lib SDL2.lib SDL2main.lib SDL2test.lib AntTweakBar64.lib OpenGL32.lib "assimp-vc140-mt.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\SD_Engine\SDEngine\x64\Debug\SDEngine.lib" /MACHINE:X64 x64\Debug\Camera.obj
+         x64\Debug\DefferedCompositor.obj
+         x64\Debug\Display.obj
+         x64\Debug\Entity.obj
+         x64\Debug\GBuffer.obj
+         x64\Debug\Grid.obj
+         x64\Debug\Light.obj
+         x64\Debug\Main.obj
+         x64\Debug\Material.obj
+         x64\Debug\ObjLoader.obj
+         x64\Debug\Shader.obj
+         x64\Debug\StaticMesh.obj
+         x64\Debug\ImageUtils.obj
+         x64\Debug\Texture2D.obj
+         x64\Debug\Transform.obj
+         x64\Debug\World.obj
+         SDEngine.vcxproj -> G:\SD_Engine\SDEngine\x64\Debug\SDEngine.exe
+     1>Done Building Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.36
