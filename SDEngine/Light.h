@@ -50,6 +50,7 @@ public:
 		//}
 	}
 	virtual void Draw(Shader& shader) override;
+	virtual void Tick(float DeltaTime) override;
 private:
 	FLightInfo S_LightInfo;
 	StaticMesh* S_Probe;

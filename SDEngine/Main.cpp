@@ -59,26 +59,47 @@ int main(int argc, char* argv[]) {
 	TwBar *infoBar;
 	infoBar = TwNewBar("StatUnit");
 	TwDefine(" StatUnit refresh=0.1 ");
+	TwDefine(" StatUnit alpha=10 ");
 	TwAddVarRO(infoBar, "Frame Time", TW_TYPE_FLOAT, &deltaTime, "");
 	TwAddVarRO(infoBar, "Frame Rate", TW_TYPE_INT32, &frameRate, "");
 
-	Texture2D albdeo("./res/T_TorusBaseColor.tga");
-	Texture2D roughness("./res/T_TorusRMAO.tga", "tex_RMAO");
-	Texture2D normal("./res/T_TorusNormal.tga", "tex_Normal");
+	Texture2D albdeo("./res/Eye/T_EyeBaseColor.png");
+	Texture2D roughness("./res/Eye/T_EyeRoughness.png", "tex_RMAO");
+	Texture2D normal("./res/Eye/T_EyeNormal.png", "tex_Normal");
 
 	Transform cameraTransform(vec3(0, 15, 5));
 	cameraTransform.SetRotation(50, -180, 0);
-	camera = &Camera(cameraTransform, 70, display.GetAspectRatio(), 0.01f, 1000.0f);
+	camera = &Camera(S_World, cameraTransform, 70, display.GetAspectRatio(), 0.01f, 1000.0f);
 
 	Transform transform;
 	transform.SetUniformScale(3.0f);
-	transform.SetRotation(0, 0, 0);
+	transform.SetRotation(-60, 0, 0);
+	transform.GetPosition().y = 10;
+	transform.GetPosition().x = -6;
+	StaticMesh eye(S_World, transform, "./res/Eye/Eye.fbx");
+	eye.RegisterTexture(&roughness);
+	eye.RegisterTexture(&albdeo);
+	eye.RegisterTexture(&normal);
+	entityList.push_back(&eye);
 
-	StaticMesh book1(S_World, transform, "./res/Torus.fbx");
-	book1.RegisterTexture(&roughness);
-	book1.RegisterTexture(&albdeo);
-	book1.RegisterTexture(&normal);
-	entityList.push_back(&book1);
+	Transform transform2;
+	transform2.SetUniformScale(3.0f);
+	transform2.SetRotation(-60, 0, 0);
+	transform2.GetPosition().y = 10;
+	transform2.GetPosition().x = 6;
+	StaticMesh eye2(S_World, transform2, "./res/Eye/Eye.fbx");
+	eye2.RegisterTexture(&roughness);
+	eye2.RegisterTexture(&albdeo);
+	eye2.RegisterTexture(&normal);
+	entityList.push_back(&eye2);
+
+	//Texture2D headTex("./res/Head/lambertian.jpg");
+	//Transform transform;
+	//transform.SetUniformScale(10.0f);
+	////transform.SetRotation(90, 0, 0);
+	//StaticMesh head(S_World, transform, "./res/Head/Head.fbx");
+	//head.RegisterTexture(&headTex);
+	//entityList.push_back(&head);
 
 	Grid grid(40, 2);
 
@@ -87,26 +108,27 @@ int main(int argc, char* argv[]) {
 	int debugCount = 5;
 
 
-	//for (int i = 0; i < 10; i++) {
-	//	for (int j = 0; j < 10; j++) {
-	//		float r = (float)(rand()) / (float)(RAND_MAX);
-	//		float g = (float)(rand()) / (float)(RAND_MAX);
-	//		float b = (float)(rand()) / (float)(RAND_MAX);
-	//		Transform tempTransform;
-	//		tempTransform.GetPosition().x = (float)j*3 - 12.0f;
-	//		tempTransform.GetPosition().y = 0.2;
-	//		tempTransform.GetPosition().z = (float)i*3 - 13.5f;
-	//		vec3 tempColor = vec3(r, g, b);
-	//		Light tempLight = Light(S_World, tempTransform, 1, tempColor, 5);
-	//		lightList.push_back(tempLight);
-	//	}
-	//}
-	Transform tempTransform;
-	tempTransform.GetPosition().y = 1;
-	vec3 tempColor = vec3(1, 1, 1);
-	Light tempLight = Light(S_World, tempTransform, 1, tempColor, 5);
-	lightList.push_back(tempLight);
-	entityList.push_back(&tempLight);
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			float r = (float)(rand()) / (float)(RAND_MAX);
+			float g = (float)(rand()) / (float)(RAND_MAX);
+			float b = (float)(rand()) / (float)(RAND_MAX);
+			Transform tempTransform;
+			tempTransform.GetPosition().x = (float)j*3 - 12.0f;
+			tempTransform.GetPosition().y = ((float)(rand()) / (float)(RAND_MAX)) + 3;
+			tempTransform.GetPosition().z = (float)i*3 - 13.5f;
+			vec3 tempColor = vec3(r, g, b);
+			float atten = ((float)(rand()) / (float)(RAND_MAX))*5;
+			Light tempLight = Light(S_World, tempTransform, 20, tempColor, atten);
+			lightList.push_back(tempLight);
+		}
+	}
+
+/*	Transform tempLightTrasform;
+	tempLightTrasform.GetPosition().y = 5;
+	float atten = ((float)(rand()) / (float)(RAND_MAX))*5;
+	Light tempLight = Light(S_World, tempLightTrasform, 100, vec3(1,1,1), atten);
+	lightList.push_back(tempLight)*/;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
@@ -125,23 +147,29 @@ int main(int argc, char* argv[]) {
 				entityList[i]->Tick(deltaTime);
 			}
 		}
+
 		shader.Update(grid.GetTransform(), *camera);
 		//grid.Draw(shader);
 		for (int i = 0; i < lightList.size(); i++) {
-			lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime)*2;
-			lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + cos(worldTime)*2;
-			lightList[i].SetLightIntensity(cos(worldTime) + 1.5f);
+			if (i % 3 == 0) {
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime + (i/5.0f)) * 2;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + cos(worldTime + (i / 5.0f)) * 2;
+				lightList[i].SetLightIntensity(cos(worldTime + (i / 5.0f)) + 1.5f);
+			}else if (i % 5 == 0) {
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 5.0f)) * 2;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 5.0f)) * 2;
+				lightList[i].SetLightIntensity(sin(worldTime + (i / 5.0f)) + 1.5f);
+			}else {
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 10.0f)) * 2;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 10.0f)) * 2;
+				lightList[i].SetLightIntensity(sin(worldTime + (i / 10.0f)) + 2.0f);
+			}
 		}
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		S_DefferedCompositor.Composite(&S_Buffer, lightList, camera);
-		//DebugGBuffer();
-		TwDraw();
-		display.Update();
-
+		S_DefferedCompositor.CompositeLighting(&S_Buffer, lightList, camera);
+		S_DefferedCompositor.CompositePostProcesing(&S_Buffer, camera);
 		long now = SDL_GetTicks();
-		deltaTime = ((float)(now - last))/1000;
+		deltaTime = ((float)(now - last)) / 1000;
 		frameRate = 1.0f / deltaTime;
 		last = now;
 
@@ -151,6 +179,10 @@ int main(int argc, char* argv[]) {
 		}
 		currentCount++;
 		worldTime += deltaTime;
+
+		TwDraw();
+		display.Update();
+
 		Movement();
 	}
 	return 0;
@@ -196,15 +228,18 @@ void Movement() {
 		}
 		if (e.type == SDL_MOUSEMOTION) {
 			if (e.motion.state & SDL_BUTTON_RMASK) {
+				SDL_ShowCursor(0);
 				camera->AddOrbit((float)(e.motion.y - lastMouseY) / lookSpeed, -(float)(e.motion.x - lastMouseX) / lookSpeed);
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
 			}else if (e.motion.state & SDL_BUTTON_MMASK) {
-				camera->GetCameraTransform().GetPosition().x -= (float)(e.motion.x - lastMouseX) / 250.0f;
-				camera->GetCameraTransform().GetPosition().y += (float)(e.motion.y - lastMouseY) / 250.0f;
+				SDL_ShowCursor(0);
+				camera->GetTransform().GetPosition().x -= (float)(e.motion.x - lastMouseX) / 250.0f;
+				camera->GetTransform().GetPosition().y += (float)(e.motion.y - lastMouseY) / 250.0f;
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
 			}else {
+				SDL_ShowCursor(1);
 				lastMouseX = e.motion.x;
 				lastMouseY = e.motion.y;
 			}
@@ -216,6 +251,9 @@ void Movement() {
 			shader.RecompileShader();
 			S_DefferedCompositor.GetLightingShader().RecompileShader();
 		}
+		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F]) {
+			camera->SetTransform(camera->GetInitialTransform());
+		}
 		keyInfo.bWDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_W];
 		keyInfo.bSDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_S];
 		keyInfo.bDDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_A];
@@ -224,22 +262,22 @@ void Movement() {
 		keyInfo.bEDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_E];
 	}
 	if (keyInfo.bWDown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetForwardVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() + camera->GetTransform().GetForwardVector() * movementSpeed;
 	}
 	if (keyInfo.bSDown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetForwardVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() - camera->GetTransform().GetForwardVector() * movementSpeed;
 	}
 	if (keyInfo.bADown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetRightVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() - camera->GetTransform().GetRightVector() * movementSpeed;
 	}
 	if (keyInfo.bDDown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetRightVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() + camera->GetTransform().GetRightVector() * movementSpeed;
 	}
 	if (keyInfo.bQDown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() - camera->GetCameraTransform().GetUpVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() - camera->GetTransform().GetUpVector() * movementSpeed;
 	}
 	if (keyInfo.bEDown) {
-		camera->GetCameraTransform().GetPosition() = camera->GetCameraTransform().GetPosition() + camera->GetCameraTransform().GetUpVector() * movementSpeed;
+		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() + camera->GetTransform().GetUpVector() * movementSpeed;
 	}
 }
 void RenderQuad() {

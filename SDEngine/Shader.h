@@ -2,7 +2,8 @@
 #include <string>
 #include <GLEW/glew.h>
 #include "Transform.h"
-#include "Camera.h"
+
+class Camera;
 
 enum class EShaderType {
 	VERTEX,

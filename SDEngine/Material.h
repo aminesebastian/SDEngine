@@ -6,7 +6,8 @@
 class Material {
 
 public:
-	Material(const std::string ShaderName, const std::string AlbedoTexture);
+	Material(const std::string ShaderName, const std::string AlbedoTexture = "", const std::string RMAOTexture = ""
+		, const std::string NormalTexture = "");
 	Material() {};
 	~Material();
 

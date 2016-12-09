@@ -1,7 +1,7 @@
 #include "Shader.h"
 #include <iostream>
 #include <fstream>
-
+#include "Camera.h"
 
 Shader::Shader(const std::string& ShaderName) {
 	this->ShaderName = ShaderName;

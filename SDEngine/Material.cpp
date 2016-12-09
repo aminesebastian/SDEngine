@@ -2,7 +2,8 @@
 
 
 
-Material::Material(const std::string ShaderName, const std::string AlbedoTexture) {
+Material::Material(const std::string ShaderName, const std::string AlbedoTexture, const std::string RMAOTexture
+	, const std::string NormalTexture) {
 
 	S_Textures[0] = &Texture2D(AlbedoTexture);
 	//S_Textures[1] = &Texture2D(RoughessTexture);

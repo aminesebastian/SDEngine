@@ -3,7 +3,6 @@
 #include <GLEW/glew.h>
 #include <string>
 #include <vector>
-#include "Shader.h"
 #include "Entity.h"
 #include "Material.h"
 #include "Texture2D.h"

@@ -12,12 +12,14 @@ public:
 		S_InitialTransform(SpawnTransform) {}
 
 	Entity() {}
-	virtual ~Entity();
+	virtual ~Entity() {};
 
 	virtual void Draw(Shader& shader) {}
 
 	Transform& GetTransform() { return S_Transform; }
 	Transform GetInitialTransform() { return S_InitialTransform; } 
+
+	inline void SetTransform(Transform NewTransform) { S_Transform = NewTransform; }
 
 	bool IsVisible() { return bVisible; }
 	void UpdateVisibility(bool bShow) { bVisible = bShow; }
@@ -32,12 +34,13 @@ public:
 	void Destroy() {
 		delete this;
 	}
+
 protected:
 	const World S_World;
 	Transform S_Transform;
 	Transform S_InitialTransform;
 	bool bVisible = true;
-	bool bNeedsTick = false;
+	bool bNeedsTick = true;
 	bool bNeedsBeginPlay = true;
 };
 
