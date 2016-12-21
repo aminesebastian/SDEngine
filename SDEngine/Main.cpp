@@ -22,7 +22,7 @@ float worldTime = 0.0f;
 int frameRate = 0.016f;
 std::vector<Entity*> entityList;
 std::vector<Light> lightList;
-Display display(1920, 1200, "SD Engine", 8);
+Display display(1280, 720, "SD Engine", 8);
 GBuffer S_Buffer;
 DefferedCompositor S_DefferedCompositor;
 Shader shader("./Res/GeometryPassShader");
@@ -38,6 +38,7 @@ float lookSpeed = 200.0f;
 
 bool bDebugGBuffer = false;
 bool bEnableSkySphere = false;
+bool bShowGrid = true;
 
 struct FKeyInfo {
 	bool bWDown;
@@ -47,6 +48,8 @@ struct FKeyInfo {
 	bool bQDown;
 	bool bEDown;
 	bool bTDown;
+	bool bGDown;
+	bool bKDown;
 };
 FKeyInfo keyInfo;
 
@@ -66,6 +69,13 @@ int main(int argc, char* argv[]) {
 	TwDefine(" StatUnit alpha=10 ");
 	TwAddVarRO(infoBar, "Frame Time", TW_TYPE_FLOAT, &deltaTime, "");
 	TwAddVarRO(infoBar, "Frame Rate", TW_TYPE_INT32, &frameRate, "");
+	int lightCount = 0;
+	TwAddVarRO(infoBar, "Light Count", TW_TYPE_INT32, &lightCount, "");
+
+	TwAddVarRO(infoBar, "Show Skysphere", TW_TYPE_BOOL8, &bEnableSkySphere, "");
+	TwAddVarRO(infoBar, "Debug GBuffer", TW_TYPE_BOOL8, &bDebugGBuffer, "");
+	TwAddVarRO(infoBar, "Show Grid", TW_TYPE_BOOL8, &bShowGrid, "");
+	TwAddVarRO(infoBar, "Movement Speed", TW_TYPE_FLOAT, &movementSpeed, "");
 
 	Texture2D defaultAlbedo("./res/T_DefaultAlbedoMap.png", "tex_Normal");
 	Texture2D defaultRMAO("./res/T_DefaultRMAOMap.png", "tex_RMAO");
@@ -119,15 +129,13 @@ int main(int argc, char* argv[]) {
 	gunner.RegisterTexture(&gunnerNormal);
 	entityList.push_back(&gunner);
 
-	if (bEnableSkySphere) {
-		Texture2D starfield("./res/T_OceanSkysphere.jpg");
-		Transform sphereTransform;
-		StaticMesh skySphere(S_World, sphereTransform, "./res/SkySphere.fbx");
-		skySphere.RegisterTexture(&defaultRMAO);
-		skySphere.RegisterTexture(&starfield);
-		skySphere.RegisterTexture(&defaultNormal);
-		entityList.push_back(&skySphere);
-	}
+	Texture2D starfield("./res/T_OceanSkysphere.jpg");
+	Transform sphereTransform;
+	StaticMesh skySphere(S_World, sphereTransform, "./res/SkySphere.fbx");
+	skySphere.RegisterTexture(&defaultRMAO);
+	skySphere.RegisterTexture(&starfield);
+	skySphere.RegisterTexture(&defaultNormal);
+
 	
 	Grid grid(100, 2);
 
@@ -170,7 +178,7 @@ int main(int argc, char* argv[]) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
 	while (!display.IsClosed()) {	
-
+		lightCount = lightList.size();
 		S_Buffer.BindForWriting();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader.Bind();
@@ -186,7 +194,12 @@ int main(int argc, char* argv[]) {
 		}
 
 		shader.Update(grid.GetTransform(), *camera);
-		grid.Draw(shader);
+		if (bShowGrid) {
+			grid.Draw(shader);
+		}
+		if (bEnableSkySphere) {
+			skySphere.Draw(shader);
+		}
 		for (int i = 0; i < lightList.size(); i++) {
 			if (i % 3 == 0) {
 				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime + (i/5.0f)) * 5;
@@ -309,6 +322,24 @@ void Movement() {
 			keyInfo.bTDown = true;
 		}else{
 			keyInfo.bTDown = false;
+		}
+	}
+	if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_K]) {
+		if (!keyInfo.bKDown) {
+			bEnableSkySphere = !bEnableSkySphere;
+			keyInfo.bKDown = true;
+		}
+		else {
+			keyInfo.bKDown = false;
+		}
+	}
+	if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_G]) {
+		if (!keyInfo.bGDown) {
+			bShowGrid = !bShowGrid;
+			keyInfo.bGDown = true;
+		}
+		else {
+			keyInfo.bGDown = false;
 		}
 	}
 	if (keyInfo.bWDown) {
