@@ -43,6 +43,19 @@ public:
 	StaticMesh(const World& World, const Transform& SpawnTransform, const std::string& ModelName);
 
 	virtual ~StaticMesh();
+	StaticMesh(const StaticMesh& other) {
+		S_VertexArrayObject = other.S_VertexArrayObject;
+		for (int i = 0; i < NUM_BUFFERS; i++) {
+			S_VertexArrayBuffers[i] = other.S_VertexArrayBuffers[i];
+		}
+		S_DrawCount = other.S_DrawCount;
+		Textures = other.Textures;
+		S_Positions = other.S_Positions;
+		S_TexCoords = other.S_TexCoords;
+		S_Normals = other.S_Normals;
+		S_Tangents = other.S_Tangents;
+		S_Indicies = other.S_Indicies;
+	}
 
 	virtual void Draw(Shader& shader) override;
 
@@ -54,6 +67,7 @@ public:
 	void RegisterTexture(Texture2D* texture) { Textures.push_back(texture); }
 private:
 	void operator=(const StaticMesh& other) {}
+
 	void InitMesh();
 
 	enum {

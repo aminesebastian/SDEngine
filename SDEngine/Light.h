@@ -24,7 +24,6 @@ public:
 		S_LightInfo.Intensity = Intensity;
 		S_LightInfo.Color = Color;
 		S_LightInfo.Attenuation = Attenuation;
-		S_Probe = &StaticMesh(World, GetTransform(), "./res/Sphere.fbx");
 	}
 	~Light();
 
@@ -37,18 +36,8 @@ public:
 		glUniform3fv(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Color").c_str()), 1, &GetLightInfo().Color[0]);
 		glUniform3fv(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Position").c_str()), 1, &GetTransform().GetPosition()[0]);
 		glUniform3fv(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Direction").c_str()), 1, &GetTransform().GetForwardVector()[0]);
-
-		//switch (GetLightInfo().Type) {
-		//	case ELightType::Ambient :glUniform1f(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Type").c_str()), 0);
-		//		break;
-		//	case ELightType::Spot:glUniform1f(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Type").c_str()), 1);
-		//		break;
-		//	case ELightType::Point:glUniform1f(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Type").c_str()), 2);
-		//		break;
-		//	case ELightType::Directional:glUniform1f(glGetUniformLocation(shader.GetProgram(), ("lights[" + std::to_string(index) + "].Type").c_str()), 3);
-		//		break;
-		//}
 	}
+	virtual void BeginPlay() override;
 	virtual void Draw(Shader& shader) override;
 	virtual void Tick(float DeltaTime) override;
 private:

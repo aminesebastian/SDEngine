@@ -61,6 +61,12 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Quake2Module.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -105,7 +111,13 @@
     <ClInclude Include="Light.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Quake2Module.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\DefferedLighting.frag">

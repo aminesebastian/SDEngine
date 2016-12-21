@@ -158,6 +158,8 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Prefab.cpp" />
+    <ClCompile Include="Quake2Module.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
@@ -175,6 +177,8 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Prefab.h" />
+    <ClInclude Include="Quake2Module.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="ImageUtils.h" />

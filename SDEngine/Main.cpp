@@ -22,7 +22,7 @@ float worldTime = 0.0f;
 int frameRate = 0.016f;
 std::vector<Entity*> entityList;
 std::vector<Light> lightList;
-Display display(1280, 720, "SD Engine", 8);
+Display display(1920, 1200, "SD Engine", 8);
 GBuffer S_Buffer;
 DefferedCompositor S_DefferedCompositor;
 Shader shader("./Res/GeometryPassShader");
@@ -36,6 +36,9 @@ World S_World;
 float movementSpeed = 0.5f;
 float lookSpeed = 200.0f;
 
+bool bDebugGBuffer = false;
+bool bEnableSkySphere = false;
+
 struct FKeyInfo {
 	bool bWDown;
 	bool bADown;
@@ -43,6 +46,7 @@ struct FKeyInfo {
 	bool bDDown;
 	bool bQDown;
 	bool bEDown;
+	bool bTDown;
 };
 FKeyInfo keyInfo;
 
@@ -63,19 +67,23 @@ int main(int argc, char* argv[]) {
 	TwAddVarRO(infoBar, "Frame Time", TW_TYPE_FLOAT, &deltaTime, "");
 	TwAddVarRO(infoBar, "Frame Rate", TW_TYPE_INT32, &frameRate, "");
 
+	Texture2D defaultAlbedo("./res/T_DefaultAlbedoMap.png", "tex_Normal");
+	Texture2D defaultRMAO("./res/T_DefaultRMAOMap.png", "tex_RMAO");
+	Texture2D defaultNormal("./res/T_DefaultNormalMap.png", "tex_Normal");
+
 	Texture2D albdeo("./res/Eye/T_EyeBaseColor.png");
 	Texture2D roughness("./res/Eye/T_EyeRoughness.png", "tex_RMAO");
 	Texture2D normal("./res/Eye/T_EyeNormal.png", "tex_Normal");
 
 	Transform cameraTransform(vec3(0, 15, 5));
 	cameraTransform.SetRotation(50, -180, 0);
-	camera = &Camera(S_World, cameraTransform, 70, display.GetAspectRatio(), 0.01f, 1000.0f);
+	camera = &Camera(S_World, cameraTransform, 70, display.GetAspectRatio(), 0.01f, 10000.0f);
 
 	Transform transform;
-	transform.SetUniformScale(3.0f);
-	transform.SetRotation(-60, 0, 0);
-	transform.GetPosition().y = 10;
-	transform.GetPosition().x = -6;
+	transform.SetUniformScale(6.0f);
+	transform.SetRotation(0, 0, 0);
+	transform.GetPosition().y = 70;
+	transform.GetPosition().x = -12;
 	StaticMesh eye(S_World, transform, "./res/Eye/Eye.fbx");
 	eye.RegisterTexture(&roughness);
 	eye.RegisterTexture(&albdeo);
@@ -83,52 +91,81 @@ int main(int argc, char* argv[]) {
 	entityList.push_back(&eye);
 
 	Transform transform2;
-	transform2.SetUniformScale(3.0f);
-	transform2.SetRotation(-60, 0, 0);
-	transform2.GetPosition().y = 10;
-	transform2.GetPosition().x = 6;
+	transform2.SetUniformScale(6.0f);
+	transform2.SetRotation(0, 0, 0);
+	transform2.GetPosition().y = 70;
+	transform2.GetPosition().x = 12;
 	StaticMesh eye2(S_World, transform2, "./res/Eye/Eye.fbx");
 	eye2.RegisterTexture(&roughness);
 	eye2.RegisterTexture(&albdeo);
 	eye2.RegisterTexture(&normal);
 	entityList.push_back(&eye2);
 
-	//Texture2D headTex("./res/Head/lambertian.jpg");
-	//Transform transform;
-	//transform.SetUniformScale(10.0f);
-	////transform.SetRotation(90, 0, 0);
-	//StaticMesh head(S_World, transform, "./res/Head/Head.fbx");
-	//head.RegisterTexture(&headTex);
-	//entityList.push_back(&head);
+	Transform planeTransform;
+	StaticMesh plane(S_World, planeTransform, "./res/Plane.fbx");
+	plane.RegisterTexture(&defaultRMAO);
+	plane.RegisterTexture(&defaultAlbedo);
+	plane.RegisterTexture(&defaultNormal);
+	entityList.push_back(&plane);
 
-	Grid grid(40, 2);
+	Texture2D gunnerAlbedo("./res/Gunner/T_GunnerBaseColor.tga");
+	Texture2D gunnerRMAO("./res/Gunner/T_GunnerRMAO.tga", "tex_RMAO");
+	Texture2D gunnerNormal("./res/Gunner/T_GunnerNormal.tga", "tex_Normal");
+	Transform gunnerTransform;
+	gunnerTransform.GetPosition().y = 23.5;
+	StaticMesh gunner(S_World, gunnerTransform, "./res/Gunner/Gunner.obj");
+	gunner.RegisterTexture(&gunnerRMAO);
+	gunner.RegisterTexture(&gunnerAlbedo);
+	gunner.RegisterTexture(&gunnerNormal);
+	entityList.push_back(&gunner);
+
+	if (bEnableSkySphere) {
+		Texture2D starfield("./res/T_OceanSkysphere.jpg");
+		Transform sphereTransform;
+		StaticMesh skySphere(S_World, sphereTransform, "./res/SkySphere.fbx");
+		skySphere.RegisterTexture(&defaultRMAO);
+		skySphere.RegisterTexture(&starfield);
+		skySphere.RegisterTexture(&defaultNormal);
+		entityList.push_back(&skySphere);
+	}
+	
+	Grid grid(100, 2);
 
 	long last = 0;
 	int currentCount = 0;
 	int debugCount = 5;
 
 
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
 			float r = (float)(rand()) / (float)(RAND_MAX);
 			float g = (float)(rand()) / (float)(RAND_MAX);
 			float b = (float)(rand()) / (float)(RAND_MAX);
 			Transform tempTransform;
-			tempTransform.GetPosition().x = (float)j*3 - 12.0f;
-			tempTransform.GetPosition().y = ((float)(rand()) / (float)(RAND_MAX)) + 3;
-			tempTransform.GetPosition().z = (float)i*3 - 13.5f;
+			tempTransform.GetPosition().x = (float)j*5 - 20.0f;
+			tempTransform.GetPosition().y = (i* j) + 20;
+			tempTransform.GetPosition().z = (float)i*5- 20.0f;
 			vec3 tempColor = vec3(r, g, b);
-			float atten = ((float)(rand()) / (float)(RAND_MAX))*5;
-			Light tempLight = Light(S_World, tempTransform, 20, tempColor, atten);
+			float atten = ((float)(rand()) / (float)(RAND_MAX)) * 10;
+			Light tempLight = Light(S_World, tempTransform, 1, tempColor, atten);
 			lightList.push_back(tempLight);
+			entityList.push_back(&tempLight);
 		}
 	}
 
-/*	Transform tempLightTrasform;
-	tempLightTrasform.GetPosition().y = 5;
-	float atten = ((float)(rand()) / (float)(RAND_MAX))*5;
-	Light tempLight = Light(S_World, tempLightTrasform, 100, vec3(1,1,1), atten);
-	lightList.push_back(tempLight)*/;
+
+	Transform tempTransform;
+	tempTransform.GetPosition().x = 0;
+	tempTransform.GetPosition().y = 85;
+	tempTransform.GetPosition().z = 15;
+	vec3 tempColor = vec3(1.0f, 1.0f, 0.90f);
+	float atten = 10;
+	Light tempLight = Light(S_World, tempTransform, 1, tempColor, atten);
+	lightList.push_back(tempLight);
+
+	for (int i = 0; i < entityList.size(); i++) {
+		entityList[i]->BeginPlay();
+	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	S_Buffer.Init(display.GetDimensions().x, display.GetDimensions().y);
@@ -149,25 +186,31 @@ int main(int argc, char* argv[]) {
 		}
 
 		shader.Update(grid.GetTransform(), *camera);
-		//grid.Draw(shader);
+		grid.Draw(shader);
 		for (int i = 0; i < lightList.size(); i++) {
 			if (i % 3 == 0) {
-				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime + (i/5.0f)) * 2;
-				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + cos(worldTime + (i / 5.0f)) * 2;
-				lightList[i].SetLightIntensity(cos(worldTime + (i / 5.0f)) + 1.5f);
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + sin(worldTime + (i/5.0f)) * 5;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + cos(worldTime + (i / 5.0f)) * 5;
+				//lightList[i].SetLightIntensity(cos(worldTime + (i / 5.0f)) + 1.5f);
 			}else if (i % 5 == 0) {
-				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 5.0f)) * 2;
-				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 5.0f)) * 2;
-				lightList[i].SetLightIntensity(sin(worldTime + (i / 5.0f)) + 1.5f);
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 5.0f)) * 5;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 5.0f)) * 5;
+				//lightList[i].SetLightIntensity(sin(worldTime + (i / 5.0f)) + 1.5f);
 			}else {
-				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 10.0f)) * 2;
-				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 10.0f)) * 2;
-				lightList[i].SetLightIntensity(sin(worldTime + (i / 10.0f)) + 2.0f);
+				lightList[i].GetTransform().GetPosition().x = lightList[i].GetInitialTransform().GetPosition().x + cos(worldTime + (i / 10.0f)) * 5;
+				lightList[i].GetTransform().GetPosition().z = lightList[i].GetInitialTransform().GetPosition().z + sin(worldTime + (i / 10.0f)) * 5;
+				//lightList[i].SetLightIntensity(sin(worldTime + (i / 10.0f)) + 2.0f);
 			}
+			lightList[i].Draw(shader);
 		}
 
-		S_DefferedCompositor.CompositeLighting(&S_Buffer, lightList, camera);
-		S_DefferedCompositor.CompositePostProcesing(&S_Buffer, camera);
+		if (bDebugGBuffer) {
+			DebugGBuffer();
+		}else{
+			S_DefferedCompositor.CompositeLighting(&S_Buffer, lightList, camera);
+			S_DefferedCompositor.CompositePostProcesing(&S_Buffer, camera);
+		}
+
 		long now = SDL_GetTicks();
 		deltaTime = ((float)(now - last)) / 1000;
 		frameRate = 1.0f / deltaTime;
@@ -187,7 +230,6 @@ int main(int argc, char* argv[]) {
 	}
 	return 0;
 }
-
 
 void StatUnit() {
 	system("cls");
@@ -260,6 +302,14 @@ void Movement() {
 		keyInfo.bADown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_D];
 		keyInfo.bQDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_Q];
 		keyInfo.bEDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_E];
+	}
+	if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_T]) {
+		if (!keyInfo.bTDown) {
+			bDebugGBuffer = !bDebugGBuffer;
+			keyInfo.bTDown = true;
+		}else{
+			keyInfo.bTDown = false;
+		}
 	}
 	if (keyInfo.bWDown) {
 		camera->GetTransform().GetPosition() = camera->GetTransform().GetPosition() + camera->GetTransform().GetForwardVector() * movementSpeed;

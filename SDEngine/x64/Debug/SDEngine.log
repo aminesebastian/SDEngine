@@ -1,138 +1,26 @@
-﻿Build started 12/20/2016 9:01:36 PM.
+﻿Build started 12/21/2016 3:26:54 AM.
      1>Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine\SDEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I./Include /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Camera.cpp DefferedCompositor.cpp Display.cpp Entity.cpp GBuffer.cpp Grid.cpp Light.cpp Main.cpp Material.cpp ObjLoader.cpp Shader.cpp StaticMesh.cpp ImageUtils.cpp Texture2D.cpp Transform.cpp World.cpp
-         World.cpp
-         Transform.cpp
-         Texture2D.cpp
-         ImageUtils.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(278): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(286): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(284): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(326): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(348): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(346): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(384): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(486): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(499): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(572): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(610): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(628): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(1545): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(1574): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(1592): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2586): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2711): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2717): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2726): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2728): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2737): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2773): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2777): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2799): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2802): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2813): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(2853): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3053): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3064): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3068): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3248): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3252): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3260): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3268): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3281): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3298): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3302): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3450): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3478): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3489): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3490): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3504): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3523): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3541): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3552): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3562): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3589): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3590): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3807): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3811): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3817): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3829): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3858): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3866): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3883): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3916): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(3950): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4063): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4072): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4077): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4081): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4131): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-     1>g:\sd_engine\sdengine\sdengine\sdengine\imageutils.cpp(4338): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-         StaticMesh.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(12): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(18): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(47): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(52): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(61): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(71): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(81): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(91): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(100): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(102): warning C4018: '<': signed/unsigned mismatch
-     1>g:\sd_engine\sdengine\sdengine\sdengine\staticmesh.cpp(109): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-         Shader.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\shader.cpp(79): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
-         ObjLoader.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(27): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(84): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(121): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(136): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(164): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(262): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(296): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(329): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(378): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\objloader.cpp(386): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-         Material.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I./Include /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Main.cpp
          Main.cpp
      1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
      1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
      1>g:\sd_engine\sdengine\sdengine\sdengine\light.h(15): warning C4305: 'initializing': truncation from 'double' to 'float'
      1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(134): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(173): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(211): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(214): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(217): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(220): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(257): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(258): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(259): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(260): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(261): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(262): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-         Light.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\light.h(15): warning C4305: 'initializing': truncation from 'double' to 'float'
-         Grid.cpp
-         GBuffer.cpp
-         Entity.cpp
-         Display.cpp
-         DefferedCompositor.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\light.h(15): warning C4305: 'initializing': truncation from 'double' to 'float'
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-         Camera.cpp
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     1>g:\sd_engine\sdengine\sdengine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-         Generating Code...
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(61): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(146): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(171): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(216): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(253): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(256): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(259): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(262): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(299): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(300): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(301): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(302): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(303): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
+     1>g:\sd_engine\sdengine\sdengine\sdengine\main.cpp(304): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"G:\SD_Engine\SDEngine\SDEngine\x64\Debug\SDEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\Lib glew32.lib glew32s.lib SDL2.lib SDL2main.lib SDL2test.lib AntTweakBar64.lib OpenGL32.lib "assimp-vc140-mt.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"G:\SD_Engine\SDEngine\SDEngine\x64\Debug\SDEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\SD_Engine\SDEngine\SDEngine\x64\Debug\SDEngine.lib" /MACHINE:X64 x64\Debug\Camera.obj
          x64\Debug\DefferedCompositor.obj
@@ -144,6 +32,8 @@
          x64\Debug\Main.obj
          x64\Debug\Material.obj
          x64\Debug\ObjLoader.obj
+         x64\Debug\Prefab.obj
+         x64\Debug\Quake2Module.obj
          x64\Debug\Shader.obj
          x64\Debug\StaticMesh.obj
          x64\Debug\ImageUtils.obj
@@ -155,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:11.71
+Time Elapsed 00:00:01.33
