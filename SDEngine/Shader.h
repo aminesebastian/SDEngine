@@ -17,7 +17,7 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const Transform& Transform, Camera& Camera);
+	void Update(const Transform& Transform, Camera* Camera);
 	void RecompileShader();
 
 	GLuint& GetProgram() { return S_Program; }

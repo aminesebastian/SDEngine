@@ -4,13 +4,57 @@
 #include "Texture2D.h"
 #include "Camera.h"
 
-DefferedCompositor::DefferedCompositor() {
-	Shader tempShader("./Res/DefferedLighting");
-	S_LightingShader = tempShader;
-	S_LightingShader.RecompileShader();
+DefferedCompositor::DefferedCompositor(string LightingShader) {
+	S_LightingShader = new Shader(LightingShader);
+	S_PostProcessShader = new Shader("Res/PostProcess");
+
 }
 DefferedCompositor::~DefferedCompositor() {}
 
+void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* Camera) {
+	WriteBuffer->BindForWriting();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	S_LightingShader->Bind();
+	glUniform3fv(glGetUniformLocation(S_LightingShader->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);
+	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
+	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
+
+	for (GLuint i = 0; i < Lights.size(); i++) {
+		Lights[i]->SendShaderInformation(S_LightingShader, i);
+	}
+	
+	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
+
+	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
+		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), uniformNames[i].c_str()), i);
+	}
+
+	DrawToScreen();
+}
+void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera) {
+	ReadBuffer->BindForReading();
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	S_PostProcessShader->Bind();
+	glUniform3fv(glGetUniformLocation(S_PostProcessShader->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);
+	glUniform1f(glGetUniformLocation(S_PostProcessShader->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
+	glUniform1f(glGetUniformLocation(S_PostProcessShader->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
+
+	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp"};
+
+	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
+		glUniform1i(glGetUniformLocation(S_PostProcessShader->GetProgram(), uniformNames[i].c_str()), i);
+	}
+
+	DrawToScreen();
+}
 void DefferedCompositor::DrawToScreen() {
 	if (quadVAO == 0) {
 		GLfloat quadVertices[] = {
@@ -19,7 +63,7 @@ void DefferedCompositor::DrawToScreen() {
 			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 		};
-		// Setup plane VAO
+
 		glGenVertexArrays(1, &quadVAO);
 		glGenBuffers(1, &quadVBO);
 		glBindVertexArray(quadVAO);
@@ -33,28 +77,4 @@ void DefferedCompositor::DrawToScreen() {
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
-}
-void DefferedCompositor::CompositeLighting(GBuffer* Buffer, vector<Light>& Lights, Camera* camera) {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_LightingShader.Bind();
-	glUniform3fv(glGetUniformLocation(S_LightingShader.GetProgram(), "cameraPos"), 1, &camera->GetTransform().GetPosition()[0]);
-	glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), "NEAR_CLIP"), camera->GetNearClipPlane());
-	glUniform1f(glGetUniformLocation(S_LightingShader.GetProgram(), "FAR_CLIP"), camera->GetFarClipPlane());
-	for (GLuint i = 0; i < Lights.size(); i++) {
-		Lights[i].SendShaderInformation(S_LightingShader, i);
-	}
-	
-	string uniformNames[8]{"worldPosition", "albedo", "RMAO", "emissive", "normal", "texCoord"};
-
-	for (int i = 0; i < Buffer->GBUFFER_NUM_TEXTURES; i++) {	
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, Buffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_LightingShader.GetProgram(), uniformNames[i].c_str()), i);
-	}
-	DrawToScreen();
-}
-void DefferedCompositor::CompositePostProcesing(GBuffer* Buffer, Camera* Camera) {
-
 }

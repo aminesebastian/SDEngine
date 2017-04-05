@@ -8,6 +8,7 @@ class Display {
 
 public:
 	Display(int Width, int Height, const std::string& Title, int BitDepth);
+	Display() : Display(1280, 720, "SD_ENGINE", 32) {}
 	virtual ~Display();
 
 	void Update();

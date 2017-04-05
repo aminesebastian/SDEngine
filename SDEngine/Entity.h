@@ -6,8 +6,7 @@
 class Entity {
 
 public:
-	Entity(const World& World, const Transform SpawnTransform) :
-		S_World(World),
+	Entity(const Transform SpawnTransform) :
 		S_Transform(SpawnTransform),
 		S_InitialTransform(SpawnTransform) {}
 
@@ -24,7 +23,7 @@ public:
 	bool IsVisible() { return bVisible; }
 	void UpdateVisibility(bool bShow) { bVisible = bShow; }
 	void ToggleVisibility() { bVisible = !bVisible; }
-
+	void CompleteSpawn(UWorld* World) { S_World = World; }
 	bool NeedsTick() { return bNeedsTick; }
 	bool NeedsBeginPlay() { return bNeedsBeginPlay; }
 
@@ -36,7 +35,7 @@ public:
 	}
 
 protected:
-	const World S_World;
+	const UWorld* S_World;
 	Transform S_Transform;
 	Transform S_InitialTransform;
 	bool bVisible = true;

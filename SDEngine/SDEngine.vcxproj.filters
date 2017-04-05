@@ -11,54 +11,81 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{13a7b081-ef44-4d30-b7b2-3e2df88b24ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Entities">
+      <UniqueIdentifier>{03868701-fcb6-4426-9c76-ccad46b1e8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{21393857-7b27-46cb-8a3a-603322db22ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{5a6e0009-c4ee-441b-bafd-8b81a5874f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Rendering">
+      <UniqueIdentifier>{19560051-d993-4bb1-a6ef-66fe470b7316}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utilities">
+      <UniqueIdentifier>{cf11a89e-ec53-4293-af9b-dc358dcfeb89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{67ed7848-4d26-4587-b72d-6aa74e3e0cd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DefferedCompositor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="DefferedCompositor.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtils.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SLogger.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,46 +93,57 @@
     <ClInclude Include="Display.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticMesh.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageUtils.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjLoader.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="DefferedCompositor.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Headers\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticMesh.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="DefferedCompositor.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtils.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoader.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h" />
+    <ClInclude Include="SLogger.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\DefferedLighting.frag">
@@ -124,6 +162,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Res\GeometryPassShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\PostProcess.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\PostProcess.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

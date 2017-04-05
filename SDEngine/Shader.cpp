@@ -108,17 +108,12 @@ void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 void Shader::Bind() {
 	glUseProgram(S_Program);
 }
-void Shader::Update(const Transform& Transform, Camera& Camera) {
+void Shader::Update(const Transform& Transform, Camera* Camera) {
 
-	mat4 tempMVP = Camera.GetProjectionMatrix()* Camera.GetViewMatrix() * Transform.GetModelMatrix();
+	mat4 tempMVP = Camera->GetProjectionMatrix()* Camera->GetViewMatrix() * Transform.GetModelMatrix();
 
 	glUniformMatrix4fv(S_Uniforms[MODEL_MATRIX_U], 1, GL_FALSE, &Transform.GetModelMatrix()[0][0]);
 	glUniformMatrix4fv(S_Uniforms[MVP_MATRIX_U], 1, GL_FALSE, &tempMVP[0][0]);
-	//std::cout << Camera.GetCameraTransform().ForwardVectorToString() << std::endl;
-	//glUniform3fv(S_Uniforms[LIGHT_DIRECTION_U], 1, &LightDirection[0]);
-	//glUniform3fv(S_Uniforms[LIGHT_COLOR_U], 1, &LightColor[0]);
-	//glUniform1f(S_Uniforms[LIGHT_INTENSITY_U], LightIntensity);
-	//glUniform3fv(S_Uniforms[AMBIENT_COLOR_U], 1, &AmbientColor[0]);
-	//glUniform1f(S_Uniforms[AMBIENT_INTENSITY_U], AmbientIntensity);
-
+	glUniform1f(glGetUniformLocation(S_Program, "NEAR_CLIP"), Camera->GetNearClipPlane());
+	glUniform1f(glGetUniformLocation(S_Program, "FAR_CLIP"), Camera->GetFarClipPlane());
 }

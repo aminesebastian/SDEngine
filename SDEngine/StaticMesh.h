@@ -39,8 +39,8 @@ private:
 class StaticMesh : public Entity {
 
 public:
-	StaticMesh(const World& World, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
-	StaticMesh(const World& World, const Transform& SpawnTransform, const std::string& ModelName);
+	StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
+	StaticMesh(const Transform& SpawnTransform, const std::string& ModelName);
 
 	virtual ~StaticMesh();
 
@@ -52,6 +52,9 @@ public:
 	void populateVertecies(aiMesh* Mesh);
 
 	void RegisterTexture(Texture2D* texture) { Textures.push_back(texture); }
+
+	void SetCustomColor(vec3 Color) { S_CustomAlbedo = Color; S_UseCustomColor = true; }
+	void SetMaterialID(int ID) { S_MaterialID = ID; }
 private:
 	void operator=(const StaticMesh& other) {}
 	void InitMesh();
@@ -62,7 +65,7 @@ private:
 		NORMAL_VB,
 		TANGENT_VB,
 		INDEX_VB,
-
+		COLORS_VB,
 		NUM_BUFFERS
 	};
 
@@ -75,6 +78,17 @@ private:
 	std::vector<vec2> S_TexCoords;
 	std::vector<vec3> S_Normals;
 	std::vector<vec3> S_Tangents;
+	std::vector<vec3> S_VertexColors;
 	std::vector<unsigned int> S_Indicies;
+
+
+	bool S_UseCustomColor = false;
+	bool S_UseCustomRoughness = false;
+	bool S_UseCustomMetalness = false;
+
+	vec3 S_CustomAlbedo;
+	float S_CustomRoughness;
+	float S_CustomMetalness;
+	int	S_MaterialID;
 };
 

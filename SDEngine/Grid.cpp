@@ -3,6 +3,7 @@
 
 
 void Grid::Draw(Shader& shader) {
+	glUniform1i(glGetUniformLocation(shader.GetProgram(), "MAT_ID"), 1);
 	glBegin(GL_LINES);
 	glColor3f(0.75f, 0.75f, 0.75f);
 	for (int i = -S_HalfSize; i <= S_HalfSize; i++){

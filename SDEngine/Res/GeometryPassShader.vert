@@ -7,7 +7,6 @@ layout (location = 3) in vec3 tangent;
 
 uniform mat4 modelMatrix;
 uniform mat4 MVP;
-
                                      
 out vec2 texCoord0;                                                                 
 out mat3 tbnMatrix0;                                                                     

@@ -18,7 +18,5 @@ void main() {
 	vec4 ambientContribution = vec4(ambientColor*ambientIntensity, 1.0);
 	float directionalLight = max(dot(-lightDirection, normal0), 0.0)*lightIntensity*5;	
 	
-	outColor =  ((directionalLight +  ambientContribution)*texture2D(tex_roughness, texCoord0).r) * texture2D(tex_albedo, texCoord0);
-	
-		
+	outColor =  ((directionalLight +  ambientContribution)*texture2D(tex_roughness, texCoord0).r) * texture2D(tex_albedo, texCoord0);		
 }

@@ -3,15 +3,31 @@
 #include <vector>
 
 class Entity;
+class Camera;
+class Shader;
+class Light;
 
-class World {
+
+using namespace std;
+
+class UWorld {
 public:
-	World();
-	virtual ~World();
+	UWorld();
+	virtual ~UWorld();
 
-	void DrawWorld();
+	void TickWorld(float DeltaTime);
+
+	void RegisterEntity(Entity* entity);
+	bool DestroyEntity(Entity* entity);
+
+	void RegisterLight(Light* light);
+	bool DestroyLight(Light* light);
+
+	vector<Entity*> GetWorldEntities() { return S_EntityList; }
+	vector<Light*> GetWorldLights() { return S_LightList; }
 
 private:
-	std::vector<Entity*> S_EntityList;
+	vector<Entity*> S_EntityList;
+	vector<Light*> S_LightList;
 };
 
