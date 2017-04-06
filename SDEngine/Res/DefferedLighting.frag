@@ -42,7 +42,7 @@ void main()	{
 	MatID				= texture(matID, texCoord0);
 
 
-	vec4 output		= texture(albedo, texCoord0) * vec4(Luminance(), 1.0);
+	vec4 output		=  texture(albedo, texCoord0) * vec4(Luminance(), 1.0);
 	LitOutput			= output;
 
     float brightness = dot(output.rgb, vec3(0.2126, 0.7152, 0.0722));
@@ -51,9 +51,9 @@ void main()	{
 vec3 Luminance() {
 	vec3 finalLightIntensity;
 	if(texture(matID, texCoord0) == 0) {
-		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.1f;
+		//finalLightIntensity = texture(albedo, texCoord0).rgb * 0.0005f;
 		for(int i=0; i<NUM_LIGHTS; i++) {
-			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/200, 0.02f);	
+			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/1000, 0.020);	
 		}
 	}else{
 		finalLightIntensity = texture(albedo, texCoord0).rgb;
@@ -70,12 +70,13 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
     attenuation = max((attenuation - cutoff) / (1 - cutoff), 0);
     float LdotN = max(dot(N, L), 0.0);
 
-	float roughness = texture(RMAO, texCoord0).r;
+	float roughness = 0.0;//texture(RMAO, texCoord0).r;
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
     vec3 halfDir = normalize(L + eyeDir);
     float specAngle = max(dot(halfDir, N), 0.0);
-    float specularIntensity = pow(specAngle, 16.0)*roughness;
+    float specularIntensity = pow(specAngle, 2.0+(512*(1-roughness)));
 
-	//return (lightColour * lightIntensity) * LdotN;
-    return ((lightColour * lightIntensity) + specularIntensity) * LdotN * attenuation;
+	float metallic = 0.0f;
+	vec3 adjustedSpecular = ((texture(albedo, texCoord0).rgb * metallic) + (lightColour * (1.0-metallic))) * specularIntensity;
+    return ((adjustedSpecular + lightIntensity)) * LdotN * attenuation;
 }

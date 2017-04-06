@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Light.h"
 
 Engine::Engine() {
 	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
@@ -33,18 +34,17 @@ bool Engine::Init() {
 
 void Engine::MainLoop()  {
 	while (!S_Display->IsClosed()) {
-		long now = SDL_GetTicks();
+		float now = SDL_GetTicks();
 
 		GameLoop();
 		RenderingLoop();
 		UILoop();
 		Movement();
 
-		S_DeltaTime = ((float)(now - S_LastFrameTime));
-		S_FrameRate = 1.0f / S_DeltaTime;
+		S_DeltaTime = now - S_LastFrameTime;
+		S_FrameRate = 1.0f / (S_DeltaTime/1000);
 		S_LastFrameTime = now;
 		S_WorldTime += S_DeltaTime;
-
 		S_Display->Update();
 	}
 }
@@ -72,6 +72,26 @@ void Engine::GameLoop() {
  **************************************************************************************************/
 
 void Engine::RenderingLoop() {
+	for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
+		if (i % 2 == 0) {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i%10);
+		}else {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+		}
+		if (i % 2 == 0) {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+		}
+		else {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1*glm::sin((S_WorldTime + ((float)i/1000.0f) )/ 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+		}
+		if (i % 2 == 0) {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+		}
+		else {
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1*glm::cos((S_WorldTime + ((float)i / 1000.0f))/ 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+		}
+		
+	}
 	S_RenderingEngine->RenderWorld(S_World, S_Camera);
 }
 

@@ -54,6 +54,7 @@ public:
 	void RegisterTexture(Texture2D* texture) { Textures.push_back(texture); }
 
 	void SetCustomColor(vec3 Color) { S_CustomAlbedo = Color; S_UseCustomColor = true; }
+	void SetCustomRoughness(float Roughness) { S_CustomRoughness = Roughness; S_UseCustomRoughness = true; }
 	void SetMaterialID(int ID) { S_MaterialID = ID; }
 private:
 	void operator=(const StaticMesh& other) {}

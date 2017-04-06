@@ -54,12 +54,9 @@ void main()	{
                 * weight[i];
     }
 
-
-
-
-
 	float gamma = 2.2;
 	vec4 composite = (bloom) + texture(finalComp, texCoord0);
+	//vec4 composite = texture(finalComp, texCoord0);
 	vec4 gammaCorrected = pow(composite, vec4(1.0 / gamma));
     fragColor = gammaCorrected;
 }
