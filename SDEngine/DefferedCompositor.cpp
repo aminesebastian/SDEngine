@@ -6,12 +6,21 @@
 
 DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_LightingShader = new Shader(LightingShader);
-	S_PostProcessShader = new Shader("Res/PostProcess");
-
+	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output"));
+	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/Bloom"));
+	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/ToneMapping"));
 }
 DefferedCompositor::~DefferedCompositor() {}
 
+void DefferedCompositor::RecompileShaders() {
+	S_LightingShader->RecompileShader();
+	S_FinalOutputShader->RecompileShader();
+	for (int i = 0; i < S_PostProcessingShaders.size(); i++) {
+		S_PostProcessingShaders[i]->RecompileShader();
+	}
+}
 void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* Camera) {
+	ReadBuffer->BindForReading();
 	WriteBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -35,24 +44,40 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 
 	DrawToScreen();
 }
-void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera) {
+void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex) {
 	ReadBuffer->BindForReading();
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	WriteBuffer->BindForWriting();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_PostProcessShader->Bind();
-	glUniform3fv(glGetUniformLocation(S_PostProcessShader->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);
-	glUniform1f(glGetUniformLocation(S_PostProcessShader->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
-	glUniform1f(glGetUniformLocation(S_PostProcessShader->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
+	GetPostProcessShader(PostProcessingIndex)->Bind();
+	glUniform3fv(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);
+	glUniform1f(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
+	glUniform1f(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
 
-	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp"};
+	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
 
 	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_PostProcessShader->GetProgram(), uniformNames[i].c_str()), i);
+		glUniform1i(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), uniformNames[i].c_str()), i);
 	}
+	DrawToScreen();		
 
+}
+void DefferedCompositor::OutputToScreen(GBuffer* ReadBuffer) {
+	ReadBuffer->BindForReading();
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	S_FinalOutputShader->Bind();
+
+	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
+
+	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
+		glUniform1i(glGetUniformLocation(S_FinalOutputShader->GetProgram(), uniformNames[i].c_str()), i);
+	}
 	DrawToScreen();
 }
 void DefferedCompositor::DrawToScreen() {

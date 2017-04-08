@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -192,14 +192,16 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\DefferedLighting.frag" />
-    <None Include="Res\DefferedLighting.vert" />
-    <None Include="Res\ForwardShader.frag" />
-    <None Include="Res\ForwardShader.vert" />
-    <None Include="Res\GeometryPassShader.frag" />
-    <None Include="Res\GeometryPassShader.vert" />
-    <None Include="Res\PostProcess.frag" />
-    <None Include="Res\PostProcess.vert" />
+    <None Include="Res\Shaders\DefferedLighting.frag" />
+    <None Include="Res\Shaders\DefferedLighting.vert" />
+    <None Include="Res\Shaders\GeometryPassShader.frag" />
+    <None Include="Res\Shaders\GeometryPassShader.vert" />
+    <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
+    <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
+    <None Include="Res\Shaders\PostProcessing\Output.frag" />
+    <None Include="Res\Shaders\PostProcessing\Output.vert" />
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

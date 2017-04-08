@@ -29,6 +29,9 @@
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{67ed7848-4d26-4587-b72d-6aa74e3e0cd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\PostProcessing">
+      <UniqueIdentifier>{f0c1df1f-c8c2-4002-b377-08c606f826cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Display.cpp">
@@ -146,29 +149,35 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\DefferedLighting.frag">
+    <None Include="Res\Shaders\DefferedLighting.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\DefferedLighting.vert">
+    <None Include="Res\Shaders\GeometryPassShader.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\ForwardShader.frag">
+    <None Include="Res\Shaders\GeometryPassShader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\ForwardShader.vert">
+    <None Include="Res\Shaders\DefferedLighting.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\GeometryPassShader.frag">
-      <Filter>Shaders</Filter>
+    <None Include="Res\Shaders\PostProcessing\Bloom.frag">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
-    <None Include="Res\GeometryPassShader.vert">
-      <Filter>Shaders</Filter>
+    <None Include="Res\Shaders\PostProcessing\Bloom.vert">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
-    <None Include="Res\PostProcess.frag">
-      <Filter>Shaders</Filter>
+    <None Include="Res\Shaders\PostProcessing\Output.frag">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
-    <None Include="Res\PostProcess.vert">
-      <Filter>Shaders</Filter>
+    <None Include="Res\Shaders\PostProcessing\Output.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.vert">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
   </ItemGroup>
 </Project>

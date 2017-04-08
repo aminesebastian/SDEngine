@@ -25,7 +25,7 @@ Engine::~Engine() {
 bool Engine::Init() {
 	if (bIsInitialized) { return false; }
 
-	S_RenderingEngine->ChangeShader("./Res/GeometryPassShader");
+	S_RenderingEngine->ChangeShader("./Res/Shaders/GeometryPassShader");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	bIsInitialized = true;

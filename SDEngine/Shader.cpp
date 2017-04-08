@@ -37,7 +37,13 @@ void Shader::RecompileShader() {
 	S_Uniforms[LIGHT_COLOR_U] = glGetUniformLocation(S_Program, "lightColor");
 	S_Uniforms[CAMERA_VIEW_VECTOR_U] = glGetUniformLocation(S_Program, "viewVector");
 
-	std::cout << "Compilation Success!" << std::endl;
+	int lastSlash = 0;
+	for (int i = 0; i < ShaderName.length(); i++) {
+		if (ShaderName[i] == '/') {
+			lastSlash = i;
+		}
+	}
+	std::cout << "Compilation Success! -> " << ShaderName.substr(lastSlash+1, ShaderName.length() - lastSlash) << std::endl;
 }
 Shader::~Shader() {
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {

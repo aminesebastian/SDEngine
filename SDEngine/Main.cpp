@@ -37,17 +37,17 @@ int main(int argc, char* argv[]) {
 	init_logger("SD_EngineLog.txt");
 	PrintToLog("Engine Launched!");
 
-	//Texture2D torusAlbedo("res/T_TorusBaseColor.tga");
-	//Texture2D torusRoughness("res/T_TorusRMAO.tga", "tex_RMAO");
-	//Texture2D torusNormal("res/T_TorusNormal.tga", "tex_Normal");
+	Texture2D torusAlbedo("res/T_TorusBaseColor.tga");
+	Texture2D torusRoughness("res/T_TorusRMAO.tga", "tex_RMAO");
+	Texture2D torusNormal("res/T_TorusNormal.tga", "tex_Normal");
 
-	//Transform torusTransform;
-	//torusTransform.SetUniformScale(5.0f);
-	//StaticMesh torus(torusTransform, "./res/Torus.fbx");
-	//torus.RegisterTexture(&torusAlbedo);
-	//torus.RegisterTexture(&torusRoughness);
-	//torus.RegisterTexture(&torusNormal);
-	//S_Engine->GetWorld()->RegisterEntity(&torus);
+	Transform torusTransform;
+	torusTransform.SetUniformScale(5.0f);
+	StaticMesh torus(torusTransform, "./res/Torus.fbx");
+	torus.RegisterTexture(&torusAlbedo);
+	torus.RegisterTexture(&torusRoughness);
+	torus.RegisterTexture(&torusNormal);
+	S_Engine->GetWorld()->RegisterEntity(&torus);
 
 
 	Transform transform;

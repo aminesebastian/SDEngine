@@ -16,14 +16,20 @@ public:
 	~DefferedCompositor();
 
 	void CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* camera);
-	void CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera);
+	void CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex);
+	void OutputToScreen(GBuffer* ReadBuffer);
+
+	void RecompileShaders();
+
 	void DrawToScreen();
 	Shader* GetLightingShader() { return S_LightingShader; }
-	Shader* GetPostProcessShader() { return S_PostProcessShader; }
+	Shader* GetPostProcessShader(int Index) { return S_PostProcessingShaders[Index]; }
+	int GetPostProcessShaderCount() { return S_PostProcessingShaders.size(); }
 private:
 
 	Shader* S_LightingShader;
-	Shader* S_PostProcessShader;
+	Shader* S_FinalOutputShader;
+	vector<Shader*> S_PostProcessingShaders;
 	GLuint quadVAO = 0;
 	GLuint quadVBO;
 

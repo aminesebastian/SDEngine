@@ -11,7 +11,7 @@ URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1 = new GBuffer();
 	S_Buffer2 = new GBuffer();
 	S_Display = Display;
-	S_DefferedCompositor = new DefferedCompositor("Res/DefferedLighting");
+	S_DefferedCompositor = new DefferedCompositor("Res/Shaders/DefferedLighting");
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 }
@@ -22,8 +22,7 @@ URenderingEngine::~URenderingEngine() {
 void URenderingEngine::ChangeShader(std::string ShaderName) { S_Shader = new Shader(ShaderName); }
 void URenderingEngine::RecompileShaders() {
 	S_Shader->RecompileShader(); 
-	S_DefferedCompositor->GetLightingShader()->RecompileShader(); 
-	S_DefferedCompositor->GetPostProcessShader()->RecompileShader();
+	S_DefferedCompositor->RecompileShaders();
 }
 
 void URenderingEngine::DebugGBuffer() {
@@ -56,7 +55,7 @@ void URenderingEngine::CopyToFreeGBuffer() {
 
 }
 void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
-	GetReadGBuffer()->BindForWriting();
+	GetFreeGBuffer()->BindForWriting();
 	S_Shader->Bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
@@ -72,14 +71,19 @@ void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 			World->GetWorldLights()[i]->Draw(*S_Shader);
 		}
 	}
-	//CopyToFreeGBuffer();
-	//FlipCurrentBufferIndex();
+	FlipCurrentBufferIndex();
 
 	S_DefferedCompositor->CompositeLighting(GetReadGBuffer(), GetFreeGBuffer(), World->GetWorldLights(), Camera);
 	//CopyToFreeGBuffer();
-	//FlipCurrentBufferIndex();
+	FlipCurrentBufferIndex();
 
 	/*Writing straight to screen, ignore write buffer*/
-	S_DefferedCompositor->CompositePostProcesing(GetFreeGBuffer(), GetFreeGBuffer(), Camera);
+	for (int i = 0; i < S_DefferedCompositor->GetPostProcessShaderCount(); i++) {
+		S_DefferedCompositor->CompositePostProcesing(GetReadGBuffer(), GetFreeGBuffer(), Camera, i);
+		FlipCurrentBufferIndex();
+	}
+
 	//FlipCurrentBufferIndex();
+
+	S_DefferedCompositor->OutputToScreen(GetReadGBuffer());
 }
