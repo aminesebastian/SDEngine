@@ -1,12 +1,21 @@
 #include "StaticMesh.h"
+#include "Engine.h"
 #include <iostream>
+#include "Engine.h"
 
-
+StaticMesh::StaticMesh(const Transform& SpawnTransform, Material* Material, const std::string& ModelName)
+	: Entity(SpawnTransform) {
+	loadModel(ModelName);
+	InitMesh();
+	S_MaterialID = 0;
+	S_Material = Material;
+}
 StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& ModelName)
 	: Entity(SpawnTransform) {
 	loadModel(ModelName);
 	InitMesh();
 	S_MaterialID = 0;
+	S_Material = Engine::GetInstance()->GetDefaultMaterial();
 }
 StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
 	: Entity(SpawnTransform) {
@@ -21,6 +30,7 @@ StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsig
 	}
 
 	InitMesh();
+	S_Material = Engine::GetInstance()->GetDefaultMaterial();
 }
 StaticMesh::~StaticMesh() {
 	glDeleteVertexArrays(1, &S_VertexArrayObject);
@@ -206,40 +216,44 @@ void StaticMesh::InitMesh() {
  * @param [in,out]	shader	The shader.
  **************************************************************************************************/
 
-void StaticMesh::Draw(Shader& shader) {
-	shader.Bind();
-
-	glEnable(GL_TEXTURE_2D);
-	for (int i = 0; i < this->Textures.size(); i++) {
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), Textures[i]->GetType().c_str()), i);
-		Textures[i]->Bind(i);
-	}
-	glUniform1i(glGetUniformLocation(shader.GetProgram(), "MAT_ID"), S_MaterialID);
-	if (S_UseCustomColor) {
-		glUniform3fv(glGetUniformLocation(shader.GetProgram(), "albedo0"), 1, &S_CustomAlbedo[0]);
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 1);
-	}
-	else {
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 0);
-	}
-	if (S_UseCustomRoughness) {
-		glUniform1f(glGetUniformLocation(shader.GetProgram(), "roughness0"), S_CustomRoughness);
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 1);
-	}
-	else {
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 0);
-	}
-	if (S_UseCustomMetalness) {
-		glUniform1f(glGetUniformLocation(shader.GetProgram(), "metalness0"), S_CustomMetalness);
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 1);
-	}
-	else {
-		glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 0);
-	}
-	// Draw mesh
+void StaticMesh::Draw(Camera* Camera) {
+	S_Material->BindMaterial(GetTransform(), Camera);
 	glBindVertexArray(S_VertexArrayObject);
 	glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+	
+	//shader.Bind();
+	//glEnable(GL_TEXTURE_2D);
+	////for (int i = 0; i < this->Textures.size(); i++) {
+	////	glUniform1i(glGetUniformLocation(shader.GetProgram(), Textures[i]->GetType().c_str()), i);
+	////	Textures[i]->Bind(i);
+	////}
+	//glUniform1i(glGetUniformLocation(shader.GetProgram(), "MAT_ID"), S_MaterialID);
+	//if (S_UseCustomColor) {
+	//	glUniform3fv(glGetUniformLocation(shader.GetProgram(), "albedo0"), 1, &S_CustomAlbedo[0]);
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 1);
+	//}
+	//else {
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 0);
+	//}
+	//if (S_UseCustomRoughness) {
+	//	glUniform1f(glGetUniformLocation(shader.GetProgram(), "roughness0"), S_CustomRoughness);
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 1);
+	//}
+	//else {
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 0);
+	//}
+	//if (S_UseCustomMetalness) {
+	//	glUniform1f(glGetUniformLocation(shader.GetProgram(), "metalness0"), S_CustomMetalness);
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 1);
+	//}
+	//else {
+	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 0);
+	//}
+	//// Draw mesh
+	//glBindVertexArray(S_VertexArrayObject);
+	//glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
+	//glBindVertexArray(0);
 
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 }

@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <GLEW/glew.h>
+#include <string>
 #include "Transform.h"
+#include "Texture2D.h"
 
 class Camera;
 
@@ -9,6 +11,7 @@ enum class EShaderType {
 	VERTEX,
 	FRAGMENT
 };
+using namespace std;
 class Shader {
 
 public:
@@ -19,6 +22,14 @@ public:
 	void Bind();
 	void Update(const Transform& Transform, Camera* Camera);
 	void RecompileShader();
+
+	void SetShaderInteger(string Name, int Value);
+	void SetShaderVector4(string Name, vec4 Vector);
+	void SetShaderVector3(string Name, vec3 Vector);
+	void SetShaderVector2(string Name, vec2 Vector);
+	void SetShaderFloat(string Name, float Value);
+	void SetShaderMatrix4(string Name, mat4 Matrix);
+	void SetShaderTexture(string Name, Texture2D* Texture, GLuint Sample);
 
 	GLuint& GetProgram() { return S_Program; }
 
@@ -47,6 +58,5 @@ private:
 
 	GLuint S_Program;
 	GLuint S_Shaders[NUM_SHADERS];
-	GLuint S_Uniforms[NUM_UNIFORMS];
 };
 

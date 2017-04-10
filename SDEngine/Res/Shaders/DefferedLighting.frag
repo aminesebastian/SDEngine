@@ -21,7 +21,7 @@ layout (location = 6) out vec4 HDR;
 layout (location = 7) out vec4 LitOutput;
 
 const float PI = 3.14159265359;
-const int NUM_LIGHTS = 100;
+const int NUM_LIGHTS = 125;
 struct LightInfo {
 	float Intensity;
 	vec3 Color;
@@ -47,42 +47,48 @@ void main()	{
 	MatID				= texture(matID, texCoord0);
 
 
-	vec4 lighting		=  texture(albedo, texCoord0) * vec4(Luminance(), 1.0);
-	LitOutput			= lighting;
+	vec4 lighting		= vec4(Luminance(), 1.0);
+	float brightness	= dot(lighting.rgb, vec3(0.2126, 0.7152, 0.0722));
+	//float distance	= clamp((length(texture(worldPosition, texCoord0).rgb - CAMERA_POS)-25)/200, 0.0, 0.5);
+    //HDR				= lighting * max(0.0, brightness-1.0) * (1-distance);
+	
+	lighting			= clamp(lighting, 0.0, 1.0);
+	//vec4 fogColor		= vec4(1.0, 1.0, 1.0, 1.0);
+	//LitOutput			= (lighting * (1-distance)) + (fogColor * distance);
 
-    float brightness = dot(lighting.rgb, vec3(0.2126, 0.7152, 0.0722));
-    HDR = lighting * max(0.0, brightness-1.0);
+    HDR					= lighting * max(0.0, brightness-1.0f);
+	LitOutput			= lighting;
 }
 vec3 Luminance() {
 	vec3 finalLightIntensity;
 	if(texture(matID, texCoord0) == 0) {
 		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.03f;
 		for(int i=0; i<NUM_LIGHTS; i++) {
-			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/1000, 0.020);	
+			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125, 0.020);	
 		}
 	}else{
-		finalLightIntensity = texture(albedo, texCoord0).rgb;
+		finalLightIntensity = vec3(1);
 	}
-	return finalLightIntensity;
+	return texture(albedo, texCoord0).rgb * finalLightIntensity;
 }
 vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity, float cutoff) {
-    vec3 albedoGamma     = texture(albedo, texCoord0).rgb * texture(albedo, texCoord0).rgb;
+    vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
     vec3 L = normalize(lightCentre - fragmentPosition);
 	float distance    = length(lightCentre - fragmentPosition);
     float attenuation = 500.0 / (distance * distance);
     float NdotL = max(dot(N, L), 0.0);
 
-	float roughness = 0.0f;texture(RMAO, texCoord0).r;
+	float roughness = 0.4f;
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
 
 
-	vec3 radiance     = lightColour * attenuation;  
+	vec3 radiance = lightColour * attenuation * lightIntensity;  
 	vec3 H = normalize(eyeDir + L);
 
 	float NDF = DistributionGGX(N, H, roughness);        
     float G   = GeometrySmith(N, eyeDir, L, roughness);      
 
-	float metallic = 0.0f; texture(RMAO, texCoord0).g;
+	float metallic = 1.0f; //clamp(texture(RMAO, texCoord0).g, 0.1, 1.0);
 	vec3 F0 = vec3(0.04);
 	F0      = mix(F0, albedoGamma, metallic);
 	vec3 F    = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 

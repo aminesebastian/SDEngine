@@ -4,8 +4,7 @@
 #include "ImageUtils.h"
 
 
-Texture2D::Texture2D(const std::string& FileName, const std::string& Type, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour) {
-	this->S_Type = Type;
+Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponents, GLint WrapBehaviour, GLfloat FilterBehaviour) {
 	this->S_FileName = FileName;
 
 	int width, height, numComponents;

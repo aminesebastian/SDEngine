@@ -192,16 +192,26 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Res\Shaders\DefaultGeometryPassShader.frag" />
+    <None Include="Res\Shaders\DefaultGeometryPassShader.vert" />
     <None Include="Res\Shaders\DefferedLighting.frag" />
     <None Include="Res\Shaders\DefferedLighting.vert" />
-    <None Include="Res\Shaders\GeometryPassShader.frag" />
-    <None Include="Res\Shaders\GeometryPassShader.vert" />
-    <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
-    <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
+    <None Include="Res\Shaders\GridShader.frag" />
+    <None Include="Res\Shaders\GridShader.vert" />
+    <None Include="Res\Shaders\LightDebugShader.frag" />
+    <None Include="Res\Shaders\LightDebugShader.vert" />
+    <None Include="Res\Shaders\PostProcessing\BloomX.frag" />
+    <None Include="Res\Shaders\PostProcessing\BloomX.vert" />
+    <None Include="Res\Shaders\PostProcessing\BloomY.frag" />
+    <None Include="Res\Shaders\PostProcessing\BloomY.vert" />
     <None Include="Res\Shaders\PostProcessing\Output.frag" />
     <None Include="Res\Shaders\PostProcessing\Output.vert" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
+    <None Include="Res\Shaders\TestEyeShader.frag" />
+    <None Include="Res\Shaders\TestEyeShader.vert" />
+    <None Include="Res\Shaders\TranslucentShader.frag" />
+    <None Include="Res\Shaders\TranslucentShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

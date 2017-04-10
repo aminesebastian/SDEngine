@@ -15,12 +15,13 @@ public:
 
 	void ChangeShader(std::string ShaderName);
 	void RenderWorld(UWorld* World, Camera* Camera);
-	void RecompileShaders();
+	void GemoetryPass(UWorld* World, Camera* Camera, GBuffer* WriteBuffer);
+	void TranslucencyPass(UWorld* World, Camera* Camera, GBuffer* ReadBuffer, GBuffer* WriteBuffer);
+	void RecompileShaders(UWorld* World);
 	void DebugGBuffer();
 
 	GBuffer* GetReadGBuffer() { return S_CurrentBuffer == 1 ? S_Buffer1 : S_Buffer2; }
 	GBuffer* GetFreeGBuffer() { return S_CurrentBuffer == 1 ? S_Buffer2 : S_Buffer1; }
-	void CopyToFreeGBuffer();
 	void FlipCurrentBufferIndex() { S_CurrentBuffer == 1 ? S_CurrentBuffer = 2 : S_CurrentBuffer = 1; }
 
 private:

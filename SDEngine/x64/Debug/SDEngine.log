@@ -1,0 +1,15 @@
+﻿  StaticMesh.cpp
+f:\sd engine\sdengine\staticmesh.cpp(21): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(27): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(57): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(80): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(89): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(99): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(109): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(119): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(128): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(130): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(136): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(147): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  SDEngine.vcxproj -> F:\SD Engine\x64\Debug\SDEngine.exe
+  SDEngine.vcxproj -> F:\SD Engine\x64\Debug\SDEngine.pdb (Partial PDB)

@@ -17,15 +17,26 @@ Engine::Engine() {
 	TwDefine(" StatUnit alpha=30 ");
 	TwAddVarRO(S_InfoBar, "Frame Time", TW_TYPE_FLOAT, &S_DeltaTime, "");
 	TwAddVarRO(S_InfoBar, "Frame Rate", TW_TYPE_FLOAT, &S_FrameRate, "");
+
+	S_DefaultMaterial = new Material("./Res/Shaders/DefaultGeometryPassShader");
+	Texture2D* albedoTexture = new Texture2D("./Res/Textures/Checkboard1K.png");
+	S_DefaultMaterial->SetTextureParameter("Albedo", albedoTexture);
+	S_DefaultMaterial->SetVec3Parameter("Normal", vec3(0.5f, 0.5f, 1.0f));
+	S_DefaultMaterial->SetScalarParameter("Roughness", 0.5f);
+	S_DefaultMaterial->SetScalarParameter("Metalness", 0.5f);
 }
 Engine::~Engine() {
 	delete &S_Display;
 	delete &S_RenderingEngine;
 }
+Engine* Engine::GetInstance() {
+	static Engine* S_EngineInstance = new Engine(); // only initialized once!
+	return S_EngineInstance;
+}
 bool Engine::Init() {
 	if (bIsInitialized) { return false; }
 
-	S_RenderingEngine->ChangeShader("./Res/Shaders/GeometryPassShader");
+	S_RenderingEngine->ChangeShader("./Res/Shaders/DefaultGeometryPassShader");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	bIsInitialized = true;
@@ -73,22 +84,37 @@ void Engine::GameLoop() {
 
 void Engine::RenderingLoop() {
 	for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-		if (i % 2 == 0) {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i%10);
-		}else {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
-		}
-		if (i % 2 == 0) {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-		}
-		else {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1*glm::sin((S_WorldTime + ((float)i/1000.0f) )/ 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-		}
-		if (i % 2 == 0) {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 500) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
-		}
-		else {
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1*glm::cos((S_WorldTime + ((float)i / 1000.0f))/ 500)) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+		switch (i % 5) {
+		case 0:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) /5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
+		case 1:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600*((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
+		case 2:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 300 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
+		case 3:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i+1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 800 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
+		case 4:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 300 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
+		default:
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (3*glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x + (i % 10);
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (3 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 300 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (3 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z + (i % 10);
+			break;
 		}
 		
 	}
@@ -112,6 +138,9 @@ void Engine::Movement() {
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			S_Display->CloseDisplay();
+		}
+		if (e.type == SDL_WINDOWEVENT_RESIZED) {
+			S_Display->ResizeDisplay(e.window.data1, e.window.data2);
 		}
 		if (e.type == SDL_MOUSEMOTION) {
 			if (e.motion.state & SDL_BUTTON_RMASK) {
@@ -137,7 +166,7 @@ void Engine::Movement() {
 			movementSpeed = clamp(movementSpeed + ((float)e.wheel.y / 100.0f), 0.01f, 2.5f);
 		}
 		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_RETURN]) {
-			S_RenderingEngine->RecompileShaders();
+			S_RenderingEngine->RecompileShaders(S_World);
 		}
 		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F]) {
 			S_Camera->SetTransform(S_Camera->GetInitialTransform());
@@ -148,6 +177,11 @@ void Engine::Movement() {
 		keyInfo.bADown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_D];
 		keyInfo.bQDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_Q];
 		keyInfo.bEDown = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_E];
+		if (SDL_GetKeyboardState(NULL)[SDL_SCANCODE_L]) {
+			for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
+				S_World->GetWorldLights()[i]->ToggleDebug(!S_World->GetWorldLights()[i]->GetDebugMode());
+			}
+		}
 	}
 	if (keyInfo.bWDown) {
 		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetForwardVector() * movementSpeed;
@@ -167,6 +201,7 @@ void Engine::Movement() {
 	if (keyInfo.bEDown) {
 		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetUpVector() * movementSpeed;
 	}
+
 }
 
 

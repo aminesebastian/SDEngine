@@ -28,15 +28,6 @@ void Shader::RecompileShader() {
 	glValidateProgram(S_Program);
 	CheckShaderError(S_Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
 
-	S_Uniforms[MODEL_MATRIX_U] = glGetUniformLocation(S_Program, "modelMatrix");
-	S_Uniforms[MVP_MATRIX_U] = glGetUniformLocation(S_Program, "MVP");
-	S_Uniforms[AMBIENT_COLOR_U] = glGetUniformLocation(S_Program, "ambientColor");
-	S_Uniforms[AMBIENT_INTENSITY_U] = glGetUniformLocation(S_Program, "ambientIntensity");
-	S_Uniforms[LIGHT_DIRECTION_U] = glGetUniformLocation(S_Program, "lightDirection");
-	S_Uniforms[LIGHT_INTENSITY_U] = glGetUniformLocation(S_Program, "lightIntensity");
-	S_Uniforms[LIGHT_COLOR_U] = glGetUniformLocation(S_Program, "lightColor");
-	S_Uniforms[CAMERA_VIEW_VECTOR_U] = glGetUniformLocation(S_Program, "viewVector");
-
 	int lastSlash = 0;
 	for (int i = 0; i < ShaderName.length(); i++) {
 		if (ShaderName[i] == '/') {
@@ -118,8 +109,32 @@ void Shader::Update(const Transform& Transform, Camera* Camera) {
 
 	mat4 tempMVP = Camera->GetProjectionMatrix()* Camera->GetViewMatrix() * Transform.GetModelMatrix();
 
-	glUniformMatrix4fv(S_Uniforms[MODEL_MATRIX_U], 1, GL_FALSE, &Transform.GetModelMatrix()[0][0]);
-	glUniformMatrix4fv(S_Uniforms[MVP_MATRIX_U], 1, GL_FALSE, &tempMVP[0][0]);
-	glUniform1f(glGetUniformLocation(S_Program, "NEAR_CLIP"), Camera->GetNearClipPlane());
-	glUniform1f(glGetUniformLocation(S_Program, "FAR_CLIP"), Camera->GetFarClipPlane());
+	SetShaderMatrix4("MODEL_MATRIX", Transform.GetModelMatrix());
+	SetShaderMatrix4("MVP", tempMVP);
+	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
+	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());
+}
+
+
+void Shader::SetShaderInteger(string Name, int Value) {
+	glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
+}
+void Shader::SetShaderVector4(string Name, vec4 Vector) {
+	glUniform4fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
+}
+void Shader::SetShaderVector3(string Name, vec3 Vector) {
+	glUniform3fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
+}
+void Shader::SetShaderVector2(string Name, vec2 Vector) {
+	glUniform2fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
+}
+void Shader::SetShaderFloat(string Name, float Value) {
+	glUniform1f(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
+}
+void Shader::SetShaderMatrix4(string Name, mat4 Matrix) {
+	glUniformMatrix4fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, GL_FALSE, &Matrix[0][0]);
+}
+void Shader::SetShaderTexture(string Name, Texture2D* Texture, GLuint Sample) {
+	glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Sample);
+	Texture->Bind(Sample);
 }

@@ -20,9 +20,16 @@ URenderingEngine::~URenderingEngine() {
 }
 
 void URenderingEngine::ChangeShader(std::string ShaderName) { S_Shader = new Shader(ShaderName); }
-void URenderingEngine::RecompileShaders() {
+void URenderingEngine::RecompileShaders(UWorld* World) {
 	S_Shader->RecompileShader(); 
 	S_DefferedCompositor->RecompileShaders();
+
+	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
+		StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
+		if (temp && temp->GetMaterial() != NULL) {
+			temp->GetMaterial()->GetShader()->RecompileShader();
+		}
+	}
 }
 
 void URenderingEngine::DebugGBuffer() {
@@ -51,39 +58,79 @@ void URenderingEngine::DebugGBuffer() {
 	glBlitFramebuffer(0, 0, S_Display->GetDimensions().x, S_Display->GetDimensions().y, ThirdWidth, 0, S_Display->GetDimensions().x, ThirdHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 }
-void URenderingEngine::CopyToFreeGBuffer() {
-
-}
-void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
-	GetFreeGBuffer()->BindForWriting();
-	S_Shader->Bind();
+void URenderingEngine::GemoetryPass(UWorld* World, Camera* Camera, GBuffer* WriteBuffer) {
+	WriteBuffer->BindForWriting();
+	//S_Shader->Bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
-		S_Shader->Update(World->GetWorldEntities()[i]->GetTransform(), Camera);
 		if (World->GetWorldEntities()[i]->IsVisible()) {
-			World->GetWorldEntities()[i]->Draw(*S_Shader);
+			StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
+			if (temp) {
+				if (temp->GetMaterial()->GetShaderModel() != EShaderModel::TRANSLUCENT) {
+					World->GetWorldEntities()[i]->Draw(Camera);
+				}
+			}
+			else {
+				World->GetWorldEntities()[i]->Draw(Camera);
+			}
 		}
 	}
 	for (int i = 0; i < World->GetWorldLights().size(); i++) {
-		S_Shader->Update(World->GetWorldLights()[i]->GetTransform(), Camera);
 		if (World->GetWorldLights()[i]->IsVisible()) {
-			World->GetWorldLights()[i]->Draw(*S_Shader);
+			World->GetWorldLights()[i]->Draw(Camera);
 		}
 	}
+}
+void URenderingEngine::TranslucencyPass(UWorld* World, Camera* Camera, GBuffer* ReadBuffer, GBuffer* WriteBuffer) {
+	WriteBuffer->BindForWriting();
+	ReadBuffer->BindForReading();
+
+	string uniformNames[1]{ "finalComp" };
+
+	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
+		if (World->GetWorldEntities()[i]->IsVisible()) {
+			StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
+			if (temp) {
+				if (temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
+					for (int i = 0; i < 1; i++) {
+						glEnable(GL_TEXTURE_2D);
+						glActiveTexture(GL_TEXTURE0 + i);
+						glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
+						glUniform1i(glGetUniformLocation(temp->GetMaterial()->GetShader()->GetProgram(), uniformNames[i].c_str()), i);
+					}
+					World->GetWorldEntities()[i]->Draw(Camera);
+				}
+			}
+		}
+	}
+}
+void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
+	GemoetryPass(World, Camera, GetFreeGBuffer());
+
 	FlipCurrentBufferIndex();
 
 	S_DefferedCompositor->CompositeLighting(GetReadGBuffer(), GetFreeGBuffer(), World->GetWorldLights(), Camera);
-	//CopyToFreeGBuffer();
-	FlipCurrentBufferIndex();
 
-	/*Writing straight to screen, ignore write buffer*/
+	FlipCurrentBufferIndex();
+	int translucentCount = 0;
+	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
+		if (World->GetWorldEntities()[i]->IsVisible()) {
+			StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
+			if (temp && temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
+				translucentCount++;
+			}
+		}
+	}
+	if (translucentCount > 0) {
+		TranslucencyPass(World, Camera, GetReadGBuffer(), GetFreeGBuffer());
+		FlipCurrentBufferIndex();
+	}
+
 	for (int i = 0; i < S_DefferedCompositor->GetPostProcessShaderCount(); i++) {
 		S_DefferedCompositor->CompositePostProcesing(GetReadGBuffer(), GetFreeGBuffer(), Camera, i);
 		FlipCurrentBufferIndex();
 	}
-
-	//FlipCurrentBufferIndex();
 
 	S_DefferedCompositor->OutputToScreen(GetReadGBuffer());
 }

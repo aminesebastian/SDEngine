@@ -1,24 +1,110 @@
-﻿Build started 11/17/2016 9:51:55 PM.
-     1>Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I.\Include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Display.cpp Main.cpp
-         Display.cpp
-         Generating Code...
-         Compiling...
-         Main.cpp
-         Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\SD_Engine\SDEngine\Debug\SDEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:.\Lib glew32.lib glew32s.lib SDL2.lib SDL2main.lib SDL2test.lib OpenGL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"G:\SD_Engine\SDEngine\Debug\SDEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\SD_Engine\SDEngine\Debug\SDEngine.lib" /MACHINE:X86 Debug\Display.obj
-         Debug\Main.obj
-     1>MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol _main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-     1>.\Lib\glew32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
-     1>.\Lib\glew32s.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
-     1>.\Lib\SDL2.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
-     1>.\Lib\SDL2main.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
-     1>.\Lib\SDL2test.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
-     1>G:\SD_Engine\SDEngine\Debug\SDEngine.exe : fatal error LNK1120: 1 unresolved externals
-     1>Done Building Project "G:\SD_Engine\SDEngine\SDEngine\SDEngine.vcxproj" (Build target(s)) -- FAILED.
-
-Build FAILED.
-
-Time Elapsed 00:00:01.47
+﻿  World.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\world.cpp(14): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\world.cpp(19): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\world.cpp(30): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\world.cpp(43): warning C4018: '<': signed/unsigned mismatch
+  Transform.cpp
+  Texture2D.cpp
+  ImageUtils.cpp
+f:\sd engine\sdengine\imageutils.cpp(284): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+f:\sd engine\sdengine\imageutils.cpp(346): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+f:\sd engine\sdengine\imageutils.cpp(384): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+f:\sd engine\sdengine\imageutils.cpp(4338): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+  StaticMesh.cpp
+f:\sd engine\sdengine\staticmesh.cpp(13): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(19): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(48): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(71): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(80): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(90): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(100): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(110): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(119): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(121): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\staticmesh.cpp(127): warning C4018: '<': signed/unsigned mismatch
+  Shader.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\shader.cpp(32): warning C4018: '<': signed/unsigned mismatch
+  RenderingEngine.cpp
+f:\sd engine\sdengine\renderingengine.cpp(15): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(16): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(27): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\renderingengine.cpp(49): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(52): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(55): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(58): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+f:\sd engine\sdengine\renderingengine.cpp(66): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\renderingengine.cpp(72): warning C4018: '<': signed/unsigned mismatch
+  ObjLoader.cpp
+f:\sd engine\sdengine\objloader.cpp(378): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  Material.cpp
+f:\sd engine\sdengine\material.cpp(13): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(24): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(35): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(46): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(57): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(74): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(87): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(90): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(93): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(96): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(99): warning C4018: '<': signed/unsigned mismatch
+f:\sd engine\sdengine\material.cpp(102): warning C4018: '<': signed/unsigned mismatch
+  Engine.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\engine.h(16): warning C4005: 'PrintToLog': macro redefinition
+  f:\sd engine\sdengine\engine.h(15): note: see previous definition of 'PrintToLog'
+f:\sd engine\sdengine\engine.h(44): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+f:\sd engine\sdengine\engine.cpp(14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+f:\sd engine\sdengine\engine.cpp(37): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+f:\sd engine\sdengine\engine.cpp(45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+f:\sd engine\sdengine\engine.cpp(46): warning C4244: '=': conversion from 'float' to 'long', possible loss of data
+f:\sd engine\sdengine\engine.cpp(75): warning C4018: '<': signed/unsigned mismatch
+  Main.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\engine.h(16): warning C4005: 'PrintToLog': macro redefinition
+  f:\sd engine\sdengine\engine.h(15): note: see previous definition of 'PrintToLog'
+f:\sd engine\sdengine\engine.h(44): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+  Light.cpp
+  Grid.cpp
+  GBuffer.cpp
+  Entity.cpp
+  Display.cpp
+  DefferedCompositor.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\defferedcompositor.cpp(18): warning C4018: '<': signed/unsigned mismatch
+  Camera.cpp
+f:\sd engine\sdengine\camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\sd engine\sdengine\camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  SLogger.c
+f:\sd engine\sdengine\slogger.c(28): warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(void)'
+f:\sd engine\sdengine\slogger.c(22): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+f:\sd engine\sdengine\slogger.c(26): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+f:\sd engine\sdengine\slogger.c(48): warning C4047: 'function': 'char *const ' differs in levels of indirection from 'char *[20]'
+f:\sd engine\sdengine\slogger.c(48): warning C4024: 'sprintf': different types for formal and actual parameter 1
+f:\sd engine\sdengine\slogger.c(51): warning C4047: 'function': 'char *const ' differs in levels of indirection from 'char *[3]'
+f:\sd engine\sdengine\slogger.c(51): warning C4024: 'sprintf': different types for formal and actual parameter 1
+f:\sd engine\sdengine\slogger.c(55): warning C4047: 'function': 'const char *const ' differs in levels of indirection from 'char *[20]'
+f:\sd engine\sdengine\slogger.c(55): warning C4024: 'vfprintf': different types for formal and actual parameter 2
+f:\sd engine\sdengine\slogger.c(56): warning C4047: 'function': 'const char *const ' differs in levels of indirection from 'char *[3]'
+f:\sd engine\sdengine\slogger.c(56): warning C4024: 'vfprintf': different types for formal and actual parameter 2
+f:\sd engine\sdengine\slogger.c(46): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(505): note: see declaration of 'localtime'
+f:\sd engine\sdengine\slogger.c(48): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+f:\sd engine\sdengine\slogger.c(51): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+LINK : fatal error LNK1104: cannot open file 'AntTweakBar.lib'

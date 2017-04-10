@@ -32,6 +32,9 @@
     <Filter Include="Shaders\PostProcessing">
       <UniqueIdentifier>{f0c1df1f-c8c2-4002-b377-08c606f826cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\IndividualShaders">
+      <UniqueIdentifier>{7e03f0c8-f91f-401e-acc4-7610dc922084}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Display.cpp">
@@ -152,20 +155,8 @@
     <None Include="Res\Shaders\DefferedLighting.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Res\Shaders\GeometryPassShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\GeometryPassShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Res\Shaders\DefferedLighting.frag">
       <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom.vert">
-      <Filter>Shaders\PostProcessing</Filter>
     </None>
     <None Include="Res\Shaders\PostProcessing\Output.frag">
       <Filter>Shaders\PostProcessing</Filter>
@@ -178,6 +169,48 @@
     </None>
     <None Include="Res\Shaders\PostProcessing\ToneMapping.vert">
       <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\DefaultGeometryPassShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\DefaultGeometryPassShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LightDebugShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LightDebugShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BloomX.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BloomY.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BloomY.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BloomX.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucentShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucentShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TestEyeShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TestEyeShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\GridShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\GridShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

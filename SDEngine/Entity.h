@@ -3,6 +3,8 @@
 #include "Shader.h"
 #include "World.h"
 
+
+
 class Entity {
 
 public:
@@ -13,7 +15,7 @@ public:
 	Entity() {}
 	virtual ~Entity() {};
 
-	virtual void Draw(Shader& shader) {}
+	virtual void Draw(Camera* Camera) {}
 
 	Transform& GetTransform() { return S_Transform; }
 	Transform GetInitialTransform() { return S_InitialTransform; } 

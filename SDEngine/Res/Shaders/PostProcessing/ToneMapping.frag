@@ -13,15 +13,15 @@ uniform sampler2D matID;
 uniform sampler2D HDR;
 uniform sampler2D finalComp;
 
-layout (location = 7) out vec4 LitOutput;
+layout (location = 7) out vec4 Output;
 
-uniform float EXPOSURE = 1.0f;
-uniform float WHITE_POINT = 1.0f;
+uniform float EXPOSURE = 10.0f;
+uniform float WHITE_POINT = 10.0f;
 
 vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint);
 
 void main()	{	
-	LitOutput = FilmicTonemap(texture(finalComp, texCoord0), EXPOSURE, WHITE_POINT);
+	Output = FilmicTonemap(texture(finalComp, texCoord0), EXPOSURE, WHITE_POINT);
 }
 vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint) {
     float A = 0.15;

@@ -41,7 +41,7 @@ public:
 	}
 
 	virtual ~Camera();
-	void UpdateCameraPosition(const vec3 NewPosition) { S_Transform.GetPosition() = NewPosition; };
+	void UpdateCameraPosition(const vec3 NewPosition) { S_Transform.GetPosition() = NewPosition; }
 
 private:
 	mat4 S_ProjectionMatrix;

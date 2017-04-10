@@ -1,36 +1,122 @@
 #include "Material.h"
-
-
+#include <iostream>
+#include "Engine.h"
+#include "Light.h"
 
 Material::Material(const std::string BaseShaderName) {
 	S_Shader = new Shader(BaseShaderName);
+	this->SetVec3Parameter("Normal", vec3(0.5f, 0.5f, 1.0f));
+	this->SetScalarParameter("Roughness", 0.5f);
+	this->SetScalarParameter("Metalness", 0.5f);
 }
-Material::~Material() {}
+Material::~Material() {
 
-bool Material::RegisterTexture(string TexturePath, string Name) {
-	Texture2D* newTex = new Texture2D(TexturePath);
-	if (RegisterTexture(newTex, Name)) {
-		return true;
-	}
-	delete newTex;
-	return false;
 }
-bool Material::RegisterTexture(Texture2D* Texture, string Name) {
-	for (int i = 0; i < S_Textures.size(); i++) {
-		if (S_Textures[i].Name == Name) {
-			return false;
+
+bool Material::SetVec4Parameter(string Name, vec4 Value) {
+	for (int i = 0; i < this->S_Vec4Parameters.size(); i++) {
+		if (S_Vec4Parameters[i].Name == Name) {
+			S_Vec4Parameters[i].Vector = Value;
 		}
 	}
-	MaterialTexture newTexture;
-	newTexture.Texture = Texture;
-	newTexture.Name = Name;
-	S_Textures.push_back(newTexture);
+	FVec4Parameter temp;
+	temp.Name = Name;
+	temp.Vector = Value;
+	S_Vec4Parameters.push_back(temp);
 	return true;
 }
-void Material::BindMaterial() {
-	S_Shader->Bind();
-	for (int i = 0; i < this->S_Textures.size(); i++) {
-		glUniform1i(glGetUniformLocation(S_Shader->GetProgram(), S_Textures[i].Name.c_str()), i);
-		S_Textures[i].Texture->Bind(i);
+bool Material::SetVec3Parameter(string Name, vec3 Value) {
+	for (int i = 0; i < this->S_Vec3Parameters.size(); i++) {
+		if (S_Vec3Parameters[i].Name == Name) {
+			S_Vec3Parameters[i].Vector = Value;
+		}
 	}
+	FVec3Parameter temp;
+	temp.Name = Name;
+	temp.Vector = Value;
+	S_Vec3Parameters.push_back(temp);
+	return true;
+}
+bool Material::SetVec2Parameter(string Name, vec2 Value) {
+	for (int i = 0; i < this->S_Vec2Parameters.size(); i++) {
+		if (S_Vec2Parameters[i].Name == Name) {
+			S_Vec2Parameters[i].Vector = Value;
+		}
+	}
+	FVec2Parameter temp;
+	temp.Name = Name;
+	temp.Vector = Value;
+	S_Vec2Parameters.push_back(temp);
+	return true;
+}
+bool Material::SetScalarParameter(string Name, float Value) {
+	for (int i = 0; i < this->S_ScalarParameters.size(); i++) {
+		if (S_ScalarParameters[i].Name == Name) {
+			S_ScalarParameters[i].Scalar = Value;
+		}
+	}
+	FScalarParameter temp;
+	temp.Name = Name;
+	temp.Scalar = Value;
+	S_ScalarParameters.push_back(temp);
+	return true;
+}
+bool Material::SetBoolParameter(string Name, bool Value) {
+	for (int i = 0; i < this->S_BoolParameters.size(); i++) {
+		if (S_BoolParameters[i].Name == Name) {
+			S_BoolParameters[i].Value = Value;
+		}
+	}
+	FBoolParameter temp;
+	temp.Name = Name;
+	temp.Value = Value;
+	S_BoolParameters.push_back(temp);
+	return true;
+}
+bool Material::SetTextureParameter(string Name, Texture2D* Texture) {
+	for (int i = 0; i < S_TextureParameters.size(); i++) {
+		if (S_TextureParameters[i].Name == Name) {
+			S_TextureParameters[i].Texture = Texture;
+		}
+	}
+	FTextureParameter newTexture;
+	newTexture.Texture = Texture;
+	newTexture.Name = Name;
+	S_TextureParameters.push_back(newTexture);
+	return true;
+}
+
+bool Material::SetShaderModel(EShaderModel Model) {
+	S_ShaderModel = Model;
+	return true;
+}
+void Material::BindMaterial(Transform EntityTransform, Camera* Camera) {
+	S_Shader->Bind();
+	S_Shader->Update(EntityTransform, Camera);
+	glEnable(GL_TEXTURE_2D);
+	S_Shader->SetShaderInteger("MAT_ID", S_ShaderModel);
+	for (int i = 0; i < this->S_TextureParameters.size(); i++) {
+		S_Shader->SetShaderTexture(S_TextureParameters[i].Name, S_TextureParameters[i].Texture, i);
+	}
+	for (int i = 0; i < this->S_Vec4Parameters.size(); i++) {
+		S_Shader->SetShaderVector4(S_Vec4Parameters[i].Name, S_Vec4Parameters[i].Vector);
+	}
+	for (int i = 0; i < this->S_Vec3Parameters.size(); i++) {
+		S_Shader->SetShaderVector3(S_Vec3Parameters[i].Name, S_Vec3Parameters[i].Vector);
+	}
+	for (int i = 0; i < this->S_Vec2Parameters.size(); i++) {
+		S_Shader->SetShaderVector2(S_Vec2Parameters[i].Name, S_Vec2Parameters[i].Vector);
+	}
+	for (int i = 0; i < this->S_ScalarParameters.size(); i++) {
+		S_Shader->SetShaderFloat(S_ScalarParameters[i].Name, S_ScalarParameters[i].Scalar);
+	}
+	for (int i = 0; i < this->S_BoolParameters.size(); i++) {
+		S_Shader->SetShaderInteger(S_BoolParameters[i].Name, S_BoolParameters[i].Value);
+	}
+	if (S_ShaderModel == EShaderModel::TRANSLUCENT) {
+		for (int i = 0; i < Engine::GetInstance()->GetWorld()->GetWorldLights().size(); i++) {
+			Engine::GetInstance()->GetWorld()->GetWorldLights()[i]->SendShaderInformation(S_Shader, 1);
+		}
+	}
+	glDisable(GL_TEXTURE_2D);
 }

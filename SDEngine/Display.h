@@ -21,7 +21,9 @@ public:
 	inline float GetAspectRatio() const {
 		return ((float)S_Width) / ((float)S_Height);
 	}
+	void ResizeDisplay(int NewWidth, int NewHeight);
 	void CloseDisplay() { bIsClosed = true; }
+	SDL_Window* GetWindow() { return S_Window; }
 private:
 	Display(const Display& other) {}
 	void operator=(const Display& other) {}

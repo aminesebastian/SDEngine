@@ -40,11 +40,12 @@ class StaticMesh : public Entity {
 
 public:
 	StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
+	StaticMesh(const Transform& SpawnTransform, Material* Material, const std::string& ModelName);
 	StaticMesh(const Transform& SpawnTransform, const std::string& ModelName);
 
 	virtual ~StaticMesh();
 
-	virtual void Draw(Shader& shader) override;
+	virtual void Draw(Camera* Camera) override;
 
 
 	void loadModel(const std::string& ModelName);
@@ -56,6 +57,11 @@ public:
 	void SetCustomColor(vec3 Color) { S_CustomAlbedo = Color; S_UseCustomColor = true; }
 	void SetCustomRoughness(float Roughness) { S_CustomRoughness = Roughness; S_UseCustomRoughness = true; }
 	void SetMaterialID(int ID) { S_MaterialID = ID; }
+
+
+	void SetMaterial(Material* NewMaterial) { S_Material = NewMaterial; }
+	Material* GetMaterial() { return S_Material; }
+
 private:
 	void operator=(const StaticMesh& other) {}
 	void InitMesh();
@@ -82,7 +88,7 @@ private:
 	std::vector<vec3> S_VertexColors;
 	std::vector<unsigned int> S_Indicies;
 
-
+	Material* S_Material;
 	bool S_UseCustomColor = false;
 	bool S_UseCustomRoughness = false;
 	bool S_UseCustomMetalness = false;
