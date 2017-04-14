@@ -29,5 +29,8 @@ public:
 private:
 	vector<Entity*> S_EntityList;
 	vector<Light*> S_LightList;
+
+	float S_DeltaTime;
+	float S_WorldTime;
 };
 

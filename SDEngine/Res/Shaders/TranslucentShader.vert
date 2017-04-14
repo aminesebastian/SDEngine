@@ -10,14 +10,15 @@ uniform mat4 MVP;
                                      
 out vec2 texCoord0;                                                                 
 out mat3 tbnMatrix0;                                                                     
-out vec3 worldPos0;    
+out vec3 worldPos0;  
 out vec3 normal0;                                                             
+
+
 
 void main() {       
     gl_Position			= (MVP) * vec4(position, 1.0);
     texCoord0			= texCoord;                  
 	worldPos0			= (MODEL_MATRIX * vec4(position, 1.0)).xyz;
-
 
     vec3 tempNormal		= normalize((MODEL_MATRIX *vec4(normal, 0.0)).xyz);   
 	vec3 tempTangent	= normalize((MODEL_MATRIX *vec4(tangent, 0.0)).xyz);  	
@@ -27,3 +28,4 @@ void main() {
     tbnMatrix0			= mat3(tempTangent, tempBiTangent, tempNormal);
 	normal0				= normalize((MODEL_MATRIX *vec4(normal, 0.0)).xyz);  
 }
+

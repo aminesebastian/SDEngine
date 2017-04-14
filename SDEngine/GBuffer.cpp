@@ -3,6 +3,14 @@
 
 GBuffer::GBuffer() {
 	S_FBO = 0;
+	S_GBufferTextureNames.push_back("worldPosition");
+	S_GBufferTextureNames.push_back("albedo");
+	S_GBufferTextureNames.push_back("RMAO");
+	S_GBufferTextureNames.push_back("normal");
+	S_GBufferTextureNames.push_back("texCoord");
+	S_GBufferTextureNames.push_back("translucency");
+	S_GBufferTextureNames.push_back("HDR");
+	S_GBufferTextureNames.push_back("finalComp");
 }
 
 GBuffer::~GBuffer() {

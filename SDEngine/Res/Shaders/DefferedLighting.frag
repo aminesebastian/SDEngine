@@ -9,19 +9,17 @@ uniform sampler2D albedo;
 uniform sampler2D RMAO;
 uniform sampler2D normal;
 uniform sampler2D texCoord;
-uniform sampler2D matID;
 
 layout (location = 0) out vec4 WorldPosOut;   
 layout (location = 1) out vec4 AlbedoOut;  
 layout (location = 2) out vec4 RMAOOut;	      
 layout (location = 3) out vec3 NormalOut;     
 layout (location = 4) out vec3 TexCoordOut;	
-layout (location = 5) out vec4 MatID;
-layout (location = 6) out vec4 HDR;	
+layout (location = 6) out vec4 HDR;
 layout (location = 7) out vec4 LitOutput;
 
 const float PI = 3.14159265359;
-const int NUM_LIGHTS = 125;
+const int NUM_LIGHTS = 127;
 struct LightInfo {
 	float Intensity;
 	vec3 Color;
@@ -44,8 +42,6 @@ void main()	{
 	TexCoordOut			= texture(texCoord, texCoord0).rgb;
 	NormalOut			= texture(normal, texCoord0).rgb;	
 	RMAOOut				= texture(RMAO, texCoord0);	
-	MatID				= texture(matID, texCoord0);
-
 
 	vec4 lighting		= vec4(Luminance(), 1.0);
 	float brightness	= dot(lighting.rgb, vec3(0.2126, 0.7152, 0.0722));
@@ -61,7 +57,7 @@ void main()	{
 }
 vec3 Luminance() {
 	vec3 finalLightIntensity;
-	if(texture(matID, texCoord0) == 0) {
+	if(texture(albedo, texCoord0).a == 0) {
 		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.03f;
 		for(int i=0; i<NUM_LIGHTS; i++) {
 			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125, 0.020);	
@@ -78,7 +74,7 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
     float attenuation = 500.0 / (distance * distance);
     float NdotL = max(dot(N, L), 0.0);
 
-	float roughness = 0.4f;
+	float roughness = texture(RMAO, texCoord0).r;
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
 
 
@@ -88,7 +84,7 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
 	float NDF = DistributionGGX(N, H, roughness);        
     float G   = GeometrySmith(N, eyeDir, L, roughness);      
 
-	float metallic = 1.0f; //clamp(texture(RMAO, texCoord0).g, 0.1, 1.0);
+	float metallic = texture(RMAO, texCoord0).g;
 	vec3 F0 = vec3(0.04);
 	F0      = mix(F0, albedoGamma, metallic);
 	vec3 F    = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 

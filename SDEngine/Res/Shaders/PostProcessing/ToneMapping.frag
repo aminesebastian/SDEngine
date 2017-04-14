@@ -9,14 +9,14 @@ uniform sampler2D albedo;
 uniform sampler2D RMAO;
 uniform sampler2D normal;
 uniform sampler2D texCoord;
-uniform sampler2D matID;
+uniform sampler2D translucency;
 uniform sampler2D HDR;
 uniform sampler2D finalComp;
 
 layout (location = 7) out vec4 Output;
 
-uniform float EXPOSURE = 10.0f;
-uniform float WHITE_POINT = 10.0f;
+uniform float EXPOSURE = 7.0f;
+uniform float WHITE_POINT = 7.0f;
 
 vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint);
 
@@ -34,5 +34,9 @@ vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint) {
 	vec4 preWhitepoint = Exposure * Input;
     preWhitepoint =  ((preWhitepoint*(A*preWhitepoint+C*B)+D*E)/(preWhitepoint*(A*preWhitepoint+B)+D*F))-E/F;
 	preWhitepoint /= ((Whitepoint*(A*Whitepoint+C*B)+D*E)/(Whitepoint*(A*Whitepoint+B)+D*F))-E/F;
-	return preWhitepoint;
+	if(texture(albedo, texCoord0).a == 0) {
+		return preWhitepoint;
+	}else{
+		return Input;
+	}	
 }

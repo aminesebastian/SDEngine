@@ -8,8 +8,11 @@ Shader::Shader(const std::string& ShaderName) {
 	RecompileShader();
 }
 void Shader::RecompileShader() {
+	glDeleteProgram(S_Program);
 	S_Program = glCreateProgram();
 
+	glDeleteShader(S_Shaders[0]);
+	glDeleteShader(S_Shaders[1]);
 	S_Shaders[0] = CreateShader(LoadShader(ShaderName + ".vert"), GL_VERTEX_SHADER);
 	S_Shaders[1] = CreateShader(LoadShader(ShaderName + ".frag"), GL_FRAGMENT_SHADER);
 
@@ -113,6 +116,8 @@ void Shader::Update(const Transform& Transform, Camera* Camera) {
 	SetShaderMatrix4("MVP", tempMVP);
 	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
 	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());
+
+	SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
 }
 
 

@@ -1,74 +1,16 @@
-﻿  DefferedCompositor.cpp
-f:\sd engine\sdengine\DefferedCompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Engine.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Engine.h(17): warning C4005: 'PrintToLog': macro redefinition
-  f:\sd engine\sdengine\Engine.h(16): note: see previous definition of 'PrintToLog'
-f:\sd engine\sdengine\Engine.h(49): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-Engine.cpp(14): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Engine.cpp(48): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
-Engine.cpp(56): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-Engine.cpp(57): warning C4244: '=': conversion from 'float' to 'long', possible loss of data
-Engine.cpp(174): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-Engine.cpp(175): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-Engine.cpp(176): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-Engine.cpp(177): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-Engine.cpp(178): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-Engine.cpp(179): warning C4800: 'const Uint8': forcing value to bool 'true' or 'false' (performance warning)
-  Grid.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Engine.h(17): warning C4005: 'PrintToLog': macro redefinition
-  f:\sd engine\sdengine\Engine.h(16): note: see previous definition of 'PrintToLog'
-f:\sd engine\sdengine\Engine.h(49): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  Light.cpp
-  Main.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Engine.h(17): warning C4005: 'PrintToLog': macro redefinition
-  f:\sd engine\sdengine\Engine.h(16): note: see previous definition of 'PrintToLog'
-f:\sd engine\sdengine\Engine.h(49): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  Material.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Engine.h(17): warning C4005: 'PrintToLog': macro redefinition
-  f:\sd engine\sdengine\Engine.h(16): note: see previous definition of 'PrintToLog'
-f:\sd engine\sdengine\Engine.h(49): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  RenderingEngine.cpp
-f:\sd engine\sdengine\DefferedCompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-RenderingEngine.cpp(15): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-RenderingEngine.cpp(16): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-RenderingEngine.cpp(49): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(52): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(55): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(58): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-  StaticMesh.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Engine.h(17): warning C4005: 'PrintToLog': macro redefinition
-  f:\sd engine\sdengine\Engine.h(16): note: see previous definition of 'PrintToLog'
-f:\sd engine\sdengine\Engine.h(49): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-StaticMesh.cpp(22): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(28): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(58): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(81): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(90): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(100): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(110): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(120): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(129): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(131): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(137): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(148): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-  World.cpp
-f:\sd engine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\sd engine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+﻿  RenderingEngine.cpp
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\DefferedCompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+RenderingEngine.cpp(18): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(19): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(20): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(53): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(56): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(59): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(62): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
   Generating code
-  4 of 1377 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+  41 of 1449 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    27 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  SDEngine.vcxproj -> F:\SD Engine\x64\Release\SDEngine.exe
+  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Release\SDEngine.exe
+  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Release\SDEngine.pdb (Full PDB)

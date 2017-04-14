@@ -94,6 +94,12 @@
     <ClCompile Include="SLogger.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="EyeActor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -149,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="SLogger.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EyeActor.h">
+      <Filter>Headers\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +222,18 @@
       <Filter>Shaders\IndividualShaders</Filter>
     </None>
     <None Include="Res\Shaders\GridShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucencyCompositor.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucencyCompositor.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\SkySphereShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SkySphereShader.vert">
       <Filter>Shaders\IndividualShaders</Filter>
     </None>
   </ItemGroup>

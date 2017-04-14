@@ -5,8 +5,8 @@
 #include "RenderingEngine.h"
 #include "Material.h"
 
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 1080
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 #define WINDOW_BIT_DEPTH 8
 
 #define LOG_GENERAL "GENERAL"
@@ -35,6 +35,9 @@ public:
 	bool Init();
 	void StartEngine() { bShouldLoop = true; MainLoop(); }
 	Material* GetDefaultMaterial() { return S_DefaultMaterial; }
+
+	float GetDeltaTime() { return S_DeltaTime; }
+	float GetWorldTime() { return S_WorldTime; }
 
 	static Engine* GetInstance();
 private:

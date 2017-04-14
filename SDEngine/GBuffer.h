@@ -14,9 +14,9 @@ public:
 		GBUFFER_TEXTURE_TYPE_RMAO,
 		GBUFFER_TEXTURE_TYPE_NORMAL,
 		GBUFFER_TEXTURE_TYPE_TEXCOORD,
-		GBUFFER_TEXTUER_TYPE_MAT_ID,
-		GBUFFER_TEXTUER_TYPE_HDR,
-		GBUFFER_TEXTUER_TYPE_FINAL_COMP,
+		GBUFFER_TEXTURE_TYPE_TRANSLUCENCY,
+		GBUFFER_TEXTURE_TYPE_HDR,
+		GBUFFER_TEXTURE_TYPE_FINAL_COMP,
 		GBUFFER_NUM_TEXTURES
 	};
 
@@ -25,6 +25,8 @@ public:
 	~GBuffer();
 
 	bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
+
+	std::string GetGBufferTextureName(int Index) { return S_GBufferTextureNames[Index]; }
 
 	void BindForWriting();
 	void BindForReading();
@@ -35,4 +37,5 @@ public:
 
 private:
 	GLuint S_DepthBuffer;
+	std::vector<std::string> S_GBufferTextureNames;
 };

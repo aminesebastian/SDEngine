@@ -5,6 +5,9 @@
 
 Material::Material(const std::string BaseShaderName) {
 	S_Shader = new Shader(BaseShaderName);
+	this->SetShaderModel(EShaderModel::DEFAULT);
+
+	this->SetVec2Parameter("SCREEN_RES", vec2(WINDOW_WIDTH, WINDOW_HEIGHT));
 	this->SetVec3Parameter("Normal", vec3(0.5f, 0.5f, 1.0f));
 	this->SetScalarParameter("Roughness", 0.5f);
 	this->SetScalarParameter("Metalness", 0.5f);
@@ -94,6 +97,10 @@ void Material::BindMaterial(Transform EntityTransform, Camera* Camera) {
 	S_Shader->Bind();
 	S_Shader->Update(EntityTransform, Camera);
 	glEnable(GL_TEXTURE_2D);
+
+	SetScalarParameter("FRAME_TIME", Engine::GetInstance()->GetDeltaTime());
+	SetScalarParameter("TIME", Engine::GetInstance()->GetWorldTime());
+
 	S_Shader->SetShaderInteger("MAT_ID", S_ShaderModel);
 	for (int i = 0; i < this->S_TextureParameters.size(); i++) {
 		S_Shader->SetShaderTexture(S_TextureParameters[i].Name, S_TextureParameters[i].Texture, i);

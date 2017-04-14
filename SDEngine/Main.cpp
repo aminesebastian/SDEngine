@@ -10,6 +10,7 @@
 #include "Grid.h"
 #include "Engine.h"
 #include "RenderingEngine.h"
+#include "EyeActor.h"
 
 #undef main
 using namespace glm;
@@ -47,6 +48,16 @@ int main(int argc, char* argv[]) {
 	//torus.RegisterTexture(&torusNormal);
 	//S_Engine->GetWorld()->RegisterEntity(&torus);
 
+	Transform skySphereTransform;
+	skySphereTransform.SetUniformScale(100.0f);
+	Texture2D* skySphereTexture = new Texture2D("res/ForestEnvironment.jpg");
+
+	Material* skyMaterial = new Material("./Res/Shaders/SkySphereShader");
+	skyMaterial->SetTextureParameter("Albedo", skySphereTexture);
+	skyMaterial->SetShaderModel(EShaderModel::UNLIT);
+	StaticMesh* sky = new StaticMesh(skySphereTransform, skyMaterial, "./res/SkySphere.fbx");
+	S_Engine->GetWorld()->RegisterEntity(sky);
+
 
 	Transform innerEyetransform;
 	innerEyetransform.SetUniformScale(3.0f);
@@ -66,7 +77,7 @@ int main(int argc, char* argv[]) {
 
 
 	Transform outerEyeTransform;
-	outerEyeTransform.SetUniformScale(3.1f);
+	outerEyeTransform.SetUniformScale(3.0f);
 	outerEyeTransform.SetRotation(-60, 0, 0);
 	outerEyeTransform.GetPosition().y = 10;
 
@@ -76,11 +87,12 @@ int main(int argc, char* argv[]) {
 	Material* outerEyeMaterial = new Material("./Res/Shaders/TranslucentShader");
 	outerEyeMaterial->SetShaderModel(EShaderModel::TRANSLUCENT);
 	outerEyeMaterial->SetVec3Parameter("Albedo", vec3(1.0, 1.0, 1.0));
-	outerEyeMaterial->SetTextureParameter("RMAO", outerRoughness);
-	outerEyeMaterial->SetTextureParameter("Normal", outerNormal);
-	outerEyeMaterial->SetScalarParameter("Opacity", 0.5f);
+	outerEyeMaterial->SetScalarParameter("Opacity", 0.2f);
 	StaticMesh* outerEye = new StaticMesh(outerEyeTransform, outerEyeMaterial, "./res/Eye/EyeClear.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(outerEye);
+	S_Engine->GetWorld()->RegisterEntity(outerEye);
+
+	//EyeActor* tempEye = new EyeActor(innerEyetransform);
+	//S_Engine->GetWorld()->RegisterEntity(tempEye);
 
 	Grid grid(40, 2);
 	S_Engine->GetWorld()->RegisterEntity(&grid);
@@ -102,10 +114,16 @@ int main(int argc, char* argv[]) {
 			}
 		}
 	}
-	//Transform fillLightTransform;
-	//fillLightTransform.GetPosition().y = 10;
-	//Light* fillLight = new Light(fillLightTransform, 40, vec3(1.0, 0.8, 0.2), 100);
-	//S_Engine->GetWorld()->RegisterLight(fillLight);
+	Transform fillLightTransform;
+	fillLightTransform.GetPosition().y = 50;
+	Light* fillLight = new Light(fillLightTransform, 800, vec3(0.75, 0.9, 0.8), 150);
+	fillLight->ToggleDebug(true);
+	S_Engine->GetWorld()->RegisterLight(fillLight);
+
+	fillLightTransform.GetPosition().y = -20;
+	Light* bounceLight = new Light(fillLightTransform, 500, vec3(0.75, 0.9, 0.8), 150);
+	bounceLight->ToggleDebug(true);
+	S_Engine->GetWorld()->RegisterLight(bounceLight);
 
 	S_Engine->StartEngine();
 	return 0;

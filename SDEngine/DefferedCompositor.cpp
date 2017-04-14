@@ -7,8 +7,8 @@
 DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_LightingShader = new Shader(LightingShader);
 	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output"));
-	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomX"));
-	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomY"));
+	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomX"));
+	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomY"));
 	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/ToneMapping"));
 }
 DefferedCompositor::~DefferedCompositor() {}
@@ -33,17 +33,15 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 	for (GLuint i = 0; i < Lights.size(); i++) {
 		Lights[i]->SendShaderInformation(S_LightingShader, i);
 	}
-	
-	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
 
 	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), uniformNames[i].c_str()), i);
+		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
 	}
 
-	DrawToScreen();
+	DrawScreenQuad();
 }
 void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex) {
 	ReadBuffer->BindForReading();
@@ -54,16 +52,14 @@ void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* Wr
 	glUniform1f(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
 	glUniform1f(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
 
-	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
 
 	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), uniformNames[i].c_str()), i);
+		glUniform1i(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
 	}
-	DrawToScreen();		
-
+	DrawScreenQuad();
 }
 void DefferedCompositor::OutputToScreen(GBuffer* ReadBuffer) {
 	ReadBuffer->BindForReading();
@@ -71,17 +67,15 @@ void DefferedCompositor::OutputToScreen(GBuffer* ReadBuffer) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_FinalOutputShader->Bind();
 
-	string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
-
 	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_FinalOutputShader->GetProgram(), uniformNames[i].c_str()), i);
+		glUniform1i(glGetUniformLocation(S_FinalOutputShader->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
 	}
-	DrawToScreen();
+	DrawScreenQuad();
 }
-void DefferedCompositor::DrawToScreen() {
+void DefferedCompositor::DrawScreenQuad() {
 	if (quadVAO == 0) {
 		GLfloat quadVertices[] = {
 			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,

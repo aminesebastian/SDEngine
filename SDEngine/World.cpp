@@ -4,7 +4,7 @@
 #include "Shader.h"
 
 
-UWorld::UWorld() {}
+UWorld::UWorld() : S_DeltaTime(0), S_WorldTime(0) {}
 UWorld::~UWorld() {
 	delete &S_EntityList;
 	delete &S_LightList;

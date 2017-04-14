@@ -19,21 +19,21 @@ layout (location = 1) out vec4 AlbedoOut;
 layout (location = 2) out vec4 RMAOOut;	      
 layout (location = 3) out vec3 NormalOut;     
 layout (location = 4) out vec3 TexCoordOut;	
-layout (location = 5) out vec3 MatIDOut;	
 
 float linearizeDepth(float depth);
 														
 void main()	{											
 	WorldPosOut.rgb		= worldPos0;	
 	WorldPosOut.a		= linearizeDepth(gl_FragCoord.z);	
-	AlbedoOut.rgb		= Color;				
+
+	AlbedoOut.rgb		= Color;		
+	AlbedoOut.a			= MAT_ID;			
 	TexCoordOut			= vec3(texCoord0, 0.0);
 	vec3 sampledNormal	= ((255.0/128.0) * Normal)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
 	RMAOOut.r			= Roughness;	
 	RMAOOut.g			= Metalness;									
 	RMAOOut.b			= 1.0f;	
-	MatIDOut			= vec3(MAT_ID);	
 }
 
 float linearizeDepth(float depth) {

@@ -217,10 +217,18 @@ void StaticMesh::InitMesh() {
  **************************************************************************************************/
 
 void StaticMesh::Draw(Camera* Camera) {
-	S_Material->BindMaterial(GetTransform(), Camera);
-	glBindVertexArray(S_VertexArrayObject);
-	glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	if (S_Material->GetShaderModel() != EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::GEOMETRY) {
+		S_Material->BindMaterial(GetTransform(), Camera);
+		glBindVertexArray(S_VertexArrayObject);
+		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
+	if (S_Material->GetShaderModel() == EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::TRANSLUCENCY) {
+		S_Material->BindMaterial(GetTransform(), Camera);
+		glBindVertexArray(S_VertexArrayObject);
+		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
 	
 	//shader.Bind();
 	//glEnable(GL_TEXTURE_2D);
