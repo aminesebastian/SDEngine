@@ -5,9 +5,9 @@
 #include "RenderingEngine.h"
 #include "Material.h"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-#define WINDOW_BIT_DEPTH 8
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
+#define WINDOW_BIT_DEPTH 10
 
 #define LOG_GENERAL "GENERAL"
 #define LOG_WARNING "WARNING"

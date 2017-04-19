@@ -142,6 +142,11 @@ void URenderingEngine::BlendTransparencyPass(UWorld* World, Camera* Camera, GBuf
 	glActiveTexture(GL_TEXTURE0 + TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
 	glBindTexture(GL_TEXTURE_2D, TranslucencyBuffer->GetTexture(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY));
 	glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), TranslucencyBuffer->GetGBufferTextureName(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY).c_str()), TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0 + TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_HDR);
+	glBindTexture(GL_TEXTURE_2D, TranslucencyBuffer->GetTexture(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_HDR));
+	glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), TranslucencyBuffer->GetGBufferTextureName(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_HDR).c_str()), TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_HDR);
 	S_DefferedCompositor->DrawScreenQuad();
 }
 void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {

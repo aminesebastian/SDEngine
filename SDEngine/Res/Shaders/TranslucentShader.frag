@@ -6,6 +6,7 @@ in vec3 worldPos0;
 in float depth0;
 
 uniform vec2 SCREEN_RES;
+uniform int MAT_ID;
 
 uniform vec3 CAMERA_POS;
 uniform float Opacity;
@@ -48,24 +49,25 @@ float linearizeDepth(float depth);
 
 void main() {
 	WorldPosOut			= texture(worldPosition, texCoord0);	
-	AlbedoOut	 		= texture(albedo, texCoord0);			
+	AlbedoOut	 		= texture(albedo, texCoord0);	
+	AlbedoOut.a			= MAT_ID;
 	TexCoordOut			= texture(texCoord, texCoord0).rgb;
 	NormalOut			= texture(normal, texCoord0).rgb;	
 	RMAOOut				= texture(RMAO, texCoord0);	
-	HDROutput			= texture(HDR, texCoord0);
+	//HDROutput			= texture(HDR, texCoord0);
 	LitOutput			= texture(finalComp, texCoord0);
 
 	vec2 screenTexCoord = gl_FragCoord.rg;
 	screenTexCoord.r   /= SCREEN_RES.x;
 	screenTexCoord.g   /= SCREEN_RES.y;
-	vec3 refractionDir	= normalize(CAMERA_POS - worldPos0) - normalize(normal0);
-	vec2 refCoord		= refractionDir.rg * 0.05 * Fresnel(5, 0, 1);
+	vec3 refractionDir	= (normalize(CAMERA_POS - worldPos0) - normalize(normal0))-0.5;
+	vec2 refCoord		= refractionDir.rg * 0.06 * Fresnel(5, 0, 1);
 
-	vec4 preDepthTest	= (texture(finalComp, screenTexCoord + refCoord) * (1-Opacity)) + (vec4(Lighting()*Opacity*Albedo*Fresnel(2.0f, 0.05f, 1.0f), 1.0f));		 
-	float transDistance = gl_FragCoord.z;
-	preDepthTest.a		= transDistance; //floor(texture(worldPosition, screenTexCoord).a +0.1f);
+	vec4 preDepthTest	= (texture(finalComp, screenTexCoord + refCoord)) + (vec4(Lighting()*Albedo*Fresnel(2.0f, 0.05f, 1.0f), 1.0f));		 
+	preDepthTest.a		= 1;
 	
-	Translucency		= preDepthTest;
+	HDROutput			= texture(HDR, screenTexCoord) + clamp(preDepthTest-1, 0, 1);
+	Translucency		= (preDepthTest);
 }
 
 vec3 Lighting() {
