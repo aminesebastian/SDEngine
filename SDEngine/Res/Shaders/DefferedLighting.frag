@@ -61,7 +61,7 @@ vec3 Luminance() {
 		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.03f;
 		for(int i=0; i<NUM_LIGHTS; i++) {
 			finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125, 0.020);	
-			}
+		}
 	}else{
 		finalLightIntensity = vec3(1);
 	}
@@ -72,7 +72,6 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
     vec3 L = normalize(lightCentre - fragmentPosition);
 	float distance    = length(lightCentre - fragmentPosition);
     float attenuation = 500.0 / (distance * distance);
-
     float NdotL = max(dot(N, L), 0.0);
 
 	float roughness = texture(RMAO, texCoord0).r;

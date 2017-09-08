@@ -100,15 +100,6 @@
     <ClCompile Include="EyeActor.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="SAsset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="TypeDefenitions.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Display.h">
@@ -170,15 +161,6 @@
     </ClInclude>
     <ClInclude Include="EyeActor.h">
       <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="SAsset.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeDefenitions.h">
-      <Filter>Headers\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -252,18 +234,6 @@
       <Filter>Shaders\IndividualShaders</Filter>
     </None>
     <None Include="Res\Shaders\SkySphereShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TorusShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TorusShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\HeadShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\HeadShader.vert">
       <Filter>Shaders\IndividualShaders</Filter>
     </None>
   </ItemGroup>

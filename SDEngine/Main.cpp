@@ -11,7 +11,6 @@
 #include "Engine.h"
 #include "RenderingEngine.h"
 #include "EyeActor.h"
-#include "AssetManager.h"
 
 #undef main
 using namespace glm;
@@ -37,20 +36,17 @@ int main(int argc, char* argv[]) {
 	init_logger("SD_EngineLog.txt");
 	PrintToLog("Engine Launched!");
 
-	Texture2D* torusAlbedo = new Texture2D("res/T_TorusBaseColor.tga");
-	Texture2D* torusRoughness = new Texture2D("res/T_TorusRMAO.tga");
-	Texture2D* torusNormal = new Texture2D("res/T_TorusNormal.tga");
+	//Texture2D torusAlbedo("res/T_TorusBaseColor.tga");
+	//Texture2D torusRoughness("res/T_TorusRMAO.tga");
+	//Texture2D torusNormal("res/T_TorusNormal.tga");
 
-	Material* torusMaterial = new Material("res/Shaders/TorusShader");
-	Transform torusTransform;
-	torusTransform.SetUniformScale(5.0f);
-	StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
-	torus->SetMaterial(torusMaterial);
-	torusMaterial->SetTextureParameter("albedo", torusAlbedo);
-	torusMaterial->SetTextureParameter("RMAO", torusRoughness);
-	torusMaterial->SetTextureParameter("normal", torusNormal);
-
-	S_Engine->GetWorld()->RegisterEntity(torus);
+	//Transform torusTransform;
+	//torusTransform.SetUniformScale(5.0f);
+	//StaticMesh torus(torusTransform, "./res/Torus.fbx");
+	//torus.RegisterTexture(&torusAlbedo);
+	//torus.RegisterTexture(&torusRoughness);
+	//torus.RegisterTexture(&torusNormal);
+	//S_Engine->GetWorld()->RegisterEntity(&torus);
 
 	Transform skySphereTransform;
 	skySphereTransform.SetUniformScale(100.0f);
@@ -63,38 +59,40 @@ int main(int argc, char* argv[]) {
 	S_Engine->GetWorld()->RegisterEntity(sky);
 
 
-	//Transform innerEyetransform;
-	//innerEyetransform.SetUniformScale(3.0f);
-	//innerEyetransform.SetRotation(-60, 0, 0);
-	//innerEyetransform.GetPosition().y = 10;
+	Transform innerEyetransform;
+	innerEyetransform.SetUniformScale(3.0f);
+	innerEyetransform.SetRotation(-60, 0, 0);
+	innerEyetransform.GetPosition().y = 10;
 
-	//SAsset* eyeAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Eye.sasset");
-	//StaticMesh* eyeMesh = eyeAsset->GetAsStaticMesh();
-	//eyeMesh->SetTransform(innerEyetransform);
-	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
+	Texture2D* albedo = new Texture2D("res/Eye/T_EyeBaseColor.tga");
+	Texture2D* roughness = new Texture2D("res/Eye/T_EyeRMAO.tga");
+	Texture2D* normal= new Texture2D("res/Eye/T_EyeNormal.tga");
 
-	Transform headTransform;
-	headTransform.GetPosition().y = 10;
-	headTransform.SetUniformScale(3.0f);
-	SAsset* headAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	StaticMesh* head = headAsset->GetAsStaticMesh();
-	head->SetTransform(headTransform);
-	S_Engine->GetWorld()->RegisterEntity(head);
+	Material* newMaterial = new Material("./Res/Shaders/TestEyeShader");
+	newMaterial->SetTextureParameter("Albedo", albedo);
+	newMaterial->SetTextureParameter("RMAO", roughness);
+	newMaterial->SetTextureParameter("Normal", normal);
+	StaticMesh* eye = new StaticMesh(innerEyetransform, newMaterial, "./res/Eye/Eye.fbx");
+	S_Engine->GetWorld()->RegisterEntity(eye);
 
-	//Transform outerEyeTransform;
-	//outerEyeTransform.SetUniformScale(3.0f);
-	//outerEyeTransform.SetRotation(-60, 0, 0);
-	//outerEyeTransform.GetPosition().y = 10;
 
-	//Texture2D* outerRoughness = new Texture2D("res/Eye/T_EyeClearRoughness.tga");
-	//Texture2D* outerNormal = new Texture2D("res/Eye/T_EyeClearNormal.tga");
+	Transform outerEyeTransform;
+	outerEyeTransform.SetUniformScale(3.0f);
+	outerEyeTransform.SetRotation(-60, 0, 0);
+	outerEyeTransform.GetPosition().y = 10;
 
-	//Material* outerEyeMaterial = new Material("./Res/Shaders/TranslucentShader");
-	//outerEyeMaterial->SetShaderModel(EShaderModel::TRANSLUCENT);
-	//outerEyeMaterial->SetVec3Parameter("Albedo", vec3(1.0, 1.0, 1.0));
-	//outerEyeMaterial->SetScalarParameter("Opacity", 0.2f);
-	//StaticMesh* outerEye = new StaticMesh(outerEyeTransform, outerEyeMaterial, "./res/Eye/EyeClear.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(outerEye);
+	Texture2D* outerRoughness = new Texture2D("res/Eye/T_EyeClearRoughness.tga");
+	Texture2D* outerNormal = new Texture2D("res/Eye/T_EyeClearNormal.tga");
+
+	Material* outerEyeMaterial = new Material("./Res/Shaders/TranslucentShader");
+	outerEyeMaterial->SetShaderModel(EShaderModel::TRANSLUCENT);
+	outerEyeMaterial->SetVec3Parameter("Albedo", vec3(1.0, 1.0, 1.0));
+	outerEyeMaterial->SetScalarParameter("Opacity", 0.2f);
+	StaticMesh* outerEye = new StaticMesh(outerEyeTransform, outerEyeMaterial, "./res/Eye/EyeClear.fbx");
+	S_Engine->GetWorld()->RegisterEntity(outerEye);
+
+	//EyeActor* tempEye = new EyeActor(innerEyetransform);
+	//S_Engine->GetWorld()->RegisterEntity(tempEye);
 
 	Grid grid(40, 2);
 	S_Engine->GetWorld()->RegisterEntity(&grid);

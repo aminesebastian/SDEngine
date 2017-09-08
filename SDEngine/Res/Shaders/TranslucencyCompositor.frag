@@ -30,5 +30,5 @@ void main() {
 	HDROutput			= texture(HDR, texCoord0);
 
 	float transBlend	= texture(translucency, texCoord0).a;
-	LitOutput			= (texture(translucency, texCoord0)*transBlend) + ((1-transBlend)*texture(finalComp, texCoord0));
+	LitOutput			= (texture(translucency, texCoord0)*transBlend) + ((1.0f-transBlend)*texture(finalComp, texCoord0));
 }

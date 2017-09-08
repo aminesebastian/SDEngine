@@ -34,9 +34,9 @@ vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint) {
 	vec4 preWhitepoint = Exposure * Input;
     preWhitepoint =  ((preWhitepoint*(A*preWhitepoint+C*B)+D*E)/(preWhitepoint*(A*preWhitepoint+B)+D*F))-E/F;
 	preWhitepoint /= ((Whitepoint*(A*Whitepoint+C*B)+D*E)/(Whitepoint*(A*Whitepoint+B)+D*F))-E/F;
-	//if(texture(albedo, texCoord0).a == 0) {
+	if(texture(albedo, texCoord0).a == 0) {
 		return preWhitepoint;
-	//}else{
-	//	return Input;
-	//}	
+	}else{
+		return Input;
+	}	
 }
