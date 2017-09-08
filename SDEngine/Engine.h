@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "RenderingEngine.h"
 #include "Material.h"
+#include "Texture2D.h"
+#include "TypeDefenitions.h"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
@@ -15,6 +17,8 @@
 
 #define PrintToLog(...) _slog(__FILE__,__LINE__,__VA_ARGS__)
 #define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
+
+class AssetManager;
 
 struct FKeyInfo {
 	bool bWDown;
@@ -40,10 +44,15 @@ public:
 	float GetWorldTime() { return S_WorldTime; }
 
 	static Engine* GetInstance();
+
+	AssetManager* GetAssetManager();
+
 private:
 	Engine();
 	virtual ~Engine();
 	static Engine* S_EngineInstance;
+
+	AssetManager* S_AssetManager;
 
 	Material* S_DefaultMaterial;
 	float S_DeltaTime = 0.0f;	

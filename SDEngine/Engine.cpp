@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Light.h"
+#include "AssetManager.h"
 
 Engine::Engine() {
 	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
@@ -24,15 +25,22 @@ Engine::Engine() {
 	S_DefaultMaterial->SetVec3Parameter("Normal", vec3(0.5f, 0.5f, 1.0f));
 	S_DefaultMaterial->SetScalarParameter("Roughness", 0.5f);
 	S_DefaultMaterial->SetScalarParameter("Metalness", 0.5f);
+
+	S_AssetManager = new AssetManager();
 }
 Engine::~Engine() {
 	delete &S_Display;
 	delete &S_RenderingEngine;
 }
+
 Engine* Engine::GetInstance() {
 	static Engine* S_EngineInstance = new Engine(); // only initialized once!
 	return S_EngineInstance;
 }
+AssetManager* Engine::GetAssetManager() {
+	return S_AssetManager;
+}
+
 bool Engine::Init() {
 	if (bIsInitialized) { return false; }
 
