@@ -61,10 +61,9 @@ void main() {
 	vec3 refractionDir	= normalize(CAMERA_POS - worldPos0) - normalize(normal0);
 	vec2 refCoord		= refractionDir.rg * 0.05 * Fresnel(5, 0, 1);
 
-	vec4 preDepthTest	= (texture(finalComp, screenTexCoord + refCoord) * (1-Opacity)) + (vec4(Lighting()*Opacity*Albedo*Fresnel(2.0f, 0.05f, 1.0f), 1.0f));		 
-	float transDistance = gl_FragCoord.z;
-	preDepthTest.a		= transDistance; //floor(texture(worldPosition, screenTexCoord).a +0.1f);
-	
+	vec4 preDepthTest	= clamp((texture(finalComp, screenTexCoord + refCoord) * (1-Opacity)) + (vec4(Lighting()*Opacity*Albedo*Fresnel(2.0f, 0.05f, 1.0f), 1.0f)), 0, 1);		 
+	float transDistance = 1;
+
 	Translucency		= preDepthTest;
 }
 

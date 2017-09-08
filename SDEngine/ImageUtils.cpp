@@ -86,12 +86,12 @@ If your name should be here but isn't, let Sean know.
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
 typedef   signed short  int16;
-typedef unsigned int   uint32;
+typedef unsigned int   uint;
 typedef   signed int    int32;
 typedef unsigned int   uint;
 
 // should produce compiler error if size is wrong
-typedef unsigned char validate_uint32[sizeof(uint32) == 4 ? 1 : -1];
+typedef unsigned char validate_uint[sizeof(uint) == 4 ? 1 : -1];
 
 #if defined(STBI_NO_STDIO) && !defined(STBI_NO_WRITE)
 #define STBI_NO_WRITE
@@ -117,7 +117,7 @@ typedef unsigned char validate_uint32[sizeof(uint32) == 4 ? 1 : -1];
 // contains all the IO context, plus some basic image information
 typedef struct
 {
-	uint32 img_x, img_y;
+	uint img_x, img_y;
 	int img_n, img_out_n;
 
 	stbi_io_callbacks io;
@@ -524,9 +524,9 @@ static int get16(stbi *s)
 	return (z << 8) + get8(s);
 }
 
-static uint32 get32(stbi *s)
+static uint get32(stbi *s)
 {
-	uint32 z = get16(s);
+	uint z = get16(s);
 	return (z << 16) + get16(s);
 }
 
@@ -536,9 +536,9 @@ static int get16le(stbi *s)
 	return z + (get8(s) << 8);
 }
 
-static uint32 get32le(stbi *s)
+static uint get32le(stbi *s)
 {
-	uint32 z = get16le(s);
+	uint z = get16le(s);
 	return z + (get16le(s) << 16);
 }
 
@@ -718,7 +718,7 @@ typedef struct
 		uint8 *linebuf;
 	} img_comp[4];
 
-	uint32         code_buffer; // jpeg entropy-coded buffer
+	uint         code_buffer; // jpeg entropy-coded buffer
 	int            code_bits;   // number of valid bits
 	unsigned char  marker;      // marker seen while filling entropy buffer
 	int            nomore;      // flag if we saw a marker so must stop
@@ -786,7 +786,7 @@ static void grow_buffer_unsafe(jpeg *j)
 }
 
 // (1 << n) - 1
-static uint32 bmask[17] = { 0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535 };
+static uint bmask[17] = { 0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535 };
 
 // decode a jpeg huffman value from the bitstream
 stbi_inline static int decode(jpeg *j, huffman *h)
@@ -1771,7 +1771,7 @@ typedef struct
 {
 	uint8 *zbuffer, *zbuffer_end;
 	int num_bits;
-	uint32 code_buffer;
+	uint code_buffer;
 
 	char *zout;
 	char *zout_start;
@@ -2132,8 +2132,8 @@ int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffe
 
 typedef struct
 {
-	uint32 length;
-	uint32 type;
+	uint length;
+	uint type;
 } chunk;
 
 #define PNG_TYPE(a,b,c,d)  (((a) << 24) + ((b) << 16) + ((c) << 8) + (d))
@@ -2184,10 +2184,10 @@ static int paeth(int a, int b, int c)
 }
 
 // create the png data from post-deflated data
-static int create_png_image_raw(png *a, uint8 *raw, uint32 raw_len, int out_n, uint32 x, uint32 y)
+static int create_png_image_raw(png *a, uint8 *raw, uint raw_len, int out_n, uint x, uint y)
 {
 	stbi *s = a->s;
-	uint32 i, j, stride = x*out_n;
+	uint i, j, stride = x*out_n;
 	int k;
 	int img_n = s->img_n; // copy it into a local for later
 	assert(out_n == s->img_n || out_n == s->img_n + 1);
@@ -2263,7 +2263,7 @@ static int create_png_image_raw(png *a, uint8 *raw, uint32 raw_len, int out_n, u
 	return 1;
 }
 
-static int create_png_image(png *a, uint8 *raw, uint32 raw_len, int out_n, int interlaced)
+static int create_png_image(png *a, uint8 *raw, uint raw_len, int out_n, int interlaced)
 {
 	uint8 *final;
 	int p;
@@ -2307,7 +2307,7 @@ static int create_png_image(png *a, uint8 *raw, uint32 raw_len, int out_n, int i
 static int compute_transparency(png *z, uint8 tc[3], int out_n)
 {
 	stbi *s = z->s;
-	uint32 i, pixel_count = s->img_x * s->img_y;
+	uint i, pixel_count = s->img_x * s->img_y;
 	uint8 *p = z->out;
 
 	// compute color-based transparency, assuming we've
@@ -2332,7 +2332,7 @@ static int compute_transparency(png *z, uint8 tc[3], int out_n)
 
 static int expand_palette(png *a, uint8 *palette, int len, int pal_img_n)
 {
-	uint32 i, pixel_count = a->s->img_x * a->s->img_y;
+	uint i, pixel_count = a->s->img_x * a->s->img_y;
 	uint8 *p, *temp_out, *orig = a->out;
 
 	p = (uint8 *)malloc(pixel_count * pal_img_n);
@@ -2383,7 +2383,7 @@ void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert)
 static void stbi_de_iphone(png *z)
 {
 	stbi *s = z->s;
-	uint32 i, pixel_count = s->img_x * s->img_y;
+	uint i, pixel_count = s->img_x * s->img_y;
 	uint8 *p = z->out;
 
 	if (s->img_out_n == 3) {  // convert bgr to rgb
@@ -2429,7 +2429,7 @@ static int parse_png_file(png *z, int scan, int req_comp)
 {
 	uint8 palette[1024], pal_img_n = 0;
 	uint8 has_trans = 0, tc[3];
-	uint32 ioff = 0, idata_limit = 0, i, pal_len = 0;
+	uint ioff = 0, idata_limit = 0, i, pal_len = 0;
 	int first = 1, k, interlace = 0, iphone = 0;
 	stbi *s = z->s;
 
@@ -2504,7 +2504,7 @@ static int parse_png_file(png *z, int scan, int req_comp)
 			}
 			else {
 				if (!(s->img_n & 1)) return e("tRNS with alpha", "Corrupt PNG");
-				if (c.length != (uint32)s->img_n * 2) return e("bad tRNS len", "Corrupt PNG");
+				if (c.length != (uint)s->img_n * 2) return e("bad tRNS len", "Corrupt PNG");
 				has_trans = 1;
 				for (k = 0; k < s->img_n; ++k)
 					tc[k] = (uint8)get16(s); // non 8-bit images will be larger
@@ -2530,7 +2530,7 @@ static int parse_png_file(png *z, int scan, int req_comp)
 		}
 
 		case PNG_TYPE('I', 'E', 'N', 'D'): {
-			uint32 raw_len;
+			uint raw_len;
 			if (first) return e("first not IHDR", "Corrupt PNG");
 			if (scan != SCAN_load) return 1;
 			if (z->idata == NULL) return e("no IDAT", "Corrupt PNG");
@@ -2871,7 +2871,7 @@ static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 			}
 			else {
 				for (i = 0; i < (int)s->img_x; ++i) {
-					uint32 v = (bpp == 16 ? get16le(s) : get32le(s));
+					uint v = (bpp == 16 ? get16le(s) : get32le(s));
 					int a;
 					out[z++] = (uint8)shiftsigned(v & mr, rshift, rcount);
 					out[z++] = (uint8)shiftsigned(v & mg, gshift, gcount);
@@ -3751,9 +3751,9 @@ static void stbi_out_gif_code(stbi_gif *g, uint16 code)
 static uint8 *stbi_process_gif_raster(stbi *s, stbi_gif *g)
 {
 	uint8 lzw_cs;
-	int32 len, code;
-	uint32 first;
-	int32 codesize, codemask, avail, oldcode, bits, valid_bits, clear;
+	int len, code;
+	uint first;
+	int codesize, codemask, avail, oldcode, bits, valid_bits, clear;
 	stbi_gif_lzw *p;
 
 	lzw_cs = get8u(s);
@@ -3782,11 +3782,11 @@ static uint8 *stbi_process_gif_raster(stbi *s, stbi_gif *g)
 					return g->out;
 			}
 			--len;
-			bits |= (int32)get8(s) << valid_bits;
+			bits |= (int)get8(s) << valid_bits;
 			valid_bits += 8;
 		}
 		else {
-			int32 code = bits & codemask;
+			int code = bits & codemask;
 			bits >>= codesize;
 			valid_bits -= codesize;
 			// @OPTIMIZE: is there some way we can accelerate the non-clear path?
@@ -3872,7 +3872,7 @@ static uint8 *stbi_gif_load_next(stbi *s, stbi_gif *g, int *comp, int req_comp)
 		switch (get8(s)) {
 		case 0x2C: /* Image Descriptor */
 		{
-			int32 x, y, w, h;
+			int x, y, w, h;
 			uint8 *o;
 
 			x = get16le(s);
