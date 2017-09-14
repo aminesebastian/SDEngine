@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="BloomPostProcessing.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DefferedCompositor.cpp" />
     <ClCompile Include="Display.cpp" />
@@ -167,13 +168,17 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="PostProcessingLayer.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="SAsset.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SLogger.c" />
+    <ClCompile Include="SMath.cpp" />
+    <ClCompile Include="SSAOPostProcessing.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="ToneMapper.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="TypeDefenitions.cpp" />
     <ClCompile Include="World.cpp" />
@@ -181,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="BloomPostProcessing.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DefferedCompositor.h" />
     <ClInclude Include="Display.h" />
@@ -194,13 +200,17 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="PostProcessingLayer.h" />
     <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="SAsset.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SLogger.h" />
+    <ClInclude Include="SMath.h" />
+    <ClInclude Include="SSAOPostProcessing.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="ImageUtils.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="ToneMapper.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="TypeDefenitions.h" />
     <ClInclude Include="World.h" />
@@ -216,12 +226,16 @@
     <None Include="Res\Shaders\HeadShader.vert" />
     <None Include="Res\Shaders\LightDebugShader.frag" />
     <None Include="Res\Shaders\LightDebugShader.vert" />
+    <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
+    <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
     <None Include="Res\Shaders\PostProcessing\BloomX.frag" />
     <None Include="Res\Shaders\PostProcessing\BloomX.vert" />
     <None Include="Res\Shaders\PostProcessing\BloomY.frag" />
     <None Include="Res\Shaders\PostProcessing\BloomY.vert" />
     <None Include="Res\Shaders\PostProcessing\Output.frag" />
     <None Include="Res\Shaders\PostProcessing\Output.vert" />
+    <None Include="Res\Shaders\PostProcessing\SSAO.frag" />
+    <None Include="Res\Shaders\PostProcessing\SSAO.vert" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
     <None Include="Res\Shaders\SkySphereShader.frag" />

@@ -8,6 +8,9 @@
 #include "DefferedCompositor.h"
 #include <GLEW/glew.h>
 #include "EngineStatics.h"
+#include "ToneMapper.h"
+#include "BloomPostProcessing.h"
+#include "SSAOPostProcessing.h"
 
 URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1 = new GBuffer();
@@ -19,6 +22,9 @@ URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_TranslucencyBuffer->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
+	S_PostProcessingLayers.push_back(new SSAOPostProcessing());
+	//S_PostProcessingLayers.push_back(new BloomPostProcessing());
+	//S_PostProcessingLayers.push_back(new ToneMapper());
 }
 URenderingEngine::~URenderingEngine() {
 
@@ -34,6 +40,9 @@ void URenderingEngine::RecompileShaders(UWorld* World) {
 		if (temp && temp->GetMaterial() != NULL) {
 			temp->GetMaterial()->GetShader()->RecompileShader();
 		}
+	}
+	for(int i=0; i<S_PostProcessingLayers.size(); i++) {
+		S_PostProcessingLayers[i]->RecompileShaders();
 	}
 	EngineStatics::GetLightDebugShader()->RecompileShader();
 }
@@ -145,6 +154,8 @@ void URenderingEngine::BlendTransparencyPass(UWorld* World, Camera* Camera, GBuf
 	S_DefferedCompositor->DrawScreenQuad();
 }
 void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
+	S_CurrentBuffer = 1;
+
 	S_CurrentStage = ERenderingStage::GEOMETRY;
 	GemoetryPass(World, Camera, GetFreeGBuffer());
 	FlipCurrentBufferIndex();
@@ -153,18 +164,18 @@ void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 	S_DefferedCompositor->CompositeLighting(GetReadGBuffer(), GetFreeGBuffer(), World->GetWorldLights(), Camera);
 	FlipCurrentBufferIndex();
 
-	//S_CurrentStage = ERenderingStage::TRANSLUCENCY;
-	//if (GetTranslucentObjectCount(World) > 0) {
-	//	TranslucencyPass(World, Camera, GetReadGBuffer(), S_TranslucencyBuffer);
-	//	BlendTransparencyPass(World, Camera, S_TranslucencyBuffer, GetReadGBuffer(), GetFreeGBuffer());
-	//	FlipCurrentBufferIndex();
-	//}
+	S_CurrentStage = ERenderingStage::TRANSLUCENCY;
+	if (GetTranslucentObjectCount(World) > 0) {
+		TranslucencyPass(World, Camera, GetReadGBuffer(), S_TranslucencyBuffer);
+		BlendTransparencyPass(World, Camera, S_TranslucencyBuffer, GetReadGBuffer(), GetFreeGBuffer());
+		FlipCurrentBufferIndex();
+	}
 
-	//S_CurrentStage = ERenderingStage::POST_PROCESSING;
-	//for (int i = 0; i < S_DefferedCompositor->GetPostProcessShaderCount(); i++) {
-	//	S_DefferedCompositor->CompositePostProcesing(GetReadGBuffer(), GetFreeGBuffer(), Camera, i);
-	//	FlipCurrentBufferIndex();
-	//}
+	S_CurrentStage = ERenderingStage::POST_PROCESSING;
+	for (int i = 0; i < S_PostProcessingLayers.size(); i++) {
+		S_PostProcessingLayers[i]->RenderLayer(S_DefferedCompositor, Camera, GetReadGBuffer(), GetFreeGBuffer());
+		FlipCurrentBufferIndex();
+	}
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetReadGBuffer());

@@ -31,7 +31,7 @@ void main()	{
 	TexCoordOut			= vec3(texCoord0, 0.0);
 	vec3 sampledNormal	= ((255.0/128.0) * texture(normal, texCoord0).xyz)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
-	RMAOOut.r			= texture(RMAO, texCoord0).b;
+	RMAOOut.r			= texture(RMAO, texCoord0).r;
 	RMAOOut.g			= 0.0f;									
 	RMAOOut.b			= texture(RMAO, texCoord0).b;	
 }

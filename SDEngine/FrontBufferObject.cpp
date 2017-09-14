@@ -1,6 +1,6 @@
 #include "FrontBufferObject.h"
 #include <iostream>
-
+#include "Shader.h"
 
 FrontBufferObject::FrontBufferObject() {
 	S_NumTextures = 0;
@@ -61,6 +61,15 @@ bool FrontBufferObject::Init(unsigned int WindowWidth, unsigned int WindowHeight
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return true;
+}
+
+void FrontBufferObject::BindTextures(Shader* Shader) {
+	for (int i = 0; i < GetNumTextures(); i++) {
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, GetTexture(i));
+		glUniform1i(glGetUniformLocation(Shader->GetProgram(), GetTextureName(i).c_str()), i);
+	}
 }
 
 void FrontBufferObject::BindForWriting() {

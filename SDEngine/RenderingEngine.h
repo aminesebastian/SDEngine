@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "PostProcessingLayer.h"
+#include "TypeDefenitions.h"
 
 class UWorld;
 class Shader;
@@ -37,9 +39,13 @@ public:
 private:
 	Shader* S_Shader;
 	Shader* S_TranslucencyBlendShader;
+	
 	GBuffer* S_Buffer1;
 	GBuffer* S_Buffer2;
 	GBuffer* S_TranslucencyBuffer;
+
+	SArray<PostProcessingLayer*> S_PostProcessingLayers;
+
 	int S_CurrentBuffer = 1;
 	Display* S_Display;
 	DefferedCompositor* S_DefferedCompositor;

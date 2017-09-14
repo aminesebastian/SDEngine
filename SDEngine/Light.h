@@ -10,7 +10,7 @@ struct FLightInfo {
 	float Intensity;
 	vec3 Color;
 	float Attenuation;
-	ELightType Type = ELightType::POINT;
+	ELightType Type = POINT;
 };
 
 

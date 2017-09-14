@@ -37,20 +37,20 @@ int main(int argc, char* argv[]) {
 	init_logger("SD_EngineLog.txt");
 	PrintToLog("Engine Launched!");
 
-	Texture2D* torusAlbedo = new Texture2D("res/T_TorusBaseColor.tga");
-	Texture2D* torusRoughness = new Texture2D("res/T_TorusRMAO.tga");
-	Texture2D* torusNormal = new Texture2D("res/T_TorusNormal.tga");
+	//Texture2D* torusAlbedo = new Texture2D("res/T_TorusBaseColor.tga");
+	//Texture2D* torusRoughness = new Texture2D("res/T_TorusRMAO.tga");
+	//Texture2D* torusNormal = new Texture2D("res/T_TorusNormal.tga");
 
-	Material* torusMaterial = new Material("res/Shaders/TorusShader");
-	Transform torusTransform;
-	torusTransform.SetUniformScale(5.0f);
-	StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
-	torus->SetMaterial(torusMaterial);
-	torusMaterial->SetTextureParameter("albedo", torusAlbedo);
-	torusMaterial->SetTextureParameter("RMAO", torusRoughness);
-	torusMaterial->SetTextureParameter("normal", torusNormal);
+	//Material* torusMaterial = new Material("res/Shaders/TorusShader");
+	//Transform torusTransform;
+	//torusTransform.SetUniformScale(5.0f);
+	//StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
+	//torus->SetMaterial(torusMaterial);
+	//torusMaterial->SetTextureParameter("albedo", torusAlbedo);
+	//torusMaterial->SetTextureParameter("RMAO", torusRoughness);
+	//torusMaterial->SetTextureParameter("normal", torusNormal);
 
-	S_Engine->GetWorld()->RegisterEntity(torus);
+	//S_Engine->GetWorld()->RegisterEntity(torus);
 
 	//Transform skySphereTransform;
 	//skySphereTransform.SetUniformScale(100.0f);
@@ -105,28 +105,32 @@ int main(int argc, char* argv[]) {
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetPosition().x = (float)j * 5 - 5.0f;
-				tempTransform.GetPosition().y = 10+(float)k * 5;
-				tempTransform.GetPosition().z = (float)i * 5 - 5.0f;
+				tempTransform.GetPosition().x = (float)j * 2 - 2.0f;
+				tempTransform.GetPosition().y = 10+(float)k * 3.0;
+				tempTransform.GetPosition().z = (float)i * 2 - 2.0f;
 				vec3 tempColor = vec3(r, g, b);
-				float atten = (((float)(rand()) / (float)(RAND_MAX))+1) * 50;
-				tempTransform.SetUniformScale(atten/50);
-				Light* tempLight = new Light(tempTransform, POINT, 20, tempColor, atten);
-				//tempLight->ToggleDebug(true);
+				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*2;
+				tempTransform.SetUniformScale(0.25f);
+				Light* tempLight = new Light(tempTransform, POINT, 45, tempColor, atten);
+				tempLight->ToggleDebug(false);
 				S_Engine->GetWorld()->RegisterLight(tempLight);
 			}
 		}
 	}
+
 	Transform fillLightTransform;
+	fillLightTransform.SetRotation(180, 0, 0);
 	fillLightTransform.GetPosition().y = 50;
-	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8), 150);
+	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8));
 	fillLight->ToggleDebug(true);
 	S_Engine->GetWorld()->RegisterLight(fillLight);
 
-	fillLightTransform.GetPosition().y = -20;
-	Light* bounceLight = new Light(fillLightTransform, DIRECTIONAL, 500, vec3(0.75, 0.9, 0.8), 150);
-	bounceLight->ToggleDebug(true);
-	S_Engine->GetWorld()->RegisterLight(bounceLight);
+	//TwAddVarRW(S_Engine->GetInfoBar(), "Light Color", TW_TYPE_COLOR3F, &fillLight->GetLightInfo().Color, " opened=true help='Main Light Color' ");
+	//Transform bounceLightTransform;
+	//bounceLightTransform.GetPosition().y = -20;
+	//Light* bounceLight = new Light(bounceLightTransform, DIRECTIONAL, 500, vec3(0.75, 0.9, 0.8));
+	//bounceLight->ToggleDebug(true);
+	//S_Engine->GetWorld()->RegisterLight(bounceLight);
 
 	S_Engine->StartEngine();
 	return 0;

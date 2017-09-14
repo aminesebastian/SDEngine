@@ -1,8 +1,8 @@
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Head/Head Colour.jpg);
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Head/Head Spec.jpg);
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Head/Head_Level2_Normal.jpg);
+Texture(Res/Head/T_Head_Level2_BaseColor.tga);
+Texture(Res/Head/T_Head_Level2_RMAO.tga);
+Texture(Res/Head/T_Head_Level2_Normal.tga);
 
-Shader(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Shaders/HeadShader);
+Shader(Res/Shaders/HeadShader);
 
 TextureParam(0, albedo);
 TextureParam(1, RMAO);

@@ -11,7 +11,11 @@ Light::Light(const Transform IntialTransform, ELightType Type, float Intensity, 
 	S_DebugMaterial = new Material(EngineStatics::GetLightDebugShader());
 	S_DebugMaterial->SetShaderModel(EShaderModel::UNLIT);
 	S_DebugMaterial->SetVec3Parameter("Color", Color);
-	S_Probe = new StaticMesh(GetTransform(), S_DebugMaterial, "./res/Sphere.fbx");
+	if(S_LightInfo.Type == POINT) {
+		S_Probe = new StaticMesh(GetTransform(), S_DebugMaterial, "./res/Sphere.fbx");
+	}else{
+		S_Probe = new StaticMesh(GetTransform(), S_DebugMaterial, "./res/Arrow.fbx");
+	}
 }
 Light::~Light() {}
 
@@ -25,7 +29,7 @@ void Light::Draw(Camera* Camera) {
 	}
 }
 void Light::SendShaderInformation(Shader* shader, int index) {
-	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Type", GetLightInfo().Type);
+	shader->SetShaderInteger("lights[" + std::to_string(index) + "].Type", GetLightInfo().Type);
 	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Intensity", GetLightInfo().Intensity);
 	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Attenuation", GetLightInfo().Attenuation);
 	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Color", GetLightInfo().Color);

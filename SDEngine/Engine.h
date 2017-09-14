@@ -7,8 +7,8 @@
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH 3000
+#define WINDOW_HEIGHT 1200
 #define WINDOW_BIT_DEPTH 8
 
 #define LOG_GENERAL "GENERAL"
@@ -20,13 +20,8 @@
 
 class AssetManager;
 
-struct FKeyInfo {
-	bool bWDown;
-	bool bADown;
-	bool bSDown;
-	bool bDDown;
-	bool bQDown;
-	bool bEDown;
+struct FInputKey {
+	bool bKeyDown;
 };
 
 class Engine {
@@ -47,6 +42,7 @@ public:
 
 	AssetManager* GetAssetManager();
 
+	TwBar* GetInfoBar() { return S_InfoBar; }
 private:
 	Engine();
 	virtual ~Engine();
@@ -67,7 +63,8 @@ private:
 	int lastMouseY = 0;
 	float movementSpeed = 0.5f;
 	float lookSpeed = 200.0f;
-	FKeyInfo keyInfo;
+
+	FInputKey S_InputKeys[500];
 
 	Display* S_Display;
 	URenderingEngine* S_RenderingEngine;
@@ -79,5 +76,9 @@ private:
 	void GameLoop();
 	void RenderingLoop();
 	void UILoop();
-	void Movement();
+	void InputLoop();
+
+	void OnKeyDown(int KeyCode);
+	void OnKeyUp(int KeyCode);
+	void KeyAxisMapping();
 };

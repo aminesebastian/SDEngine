@@ -38,7 +38,7 @@ void main()	{
 	LitOutput			= texture(finalComp, texCoord0) + Bloom();
 }
 vec4 Bloom() {
-    vec2 tex_offset = BLOOM_SIZE/ textureSize(HDR, 0)/4; // gets size of single texel
+    vec2 tex_offset = BLOOM_SIZE/ textureSize(HDR, 0)/8; // gets size of single texel
     vec4 bloom = texture(HDR, texCoord0) * weight[0]; // current fragment's contribution
 
     for(int i = 1; i < 30; ++i) {

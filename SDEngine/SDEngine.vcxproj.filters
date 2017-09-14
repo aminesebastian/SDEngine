@@ -41,6 +41,12 @@
     <Filter Include="Headers\Engine">
       <UniqueIdentifier>{532c70ea-70df-4b09-aff3-b7a4bd774575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering\PostProcessing">
+      <UniqueIdentifier>{054a74a6-a851-48e6-a84d-f451b44b46c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Rendering\PostProcessingLayer">
+      <UniqueIdentifier>{3c2d05d3-233b-4972-9533-193fd99a427f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -115,11 +121,26 @@
     <ClCompile Include="SAsset.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="FrontBufferObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EngineStatics.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="FrontBufferObject.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessingLayer.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="ToneMapper.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="SSAOPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="SMath.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +213,26 @@
     <ClInclude Include="SLogger.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="FrontBufferObject.h" />
     <ClInclude Include="EngineStatics.h">
       <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontBufferObject.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingLayer.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="ToneMapper.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="SSAOPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="SMath.h">
+      <Filter>Headers\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +319,18 @@
     </None>
     <None Include="Res\Shaders\HeadShader.vert">
       <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\SSAO.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\SSAO.vert">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
   </ItemGroup>
 </Project>

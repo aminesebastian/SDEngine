@@ -19,7 +19,7 @@ layout (location = 6) out vec4 HDR;
 layout (location = 7) out vec4 LitOutput;
 
 const float PI = 3.14159265359;
-const int NUM_LIGHTS = 127;
+const int NUM_LIGHTS = 150;
 struct LightInfo {
 	float Intensity;
 	vec3 Color;
@@ -31,8 +31,8 @@ struct LightInfo {
 uniform int LIGHT_COUNT;
 uniform	LightInfo lights[NUM_LIGHTS];
 
-vec3 PointLight(vec3 P, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity, float cutoff);
-vec3 DirectionalLight(vec3 P, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity, float cutoff);
+vec3 PointLight(vec3 P, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity);
+vec3 DirectionalLight(vec3 P, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity);
 vec3 Luminance();	
 vec3 fresnelSchlick(float cosTheta, vec3 F0);  
 float DistributionGGX(vec3 N, vec3 H, float roughness);
@@ -48,12 +48,8 @@ void main()	{
 
 	vec4 lighting		= vec4(Luminance(), 1.0);
 	float brightness	= dot(lighting.rgb, vec3(0.2126, 0.7152, 0.0722));
-	//float distance	= clamp((length(texture(worldPosition, texCoord0).rgb - CAMERA_POS)-25)/200, 0.0, 0.5);
-    //HDR				= lighting * max(0.0, brightness-1.0) * (1-distance);
-	
+
 	lighting			= clamp(lighting, 0.0, 1.0);
-	//vec4 fogColor		= vec4(1.0, 1.0, 1.0, 1.0);
-	//LitOutput			= (lighting * (1-distance)) + (fogColor * distance);
 
     HDR					= lighting * max(0.0, brightness-1.0f);
 	LitOutput			= lighting;
@@ -61,12 +57,12 @@ void main()	{
 vec3 Luminance() {
 	vec3 finalLightIntensity;
 	if(texture(albedo, texCoord0).a == 0) {
-		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.3f;
+		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.03f;
 		for(int i=0; i<LIGHT_COUNT; i++) {
 			if(lights[i].Type == 0) {
-				finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125, 0.020);	
+				finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125);	
 			}else{
-				finalLightIntensity += DirectionalLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Direction, lights[i].Color, lights[i].Intensity/125, 0.020);	
+				finalLightIntensity += DirectionalLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Direction, lights[i].Color, lights[i].Intensity/125);	
 			}			
 		}
 	}else{
@@ -74,11 +70,11 @@ vec3 Luminance() {
 	}
 	return texture(albedo, texCoord0).rgb * finalLightIntensity;
 }
-vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity, float cutoff) {
+vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity) {
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
     vec3 L = normalize(lightCentre - fragmentPosition);
 	float distance    = length(lightCentre - fragmentPosition);
-    float attenuation = 500.0 / (distance * distance);
+    float attenuation = 1.0 / (distance * distance);
 
     float NdotL = max(dot(N, L), 0.0);
 
@@ -107,11 +103,11 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
 
     return (kD * albedoGamma / PI + brdf) * radiance * NdotL; 
 }
-vec3 DirectionalLight(vec3 fragmentPosition, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity, float cutoff) {
+vec3 DirectionalLight(vec3 fragmentPosition, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity) {
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
     vec3 L = normalize(lightDirection);
 
-    float NdotL = max(dot(N, -L), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
 
 	float roughness = texture(RMAO, texCoord0).r;
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
@@ -126,7 +122,7 @@ vec3 DirectionalLight(vec3 fragmentPosition, vec3 N, vec3 lightDirection, vec3 l
 	float metallic = texture(RMAO, texCoord0).g;
 	vec3 F0 = vec3(0.04);
 	F0      = mix(F0, albedoGamma, metallic);
-	vec3 F    = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
+	vec3 F  = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
 
 	vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;

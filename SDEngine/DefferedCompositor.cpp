@@ -9,7 +9,6 @@ DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output"));
 	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomX"));
 	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomY"));
-	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/ToneMapping"));
 }
 DefferedCompositor::~DefferedCompositor() {}
 
@@ -34,12 +33,7 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 		Lights[i]->SendShaderInformation(S_LightingShader, i);
 	}
 
-	for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
-	}
+	ReadBuffer->BindTextures(S_LightingShader);
 
 	DrawScreenQuad();
 }

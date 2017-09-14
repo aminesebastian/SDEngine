@@ -1,2 +1,2 @@
-Mesh(C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\SDEngine\Res\Head\Head.fbx);
-Material(C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\SDEngine\Res\Assets\HeadMaterial.sasset);
+Mesh(Res\Head\Head.fbx);
+Material(Res\Assets\HeadMaterial.sasset);

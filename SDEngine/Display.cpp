@@ -34,6 +34,7 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 	SDL_GL_SetSwapInterval(0);
 }
 Display::~Display() {
+	TwTerminate();
 	SDL_GL_DeleteContext(S_GLContext);
 	SDL_DestroyWindow(S_Window);
 
