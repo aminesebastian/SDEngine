@@ -52,15 +52,15 @@ int main(int argc, char* argv[]) {
 
 	S_Engine->GetWorld()->RegisterEntity(torus);
 
-	Transform skySphereTransform;
-	skySphereTransform.SetUniformScale(100.0f);
-	Texture2D* skySphereTexture = new Texture2D("res/ForestEnvironment.jpg");
+	//Transform skySphereTransform;
+	//skySphereTransform.SetUniformScale(100.0f);
+	//Texture2D* skySphereTexture = new Texture2D("res/ForestEnvironment.jpg");
 
-	Material* skyMaterial = new Material("./Res/Shaders/SkySphereShader");
-	skyMaterial->SetTextureParameter("Albedo", skySphereTexture);
-	skyMaterial->SetShaderModel(EShaderModel::UNLIT);
-	StaticMesh* sky = new StaticMesh(skySphereTransform, skyMaterial, "./res/SkySphere.fbx");
-	S_Engine->GetWorld()->RegisterEntity(sky);
+	//Material* skyMaterial = new Material("./Res/Shaders/SkySphereShader");
+	//skyMaterial->SetTextureParameter("Albedo", skySphereTexture);
+	//skyMaterial->SetShaderModel(EShaderModel::UNLIT);
+	//StaticMesh* sky = new StaticMesh(skySphereTransform, skyMaterial, "./res/SkySphere.fbx");
+	//S_Engine->GetWorld()->RegisterEntity(sky);
 
 
 	//Transform innerEyetransform;
@@ -98,19 +98,20 @@ int main(int argc, char* argv[]) {
 
 	Grid grid(40, 2);
 	S_Engine->GetWorld()->RegisterEntity(&grid);
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			for (int k = 0; k < 5; k++) {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			for (int k = 0; k < 3; k++) {
 				float r = (float)(rand()) / (float)(RAND_MAX);
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetPosition().x = (float)j * 10 - 25.0f;
-				tempTransform.GetPosition().y = (float)k * 10;
-				tempTransform.GetPosition().z = (float)i * 10 - 25.0f;
+				tempTransform.GetPosition().x = (float)j * 5 - 5.0f;
+				tempTransform.GetPosition().y = 10+(float)k * 5;
+				tempTransform.GetPosition().z = (float)i * 5 - 5.0f;
 				vec3 tempColor = vec3(r, g, b);
-				float atten = ((float)(rand()) / (float)(RAND_MAX)) * 50;
-				Light* tempLight = new Light(tempTransform, 20, tempColor, atten);
+				float atten = (((float)(rand()) / (float)(RAND_MAX))+1) * 50;
+				tempTransform.SetUniformScale(atten/50);
+				Light* tempLight = new Light(tempTransform, POINT, 20, tempColor, atten);
 				//tempLight->ToggleDebug(true);
 				S_Engine->GetWorld()->RegisterLight(tempLight);
 			}
@@ -118,12 +119,12 @@ int main(int argc, char* argv[]) {
 	}
 	Transform fillLightTransform;
 	fillLightTransform.GetPosition().y = 50;
-	Light* fillLight = new Light(fillLightTransform, 800, vec3(0.75, 0.9, 0.8), 150);
+	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8), 150);
 	fillLight->ToggleDebug(true);
 	S_Engine->GetWorld()->RegisterLight(fillLight);
 
 	fillLightTransform.GetPosition().y = -20;
-	Light* bounceLight = new Light(fillLightTransform, 500, vec3(0.75, 0.9, 0.8), 150);
+	Light* bounceLight = new Light(fillLightTransform, DIRECTIONAL, 500, vec3(0.75, 0.9, 0.8), 150);
 	bounceLight->ToggleDebug(true);
 	S_Engine->GetWorld()->RegisterLight(bounceLight);
 

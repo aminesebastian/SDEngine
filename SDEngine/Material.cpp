@@ -3,8 +3,9 @@
 #include "Engine.h"
 #include "Light.h"
 
-Material::Material(const std::string BaseShaderName) {
-	S_Shader = new Shader(BaseShaderName);
+Material::Material(const std::string BaseShaderName) : Material(new Shader(BaseShaderName)) {}
+Material::Material(Shader* Shader) {
+	S_Shader = Shader;
 	this->SetShaderModel(EShaderModel::DEFAULT);
 
 	this->SetVec2Parameter("SCREEN_RES", vec2(WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -98,8 +99,8 @@ void Material::BindMaterial(Transform EntityTransform, Camera* Camera) {
 	S_Shader->Update(EntityTransform, Camera);
 	glEnable(GL_TEXTURE_2D);
 
-	SetScalarParameter("FRAME_TIME", Engine::GetInstance()->GetDeltaTime());
-	SetScalarParameter("TIME", Engine::GetInstance()->GetWorldTime());
+	S_Shader->SetShaderFloat("FRAME_TIME", Engine::GetInstance()->GetDeltaTime());
+	S_Shader->SetShaderFloat("TIME", Engine::GetInstance()->GetWorldTime());
 
 	S_Shader->SetShaderInteger("MAT_ID", S_ShaderModel);
 	for (int i = 0; i < this->S_TextureParameters.size(); i++) {

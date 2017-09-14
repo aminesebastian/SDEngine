@@ -6,9 +6,9 @@ c:\users\amine\onedrive\documents\github\sdengine\sdengine\Engine.h(19): warning
 c:\users\amine\onedrive\documents\github\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
   Generating code
 c:\users\amine\onedrive\documents\github\sdengine\sdengine\sasset.cpp(77): warning C4715: 'SAsset::GetAsStaticMesh': not all control paths return a value
-  46 of 1587 functions ( 2.9%) were compiled, the rest were copied from previous compilation.
+  38 of 1556 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    80 functions had inline decision re-evaluated but remain unchanged
+    18 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Release\SDEngine.exe
   SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Release\SDEngine.pdb (Full PDB)

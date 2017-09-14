@@ -9,9 +9,9 @@ uniform float NEAR_CLIP;
 uniform float FAR_CLIP; 
 uniform int	MAT_ID;
 
-uniform sampler2D Albedo;
+uniform sampler2D albedo;
 uniform sampler2D RMAO;
-uniform sampler2D Normal;
+uniform sampler2D normal;
 uniform sampler2D Emissive;
 
 layout (location = 0) out vec4 WorldPosOut;   
@@ -26,10 +26,10 @@ void main()	{
 	WorldPosOut.rgb		= worldPos0;	
 	WorldPosOut.a		= linearizeDepth(gl_FragCoord.z);	
 
-	AlbedoOut			= texture(Albedo, texCoord0);	
+	AlbedoOut			= texture(albedo, texCoord0);	
 	AlbedoOut.a			= MAT_ID;			
 	TexCoordOut			= vec3(texCoord0, 0.0);
-	vec3 sampledNormal	= ((255.0/128.0) * texture(Normal, texCoord0).xyz)-1;
+	vec3 sampledNormal	= ((255.0/128.0) * texture(normal, texCoord0).xyz)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
 	RMAOOut.r			= texture(RMAO, texCoord0).b;
 	RMAOOut.g			= 0.0f;									

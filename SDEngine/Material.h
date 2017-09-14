@@ -44,6 +44,7 @@ class Material {
 
 public:
 	Material(string BaseShaderName);
+	Material(Shader* Shader);
 	~Material();
 
 	Shader* GetShader() { return S_Shader; }

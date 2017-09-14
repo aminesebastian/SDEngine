@@ -1,41 +1,24 @@
 #pragma once
-#include <GLEW/glew.h>
-#include <stdio.h>
-#include <cassert>
-#include "Texture2D.h"
-#include <vector>
+#include "FrontBufferObject.h"
 
-class GBuffer {
+class GBuffer : public FrontBufferObject {
 public:
 
 	enum GBUFFER_TEXTURE_TYPE {
-		GBUFFER_TEXTURE_TYPE_POSITION,
-		GBUFFER_TEXTURE_TYPE_ALBEDO, 
-		GBUFFER_TEXTURE_TYPE_RMAO,
-		GBUFFER_TEXTURE_TYPE_NORMAL,
-		GBUFFER_TEXTURE_TYPE_TEXCOORD,
-		GBUFFER_TEXTURE_TYPE_TRANSLUCENCY,
-		GBUFFER_TEXTURE_TYPE_HDR,
-		GBUFFER_TEXTURE_TYPE_FINAL_COMP,
+		GBUFFER_TEXTURE_TYPE_POSITION, //RGB Position, A Depth 
+		GBUFFER_TEXTURE_TYPE_ALBEDO, //RGB Albedo, A MAT_ID
+		GBUFFER_TEXTURE_TYPE_RMAO, //RGB RMAO, A EMPTY
+		GBUFFER_TEXTURE_TYPE_NORMAL, //RGB Normal, A EMPTY
+		GBUFFER_TEXTURE_TYPE_TEXCOORD, //RG UV, BA EMPTY
+		GBUFFER_TEXTURE_TYPE_TRANSLUCENCY, //RGB Color, A Alpha
+		GBUFFER_TEXTURE_TYPE_HDR,	//RGB HDR, A EMPTY
+		GBUFFER_TEXTURE_TYPE_FINAL_COMP,	//RGB Output, A EMPTY SHOULD BE EMISSIVE
 		GBUFFER_NUM_TEXTURES
 	};
 
 	GBuffer();
-
 	~GBuffer();
 
-	bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
-
-	std::string GetGBufferTextureName(int Index) { return S_GBufferTextureNames[Index]; }
-
-	void BindForWriting();
-	void BindForReading();
-	void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
-	GLuint& GetTexture(unsigned int i) { assert(i < GBUFFER_NUM_TEXTURES);  return S_Textures[i]; }
-	GLuint S_Textures[GBUFFER_NUM_TEXTURES];
-	GLuint S_FBO;
-
 private:
-	GLuint S_DepthBuffer;
-	std::vector<std::string> S_GBufferTextureNames;
+
 };

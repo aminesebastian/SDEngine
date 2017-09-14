@@ -35,20 +35,14 @@
     <Filter Include="Shaders\IndividualShaders">
       <UniqueIdentifier>{7e03f0c8-f91f-401e-acc4-7610dc922084}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{4899ab9b-bea1-491b-a60e-6b883302fca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine">
+      <UniqueIdentifier>{532c70ea-70df-4b09-aff3-b7a4bd774575}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -88,20 +82,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SLogger.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="EyeActor.cpp">
       <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="SAsset.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\Utilities</Filter>
@@ -109,20 +94,35 @@
     <ClCompile Include="TypeDefenitions.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SLogger.c">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SAsset.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="FrontBufferObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineStatics.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Display.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Headers\Entities</Filter>
     </ClInclude>
@@ -159,26 +159,42 @@
     <ClInclude Include="Transform.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SLogger.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Headers\Entities</Filter>
     </ClInclude>
     <ClInclude Include="EyeActor.h">
       <Filter>Headers\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="SAsset.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="TypeDefenitions.h">
       <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SAsset.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SLogger.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="FrontBufferObject.h" />
+    <ClInclude Include="EngineStatics.h">
+      <Filter>Headers\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

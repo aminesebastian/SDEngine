@@ -93,6 +93,9 @@ SArray<TString> SAsset::getParameters(TString Line) {
 	int firstSkip = getFucntionName(Line).length() + 1;
 	TString parameterString = Line.substr(firstSkip, Line.length() - firstSkip);
 	for (int i = 0; i < parameterString.length(); i++) {
+		if(curr == "" && parameterString[i] == ' ') { //Skip leading spaces
+			continue;
+		}
 		if(parameterString[i] == ',') {
 			parameters.push_back(curr);
 			curr = "";

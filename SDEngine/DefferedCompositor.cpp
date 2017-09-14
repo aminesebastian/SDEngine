@@ -9,7 +9,7 @@ DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output"));
 	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomX"));
 	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomY"));
-	S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/ToneMapping"));
+	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/ToneMapping"));
 }
 DefferedCompositor::~DefferedCompositor() {}
 
@@ -29,7 +29,7 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 	glUniform3fv(glGetUniformLocation(S_LightingShader->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);
 	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
 	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
-
+	glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), "LIGHT_COUNT"), Lights.size());
 	for (GLuint i = 0; i < Lights.size(); i++) {
 		Lights[i]->SendShaderInformation(S_LightingShader, i);
 	}
@@ -38,7 +38,7 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
+		glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
 	}
 
 	DrawScreenQuad();
@@ -57,7 +57,7 @@ void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* Wr
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
+		glUniform1i(glGetUniformLocation(GetPostProcessShader(PostProcessingIndex)->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
 	}
 	DrawScreenQuad();
 }
@@ -71,7 +71,7 @@ void DefferedCompositor::OutputToScreen(GBuffer* ReadBuffer) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_FinalOutputShader->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
+		glUniform1i(glGetUniformLocation(S_FinalOutputShader->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
 	}
 	DrawScreenQuad();
 }

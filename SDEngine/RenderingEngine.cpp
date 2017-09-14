@@ -7,6 +7,7 @@
 #include "Display.h"
 #include "DefferedCompositor.h"
 #include <GLEW/glew.h>
+#include "EngineStatics.h"
 
 URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1 = new GBuffer();
@@ -34,6 +35,7 @@ void URenderingEngine::RecompileShaders(UWorld* World) {
 			temp->GetMaterial()->GetShader()->RecompileShader();
 		}
 	}
+	EngineStatics::GetLightDebugShader()->RecompileShader();
 }
 
 void URenderingEngine::DebugGBuffer() {
@@ -110,13 +112,11 @@ void URenderingEngine::TranslucencyPass(UWorld* World, Camera* Camera, GBuffer* 
 			if (temp) {
 				if (temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
 					temp->GetMaterial()->GetShader()->Bind();
-
-					string uniformNames[9]{ "worldPosition", "albedo", "RMAO", "normal", "texCoord", "matID", "HDR", "finalComp" };
 					for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
 						glEnable(GL_TEXTURE_2D);
 						glActiveTexture(GL_TEXTURE0 + i);
 						glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-						glUniform1i(glGetUniformLocation(temp->GetMaterial()->GetShader()->GetProgram(), uniformNames[i].c_str()), i);
+						glUniform1i(glGetUniformLocation(temp->GetMaterial()->GetShader()->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
 					}
 					for (int i = 0; i < World->GetWorldLights().size(); i++) {
 						World->GetWorldLights()[i]->SendShaderInformation(temp->GetMaterial()->GetShader(), i);
@@ -136,12 +136,12 @@ void URenderingEngine::BlendTransparencyPass(UWorld* World, Camera* Camera, GBuf
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-		glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), ReadBuffer->GetGBufferTextureName(i).c_str()), i);
+		glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
 	}
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0 + TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
 	glBindTexture(GL_TEXTURE_2D, TranslucencyBuffer->GetTexture(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY));
-	glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), TranslucencyBuffer->GetGBufferTextureName(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY).c_str()), TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
+	glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), TranslucencyBuffer->GetTextureName(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY).c_str()), TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
 	S_DefferedCompositor->DrawScreenQuad();
 }
 void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
@@ -153,18 +153,18 @@ void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 	S_DefferedCompositor->CompositeLighting(GetReadGBuffer(), GetFreeGBuffer(), World->GetWorldLights(), Camera);
 	FlipCurrentBufferIndex();
 
-	S_CurrentStage = ERenderingStage::TRANSLUCENCY;
-	if (GetTranslucentObjectCount(World) > 0) {
-		TranslucencyPass(World, Camera, GetReadGBuffer(), S_TranslucencyBuffer);
-		BlendTransparencyPass(World, Camera, S_TranslucencyBuffer, GetReadGBuffer(), GetFreeGBuffer());
-		FlipCurrentBufferIndex();
-	}
+	//S_CurrentStage = ERenderingStage::TRANSLUCENCY;
+	//if (GetTranslucentObjectCount(World) > 0) {
+	//	TranslucencyPass(World, Camera, GetReadGBuffer(), S_TranslucencyBuffer);
+	//	BlendTransparencyPass(World, Camera, S_TranslucencyBuffer, GetReadGBuffer(), GetFreeGBuffer());
+	//	FlipCurrentBufferIndex();
+	//}
 
-	S_CurrentStage = ERenderingStage::POST_PROCESSING;
-	for (int i = 0; i < S_DefferedCompositor->GetPostProcessShaderCount(); i++) {
-		S_DefferedCompositor->CompositePostProcesing(GetReadGBuffer(), GetFreeGBuffer(), Camera, i);
-		FlipCurrentBufferIndex();
-	}
+	//S_CurrentStage = ERenderingStage::POST_PROCESSING;
+	//for (int i = 0; i < S_DefferedCompositor->GetPostProcessShaderCount(); i++) {
+	//	S_DefferedCompositor->CompositePostProcesing(GetReadGBuffer(), GetFreeGBuffer(), Camera, i);
+	//	FlipCurrentBufferIndex();
+	//}
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetReadGBuffer());
