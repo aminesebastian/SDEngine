@@ -36,22 +36,22 @@ void main()	{
 	RMAOOut				= texture(RMAO, texCoord0);	
 	Translucency		= texture(translucency, texCoord0);
 
-	float radius = 100.0f;
+	float radius = 10.0f;
 	float bias = 0.025f;
 
-	    // get input for SSAO algorithm
+
     vec3 fragPos = texture(worldPosition, texCoord0).xyz;
     vec3 normal = normalize(texture(normal, texCoord0).rgb);
     vec3 randomVec = normalize(texture(noiseTexture, texCoord0 * noiseScale).xyz);
-    // create TBN change-of-basis matrix: from tangent-space to view-space
+
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
     mat3 TBN = mat3(tangent, bitangent, normal);
-    // iterate over the sample kernel and calculate occlusion factor
+
     float occlusion = 0.0;
     for(int i = 0; i < kernelSize; ++i)
     {
-        // get sample position
+
         vec3 tempSample = TBN * Samples[i]; // from tangent to view-space
         tempSample = fragPos + tempSample * radius; 
         

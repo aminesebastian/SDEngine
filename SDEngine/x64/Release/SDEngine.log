@@ -1,15 +1,19 @@
-﻿  SSAOPostProcessing.cpp
+﻿  RenderingEngine.cpp
 f:\suburban digital\sdengine\sdengine\DefferedCompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
 f:\suburban digital\sdengine\sdengine\Camera.h(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 f:\suburban digital\sdengine\sdengine\Camera.h(38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\Engine.h(19): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(18): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(57): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+RenderingEngine.cpp(22): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(23): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(24): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+RenderingEngine.cpp(64): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(67): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(70): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+RenderingEngine.cpp(73): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
   Generating code
 f:\suburban digital\sdengine\sdengine\sasset.cpp(77): warning C4715: 'SAsset::GetAsStaticMesh': not all control paths return a value
-  48 of 1631 functions ( 2.9%) were compiled, the rest were copied from previous compilation.
+  73 of 1631 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    22 functions had inline decision re-evaluated but remain unchanged
+    17 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Release\SDEngine.exe
   SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Release\SDEngine.pdb (Full PDB)
