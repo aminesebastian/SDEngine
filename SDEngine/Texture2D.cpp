@@ -23,7 +23,7 @@ Texture2D::Texture2D(const std::string& FileName, unsigned int ExpectedComponent
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, FilterBehaviour);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-	//glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(imageData);
 	glBindTextureUnit(GL_TEXTURE_2D, 0);

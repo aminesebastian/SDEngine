@@ -15,7 +15,7 @@ uniform sampler2D finalComp;
 
 layout (location = 7) out vec4 Output;
 
-uniform float EXPOSURE = 7.0f;
+uniform float EXPOSURE = 9.0f;
 uniform float WHITE_POINT = 7.0f;
 
 vec4 FilmicTonemap(vec4 Input, float Exposure, float Whitepoint);

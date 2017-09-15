@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include <iostream>
 #include "Engine.h"
+#include "EngineStatics.h"
 
 StaticMesh::StaticMesh(const Transform& SpawnTransform, Material* Material, const std::string& ModelName)
 	: Entity(SpawnTransform) {
@@ -15,7 +16,7 @@ StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& Model
 	loadModel(ModelName);
 	InitMesh();
 	S_MaterialID = 0;
-	S_Material = Engine::GetInstance()->GetDefaultMaterial();
+	S_Material = EngineStatics::GetDefaultMaterial();
 }
 StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
 	: Entity(SpawnTransform) {
@@ -30,7 +31,7 @@ StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsig
 	}
 
 	InitMesh();
-	S_Material = Engine::GetInstance()->GetDefaultMaterial();
+	S_Material = EngineStatics::GetDefaultMaterial();
 }
 StaticMesh::~StaticMesh() {
 	glDeleteVertexArrays(1, &S_VertexArrayObject);

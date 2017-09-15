@@ -16,7 +16,7 @@ class Shader {
 
 public:
 	Shader() {}
-	Shader(const std::string& ShaderName);
+	Shader(const std::string& ShaderName, bool bNewStyle = false);
 	virtual ~Shader();
 
 	void Bind();
@@ -54,7 +54,7 @@ private:
 	std::string ShaderName;
 	std::string LoadShader(const std::string& fileName);
 	GLuint CreateShader(const std::string& text, GLenum ShaderType);
-	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
+	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
 
 	GLuint S_Program;
 	GLuint S_Shaders[NUM_SHADERS];

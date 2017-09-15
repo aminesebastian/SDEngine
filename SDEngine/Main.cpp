@@ -12,6 +12,7 @@
 #include "RenderingEngine.h"
 #include "EyeActor.h"
 #include "AssetManager.h"
+#include "EngineStatics.h"
 
 #undef main
 using namespace glm;
@@ -45,7 +46,7 @@ int main(int argc, char* argv[]) {
 	//Transform torusTransform;
 	//torusTransform.SetUniformScale(5.0f);
 	//StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
-	//torus->SetMaterial(torusMaterial);
+	//torus->SetMaterial(EngineStatics::GetDefaultMaterial());
 	//torusMaterial->SetTextureParameter("albedo", torusAlbedo);
 	//torusMaterial->SetTextureParameter("RMAO", torusRoughness);
 	//torusMaterial->SetTextureParameter("normal", torusNormal);

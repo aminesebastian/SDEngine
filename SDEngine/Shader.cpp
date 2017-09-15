@@ -2,14 +2,23 @@
 #include <iostream>
 #include <fstream>
 #include "Camera.h"
+#include "TypeDefenitions.h"
 
-Shader::Shader(const std::string& ShaderName) {
+Shader::Shader(const std::string& ShaderName, bool bNewStyle) {
 	this->ShaderName = ShaderName;
 	RecompileShader();
 }
 void Shader::RecompileShader() {
 	glDeleteProgram(S_Program);
 	S_Program = glCreateProgram();
+
+	int lastSlash = 0;
+	for (int i = 0; i < ShaderName.length(); i++) {
+		if (ShaderName[i] == '/') {
+			lastSlash = i;
+		}
+	}
+	TString shaderNameOnly = ShaderName.substr(lastSlash + 1, ShaderName.length() - lastSlash);
 
 	glDeleteShader(S_Shaders[0]);
 	glDeleteShader(S_Shaders[1]);
@@ -25,19 +34,21 @@ void Shader::RecompileShader() {
 	glBindAttribLocation(S_Program, 2, "normal");
 	glBindAttribLocation(S_Program, 3, "vertexColor");
 
+	bool success = true;
 	glLinkProgram(S_Program);
-	CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed: ");
+	success = CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed For Shader:" + shaderNameOnly + " ");
 
-	glValidateProgram(S_Program);
-	CheckShaderError(S_Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
-
-	int lastSlash = 0;
-	for (int i = 0; i < ShaderName.length(); i++) {
-		if (ShaderName[i] == '/') {
-			lastSlash = i;
-		}
+	if(!success) {
+		return;
 	}
-	std::cout << "Compilation Success! -> " << ShaderName.substr(lastSlash+1, ShaderName.length() - lastSlash) << std::endl;
+	glValidateProgram(S_Program);
+	success = CheckShaderError(S_Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
+
+	if (!success) {
+		return;
+	}
+
+	std::cout << "Compilation Success! -> " << shaderNameOnly << std::endl;
 }
 Shader::~Shader() {
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
@@ -85,7 +96,7 @@ GLuint Shader::CreateShader(const std::string& text, GLenum ShaderType) {
 
 	return shader;
 }
-void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage) {
+bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage) {
 	GLint success = 0;
 	GLchar error[1024] = { 0 };
 
@@ -103,6 +114,7 @@ void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 		}
 		std::cerr << errorMessage << ": '" << error << "'" << std::endl;
 	}
+	return success;
 }
 
 void Shader::Bind() {

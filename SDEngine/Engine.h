@@ -7,8 +7,8 @@
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
 
-#define WINDOW_WIDTH 3000
-#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 #define WINDOW_BIT_DEPTH 8
 
 #define LOG_GENERAL "GENERAL"
@@ -33,7 +33,6 @@ public:
 	Camera* GetCurrentCamera() { return S_Camera; }
 	bool Init();
 	void StartEngine() { bShouldLoop = true; MainLoop(); }
-	Material* GetDefaultMaterial() { return S_DefaultMaterial; }
 
 	float GetDeltaTime() { return S_DeltaTime; }
 	float GetWorldTime() { return S_WorldTime; }
@@ -50,7 +49,6 @@ private:
 
 	AssetManager* S_AssetManager;
 
-	Material* S_DefaultMaterial;
 	float S_DeltaTime = 0.0f;	
 	int S_FrameRate = 0;
 	float S_WorldTime = 0.0f;
@@ -64,7 +62,7 @@ private:
 	float movementSpeed = 0.5f;
 	float lookSpeed = 200.0f;
 
-	FInputKey S_InputKeys[500];
+	FInputKey S_InputKeys[1000];
 
 	Display* S_Display;
 	URenderingEngine* S_RenderingEngine;

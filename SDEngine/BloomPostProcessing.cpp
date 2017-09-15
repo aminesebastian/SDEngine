@@ -20,6 +20,7 @@ void BloomPostProcessing::RenderXPass(DefferedCompositor* Compositor, Camera* Ca
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_BloomShader->Bind();
 	S_BloomShader->SetShaderInteger("PASS", 0);
+	S_BloomShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
 	ReadBuffer->BindTextures(S_BloomShader);
 
 	Compositor->DrawScreenQuad();
@@ -32,10 +33,12 @@ void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Ca
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_BloomShader->Bind();
 	S_BloomShader->SetShaderInteger("PASS", 1);
+	S_BloomShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
 	ReadBuffer->BindTextures(S_BloomShader);
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0 + 8);
+	glGenerateMipmapEXT(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, S_LowResBuffer->GetTexture(0));
 	glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_LowResBuffer->GetTextureName(0).c_str()), 8);
 
