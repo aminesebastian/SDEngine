@@ -1,15 +1,14 @@
 #pragma once
 #include "Display.h"
 #include "World.h"
-#include "Camera.h"
 #include "RenderingEngine.h"
 #include "Material.h"
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-#define WINDOW_BIT_DEPTH 8
+#define WINDOW_WIDTH 3000
+#define WINDOW_HEIGHT 1200
+#define WINDOW_BIT_DEPTH 10
 
 #define LOG_GENERAL "GENERAL"
 #define LOG_WARNING "WARNING"
@@ -19,6 +18,7 @@
 #define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
 
 class AssetManager;
+class Camera;
 
 struct FInputKey {
 	bool bKeyDown;

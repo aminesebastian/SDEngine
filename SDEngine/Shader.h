@@ -4,6 +4,7 @@
 #include <string>
 #include "Transform.h"
 #include "Texture2D.h"
+#include "TypeDefenitions.h"
 
 class Camera;
 
@@ -16,7 +17,7 @@ class Shader {
 
 public:
 	Shader() {}
-	Shader(const std::string& ShaderName, bool bNewStyle = false);
+	Shader(const std::string& ShaderName, bool bUseDefaultGeometry = true);
 	virtual ~Shader();
 
 	void Bind();
@@ -51,7 +52,10 @@ private:
 
 		NUM_SHADERS
 	};
-	std::string ShaderName;
+	TString S_FragmentShaderPath;
+	TString S_VertexShaderPath;
+	TString S_ShaderName;
+
 	std::string LoadShader(const std::string& fileName);
 	GLuint CreateShader(const std::string& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);

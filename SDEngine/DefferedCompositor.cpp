@@ -5,10 +5,8 @@
 #include "Camera.h"
 
 DefferedCompositor::DefferedCompositor(string LightingShader) {
-	S_LightingShader = new Shader(LightingShader);
-	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output"));
-	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomX"));
-	//S_PostProcessingShaders.push_back(new Shader("Res/Shaders/PostProcessing/BloomY"));
+	S_LightingShader = new Shader(LightingShader, false);
+	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output", false));
 }
 DefferedCompositor::~DefferedCompositor() {}
 

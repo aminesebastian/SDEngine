@@ -46,10 +46,17 @@ bool FrontBufferObject::Init(unsigned int WindowWidth, unsigned int WindowHeight
 
 	glDrawBuffers(8, attachments);
 
-	glGenRenderbuffers(1, &S_DepthBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, S_DepthBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, WindowWidth, WindowHeight);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, S_DepthBuffer);
+	glGenTextures(1, &S_DepthBuffer);
+	glBindTexture(GL_TEXTURE_2D, S_DepthBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, WindowWidth, WindowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, S_DepthBuffer, 0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
@@ -64,12 +71,18 @@ bool FrontBufferObject::Init(unsigned int WindowWidth, unsigned int WindowHeight
 	return true;
 }
 
-void FrontBufferObject::BindTextures(Shader* Shader) {
+void FrontBufferObject::BindTextures(Shader* Shader, bool bIncludeDepth) {
 	for (int i = 0; i < GetNumTextures(); i++) {
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, GetTexture(i));
 		glUniform1i(glGetUniformLocation(Shader->GetProgram(), GetTextureName(i).c_str()), i);
+	}
+	if(bIncludeDepth) {
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0 + GetNumTextures());
+		glBindTexture(GL_TEXTURE_2D, S_DepthBuffer);
+		glUniform1i(glGetUniformLocation(Shader->GetProgram(), "depthBuffer"), GetNumTextures());
 	}
 }
 

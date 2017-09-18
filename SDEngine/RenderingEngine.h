@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "PostProcessingLayer.h"
 #include "TypeDefenitions.h"
 
 class UWorld;
@@ -9,6 +8,7 @@ class Camera;
 class GBuffer;
 class Display;
 class DefferedCompositor;
+class PostProcessingLayer;
 
 enum ERenderingStage {
 	GEOMETRY,

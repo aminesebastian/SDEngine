@@ -35,7 +35,6 @@ void main()	{
 	RMAOOut.g			= 0.0f;									
 	RMAOOut.b			= texture(RMAO, texCoord0).b;	
 }
-
 float linearizeDepth(float depth) {
     float z = depth * 2.0 - 1.0;
     return (2.0 * NEAR_CLIP * FAR_CLIP) / (FAR_CLIP + NEAR_CLIP - z * (FAR_CLIP - NEAR_CLIP));	

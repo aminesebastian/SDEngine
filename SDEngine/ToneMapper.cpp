@@ -1,7 +1,7 @@
 #include "ToneMapper.h"
 
 ToneMapper::ToneMapper() {
-	S_TonemapperShader = new Shader("Res/Shaders/PostProcessing/ToneMapping");
+	S_TonemapperShader = new Shader("Res/Shaders/PostProcessing/ToneMapping", false);
 }
 ToneMapper::~ToneMapper() {}
 

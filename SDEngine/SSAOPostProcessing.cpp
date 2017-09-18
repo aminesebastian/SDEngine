@@ -3,10 +3,11 @@
 #include "SMath.h"
 
 SSAOPostProcessing::SSAOPostProcessing() {
-	S_SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO");
-	S_LowResBuffer = new FrontBufferObject();
-	S_LowResBuffer->AddTextureIndex("ssaoRough");
-	S_LowResBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
+	S_SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO", false);
+
+	S_SSAOBuffer = new FrontBufferObject();
+	S_SSAOBuffer->AddTextureIndex("ssaoRough");
+	S_SSAOBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	GenerateNoise();
 	GenerateKernel();
@@ -14,33 +15,77 @@ SSAOPostProcessing::SSAOPostProcessing() {
 SSAOPostProcessing::~SSAOPostProcessing() {}
 
 void SSAOPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+	RenderOcclusion(Compositor, Camera, ReadBuffer, OutputBuffer);
+	//Blur(Compositor, Camera, ReadBuffer, OutputBuffer);
+}
+void SSAOPostProcessing::RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
-	S_LowResBuffer->BindForReading();
+	//S_SSAOBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_SSAOShader->Bind();
-	ReadBuffer->BindTextures(S_SSAOShader);
+	ReadBuffer->BindTextures(S_SSAOShader, true);
 
 	glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0 + 8);
+	glActiveTexture(GL_TEXTURE0 + 9);
 	glBindTexture(GL_TEXTURE_2D, S_NoiseTexture);
-	glUniform1i(glGetUniformLocation(S_SSAOShader->GetProgram(), "noiseTexture"), 8);
+	glUniform1i(glGetUniformLocation(S_SSAOShader->GetProgram(), "noiseTexture"), 9);
 
 	for (int i = 0; i < S_KernelSize; i++) {
 		S_SSAOShader->SetShaderVector3("Samples[" + std::to_string(i) + "]", S_Kernel[i]);
 	}
-	S_SSAOShader->SetShaderMatrix4("PROJECTION", Camera->GetProjectionMatrix());
-	S_SSAOShader->SetShaderVector3("VIEW_RAY", Camera->GetTransform().GetForwardVector());
-	Compositor->DrawScreenQuad();
+	mat4 projection = Camera->GetProjectionMatrix();
+	S_SSAOShader->SetShaderMatrix4("PROJECTION_MATRIX", projection);
 
+	mat4 viewMatrix = Camera->GetViewMatrix();
+	S_SSAOShader->SetShaderMatrix4("VIEW_MATRIX", viewMatrix);
+
+	mat4 P = Camera->GetProjectionMatrix();
+	P = glm::inverse(P);
+	S_SSAOShader->SetShaderMatrix4("INV_PROJECTION_MATRIX", P);
+
+	mat4 V = Camera->GetViewMatrix();
+	V = glm::inverse(V);
+	S_SSAOShader->SetShaderMatrix4("INV_VIEW_MATRIX", V);
+
+	float thfov = Camera->GetThetaFOV();
+	S_SSAOShader->SetShaderFloat("THETA_FOV", thfov);
+
+	float aspect = Camera->GetAspect();
+	S_SSAOShader->SetShaderFloat("ASPECT", aspect);
+
+	S_SSAOShader->Update(Transform(), Camera);
+	
+	S_SSAOShader->SetShaderInteger("PASS", 0);
+
+	Compositor->DrawScreenQuad();
 }
+void SSAOPostProcessing::Blur(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+	ReadBuffer->BindForReading();
+	S_SSAOBuffer->BindForReading();
+	OutputBuffer->BindForWriting();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	S_SSAOShader->Bind();
+	ReadBuffer->BindTextures(S_SSAOShader, true);
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0 + 9);
+	glBindTexture(GL_TEXTURE_2D, S_SSAOBuffer->GetTexture(0));
+	glUniform1i(glGetUniformLocation(S_SSAOShader->GetProgram(), S_SSAOBuffer->GetTextureName(0).c_str()), 9);
+
+	S_SSAOShader->SetShaderInteger("PASS", 1);
+
+	Compositor->DrawScreenQuad();
+}
+
 void SSAOPostProcessing::GenerateKernel() {
 	for (int i = 0; i < S_KernelSize; i++) {
 		S_Kernel.push_back(vec3(
 			SMath::FRandRange(-1.0f, 1.0f),
-			SMath::FRandRange(-1.0f, 1.0f),
-			SMath::FRandRange(0.0f, 1.0f)
+			SMath::FRandRange(0.0f, 1.0f),
+			SMath::FRandRange(-1.0f, 1.0f)
 		));
 		glm::normalize(S_Kernel[i]);
 	}

@@ -4,26 +4,33 @@
 #include "Camera.h"
 #include "TypeDefenitions.h"
 
-Shader::Shader(const std::string& ShaderName, bool bNewStyle) {
-	this->ShaderName = ShaderName;
+Shader::Shader(const std::string& ShaderName, bool bUseDefaultGeometry) {
+	S_FragmentShaderPath = ShaderName + ".frag";
+	if(bUseDefaultGeometry) {
+		S_VertexShaderPath = "./Res/Shaders/DefaultGeometryPassShader.vert";
+	}else{
+		S_VertexShaderPath = ShaderName + ".vert";
+	}
+	int lastSlash = 0;
+	for (int i = 0; i < S_FragmentShaderPath.length(); i++) {
+		if (S_FragmentShaderPath[i] == '/') {
+			lastSlash = i;
+		}
+	}
+	S_ShaderName = S_FragmentShaderPath.substr(lastSlash + 1, S_FragmentShaderPath.length() - lastSlash);
+
 	RecompileShader();
 }
 void Shader::RecompileShader() {
 	glDeleteProgram(S_Program);
 	S_Program = glCreateProgram();
 
-	int lastSlash = 0;
-	for (int i = 0; i < ShaderName.length(); i++) {
-		if (ShaderName[i] == '/') {
-			lastSlash = i;
-		}
-	}
-	TString shaderNameOnly = ShaderName.substr(lastSlash + 1, ShaderName.length() - lastSlash);
+
 
 	glDeleteShader(S_Shaders[0]);
 	glDeleteShader(S_Shaders[1]);
-	S_Shaders[0] = CreateShader(LoadShader(ShaderName + ".vert"), GL_VERTEX_SHADER);
-	S_Shaders[1] = CreateShader(LoadShader(ShaderName + ".frag"), GL_FRAGMENT_SHADER);
+	S_Shaders[0] = CreateShader(LoadShader(S_VertexShaderPath), GL_VERTEX_SHADER);
+	S_Shaders[1] = CreateShader(LoadShader(S_FragmentShaderPath), GL_FRAGMENT_SHADER);
 
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
 		glAttachShader(S_Program, S_Shaders[i]);
@@ -36,7 +43,7 @@ void Shader::RecompileShader() {
 
 	bool success = true;
 	glLinkProgram(S_Program);
-	success = CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed For Shader:" + shaderNameOnly + " ");
+	success = CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed For Shader:" + S_ShaderName + " ");
 
 	if(!success) {
 		return;
@@ -48,7 +55,7 @@ void Shader::RecompileShader() {
 		return;
 	}
 
-	std::cout << "Compilation Success! -> " << shaderNameOnly << std::endl;
+	std::cout << "Compilation Success! -> " << S_ShaderName << std::endl;
 }
 Shader::~Shader() {
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
@@ -70,8 +77,10 @@ std::string Shader::LoadShader(const std::string& fileName) {
 			getline(file, line);
 			output.append(line + "\n");
 		}
+		file.close();
 	}else{
 		std::cerr << "Unable to load shader: " << fileName << std::endl;
+		file.close();
 	}
 
 	return output;
@@ -120,11 +129,20 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 void Shader::Bind() {
 	glUseProgram(S_Program);
 }
+/************************************************************************/
+/* Sets the Shader MODEL_MATRIX
+/* Sets the shader MVP
+/* Sets the NEAR_CLIP
+/* Sets the FAR_CLIP
+/* Sets the CAMERA_POS
+/************************************************************************/
 void Shader::Update(const Transform& Transform, Camera* Camera) {
 
 	mat4 tempMVP = Camera->GetProjectionMatrix()* Camera->GetViewMatrix() * Transform.GetModelMatrix();
 
 	SetShaderMatrix4("MODEL_MATRIX", Transform.GetModelMatrix());
+	SetShaderMatrix4("VIEW_MATRIX", Camera->GetViewMatrix());
+	SetShaderMatrix4("PROJECTION_MATRIX", Camera->GetProjectionMatrix());
 	SetShaderMatrix4("MVP", tempMVP);
 	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
 	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());

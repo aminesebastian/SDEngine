@@ -44,6 +44,8 @@ int main(int argc, char* argv[]) {
 
 	//Material* torusMaterial = new Material("res/Shaders/TorusShader");
 	//Transform torusTransform;
+	//torusTransform.GetPosition().y += 10;
+	//torusTransform.GetPosition().x += 7;
 	//torusTransform.SetUniformScale(5.0f);
 	//StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
 	//torus->SetMaterial(EngineStatics::GetDefaultMaterial());
@@ -74,6 +76,13 @@ int main(int argc, char* argv[]) {
 	//eyeMesh->SetTransform(innerEyetransform);
 	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
 
+	Transform testCubeTransform;
+	testCubeTransform.GetPosition().y = 10;
+	testCubeTransform.SetUniformScale(3.0f);
+	StaticMesh* testCubes = new StaticMesh(testCubeTransform, "./res/TestCubes.fbx");
+	testCubes->SetMaterial(EngineStatics::GetDefaultMaterial());
+	S_Engine->GetWorld()->RegisterEntity(testCubes);
+
 	Transform headTransform;
 	headTransform.GetPosition().y = 10;
 	headTransform.SetUniformScale(3.0f);
@@ -81,6 +90,14 @@ int main(int argc, char* argv[]) {
 	StaticMesh* head = headAsset->GetAsStaticMesh();
 	head->SetTransform(headTransform);
 	S_Engine->GetWorld()->RegisterEntity(head);
+
+	Transform headTransform2;
+	headTransform2.GetPosition().y = 10;
+	headTransform2.GetPosition().x = 1;
+	headTransform2.SetUniformScale(3.0f);
+	StaticMesh* head2 = headAsset->GetAsStaticMesh();
+	head2->SetTransform(headTransform2);
+	S_Engine->GetWorld()->RegisterEntity(head2);
 
 	//Transform outerEyeTransform;
 	//outerEyeTransform.SetUniformScale(3.0f);
@@ -123,7 +140,7 @@ int main(int argc, char* argv[]) {
 	fillLightTransform.SetRotation(180, 0, 0);
 	fillLightTransform.GetPosition().y = 50;
 	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8));
-	fillLight->ToggleDebug(true);
+	fillLight->ToggleDebug(false);
 	S_Engine->GetWorld()->RegisterLight(fillLight);
 
 	//TwAddVarRW(S_Engine->GetInfoBar(), "Light Color", TW_TYPE_COLOR3F, &fillLight->GetLightInfo().Color, " opened=true help='Main Light Color' ");

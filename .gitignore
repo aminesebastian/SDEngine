@@ -1,0 +1,5 @@
+SDEngine\x64
+SDEngine\Debug
+SDEngine\Release
+\x64\Debug\*.obj
+\x64\Release\*.obj

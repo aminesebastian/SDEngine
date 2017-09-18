@@ -10,11 +10,13 @@ public:
 	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) override;
 	virtual void RecompileShaders();
 
+	void RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer);
+	void Blur(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer);
 	void GenerateKernel();
 	void GenerateNoise();
 private:
 	Shader* S_SSAOShader;
-	FrontBufferObject* S_LowResBuffer;
+	FrontBufferObject* S_SSAOBuffer;
 
 	SArray<vec3> S_Noise;
 	SArray<vec3> S_Kernel;

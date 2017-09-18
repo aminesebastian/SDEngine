@@ -68,7 +68,7 @@ vec3 Luminance() {
 	}else{
 		finalLightIntensity = vec3(1);
 	}
-	return texture(albedo, texCoord0).rgb * finalLightIntensity;
+	return texture(albedo, texCoord0).rgb * finalLightIntensity * texture(RMAO, texCoord0).b;
 }
 vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity) {
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;

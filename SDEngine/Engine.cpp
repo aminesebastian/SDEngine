@@ -2,7 +2,7 @@
 #include "Light.h"
 #include "AssetManager.h"
 #include <AntTweakBar.h>
-
+#include "Camera.h"
 
 Engine::Engine() {
 	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
@@ -11,7 +11,7 @@ Engine::Engine() {
 
 	Transform cameraTransform(vec3(0, 15, 5));
 	cameraTransform.SetRotation(50, -180, 0);
-	S_Camera = new Camera(cameraTransform, 70, S_Display->GetAspectRatio(), 0.01f, 1000.0f);
+	S_Camera = new Camera(cameraTransform, radians(70.0f), S_Display->GetAspectRatio(), 0.01f, 100.0f);
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
@@ -70,40 +70,40 @@ void Engine::GameLoop() {
 	S_World->TickWorld(S_DeltaTime);
 }
 void Engine::RenderingLoop() {
-	for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-		switch (i % 5) {
-		case 0:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		case 1:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		case 2:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		case 3:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 800 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		case 4:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		default:
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 1000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-			S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 1000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-			break;
-		}
-	}
+	//for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
+	//	switch (i % 5) {
+	//	case 0:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	case 1:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	case 2:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	case 3:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 800 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	case 4:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	default:
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
+	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
+	//		break;
+	//	}
+	//}
 	S_RenderingEngine->RenderWorld(S_World, S_Camera);
 }
 void Engine::UILoop() {

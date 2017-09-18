@@ -19,7 +19,7 @@ public:
 
 	void AddTextureIndex(TString TextureName);
 
-	void BindTextures(Shader* Shader);
+	void BindTextures(Shader* Shader, bool bIncludeDepth = false);
 
 	GLuint& GetTexture(int i) { assert(i < S_NumTextures);  return S_Textures[i]; }
 	TString GetTextureName(int i) { return S_TextureNames[i]; }

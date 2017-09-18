@@ -11,6 +11,7 @@
 #include "ToneMapper.h"
 #include "BloomPostProcessing.h"
 #include "SSAOPostProcessing.h"
+#include "PostProcessingLayer.h"
 
 URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1 = new GBuffer();
@@ -18,19 +19,19 @@ URenderingEngine::URenderingEngine(Display* Display) {
 	S_TranslucencyBuffer = new GBuffer();
 	S_Display = Display;
 	S_DefferedCompositor = new DefferedCompositor("Res/Shaders/DefferedLighting");
-	S_TranslucencyBlendShader = new Shader("./Res/Shaders/TranslucencyCompositor");
+	S_TranslucencyBlendShader = new Shader("./Res/Shaders/TranslucencyCompositor", false);
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_TranslucencyBuffer->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
-	//S_PostProcessingLayers.push_back(new SSAOPostProcessing());
-	S_PostProcessingLayers.push_back(new BloomPostProcessing());
-	S_PostProcessingLayers.push_back(new ToneMapper());
+	S_PostProcessingLayers.push_back(new SSAOPostProcessing());
+	//S_PostProcessingLayers.push_back(new BloomPostProcessing());
+	//S_PostProcessingLayers.push_back(new ToneMapper());
 }
 URenderingEngine::~URenderingEngine() {
 
 }
 
-void URenderingEngine::ChangeShader(std::string ShaderName) { S_Shader = new Shader(ShaderName); }
+void URenderingEngine::ChangeShader(std::string ShaderName) { S_Shader = new Shader(ShaderName, false); }
 void URenderingEngine::RecompileShaders(UWorld* World) {
 	S_Shader->RecompileShader(); 
 	S_DefferedCompositor->RecompileShaders();

@@ -12,6 +12,7 @@ uniform sampler2D HDR;
 uniform sampler2D finalComp;
 
 uniform sampler2D xBloom;
+uniform sampler2D yBloom;
 
 uniform vec3 CAMERA_POS;
 
@@ -26,11 +27,12 @@ layout (location = 7) out vec4 LitOutput;
 
 uniform int PASS;
 
-uniform float WEIGHTS[10]		= float[] (0.227027, 0.2045946, 0.1516216, 0.104054, 0.086216, 0.077027, 0.0545946, 0.0416216, 0.024054, 0.016216);
-uniform float BLOOM_SIZE		= 2.0;
-uniform float BLOOM_BOOST		= 1.0;
-uniform float BLOOM_THRESHOLD	= 0.25;
-uniform int MIP_MAP_LEVEL		= 3;
+uniform float WEIGHTS[5]		= float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
+uniform float BLOOM_SIZE		= 8.0;
+uniform float BLOOM_BOOST		= 10.0;
+uniform float BLOOM_THRESHOLD	= 0.0;
+const int MIP_MAP_LEVEL			= 3;
+uniform vec3 TINT				= vec3(1.0, 1.0, 1.0);
 
 vec4 BloomY(float Size);
 vec4 BloomX(float Size);
@@ -40,6 +42,8 @@ void main()	{
 
 	if(PASS == 0) {
 		WorldPosOut			= BloomX(size);
+	}else if(PASS == 1) {
+		WorldPosOut			= BloomY(size);
 	}else{
 		WorldPosOut			= texture(worldPosition, texCoord0);	
 		AlbedoOut	 		= texture(albedo, texCoord0);			
@@ -48,27 +52,26 @@ void main()	{
 		RMAOOut				= texture(RMAO, texCoord0);	
 		Translucency		= texture(translucency, texCoord0);
 
-		LitOutput			= texture(finalComp, texCoord0) + BloomY(size)*BLOOM_BOOST;
+		LitOutput			= texture(yBloom, texCoord0)*vec4(TINT, 1.0)*BLOOM_BOOST + texture(finalComp, texCoord0);
 	}
 }
 
 vec4 BloomX(float Size) {
-    vec2 tex_offset = Size / textureSize(HDR, 0); 
-    vec4 bloom		= texture(HDR, texCoord0) * WEIGHTS[0]; 
+    vec2 tex_offset = Size / textureSize(yBloom, 0); 
+    vec4 bloom		= texture(yBloom, texCoord0) * WEIGHTS[0]; 
 
-    for(int i = 1; i < 30; ++i) {
-        bloom		+= max(texture(HDR, texCoord0 + vec2(tex_offset.x * i, 0.0))-BLOOM_THRESHOLD, 0) * WEIGHTS[i/3];
-        bloom		+= max(texture(HDR, texCoord0 - vec2(tex_offset.x * i, 0.0))-BLOOM_THRESHOLD, 0) * WEIGHTS[i/3];
+    for(int i = 1; i < 5; ++i) {
+        bloom += max(texture(yBloom, texCoord0 + vec2(tex_offset.x * i, 0.0))-BLOOM_THRESHOLD, 0) * WEIGHTS[i];
+        bloom += max(texture(yBloom, texCoord0 - vec2(tex_offset.x * i, 0.0))-BLOOM_THRESHOLD, 0) * WEIGHTS[i];
     }
 	return bloom * BLOOM_BOOST/10.0;
 }
 vec4 BloomY(float Size) {
     vec2 tex_offset = Size/ textureSize(xBloom, 0);
-    vec4 bloom		= textureLod(xBloom, texCoord0, MIP_MAP_LEVEL) * WEIGHTS[0]; 
-
-    for(int i = 1; i < 30; ++i) {
-		bloom		+= textureLod(xBloom, texCoord0 + vec2(0.0, tex_offset.y * i), MIP_MAP_LEVEL) * WEIGHTS[i/3];
-        bloom		+= textureLod(xBloom, texCoord0 - vec2(0.0, tex_offset.y * i), MIP_MAP_LEVEL) * WEIGHTS[i/3];
+    vec4 bloom		= texture(xBloom, texCoord0) * WEIGHTS[0]; 
+    for(int i = 1; i < 5; ++i) {
+        bloom += textureLod(xBloom, texCoord0 + vec2(0.0, tex_offset.y * i), MIP_MAP_LEVEL) * WEIGHTS[i];
+        bloom += textureLod(xBloom, texCoord0 - vec2(0.0, tex_offset.y * i), MIP_MAP_LEVEL) * WEIGHTS[i];
     }
 	return bloom;
 }
