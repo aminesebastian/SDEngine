@@ -74,7 +74,7 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
     vec3 L = normalize(lightCentre - fragmentPosition);
 	float distance    = length(lightCentre - fragmentPosition);
-    float attenuation = 1.0 / (distance * distance);
+    float attenuation = lightRadius / (distance * distance);
 
     float NdotL = max(dot(N, L), 0.0);
 

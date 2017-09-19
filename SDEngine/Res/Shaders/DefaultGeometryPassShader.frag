@@ -24,15 +24,15 @@ float linearizeDepth(float depth);
 														
 void main()	{											
 	WorldPosOut.rgb		= worldPos0;	
-	WorldPosOut.a		= linearizeDepth(gl_FragCoord.z);	
+	WorldPosOut.a		= gl_FragCoord.z;	
 
-	AlbedoOut			= texture(Albedo, texCoord0);
+	AlbedoOut			= vec4(0.5, 0.5, 0.5, 0.0); //texture(Albedo, texCoord0);
 	AlbedoOut.a			= MAT_ID;				
 	TexCoordOut			= vec3(texCoord0, 0.0);
 	vec3 sampledNormal	= ((255.0/128.0) * Normal)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
-	RMAOOut.r			= Roughness;	
-	RMAOOut.g			= Metalness;									
+	RMAOOut.r			= 0.25;	
+	RMAOOut.g			= 1.0;									
 	RMAOOut.b			= 1.0f;	
 }
 

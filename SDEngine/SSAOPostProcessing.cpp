@@ -82,32 +82,37 @@ void SSAOPostProcessing::Blur(DefferedCompositor* Compositor, Camera* Camera, Fr
 
 void SSAOPostProcessing::GenerateKernel() {
 	for (int i = 0; i < S_KernelSize; i++) {
-		S_Kernel.push_back(vec3(
-			SMath::FRandRange(-1.0f, 1.0f),
-			SMath::FRandRange(0.0f, 1.0f),
-			SMath::FRandRange(-1.0f, 1.0f)
-		));
-		glm::normalize(S_Kernel[i]);
+		glm::vec3 sample(
+			SMath::RandRange<float>(-1.0f, 1.0f), 
+			SMath::RandRange<float>(-1.0f, 1.0f), 
+			SMath::RandRange<float>(0.0f, 1.0f)
+		);
+		sample = glm::normalize(sample);
+		sample *= SMath::RandRange<float>(0.0f, 1.0f);
+		float scale = float(i) / 64.0;
+
+		scale = SMath::Lerp<float>(0.1f, 1.0f, scale * scale);
+		sample *= scale;
+		S_Kernel.push_back(sample);
 	}
 }
 void SSAOPostProcessing::GenerateNoise() {
 	for (int i = 0; i < S_NoiseSize; ++i) {
 		S_Noise.push_back(vec3(
-			SMath::FRandRange(-1.0f, 1.0f),
-			SMath::FRandRange(-1.0f, 1.0f),
+			SMath::RandRange<float>(-1.0f, 1.0f),
+			SMath::RandRange<float>(-1.0f, 1.0f),
 			0.0f
 		));
 		glm::normalize(S_Noise[i]);
 	}
 	glGenTextures(1, &S_NoiseTexture);
 	glBindTexture(GL_TEXTURE_2D, S_NoiseTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 4, 4, 0, GL_RGB, GL_FLOAT, &S_Noise[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 4, 4, 0, GL_RGB, GL_FLOAT, &S_Noise[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
-
 void SSAOPostProcessing::RecompileShaders() {
 	S_SSAOShader->RecompileShader();
 }

@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <GLM\glm.hpp>
+#include <GLM\gtx\transform.hpp>
 
 typedef std::string TString;
 typedef int int32;

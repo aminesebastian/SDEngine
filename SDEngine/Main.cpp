@@ -76,28 +76,31 @@ int main(int argc, char* argv[]) {
 	//eyeMesh->SetTransform(innerEyetransform);
 	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
 
-	Transform testCubeTransform;
-	testCubeTransform.GetPosition().y = 10;
-	testCubeTransform.SetUniformScale(3.0f);
-	StaticMesh* testCubes = new StaticMesh(testCubeTransform, "./res/TestCubes.fbx");
-	testCubes->SetMaterial(EngineStatics::GetDefaultMaterial());
-	S_Engine->GetWorld()->RegisterEntity(testCubes);
+	//Transform testCubeTransform;
+	//testCubeTransform.GetPosition().y = 10;
+	//testCubeTransform.SetUniformScale(3.0f);
+	//StaticMesh* testCubes = new StaticMesh(testCubeTransform, "./res/TestCubes.fbx");
+	//S_Engine->GetWorld()->RegisterEntity(testCubes);
 
-	Transform headTransform;
-	headTransform.GetPosition().y = 10;
-	headTransform.SetUniformScale(3.0f);
-	SAsset* headAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	StaticMesh* head = headAsset->GetAsStaticMesh();
-	head->SetTransform(headTransform);
-	S_Engine->GetWorld()->RegisterEntity(head);
+	Transform sponzaTransform;
+	StaticMesh* sponza = new StaticMesh(sponzaTransform, "./res/Sponza.fbx");
+	S_Engine->GetWorld()->RegisterEntity(sponza);
 
-	Transform headTransform2;
-	headTransform2.GetPosition().y = 10;
-	headTransform2.GetPosition().x = 1;
-	headTransform2.SetUniformScale(3.0f);
-	StaticMesh* head2 = headAsset->GetAsStaticMesh();
-	head2->SetTransform(headTransform2);
-	S_Engine->GetWorld()->RegisterEntity(head2);
+	//Transform headTransform;
+	//headTransform.GetPosition().y = 10;
+	//headTransform.SetUniformScale(3.0f);
+	//SAsset* headAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
+	//StaticMesh* head = headAsset->GetAsStaticMesh();
+	//head->SetTransform(headTransform);
+	//S_Engine->GetWorld()->RegisterEntity(head);
+
+	//Transform headTransform2;
+	//headTransform2.GetPosition().y = 10;
+	//headTransform2.GetPosition().x = 1;
+	//headTransform2.SetUniformScale(3.0f);
+	//StaticMesh* head2 = headAsset->GetAsStaticMesh();
+	//head2->SetTransform(headTransform2);
+	//S_Engine->GetWorld()->RegisterEntity(head2);
 
 	//Transform outerEyeTransform;
 	//outerEyeTransform.SetUniformScale(3.0f);
@@ -114,20 +117,20 @@ int main(int argc, char* argv[]) {
 	//StaticMesh* outerEye = new StaticMesh(outerEyeTransform, outerEyeMaterial, "./res/Eye/EyeClear.fbx");
 	//S_Engine->GetWorld()->RegisterEntity(outerEye);
 
-	Grid grid(40, 2);
-	S_Engine->GetWorld()->RegisterEntity(&grid);
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 3; k++) {
+	//Grid grid(40, 2);
+	//S_Engine->GetWorld()->RegisterEntity(&grid);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			for (int k = 0; k < 5; k++) {
 				float r = (float)(rand()) / (float)(RAND_MAX);
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetPosition().x = (float)j * 2 - 2.0f;
-				tempTransform.GetPosition().y = 10+(float)k * 3.0;
-				tempTransform.GetPosition().z = (float)i * 2 - 2.0f;
+				tempTransform.GetPosition().x = (float)j * 50 - 100.0f;
+				tempTransform.GetPosition().y = 10+(float)k * 10.0;
+				tempTransform.GetPosition().z = (float)i * 50 - 100.0f;
 				vec3 tempColor = vec3(r, g, b);
-				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*2;
+				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*250;
 				tempTransform.SetUniformScale(0.25f);
 				Light* tempLight = new Light(tempTransform, POINT, 45, tempColor, atten);
 				tempLight->ToggleDebug(false);
