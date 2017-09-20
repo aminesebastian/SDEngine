@@ -89,6 +89,7 @@ void main()	{
     
 		WorldPosOut			= vec4(pow(occlusion, 4));
 		LitOutput			= vec4(pow(occlusion, 4));	
+		LitOutput			= texture(finalComp, texCoord0);
 	}else {
 		LitOutput			= blurSSAO(2.0) * texture(finalComp, texCoord0) * 10;
 	}

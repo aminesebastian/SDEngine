@@ -11,7 +11,7 @@ Engine::Engine() {
 
 	Transform cameraTransform(vec3(0, 15, 5));
 	cameraTransform.SetRotation(50, -180, 0);
-	S_Camera = new Camera(cameraTransform, radians(70.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
+	S_Camera = new Camera(cameraTransform, radians(50.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(S_Display->GetDimensions().x, S_Display->GetDimensions().y);

@@ -6,8 +6,8 @@
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
 
-#define WINDOW_WIDTH 3000
-#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 #define WINDOW_BIT_DEPTH 10
 
 #define LOG_GENERAL "GENERAL"

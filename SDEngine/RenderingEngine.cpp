@@ -23,9 +23,9 @@ URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_TranslucencyBuffer->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
-	S_PostProcessingLayers.push_back(new SSAOPostProcessing());
-	//S_PostProcessingLayers.push_back(new BloomPostProcessing());
-	//S_PostProcessingLayers.push_back(new ToneMapper());
+	//S_PostProcessingLayers.push_back(new SSAOPostProcessing());
+	S_PostProcessingLayers.push_back(new BloomPostProcessing());
+	S_PostProcessingLayers.push_back(new ToneMapper());
 }
 URenderingEngine::~URenderingEngine() {
 
