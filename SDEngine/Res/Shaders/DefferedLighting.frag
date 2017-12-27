@@ -9,6 +9,7 @@ uniform sampler2D albedo;
 uniform sampler2D RMAO;
 uniform sampler2D normal;
 uniform sampler2D texCoord;
+uniform sampler2D shadowDepth;
 
 layout (location = 0) out vec4 WorldPosOut;   
 layout (location = 1) out vec4 AlbedoOut;  
@@ -19,7 +20,7 @@ layout (location = 6) out vec4 HDR;
 layout (location = 7) out vec4 LitOutput;
 
 const float PI = 3.14159265359;
-const int NUM_LIGHTS = 150;
+const int NUM_LIGHTS = 100;
 struct LightInfo {
 	float Intensity;
 	vec3 Color;
@@ -27,6 +28,7 @@ struct LightInfo {
 	vec3 Position;
 	vec3 Direction;
 	int Type;
+	int CastsShadow;
 };
 uniform int LIGHT_COUNT;
 uniform	LightInfo lights[NUM_LIGHTS];
@@ -63,7 +65,7 @@ vec3 Luminance() {
 				finalLightIntensity += PointLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Position, lights[i].Attenuation, lights[i].Color, lights[i].Intensity/125);	
 			}else{
 				finalLightIntensity += DirectionalLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Direction, lights[i].Color, lights[i].Intensity/125);	
-			}			
+			}		
 		}
 	}else{
 		finalLightIntensity = vec3(1);
@@ -78,7 +80,7 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
 
     float NdotL = max(dot(N, L), 0.0);
 
-	float roughness = texture(RMAO, texCoord0).r;
+	float roughness = max(texture(RMAO, texCoord0).r, 0.01);
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
 
 
@@ -105,11 +107,11 @@ vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadi
 }
 vec3 DirectionalLight(vec3 fragmentPosition, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity) {
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
-    vec3 L = normalize(lightDirection);
+    vec3 L = -1*normalize(lightDirection);
 
     float NdotL = max(dot(N, L), 0.0);
 
-	float roughness = texture(RMAO, texCoord0).r;
+	float roughness = max(texture(RMAO, texCoord0).r, 0.01);
 	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
 
 

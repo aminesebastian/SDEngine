@@ -17,6 +17,15 @@ enum ERenderingStage {
 	POST_PROCESSING,
 	OUTPUT
 };
+enum EDebugState {
+	ALBEDO,
+	NORMAL,
+	WORLD_POSITION,
+	RMAO,
+	WIREFRAME,
+	DETAIL_LIGHT
+};
+
 class URenderingEngine {
 public:
 	URenderingEngine(Display* Display);
@@ -36,6 +45,11 @@ public:
 	void FlipCurrentBufferIndex();
 
 	ERenderingStage GetRenderingStage() { return S_CurrentStage; }
+	bool GetDebugEnabled();
+	void SetDebugEnabled(bool bEnabled);
+
+	EDebugState GetDebugState();
+	void SetDebugState(EDebugState NewState);
 private:
 	Shader* S_Shader;
 	Shader* S_TranslucencyBlendShader;
@@ -50,5 +64,8 @@ private:
 	Display* S_Display;
 	DefferedCompositor* S_DefferedCompositor;
 	ERenderingStage S_CurrentStage;
+
+	bool bDebugMode;
+	EDebugState S_DebugState;
 };
 

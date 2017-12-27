@@ -38,33 +38,22 @@ int main(int argc, char* argv[]) {
 	init_logger("SD_EngineLog.txt");
 	PrintToLog("Engine Launched!");
 
-	//Texture2D* torusAlbedo = new Texture2D("res/T_TorusBaseColor.tga");
-	//Texture2D* torusRoughness = new Texture2D("res/T_TorusRMAO.tga");
-	//Texture2D* torusNormal = new Texture2D("res/T_TorusNormal.tga");
-
-	//Material* torusMaterial = new Material("res/Shaders/TorusShader");
-	//Transform torusTransform;
-	//torusTransform.GetPosition().y += 10;
-	//torusTransform.GetPosition().x += 7;
-	//torusTransform.SetUniformScale(5.0f);
-	//StaticMesh* torus = new StaticMesh(torusTransform, "./res/Torus.fbx");
-	//torus->SetMaterial(EngineStatics::GetDefaultMaterial());
-	//torusMaterial->SetTextureParameter("albedo", torusAlbedo);
-	//torusMaterial->SetTextureParameter("RMAO", torusRoughness);
-	//torusMaterial->SetTextureParameter("normal", torusNormal);
-
-	//S_Engine->GetWorld()->RegisterEntity(torus);
-
 	//Transform skySphereTransform;
 	//skySphereTransform.SetUniformScale(100.0f);
 	//Texture2D* skySphereTexture = new Texture2D("res/ForestEnvironment.jpg");
 
-	//Material* skyMaterial = new Material("./Res/Shaders/SkySphereShader");
-	//skyMaterial->SetTextureParameter("Albedo", skySphereTexture);
+	//Material* skyMaterial = new Material(EngineStatics::GetDefaultGeometryPassShader());
+	//skyMaterial->SetTextureParameter("albedo", skySphereTexture);
 	//skyMaterial->SetShaderModel(EShaderModel::UNLIT);
 	//StaticMesh* sky = new StaticMesh(skySphereTransform, skyMaterial, "./res/SkySphere.fbx");
 	//S_Engine->GetWorld()->RegisterEntity(sky);
 
+
+	Transform planeTransform;
+	planeTransform.SetUniformScale(10);
+	Material* planeMat = EngineStatics::GetDefaultMaterial();
+	StaticMesh* plane = new StaticMesh(planeTransform, planeMat, "./res/Plane.fbx");
+	S_Engine->GetWorld()->RegisterEntity(plane);
 
 	//Transform innerEyetransform;
 	//innerEyetransform.SetUniformScale(3.0f);
@@ -76,31 +65,19 @@ int main(int argc, char* argv[]) {
 	//eyeMesh->SetTransform(innerEyetransform);
 	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
 
-	//Transform testCubeTransform;
-	//testCubeTransform.GetPosition().y = 10;
-	//testCubeTransform.SetUniformScale(3.0f);
-	//StaticMesh* testCubes = new StaticMesh(testCubeTransform, "./res/TestCubes.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(testCubes);
-
-	//Transform sponzaTransform;
-	//StaticMesh* sponza = new StaticMesh(sponzaTransform, "./res/Sponza.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(sponza);
-
 	Transform headTransform;
-	headTransform.GetPosition().y = 10;
 	headTransform.SetUniformScale(3.0f);
+	headTransform.GetPosition().z = 2;
 	SAsset* headAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
 	StaticMesh* head = headAsset->GetAsStaticMesh();
 	head->SetTransform(headTransform);
 	S_Engine->GetWorld()->RegisterEntity(head);
 
-	//Transform headTransform2;
-	//headTransform2.GetPosition().y = 10;
-	//headTransform2.GetPosition().x = 1;
-	//headTransform2.SetUniformScale(3.0f);
-	//StaticMesh* head2 = headAsset->GetAsStaticMesh();
-	//head2->SetTransform(headTransform2);
-	//S_Engine->GetWorld()->RegisterEntity(head2);
+	Transform gizmoTransform;
+	SAsset* gizmoAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Gizmo.sasset");
+	StaticMesh* gizmo = gizmoAsset->GetAsStaticMesh();
+	gizmo->SetTransform(gizmoTransform);
+	S_Engine->GetWorld()->RegisterEntity(gizmo);
 
 	//Transform outerEyeTransform;
 	//outerEyeTransform.SetUniformScale(3.0f);
@@ -126,13 +103,13 @@ int main(int argc, char* argv[]) {
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetPosition().x = (float)j * 2.5f - 2.5f;
-				tempTransform.GetPosition().y = 10+(float)k * 3.0f;
-				tempTransform.GetPosition().z = (float)i * 2.5f - 2.5f;
+				tempTransform.GetPosition().x = (float)j * 1.5f - 1.5f;
+				tempTransform.GetPosition().y = (float)i * 1.5f - 1.5f;
+				tempTransform.GetPosition().z = 2 + (float)k * 3.0f; 
 				vec3 tempColor = vec3(r, g, b);
 				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*2;
 				tempTransform.SetUniformScale(0.25f);
-				Light* tempLight = new Light(tempTransform, POINT, 45, tempColor, atten);
+				Light* tempLight = new Light(tempTransform, POINT, 25, tempColor, atten);
 				tempLight->ToggleDebug(false);
 				S_Engine->GetWorld()->RegisterLight(tempLight);
 			}
@@ -141,17 +118,11 @@ int main(int argc, char* argv[]) {
 
 	Transform fillLightTransform;
 	fillLightTransform.SetRotation(180, 0, 0);
-	fillLightTransform.GetPosition().y = 50;
+	fillLightTransform.GetPosition().z = 50;
 	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8));
 	fillLight->ToggleDebug(false);
+	fillLight->SetCastsShadows(true);
 	S_Engine->GetWorld()->RegisterLight(fillLight);
-
-	//TwAddVarRW(S_Engine->GetInfoBar(), "Light Color", TW_TYPE_COLOR3F, &fillLight->GetLightInfo().Color, " opened=true help='Main Light Color' ");
-	//Transform bounceLightTransform;
-	//bounceLightTransform.GetPosition().y = -20;
-	//Light* bounceLight = new Light(bounceLightTransform, DIRECTIONAL, 500, vec3(0.75, 0.9, 0.8));
-	//bounceLight->ToggleDebug(true);
-	//S_Engine->GetWorld()->RegisterLight(bounceLight);
 
 	S_Engine->StartEngine();
 	return 0;

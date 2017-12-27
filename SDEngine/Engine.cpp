@@ -9,8 +9,9 @@ Engine::Engine() {
 	S_RenderingEngine = new URenderingEngine(S_Display);
 	S_World = new UWorld();
 
-	Transform cameraTransform(vec3(0, 15, 5));
-	cameraTransform.SetRotation(50, -180, 0);
+	Transform cameraTransform;
+	cameraTransform.SetRotation(0, 50, -180);
+	cameraTransform.GetPosition().x -= 2;
 	S_Camera = new Camera(cameraTransform, radians(50.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
 
 	TwInit(TW_OPENGL, NULL);
@@ -26,6 +27,9 @@ Engine::Engine() {
 	for (int i = 0; i < 322; i++) {
 		S_InputKeys[i].bKeyDown = false;
 	}
+	lightRotateAngle = 0;
+	lightRotateRadius = 2;
+	lightRotateSpeed = (2 * 3.14159265358979323846264338327950288) / 25000;
 }
 Engine::~Engine() {
 	delete &S_Display;
@@ -70,40 +74,16 @@ void Engine::GameLoop() {
 	S_World->TickWorld(S_DeltaTime);
 }
 void Engine::RenderingLoop() {
-	//for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-	//	switch (i % 5) {
-	//	case 0:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	case 1:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	case 2:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	case 3:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 400 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (-1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (-1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 800 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	case 4:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	default:
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 500 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().x;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = (1 * glm::sin((S_WorldTime + ((float)i / 10000.0f)) / 100 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().y;
-	//		S_World->GetWorldLights()[i]->GetTransform().GetPosition().z = (1 * glm::cos((S_WorldTime + ((float)i / 10000.0f)) / 600 * ((i + 1) / 5))) + S_World->GetWorldLights()[i]->GetInitialTransform().GetPosition().z;
-	//		break;
-	//	}
-	//}
+	for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
+		lightRotateAngle += lightRotateSpeed * S_DeltaTime;
+		float x = glm::cos(lightRotateAngle+(i*0.23))*lightRotateRadius;
+		float y = glm::sin(lightRotateAngle+(i*0.23))*lightRotateRadius;
+
+
+		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = x;
+		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = y;
+	}
+
 	S_RenderingEngine->RenderWorld(S_World, S_Camera);
 }
 void Engine::UILoop() {
@@ -176,6 +156,34 @@ void Engine::OnKeyDown(int KeyCode) {
 	if (KeyCode == SDL_SCANCODE_L) {
 		for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
 			S_World->GetWorldLights()[i]->ToggleDebug(!S_World->GetWorldLights()[i]->GetDebugMode());
+		}
+	}
+	if (S_InputKeys[SDL_SCANCODE_G].bKeyDown) {
+		S_RenderingEngine->SetDebugEnabled(!S_RenderingEngine->GetDebugEnabled());
+	}
+	if (S_InputKeys[SDL_SCANCODE_1].bKeyDown) {
+		if(S_RenderingEngine->GetDebugEnabled()) {
+			S_RenderingEngine->SetDebugState(WIREFRAME);
+		}
+	}
+	if (S_InputKeys[SDL_SCANCODE_2].bKeyDown) {
+		if (S_RenderingEngine->GetDebugEnabled()) {
+			S_RenderingEngine->SetDebugState(ALBEDO);
+		}
+	}
+	if (S_InputKeys[SDL_SCANCODE_3].bKeyDown) {
+		if (S_RenderingEngine->GetDebugEnabled()) {
+			S_RenderingEngine->SetDebugState(NORMAL);
+		}
+	}
+	if (S_InputKeys[SDL_SCANCODE_4].bKeyDown) {
+		if (S_RenderingEngine->GetDebugEnabled()) {
+			S_RenderingEngine->SetDebugState(WORLD_POSITION);
+		}
+	}
+	if (S_InputKeys[SDL_SCANCODE_5].bKeyDown) {
+		if (S_RenderingEngine->GetDebugEnabled()) {
+			S_RenderingEngine->SetDebugState(DETAIL_LIGHT);
 		}
 	}
 }

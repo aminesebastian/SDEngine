@@ -41,13 +41,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -156,11 +156,12 @@
     <ClCompile Include="BloomPostProcessing.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DefferedCompositor.cpp" />
+    <ClCompile Include="DOFPostProcessing.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EyeActor.cpp" />
-    <ClCompile Include="FrontBufferObject.cpp" />
+    <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -189,12 +190,13 @@
     <ClInclude Include="BloomPostProcessing.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DefferedCompositor.h" />
+    <ClInclude Include="DOFPostProcessing.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineStatics.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EyeActor.h" />
-    <ClInclude Include="FrontBufferObject.h" />
+    <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Light.h" />
@@ -228,16 +230,16 @@
     <None Include="Res\Shaders\LightDebugShader.vert" />
     <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
     <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
-    <None Include="Res\Shaders\PostProcessing\BloomX.frag" />
-    <None Include="Res\Shaders\PostProcessing\BloomX.vert" />
-    <None Include="Res\Shaders\PostProcessing\BloomY.frag" />
-    <None Include="Res\Shaders\PostProcessing\BloomY.vert" />
+    <None Include="Res\Shaders\PostProcessing\DOF.frag" />
+    <None Include="Res\Shaders\PostProcessing\DOF.vert" />
     <None Include="Res\Shaders\PostProcessing\Output.frag" />
     <None Include="Res\Shaders\PostProcessing\Output.vert" />
     <None Include="Res\Shaders\PostProcessing\SSAO.frag" />
     <None Include="Res\Shaders\PostProcessing\SSAO.vert" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
+    <None Include="Res\Shaders\ShadowShader.frag" />
+    <None Include="Res\Shaders\ShadowShader.vert" />
     <None Include="Res\Shaders\SkySphereShader.frag" />
     <None Include="Res\Shaders\SkySphereShader.vert" />
     <None Include="Res\Shaders\TestEyeShader.frag" />

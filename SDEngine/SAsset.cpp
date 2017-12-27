@@ -1,5 +1,6 @@
 #include "SAsset.h"
 #include "AssetManager.h"
+#include "EngineStatics.h"
 
 SAsset::SAsset(TString FilePath) {
 	S_FilePath = FilePath;
@@ -19,12 +20,18 @@ Material* SAsset::GetAsMaterial() {
 	AssetManager* manager = Engine::GetInstance()->GetAssetManager();
 
 	/*Shader Stage*/
+	bool useDefaultShader = true;
 	for (int i = 0; i < S_Data.size(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "Shader") {
 			newMaterial = new Material(getParameters(currLine)[0]);
+			useDefaultShader = false;
 			break;
 		}
+	}
+
+	if(useDefaultShader) {
+		newMaterial = new Material(EngineStatics::GetDefaultGeometryPassShader());
 	}
 
 	if(newMaterial == nullptr) {
@@ -74,6 +81,7 @@ StaticMesh* SAsset::GetAsStaticMesh() {
 			return newMesh;
 		}
 	}
+	return nullptr;
 }
 
 TString SAsset::getFucntionName(TString Line) {

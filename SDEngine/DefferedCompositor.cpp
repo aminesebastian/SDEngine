@@ -18,9 +18,13 @@ void DefferedCompositor::RecompileShaders() {
 	}
 }
 void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* Camera) {
+	for (GLuint i = 0; i < Lights.size(); i++) {
+		if (Lights[i]->CastsShadows()) {
+			Lights[i]->GenerateShadowTexture();
+		}
+	}
 	ReadBuffer->BindForReading();
 	WriteBuffer->BindForWriting();
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_LightingShader->Bind();
 	glUniform3fv(glGetUniformLocation(S_LightingShader->GetProgram(), "CAMERA_POS"), 1, &Camera->GetTransform().GetPosition()[0]);

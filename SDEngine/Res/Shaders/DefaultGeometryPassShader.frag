@@ -3,16 +3,16 @@
 in vec2 texCoord0;                                                                       
 in mat3 tbnMatrix0;                                                                 
 in vec3 worldPos0;  
-in vec3 normal0;
-
-uniform sampler2D Albedo;
-uniform float Roughness;
-uniform float Metalness;
-uniform vec3 Normal;
 
 uniform float NEAR_CLIP;
 uniform float FAR_CLIP; 
 uniform int	MAT_ID;
+
+uniform sampler2D albedo;
+uniform sampler2D RMAO;
+uniform sampler2D normal;
+uniform sampler2D Emissive;
+
 
 layout (location = 0) out vec4 WorldPosOut;   
 layout (location = 1) out vec4 AlbedoOut;  
@@ -24,18 +24,19 @@ float linearizeDepth(float depth);
 														
 void main()	{											
 	WorldPosOut.rgb		= worldPos0;	
-	WorldPosOut.a		= gl_FragCoord.z;	
+	WorldPosOut.a		= linearizeDepth(gl_FragCoord.z);	
 
-	AlbedoOut			= vec4(0.5, 0.5, 0.5, 0.0); //texture(Albedo, texCoord0);
-	AlbedoOut.a			= MAT_ID;				
-	TexCoordOut			= vec3(texCoord0, 0.0);
-	vec3 sampledNormal	= ((255.0/128.0) * Normal)-1;
+	AlbedoOut			= texture(albedo, texCoord0);	
+	AlbedoOut.a			= MAT_ID;			
+	TexCoordOut.xy		= texCoord0;
+	TexCoordOut.z		= linearizeDepth(gl_FragCoord.z);	
+
+	vec3 sampledNormal	= ((255.0/128.0) * texture(normal, texCoord0).xyz)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
-	RMAOOut.r			= 0.25;	
-	RMAOOut.g			= 1.0;									
-	RMAOOut.b			= 1.0f;	
+	RMAOOut.r			= texture(RMAO, texCoord0).r;
+	RMAOOut.g			= 0.0f;									
+	RMAOOut.b			= texture(RMAO, texCoord0).b;	
 }
-
 float linearizeDepth(float depth) {
     float z = depth * 2.0 - 1.0;
     return (2.0 * NEAR_CLIP * FAR_CLIP) / (FAR_CLIP + NEAR_CLIP - z * (FAR_CLIP - NEAR_CLIP));	

@@ -1,2 +1,10 @@
-﻿  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Debug\SDEngine.exe
-  SDEngine.vcxproj -> C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\x64\Debug\SDEngine.pdb (Full PDB)
+﻿  DefferedCompositor.cpp
+f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\sdengine\engine.h(55): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\sdengine\defferedcompositor.cpp(33): warning C4267: 'argument': conversion from 'size_t' to 'GLint', possible loss of data
+  SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Debug\SDEngine.exe

@@ -10,6 +10,10 @@ StaticMesh::StaticMesh(const Transform& SpawnTransform, Material* Material, cons
 	InitMesh();
 	S_MaterialID = 0;
 	S_Material = Material;
+
+	if(Material == nullptr) {
+		Material = EngineStatics::GetDefaultMaterial();
+	}
 }
 StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& ModelName)
 	: Entity(SpawnTransform) {
@@ -217,7 +221,12 @@ void StaticMesh::InitMesh() {
  * @param [in,out]	shader	The shader.
  **************************************************************************************************/
 
-void StaticMesh::Draw(Camera* Camera) {
+void StaticMesh::Draw(Camera* Camera) { //Clean this up
+	if (Camera == NULL) {
+		glBindVertexArray(S_VertexArrayObject);
+		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
 	if (S_Material->GetShaderModel() != EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::GEOMETRY) {
 		S_Material->BindMaterial(GetTransform(), Camera);
 		glBindVertexArray(S_VertexArrayObject);

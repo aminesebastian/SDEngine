@@ -6,7 +6,7 @@ public:
 	ToneMapper();
 	~ToneMapper();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) override;
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) override;
 	virtual void RecompileShaders();
 private:
 	Shader* S_TonemapperShader;

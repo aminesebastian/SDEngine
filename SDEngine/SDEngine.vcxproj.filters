@@ -124,9 +124,6 @@
     <ClCompile Include="EngineStatics.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="FrontBufferObject.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="PostProcessingLayer.cpp">
       <Filter>Source Files\Rendering\PostProcessing</Filter>
     </ClCompile>
@@ -141,6 +138,12 @@
     </ClCompile>
     <ClCompile Include="SMath.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="DOFPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBufferObject.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -216,9 +219,6 @@
     <ClInclude Include="EngineStatics.h">
       <Filter>Headers\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="FrontBufferObject.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="PostProcessingLayer.h">
       <Filter>Headers\Rendering\PostProcessingLayer</Filter>
     </ClInclude>
@@ -233,6 +233,12 @@
     </ClInclude>
     <ClInclude Include="SMath.h">
       <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="DOFPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBufferObject.h">
+      <Filter>Headers\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,18 +271,6 @@
     </None>
     <None Include="Res\Shaders\LightDebugShader.vert">
       <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BloomX.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BloomY.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BloomY.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BloomX.frag">
-      <Filter>Shaders\PostProcessing</Filter>
     </None>
     <None Include="Res\Shaders\TranslucentShader.vert">
       <Filter>Shaders\IndividualShaders</Filter>
@@ -331,6 +325,18 @@
     </None>
     <None Include="Res\Shaders\PostProcessing\SSAO.vert">
       <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\DOF.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\DOF.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\ShadowShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\ShadowShader.frag">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

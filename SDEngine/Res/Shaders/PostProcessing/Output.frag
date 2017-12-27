@@ -1,5 +1,5 @@
-#version 400
-                                                                        
+#version 440
+                                                                     
 in vec2 texCoord0;                                                                  
 
 uniform sampler2D worldPosition;

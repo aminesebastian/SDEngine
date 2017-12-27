@@ -6,8 +6,8 @@
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1200
 #define WINDOW_BIT_DEPTH 10
 
 #define LOG_GENERAL "GENERAL"
@@ -55,7 +55,11 @@ private:
 	long S_LastFrameTime = 0.0f;
 	bool bIsInitialized = false;
 	bool bShouldLoop = false;
-	
+
+	float lightRotateAngle;
+	float lightRotateSpeed;
+	float lightRotateRadius;
+
 	/*Temporary*/
 	int lastMouseX = 0;
 	int lastMouseY = 0;

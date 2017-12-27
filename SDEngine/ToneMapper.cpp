@@ -5,7 +5,7 @@ ToneMapper::ToneMapper() {
 }
 ToneMapper::~ToneMapper() {}
 
-void ToneMapper::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+void ToneMapper::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
 

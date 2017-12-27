@@ -1,5 +1,5 @@
 #pragma once
-#include "FrontBufferObject.h"
+#include "FrameBufferObject.h"
 #include "DefferedCompositor.h"
 #include "Camera.h"
 
@@ -8,7 +8,7 @@ public:
 	PostProcessingLayer();
 	~PostProcessingLayer();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) = 0;
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) = 0;
 	virtual void RecompileShaders() {}
 };
 

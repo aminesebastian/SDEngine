@@ -4,17 +4,17 @@
 BloomPostProcessing::BloomPostProcessing() {
 	S_BloomShader = new Shader("Res/Shaders/PostProcessing/Bloom", false);
 
-	S_XBloomBuffer = new FrontBufferObject();
-	S_XBloomBuffer->AddTextureIndex("xBloom");
+	S_XBloomBuffer = new FrameBufferObject();
+	S_XBloomBuffer->AddTextureIndex(new FFBOTextureEntry("xBloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	S_XBloomBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	S_YBloomBuffer = new FrontBufferObject();
-	S_YBloomBuffer->AddTextureIndex("yBloom");
+	S_YBloomBuffer = new FrameBufferObject();
+	S_YBloomBuffer->AddTextureIndex(new FFBOTextureEntry("yBloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	S_YBloomBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 BloomPostProcessing::~BloomPostProcessing() {}
 
-void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
 	int Passes = 5;						//Passes must be odd
 	bool horizontal = true;
 	bool firstPass = true;
@@ -29,7 +29,7 @@ void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Ca
 	}
 	BlendOutput(Compositor, Camera, ReadBuffer, OutputBuffer);
 }
-void BloomPostProcessing::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer, bool bFirstPass) {
+void BloomPostProcessing::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer, bool bFirstPass) {
 	ReadBuffer->BindForReading();
 	S_YBloomBuffer->BindForReading();
 	S_XBloomBuffer->BindForWriting();
@@ -53,11 +53,9 @@ void BloomPostProcessing::RenderXPass(DefferedCompositor* Compositor, Camera* Ca
 		glBindTexture(GL_TEXTURE_2D, S_YBloomBuffer->GetTexture(0));
 		glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_YBloomBuffer->GetTextureName(0).c_str()), 9);
 	}
-
-
 	Compositor->DrawScreenQuad();
 }
-void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	S_XBloomBuffer->BindForReading();
 	S_YBloomBuffer->BindForWriting();
@@ -65,7 +63,6 @@ void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Ca
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_BloomShader->Bind();
 	S_BloomShader->SetShaderInteger("PASS", 1);
-	S_BloomShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
 	ReadBuffer->BindTextures(S_BloomShader);
 
 	glEnable(GL_TEXTURE_2D);
@@ -76,7 +73,7 @@ void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Ca
 
 	Compositor->DrawScreenQuad();
 }
-void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrontBufferObject* ReadBuffer, FrontBufferObject* OutputBuffer) {
+void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	S_YBloomBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
@@ -84,7 +81,6 @@ void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, Camera* Ca
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_BloomShader->Bind();
 	S_BloomShader->SetShaderInteger("PASS", 2);
-	S_BloomShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
 	ReadBuffer->BindTextures(S_BloomShader);
 
 	glEnable(GL_TEXTURE_2D);

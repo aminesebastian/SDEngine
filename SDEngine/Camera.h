@@ -19,7 +19,7 @@ public:
 	{
 		S_OrthographicMatrix = ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_WIDTH, 0.0f, NearClip, FarClip);
 		S_ProjectionMatrix = perspective(FOV, Aspect, NearClip, FarClip);
-		S_UpVector = vec3(0, 1, 0);
+		S_UpVector = vec3(0, 0, 1);
 	}
 	inline float GetNearClipPlane() { return S_NearClip; }
 	inline float GetFarClipPlane() { return S_FarClip; }
@@ -31,7 +31,7 @@ public:
 		return S_OrthographicMatrix;
 	}
 	inline mat4 GetViewMatrix() {
-		return lookAt(S_Transform.GetPosition(), S_Transform.GetPosition()+ S_Transform.GetForwardVector(), S_UpVector);
+		return lookAt(S_Transform.GetPosition(), S_Transform.GetPosition() + S_Transform.GetForwardVector(), S_UpVector);
 	}
 	inline float GetThetaFOV() {
 		return glm::tan(S_FOV / 2.0);
@@ -42,18 +42,18 @@ public:
 	inline float GetAspect() {
 		return S_Aspect;
 	}
-	void AddOrbit(float X, float Y) {
-		if (S_Transform.GetRotation().x + X > radians(-89.999)) {
-			S_Transform.GetRotation().x += X;
+	void AddOrbit(float Y, float Z) {
+		if (S_Transform.GetRotation().y + Y > radians(-89.999)) {
+			S_Transform.GetRotation().y += Y;
 		}else{
-			S_Transform.GetRotation().x = radians(-89.999);
+			S_Transform.GetRotation().y = radians(-89.999);
 		}
-		if (S_Transform.GetRotation().x + X < radians(89.999)) {
-			S_Transform.GetRotation().x += X;
+		if (S_Transform.GetRotation().y + Y < radians(89.999)) {
+			S_Transform.GetRotation().y += Y;
 		}else{
-			S_Transform.GetRotation().x = radians(89.999);
+			S_Transform.GetRotation().y = radians(89.999);
 		}
-		S_Transform.GetRotation().y += Y;
+		S_Transform.GetRotation().z += Z;
 	}
 	virtual ~Camera();
 	void UpdateCameraPosition(const vec3 NewPosition) { S_Transform.GetPosition() = NewPosition; }

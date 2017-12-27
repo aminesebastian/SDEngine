@@ -12,20 +12,23 @@
 #include "BloomPostProcessing.h"
 #include "SSAOPostProcessing.h"
 #include "PostProcessingLayer.h"
+#include "DOFPostProcessing.h"
 
 URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1 = new GBuffer();
 	S_Buffer2 = new GBuffer();
 	S_TranslucencyBuffer = new GBuffer();
 	S_Display = Display;
+	bDebugMode = false;
 	S_DefferedCompositor = new DefferedCompositor("Res/Shaders/DefferedLighting");
 	S_TranslucencyBlendShader = new Shader("./Res/Shaders/TranslucencyCompositor", false);
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_TranslucencyBuffer->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
-	//S_PostProcessingLayers.push_back(new SSAOPostProcessing());
-	S_PostProcessingLayers.push_back(new BloomPostProcessing());
+	S_PostProcessingLayers.push_back(new SSAOPostProcessing());
+	//S_PostProcessingLayers.push_back(new BloomPostProcessing());
 	S_PostProcessingLayers.push_back(new ToneMapper());
+	//S_PostProcessingLayers.push_back(new DOFLayer());
 }
 URenderingEngine::~URenderingEngine() {
 
@@ -49,9 +52,10 @@ void URenderingEngine::RecompileShaders(UWorld* World) {
 }
 
 void URenderingEngine::DebugGBuffer() {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	GBuffer* currentBuffer = GetReadGBuffer();
 	currentBuffer->BindForReading();
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 	GLint ThirdWidth = (GLint)(S_Display->GetDimensions().x / 2.0f);
 	GLint ThirdHeight = (GLint)(S_Display->GetDimensions().y / 2.0f);
@@ -80,7 +84,7 @@ int URenderingEngine::GetTranslucentObjectCount(UWorld* World) {
 		if (World->GetWorldEntities()[i]->IsVisible()) {
 			StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
 			if (temp) {
-				if (temp->GetMaterial()->GetShaderModel() != EShaderModel::TRANSLUCENT) {
+				if (temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
 					count++;
 				}
 			}
@@ -90,6 +94,7 @@ int URenderingEngine::GetTranslucentObjectCount(UWorld* World) {
 }
 void URenderingEngine::GemoetryPass(UWorld* World, Camera* Camera, GBuffer* WriteBuffer) {
 	WriteBuffer->BindForWriting();
+	//glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
@@ -157,6 +162,9 @@ void URenderingEngine::BlendTransparencyPass(UWorld* World, Camera* Camera, GBuf
 void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 	S_CurrentBuffer = 1;
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearBufferfv(GL_COLOR, GetFreeGBuffer()->GBUFFER_TEXTURE_TYPE_POSITION, &vec3(0.0f, 0.0f, 0.0f)[0]);
+
 	S_CurrentStage = ERenderingStage::GEOMETRY;
 	GemoetryPass(World, Camera, GetFreeGBuffer());
 	FlipCurrentBufferIndex();
@@ -172,10 +180,12 @@ void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 		FlipCurrentBufferIndex();
 	}
 
-	S_CurrentStage = ERenderingStage::POST_PROCESSING;
-	for (int i = 0; i < S_PostProcessingLayers.size(); i++) {
-		S_PostProcessingLayers[i]->RenderLayer(S_DefferedCompositor, Camera, GetReadGBuffer(), GetFreeGBuffer());
-		FlipCurrentBufferIndex();
+	if(!bDebugMode) {
+		S_CurrentStage = ERenderingStage::POST_PROCESSING;
+		for (int i = 0; i < S_PostProcessingLayers.size(); i++) {
+			S_PostProcessingLayers[i]->RenderLayer(S_DefferedCompositor, Camera, GetReadGBuffer(), GetFreeGBuffer());
+			FlipCurrentBufferIndex();
+		}
 	}
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
@@ -184,4 +194,18 @@ void URenderingEngine::RenderWorld(UWorld* World, Camera* Camera) {
 void URenderingEngine::FlipCurrentBufferIndex() {
 	S_CurrentBuffer == 1 ? S_CurrentBuffer = 2 : S_CurrentBuffer = 1;
 
+}
+
+bool URenderingEngine::GetDebugEnabled(){
+	return bDebugMode;
+}
+void URenderingEngine::SetDebugEnabled(bool bEnabled){
+	bDebugMode = bEnabled;
+}
+
+EDebugState URenderingEngine::GetDebugState(){
+	return S_DebugState;
+}
+void URenderingEngine::SetDebugState(EDebugState NewState) {
+	S_DebugState = NewState;
 }

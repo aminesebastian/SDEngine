@@ -8,6 +8,15 @@ using namespace glm;
 class Transform {
 
 public:
+	/*
+	@param Position
+	+X -> Right
+	-X -> Left
+	+Z -> Towards Camera
+	-Z -> Away From Camera
+	+Y -> Up
+	-Y -> Down
+	*/
 	Transform(const vec3 Position = vec3(), const vec3 Rotation = vec3(), const vec3 Scale = vec3(1,1,1)) :
 		S_Position(Position),
 		S_Rotation(Rotation),
@@ -42,7 +51,7 @@ public:
 		mat4 rotZMatrix = rotate(S_Rotation.z, vec3(0, 0, 1));
 		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
-		return  combinedRotMatrix[2];
+		return  combinedRotMatrix[0];
 	}
 	inline vec3 GetUpVector() {
 		mat4 rotXMatrix = rotate(S_Rotation.x, vec3(1, 0, 0));
@@ -50,7 +59,7 @@ public:
 		mat4 rotZMatrix = rotate(S_Rotation.z, vec3(0, 0, 1));
 		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
-		return  combinedRotMatrix[1];
+		return  combinedRotMatrix[2];
 	}
 	inline vec3 GetRightVector() {
 		mat4 rotXMatrix = rotate(S_Rotation.x, vec3(1, 0, 0));
@@ -58,7 +67,7 @@ public:
 		mat4 rotZMatrix = rotate(S_Rotation.z, vec3(0, 0, 1));
 		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
-		return  combinedRotMatrix[0];
+		return  combinedRotMatrix[1];
 	}
 	inline void SetRotation(float Pitch, float Yaw, float Roll) {
 		S_Rotation.x = radians(Pitch);
@@ -72,7 +81,14 @@ public:
 		vec3 tempForward = GetForwardVector();
 		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z); 
 	}
-
+	inline std::string UpVectorToString() {
+		vec3 tempForward = GetUpVector();
+		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
+	}
+	inline std::string RightVectorToString() {
+		vec3 tempForward = GetRightVector();
+		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
+	}
 private:
 	vec3 S_Position;
 	vec3 S_Rotation;

@@ -2,8 +2,6 @@ Texture(Res/Head/T_Head_Level2_BaseColor.tga);
 Texture(Res/Head/T_Head_Level2_RMAO.tga);
 Texture(Res/Head/T_Head_Level2_Normal.tga);
 
-Shader(Res/Shaders/HeadShader);
-
 TextureParam(0, albedo);
 TextureParam(1, RMAO);
 TextureParam(2, normal);
