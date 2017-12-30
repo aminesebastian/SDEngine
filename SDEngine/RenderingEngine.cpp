@@ -25,9 +25,9 @@ URenderingEngine::URenderingEngine(Display* Display) {
 	S_Buffer1->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_Buffer2->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
 	S_TranslucencyBuffer->Init(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
-	S_PostProcessingLayers.push_back(new SSAOPostProcessing());
+	//S_PostProcessingLayers.push_back(new SSAOPostProcessing());
 	//S_PostProcessingLayers.push_back(new BloomPostProcessing());
-	S_PostProcessingLayers.push_back(new ToneMapper());
+	//S_PostProcessingLayers.push_back(new ToneMapper());
 	//S_PostProcessingLayers.push_back(new DOFLayer());
 }
 URenderingEngine::~URenderingEngine() {
@@ -49,6 +49,10 @@ void URenderingEngine::RecompileShaders(UWorld* World) {
 		S_PostProcessingLayers[i]->RecompileShaders();
 	}
 	EngineStatics::GetLightDebugShader()->RecompileShader();
+	EngineStatics::GetDefaultGeometryPassShader()->RecompileShader();
+	EngineStatics::GetShadowShader()->RecompileShader();
+	EngineStatics::GetLineShader()->RecompileShader();
+	EngineStatics::GetGausBlur7x1Shader()->RecompileShader();
 }
 
 void URenderingEngine::DebugGBuffer() {
@@ -113,6 +117,18 @@ void URenderingEngine::GemoetryPass(UWorld* World, Camera* Camera, GBuffer* Writ
 	for (int i = 0; i < World->GetWorldLights().size(); i++) {
 		if (World->GetWorldLights()[i]->IsVisible()) {
 			World->GetWorldLights()[i]->Draw(Camera);
+		}
+	}
+	if (!Engine::GetInstance()->IsInGameMode()) {
+		for (int i = 0; i<World->GetWorldEntities().size(); i++) {
+			if (World->GetWorldEntities()[i]->HasAxisAlignedBoundingBox()) {
+				World->GetWorldEntities()[i]->GetAxisAlignedBoundingBox()->DrawDebug(vec3(1.0f, 0.5f, 1.0f), Camera, World->GetWorldEntities()[i]->GetTransform());
+			}
+		}
+		for (int i = 0; i<World->GetWorldLights().size(); i++) {
+			if (World->GetWorldLights()[i]->HasAxisAlignedBoundingBox() && World->GetWorldLights()[i]->GetDebugMode()) {
+				World->GetWorldLights()[i]->GetAxisAlignedBoundingBox()->DrawDebug(World->GetWorldLights()[i]->GetLightInfo().Color, Camera, World->GetWorldLights()[i]->GetTransform());
+			}
 		}
 	}
 }

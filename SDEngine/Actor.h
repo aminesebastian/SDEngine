@@ -4,7 +4,7 @@
 
 class Actor : public Entity {
 public:
-	Actor(const Transform SpawnTransform);
+	Actor(TString Name, const Transform SpawnTransform);
 	~Actor();
 
 };

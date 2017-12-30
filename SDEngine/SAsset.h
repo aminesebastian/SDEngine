@@ -15,7 +15,7 @@ public:
 	const SArray<TString>& GetData() { return S_Data; }
 
 	Material* GetAsMaterial();
-	StaticMesh* GetAsStaticMesh();
+	StaticMesh* GetAsStaticMesh(TString StaticMeshName);
 
 private:
 	TString S_AssetName;

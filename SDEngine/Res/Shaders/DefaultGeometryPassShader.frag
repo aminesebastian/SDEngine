@@ -34,7 +34,7 @@ void main()	{
 	vec3 sampledNormal	= ((255.0/128.0) * texture(normal, texCoord0).xyz)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	
 	RMAOOut.r			= texture(RMAO, texCoord0).r;
-	RMAOOut.g			= 0.0f;									
+	RMAOOut.g			= 0.0f; //texture(RMAO, texCoord0).g;									
 	RMAOOut.b			= texture(RMAO, texCoord0).b;	
 }
 float linearizeDepth(float depth) {

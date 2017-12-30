@@ -17,11 +17,10 @@ public:
 	+Y -> Up
 	-Y -> Down
 	*/
-	Transform(const vec3 Position = vec3(), const vec3 Rotation = vec3(), const vec3 Scale = vec3(1,1,1)) :
+	Transform(const vec3 Position = vec3(0.0, 0.0, 0.0), const vec3 Rotation = vec3(0.0, 0.0, 0.0), const vec3 Scale = vec3(1,1,1)) :
 		S_Position(Position),
 		S_Rotation(Rotation),
 		S_Scale(Scale) {}
-
 	virtual ~Transform();
 
 	vec3& GetPosition() { return S_Position; }

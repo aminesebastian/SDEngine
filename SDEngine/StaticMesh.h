@@ -12,6 +12,7 @@
 
 using namespace glm;
 
+
 class Vertex {
 
 public:
@@ -39,9 +40,9 @@ private:
 class StaticMesh : public Entity {
 
 public:
-	StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
-	StaticMesh(const Transform& SpawnTransform, Material* Material, const std::string& ModelName);
-	StaticMesh(const Transform& SpawnTransform, const std::string& ModelName);
+	StaticMesh(TString Name, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
+	StaticMesh(TString Name, const Transform& SpawnTransform, Material* Material, const std::string& ModelName);
+	StaticMesh(TString Name, const Transform& SpawnTransform, const std::string& ModelName);
 
 	virtual ~StaticMesh();
 
@@ -62,6 +63,7 @@ public:
 	void SetMaterial(Material* NewMaterial) { S_Material = NewMaterial; }
 	Material* GetMaterial() { return S_Material; }
 
+	SArray<vec3> GetVerticies() { return S_Positions; }
 private:
 	void operator=(const StaticMesh& other) {}
 	void InitMesh();

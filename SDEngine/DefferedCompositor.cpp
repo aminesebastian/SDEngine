@@ -31,12 +31,12 @@ void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBu
 	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "NEAR_CLIP"), Camera->GetNearClipPlane());
 	glUniform1f(glGetUniformLocation(S_LightingShader->GetProgram(), "FAR_CLIP"), Camera->GetFarClipPlane());
 	glUniform1i(glGetUniformLocation(S_LightingShader->GetProgram(), "LIGHT_COUNT"), Lights.size());
+	glUniform2fv(glGetUniformLocation(S_LightingShader->GetProgram(), "SCREEN_RES"), 1, &Engine::GetInstance()->GetScreenRes()[0]);
+
+	ReadBuffer->BindTextures(S_LightingShader);
 	for (GLuint i = 0; i < Lights.size(); i++) {
 		Lights[i]->SendShaderInformation(S_LightingShader, i);
 	}
-
-	ReadBuffer->BindTextures(S_LightingShader);
-
 	DrawScreenQuad();
 }
 void DefferedCompositor::CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex) {

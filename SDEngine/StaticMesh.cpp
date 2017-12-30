@@ -4,8 +4,8 @@
 #include "Engine.h"
 #include "EngineStatics.h"
 
-StaticMesh::StaticMesh(const Transform& SpawnTransform, Material* Material, const std::string& ModelName)
-	: Entity(SpawnTransform) {
+StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, Material* Material, const std::string& ModelName)
+	: Entity(Name, SpawnTransform) {
 	loadModel(ModelName);
 	InitMesh();
 	S_MaterialID = 0;
@@ -15,15 +15,15 @@ StaticMesh::StaticMesh(const Transform& SpawnTransform, Material* Material, cons
 		Material = EngineStatics::GetDefaultMaterial();
 	}
 }
-StaticMesh::StaticMesh(const Transform& SpawnTransform, const std::string& ModelName)
-	: Entity(SpawnTransform) {
+StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, const std::string& ModelName)
+	: Entity(Name, SpawnTransform) {
 	loadModel(ModelName);
 	InitMesh();
 	S_MaterialID = 0;
 	S_Material = EngineStatics::GetDefaultMaterial();
 }
-StaticMesh::StaticMesh(const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
-	: Entity(SpawnTransform) {
+StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
+	: Entity(Name, SpawnTransform) {
 	for (int i = 0; i < NumVertecies; i++) {
 		S_Positions.push_back(Verticies[i].GetPosition());
 		S_TexCoords.push_back(Verticies[i].GetTexCoord());
@@ -137,6 +137,10 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 				S_Indicies.push_back(tempface.mIndices[j]);
 			}
 		}
+		//Prints out each triangle
+		//for(int i=0; i<S_Indicies.size(); i+=3) {
+		//	cout << "1: = " << S_Positions[i].x << " " << S_Positions[i].y << " " << S_Positions[i].z << " " << " 2: = " << S_Positions[i+1].x << " " << S_Positions[i+1].y << " " << S_Positions[i+1].z << " 3: = " << S_Positions[i+2].x << " " << S_Positions[i+2].y << " " << S_Positions[i+2].z << endl;
+		//}
 	}
 	if (Mesh->HasVertexColors(0)) {
 		for (int i = 0; i < Mesh->mNumVertices; i++) {
@@ -164,6 +168,8 @@ void StaticMesh::InitMesh() {
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+		S_AABB = new FAABB(S_Positions);
 	}
 
 	//Texcoord
@@ -222,10 +228,11 @@ void StaticMesh::InitMesh() {
  **************************************************************************************************/
 
 void StaticMesh::Draw(Camera* Camera) { //Clean this up
-	if (Camera == NULL) {
+	if (Camera == NULL) {	//Drawing for shadow pass
 		glBindVertexArray(S_VertexArrayObject);
 		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+		return;
 	}
 	if (S_Material->GetShaderModel() != EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::GEOMETRY) {
 		S_Material->BindMaterial(GetTransform(), Camera);
@@ -239,39 +246,4 @@ void StaticMesh::Draw(Camera* Camera) { //Clean this up
 		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
-	
-	//shader.Bind();
-	//glEnable(GL_TEXTURE_2D);
-	////for (int i = 0; i < this->Textures.size(); i++) {
-	////	glUniform1i(glGetUniformLocation(shader.GetProgram(), Textures[i]->GetType().c_str()), i);
-	////	Textures[i]->Bind(i);
-	////}
-	//glUniform1i(glGetUniformLocation(shader.GetProgram(), "MAT_ID"), S_MaterialID);
-	//if (S_UseCustomColor) {
-	//	glUniform3fv(glGetUniformLocation(shader.GetProgram(), "albedo0"), 1, &S_CustomAlbedo[0]);
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 1);
-	//}
-	//else {
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomAlbedo"), 0);
-	//}
-	//if (S_UseCustomRoughness) {
-	//	glUniform1f(glGetUniformLocation(shader.GetProgram(), "roughness0"), S_CustomRoughness);
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 1);
-	//}
-	//else {
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomRoughness"), 0);
-	//}
-	//if (S_UseCustomMetalness) {
-	//	glUniform1f(glGetUniformLocation(shader.GetProgram(), "metalness0"), S_CustomMetalness);
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 1);
-	//}
-	//else {
-	//	glUniform1i(glGetUniformLocation(shader.GetProgram(), "useCustomMetalness"), 0);
-	//}
-	//// Draw mesh
-	//glBindVertexArray(S_VertexArrayObject);
-	//glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
-
-	//glDisable(GL_TEXTURE_2D);
 }

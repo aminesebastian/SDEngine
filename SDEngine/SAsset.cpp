@@ -61,7 +61,7 @@ Material* SAsset::GetAsMaterial() {
 	}
 	return newMaterial;
 }
-StaticMesh* SAsset::GetAsStaticMesh() {
+StaticMesh* SAsset::GetAsStaticMesh(TString StaticMeshName) {
 	StaticMesh* newMesh;
 	Material* newMaterial;
 	Transform transform;
@@ -77,7 +77,7 @@ StaticMesh* SAsset::GetAsStaticMesh() {
 	for (int i = 0; i < S_Data.size(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "Mesh") {
-			newMesh = new StaticMesh(transform, newMaterial, getParameters(currLine)[0]);
+			newMesh = new StaticMesh(StaticMeshName, transform, newMaterial, getParameters(currLine)[0]);
 			return newMesh;
 		}
 	}

@@ -2,17 +2,18 @@
 #include "Transform.h"
 #include "Shader.h"
 #include "World.h"
-
+#include "FAABB.h"
 
 
 class Entity {
 
 public:
-	Entity(const Transform SpawnTransform) :
+	Entity(TString Name, const Transform SpawnTransform) :
+		S_Name(Name),
 		S_Transform(SpawnTransform),
 		S_InitialTransform(SpawnTransform) {}
 
-	Entity() {}
+	Entity(TString Name) : S_Name(Name){}
 	virtual ~Entity() {};
 
 	virtual void Draw(Camera* Camera) {}
@@ -29,6 +30,8 @@ public:
 	bool NeedsTick() { return bNeedsTick; }
 	bool NeedsBeginPlay() { return bNeedsBeginPlay; }
 
+	TString GetName() { return S_Name; }
+
 	virtual void BeginPlay() {}
 	virtual void Tick(float DeltaTime) {}
 
@@ -36,12 +39,16 @@ public:
 		delete this;
 	}
 
+	FAABB* GetAxisAlignedBoundingBox() { return S_AABB; }
+	bool HasAxisAlignedBoundingBox() { return S_AABB != NULL; }
 protected:
+	TString S_Name;
 	const UWorld* S_World;
 	Transform S_Transform;
 	Transform S_InitialTransform;
 	bool bVisible = true;
 	bool bNeedsTick = true;
 	bool bNeedsBeginPlay = true;
+	FAABB* S_AABB;
 };
 

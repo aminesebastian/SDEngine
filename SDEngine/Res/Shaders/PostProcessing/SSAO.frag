@@ -17,14 +17,7 @@ uniform sampler2D ssaoRough;
 
 uniform mat4 PROJECTION_MATRIX;
 uniform mat4 VIEW_MATRIX;
-
 uniform mat4 INV_VIEW_MATRIX;
-uniform mat4 INV_PROJECTION_MATRIX;
-
-uniform float NEAR_CLIP;
-uniform float FAR_CLIP;
-
-uniform vec3 CAMERA_POS;
 
 layout (location = 0) out vec4 WorldPosOut;   
 layout (location = 1) out vec4 AlbedoOut;  
@@ -40,8 +33,10 @@ uniform int SAMPLE_COUNT;
 
 uniform	vec3 Samples[128];
 
+uniform vec2 SCREEN_RES;
+
 const vec2 noiseScale = vec2(1920.0/4.0, 1200.0/4.0);
-const float radius = 0.3;
+const float radius = 3.5;
 const float bias = 0.005;
 
 vec4 blurSSAO(float Size);
@@ -56,10 +51,6 @@ void main()	{
 	HDROutput			= texture(HDR, texCoord0);
 
 	if(PASS == 0) { 
-
-		if(texture(worldPosition, texCoord0).a == 1.0) {
-			return;
-		}
 		vec3 fragPos	= (VIEW_MATRIX * vec4(texture(worldPosition, texCoord0).xyz, 1.0)).xyz;
 		vec3 normal		= (transpose(INV_VIEW_MATRIX) * vec4(texture(normal, texCoord0).xyz, 1.0)).xyz;
 		normal			= normalize(normal);
@@ -70,6 +61,8 @@ void main()	{
 		mat3 TBN		= mat3(tangent, bitangent, normal);
 
 		float occlusion = 0.0;
+		float matID		= clamp(1 - texture(albedo, texCoord0).a, 0.0, 1.0);
+
 		for (int i = 0; i < SAMPLE_COUNT; i++) {
 			vec3 kernelSample	= TBN * Samples[i];
 			kernelSample		= fragPos + (kernelSample * radius);
@@ -81,15 +74,15 @@ void main()	{
 
 			float sampleDepth	= (VIEW_MATRIX*vec4(texture(worldPosition, offset.xy).xyz, 1.0)).z;
 
-			float rangeCheck	= smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth));
-			occlusion			+= (sampleDepth >= kernelSample.z + bias ? 1.0 : 0.0) * rangeCheck;  
-
+			float neighborMatID	= clamp(1 - texture(albedo, offset.xy).a, 0.0, 1.0);
+			float rangeCheck	= smoothstep(0.0, 1.0, (radius/5) / abs(fragPos.z - sampleDepth));
+			occlusion			+= step(kernelSample.z+bias, sampleDepth) * rangeCheck * matID * neighborMatID;
 
 		}
+
 		occlusion				= 1.0-(occlusion / SAMPLE_COUNT);
 		WorldPosOut				= vec4(pow(occlusion, 4));
 	}else {
-		//LitOutput			= texture(ssaoRough, texCoord0);
 		LitOutput			= blurSSAO(1.0) * texture(finalComp, texCoord0);
 	}
 }

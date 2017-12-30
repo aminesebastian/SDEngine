@@ -10,8 +10,8 @@ using namespace glm;
 class Camera : public Entity {
 
 public:
-	Camera(const Transform Transform, float FOV, float Aspect, float NearClip, float FarClip) 
-		: Entity(Transform),
+	Camera(TString Name, const Transform Transform, float FOV, float Aspect, float NearClip, float FarClip)
+		: Entity(Name, Transform),
 		S_NearClip(NearClip),
 		S_FarClip(FarClip ),
 		S_FOV(FOV),

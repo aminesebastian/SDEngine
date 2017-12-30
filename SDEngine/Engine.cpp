@@ -11,8 +11,9 @@ Engine::Engine() {
 
 	Transform cameraTransform;
 	cameraTransform.SetRotation(0, 50, -180);
-	cameraTransform.GetPosition().x -= 2;
-	S_Camera = new Camera(cameraTransform, radians(50.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
+	cameraTransform.GetPosition().x = 35;
+	cameraTransform.GetPosition().z = 35;
+	S_Camera = new Camera("Camera", cameraTransform, radians(50.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
@@ -30,6 +31,8 @@ Engine::Engine() {
 	lightRotateAngle = 0;
 	lightRotateRadius = 2;
 	lightRotateSpeed = (2 * 3.14159265358979323846264338327950288) / 25000;
+
+	bGameMode = true;
 }
 Engine::~Engine() {
 	delete &S_Display;
@@ -72,18 +75,16 @@ void Engine::MainLoop()  {
 }
 void Engine::GameLoop() {
 	S_World->TickWorld(S_DeltaTime);
+	//for (int i = 0; i < S_World->GetWorldLights().size() - 1; i++) {
+	//	lightRotateAngle += lightRotateSpeed * S_DeltaTime;
+	//	float x = glm::cos(lightRotateAngle + (i*0.23))*lightRotateRadius;
+	//	float y = glm::sin(lightRotateAngle + (i*0.23))*lightRotateRadius;
+
+	//	S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = x;
+	//	S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = y;
+	//}
 }
 void Engine::RenderingLoop() {
-	for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-		lightRotateAngle += lightRotateSpeed * S_DeltaTime;
-		float x = glm::cos(lightRotateAngle+(i*0.23))*lightRotateRadius;
-		float y = glm::sin(lightRotateAngle+(i*0.23))*lightRotateRadius;
-
-
-		S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = x;
-		S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = y;
-	}
-
 	S_RenderingEngine->RenderWorld(S_World, S_Camera);
 }
 void Engine::UILoop() {
@@ -113,6 +114,39 @@ void Engine::InputLoop() {
 				S_Display->ResizeDisplay(e.window.data1, e.window.data2);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
+				if (SDL_BUTTON_LMASK) {
+					vec3 origin;
+					vec3 direction;
+					ScreenPosToWorldRay(e.motion.x, e.motion.y, WINDOW_WIDTH, WINDOW_HEIGHT, S_Camera->GetViewMatrix(), S_Camera->GetProjectionMatrix(), origin, direction);
+					//cout << "Testing Collision From Origin Of X: " << origin.x << " Y: " << origin.y << " Z: " << origin.z << endl;
+					//cout << "In Direction X: " << direction.x << " Y: " << direction.y << " Z: " << direction.z << endl;
+					for (int i = 0; i < S_World->GetWorldEntities().size(); i++) {
+						Entity* temp = S_World->GetWorldEntities()[i];
+						if (temp->IsVisible()) {
+							if (temp->HasAxisAlignedBoundingBox()) {
+								float dist;
+								vec3 collisionPoint;
+								bool collide = temp->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, temp->GetTransform(), dist, collisionPoint);
+								if (collide) {
+									cout << "Ray Collided With: " << temp->GetName() << " at a distance of " << dist << endl;
+								}
+							}
+						}
+					}
+					for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
+						Light* light = S_World->GetWorldLights()[i];
+						if (light->IsVisible() && light->GetDebugMode()) {
+							if (light->HasAxisAlignedBoundingBox()) {
+								float dist;
+								vec3 collisionPoint;
+								bool collide = light->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, light->GetTransform(), dist, collisionPoint);
+								if (collide) {
+									cout << "Ray Collided With: " << light->GetName() << " at a distance of " << dist << endl;
+								}
+							}
+						}
+					}
+				}
 				break;
 			case SDL_MOUSEMOTION:
 				if (e.type == SDL_MOUSEMOTION) {
@@ -121,15 +155,13 @@ void Engine::InputLoop() {
 						S_Camera->AddOrbit((float)(e.motion.y - lastMouseY) / lookSpeed, -(float)(e.motion.x - lastMouseX) / lookSpeed);
 						lastMouseX = e.motion.x;
 						lastMouseY = e.motion.y;
-					}
-					else if (e.motion.state & SDL_BUTTON_MMASK) {
+					} else if (e.motion.state & SDL_BUTTON_MMASK) {
 						SDL_ShowCursor(0);
 						S_Camera->GetTransform().GetPosition() -= S_Camera->GetTransform().GetRightVector()*(float)(e.motion.x - lastMouseX) / 250.0f;
 						S_Camera->GetTransform().GetPosition() += S_Camera->GetTransform().GetUpVector()*(float)(e.motion.y - lastMouseY) / 250.0f;
 						lastMouseX = e.motion.x;
 						lastMouseY = e.motion.y;
-					}
-					else {
+					} else {
 						SDL_ShowCursor(1);
 						lastMouseX = e.motion.x;
 						lastMouseY = e.motion.y;
@@ -158,8 +190,11 @@ void Engine::OnKeyDown(int KeyCode) {
 			S_World->GetWorldLights()[i]->ToggleDebug(!S_World->GetWorldLights()[i]->GetDebugMode());
 		}
 	}
-	if (S_InputKeys[SDL_SCANCODE_G].bKeyDown) {
+	if (S_InputKeys[SDL_SCANCODE_P].bKeyDown) {
 		S_RenderingEngine->SetDebugEnabled(!S_RenderingEngine->GetDebugEnabled());
+	}
+	if (S_InputKeys[SDL_SCANCODE_G].bKeyDown) {
+		bGameMode = !bGameMode;
 	}
 	if (S_InputKeys[SDL_SCANCODE_1].bKeyDown) {
 		if(S_RenderingEngine->GetDebugEnabled()) {
@@ -209,4 +244,36 @@ void Engine::KeyAxisMapping() {
 	if (S_InputKeys[SDL_SCANCODE_E].bKeyDown) {
 		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetUpVector() * movementSpeed;
 	}
+}
+void Engine::ScreenPosToWorldRay(int mouseX, int mouseY, int screenWidth, int screenHeight, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut) {
+	// The ray Start and End positions, in Normalized Device Coordinates (Have you read Tutorial 4 ?)
+	mouseY = screenHeight - mouseY;
+	glm::vec4 lRayStart_NDC(
+		((float)mouseX / (float)screenWidth - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+		((float)mouseY / (float)screenHeight - 0.5f) * 2.0f, // [0, 768] -> [-1,1]
+		-1.0f, // The near plane maps to Z=-1 in Normalized Device Coordinates
+		1.0f
+	);
+	glm::vec4 lRayEnd_NDC(
+		((float)mouseX / (float)screenWidth - 0.5f) * 2.0f,
+		((float)mouseY / (float)screenHeight - 0.5f) * 2.0f,
+		0.0f,
+		1.0f
+	);
+
+	glm::mat4 M = glm::inverse(ProjectionMatrix * ViewMatrix);
+
+	glm::vec4 lRayStart_world = M * lRayStart_NDC; 
+	lRayStart_world/=lRayStart_world.w;
+
+	glm::vec4 lRayEnd_world   = M * lRayEnd_NDC; 
+	lRayEnd_world  /=lRayEnd_world.w;
+
+
+	glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
+	lRayDir_world = glm::normalize(lRayDir_world);
+
+
+	RayOriginOut = glm::vec3(lRayStart_world);
+	RayDirectionOut = glm::normalize(lRayDir_world);
 }

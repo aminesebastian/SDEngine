@@ -50,9 +50,8 @@ int main(int argc, char* argv[]) {
 
 
 	Transform planeTransform;
-	planeTransform.SetUniformScale(10);
 	Material* planeMat = EngineStatics::GetDefaultMaterial();
-	StaticMesh* plane = new StaticMesh(planeTransform, planeMat, "./res/Plane.fbx");
+	StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
 	S_Engine->GetWorld()->RegisterEntity(plane);
 
 	//Transform innerEyetransform;
@@ -66,16 +65,15 @@ int main(int argc, char* argv[]) {
 	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
 
 	Transform headTransform;
-	headTransform.SetUniformScale(3.0f);
-	headTransform.GetPosition().z = 2;
+	headTransform.GetPosition().z = 7;
 	SAsset* headAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	StaticMesh* head = headAsset->GetAsStaticMesh();
+	StaticMesh* head = headAsset->GetAsStaticMesh("Head");
 	head->SetTransform(headTransform);
 	S_Engine->GetWorld()->RegisterEntity(head);
 
 	Transform gizmoTransform;
 	SAsset* gizmoAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Gizmo.sasset");
-	StaticMesh* gizmo = gizmoAsset->GetAsStaticMesh();
+	StaticMesh* gizmo = gizmoAsset->GetAsStaticMesh("Gizmo");
 	gizmo->SetTransform(gizmoTransform);
 	S_Engine->GetWorld()->RegisterEntity(gizmo);
 
@@ -95,7 +93,8 @@ int main(int argc, char* argv[]) {
 	//S_Engine->GetWorld()->RegisterEntity(outerEye);
 
 	//Grid grid(40, 2);
-	//S_Engine->GetWorld()->RegisterEntity(&grid);
+//	S_Engine->GetWorld()->RegisterEntity(&grid);
+	int count = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			for (int k = 0; k < 3; k++) {
@@ -103,23 +102,24 @@ int main(int argc, char* argv[]) {
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetPosition().x = (float)j * 1.5f - 1.5f;
-				tempTransform.GetPosition().y = (float)i * 1.5f - 1.5f;
-				tempTransform.GetPosition().z = 2 + (float)k * 3.0f; 
+				tempTransform.GetPosition().x = (float)j * 5.5f - 5.5f;
+				tempTransform.GetPosition().y = (float)i * 5.5f - 5.5f;
+				tempTransform.GetPosition().z = 9 + (float)k * 6.5f;
 				vec3 tempColor = vec3(r, g, b);
-				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*2;
+				float atten = (((float)(rand()) / (float)(RAND_MAX))+1)*20;
 				tempTransform.SetUniformScale(0.25f);
-				Light* tempLight = new Light(tempTransform, POINT, 25, tempColor, atten);
+				Light* tempLight = new Light("Light " + std::to_string(count), tempTransform, POINT, 25, tempColor, atten);
 				tempLight->ToggleDebug(false);
 				S_Engine->GetWorld()->RegisterLight(tempLight);
+				count++;
 			}
 		}
 	}
 
 	Transform fillLightTransform;
-	fillLightTransform.SetRotation(180, 0, 0);
-	fillLightTransform.GetPosition().z = 50;
-	Light* fillLight = new Light(fillLightTransform, DIRECTIONAL, 800, vec3(0.75, 0.9, 0.8));
+	fillLightTransform.SetRotation(0, 100, 0);
+	fillLightTransform.GetPosition().z = 30;
+	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, vec3(0.75, 0.9, 0.8));
 	fillLight->ToggleDebug(false);
 	fillLight->SetCastsShadows(true);
 	S_Engine->GetWorld()->RegisterLight(fillLight);

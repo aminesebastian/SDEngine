@@ -8,7 +8,7 @@
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1200
-#define WINDOW_BIT_DEPTH 10
+#define WINDOW_BIT_DEPTH 8
 
 #define LOG_GENERAL "GENERAL"
 #define LOG_WARNING "WARNING"
@@ -33,6 +33,8 @@ public:
 	Camera* GetCurrentCamera() { return S_Camera; }
 	bool Init();
 	void StartEngine() { bShouldLoop = true; MainLoop(); }
+	vec2 GetScreenRes() { return vec2(WINDOW_WIDTH, WINDOW_HEIGHT); }
+
 
 	float GetDeltaTime() { return S_DeltaTime; }
 	float GetWorldTime() { return S_WorldTime; }
@@ -42,6 +44,10 @@ public:
 	AssetManager* GetAssetManager();
 
 	TwBar* GetInfoBar() { return S_InfoBar; }
+
+	void ScreenPosToWorldRay(int mouseX, int mouseY, int screenWidth, int screenHeight, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut);
+
+	bool IsInGameMode() { return bGameMode; }
 private:
 	Engine();
 	virtual ~Engine();
@@ -73,6 +79,8 @@ private:
 	UWorld* S_World;
 	Camera* S_Camera;
 	TwBar* S_InfoBar;
+
+	bool bGameMode;
 
 	void MainLoop();
 	void GameLoop();

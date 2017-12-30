@@ -47,6 +47,12 @@
     <Filter Include="Headers\Rendering\PostProcessingLayer">
       <UniqueIdentifier>{3c2d05d3-233b-4972-9533-193fd99a427f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Physics">
+      <UniqueIdentifier>{bc75905e-90ed-4302-9ab3-0ed9c7e628de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{ddbbf119-6b8f-4af6-8fe7-cbbbb072831d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -145,6 +151,9 @@
     <ClCompile Include="FrameBufferObject.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="FAABB.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -239,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="FrameBufferObject.h">
       <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FAABB.h">
+      <Filter>Headers\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +349,18 @@
     </None>
     <None Include="Res\Shaders\ShadowShader.frag">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LineShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LineShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\GausBlur7x1.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\GausBlur7x1.vert">
+      <Filter>Shaders\PostProcessing</Filter>
     </None>
   </ItemGroup>
 </Project>

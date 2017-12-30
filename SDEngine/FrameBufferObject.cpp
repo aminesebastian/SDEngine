@@ -80,12 +80,12 @@ void FrameBufferObject::BindTextures(Shader* Shader, bool bIncludeDepth) {
 		glBindTexture(GL_TEXTURE_2D, GetTexture(i));
 		glUniform1i(glGetUniformLocation(Shader->GetProgram(), GetTextureName(i).c_str()), i);
 	}
-	if(bIncludeDepth) {
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0 + GetNumTextures());
-		glBindTexture(GL_TEXTURE_2D, S_DepthBuffer);
-		glUniform1i(glGetUniformLocation(Shader->GetProgram(), "depthBuffer"), GetNumTextures());
-	}
+	//if(bIncludeDepth) {
+	//	glEnable(GL_TEXTURE_2D);
+	//	glActiveTexture(GL_TEXTURE0 + GetNumTextures());
+	//	glBindTexture(GL_TEXTURE_2D, S_DepthBuffer);
+	//	glUniform1i(glGetUniformLocation(Shader->GetProgram(), "depthBuffer"), GetNumTextures());
+	//}
 }
 
 void FrameBufferObject::BindForWriting() {

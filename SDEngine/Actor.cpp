@@ -2,8 +2,8 @@
 
 
 
-Actor::Actor(const Transform SpawnTransform) :
-	Entity(SpawnTransform) {
+Actor::Actor(TString Name, const Transform SpawnTransform) :
+	Entity(Name, SpawnTransform) {
 
 
 }

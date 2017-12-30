@@ -5,7 +5,7 @@
 class EyeActor : public Actor {
 
 public:
-	EyeActor(const Transform SpawnTransform);
+	EyeActor(TString Name, const Transform SpawnTransform);
 	~EyeActor();
 
 	virtual void Draw(Camera* Camera) override;

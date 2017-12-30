@@ -161,6 +161,7 @@
     <ClCompile Include="EngineStatics.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EyeActor.cpp" />
+    <ClCompile Include="FAABB.cpp" />
     <ClCompile Include="FrameBufferObject.cpp" />
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="EngineStatics.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EyeActor.h" />
+    <ClInclude Include="FAABB.h" />
     <ClInclude Include="FrameBufferObject.h" />
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="Grid.h" />
@@ -228,10 +230,14 @@
     <None Include="Res\Shaders\HeadShader.vert" />
     <None Include="Res\Shaders\LightDebugShader.frag" />
     <None Include="Res\Shaders\LightDebugShader.vert" />
+    <None Include="Res\Shaders\LineShader.frag" />
+    <None Include="Res\Shaders\LineShader.vert" />
     <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
     <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
     <None Include="Res\Shaders\PostProcessing\DOF.frag" />
     <None Include="Res\Shaders\PostProcessing\DOF.vert" />
+    <None Include="Res\Shaders\PostProcessing\GausBlur7x1.frag" />
+    <None Include="Res\Shaders\PostProcessing\GausBlur7x1.vert" />
     <None Include="Res\Shaders\PostProcessing\Output.frag" />
     <None Include="Res\Shaders\PostProcessing\Output.vert" />
     <None Include="Res\Shaders\PostProcessing\SSAO.frag" />

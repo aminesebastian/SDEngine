@@ -15,8 +15,8 @@ layout (location = 7) out vec4 LitOutput;
 uniform int PASS;
 
 uniform float WEIGHTS[5]		= float[] (0.227027, 0.1945946, 0.1216216, 0.04054, 0.006216);
-uniform float BLOOM_SIZE		= 10.0;
-uniform float BLOOM_BOOST		= 10.0;
+uniform float BLOOM_SIZE		= 5.0;
+uniform float BLOOM_BOOST		= 5.0;
 uniform float BLOOM_THRESHOLD	= 0.0;
 uniform vec3 TINT				= vec3(1.0, 1.0, 1.0);
 
