@@ -15,6 +15,8 @@ struct FLightInfo {
 	ELightType Type = POINT;
 };
 
+class DefferedCompositor;
+
 using namespace glm;
 
 class Light : public Entity{
@@ -30,13 +32,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	bool GetDebugMode() { return bDebugLight; }
 	void ToggleDebug(bool bDebug) { bDebugLight = bDebug; }
-	void GenerateShadowTexture();
+	void GenerateShadowTexture(DefferedCompositor* Compositor);
 
 	mat4 GetLightViewMatrix();
 	mat4 GetLightOrthogonalMatrix();
 
 	bool CastsShadows() { return bCastShadows; }
 	void SetCastsShadows(bool CastsShadows) { bCastShadows = CastsShadows; }
+
+	void BlurTexture(FrameBufferObject* ReadBuffer, FrameBufferObject* WriteBuffer);
 private:
 	FLightInfo S_LightInfo;
 	StaticMesh* S_Probe;
@@ -48,10 +52,6 @@ private:
 	mat4 S_ViewMatrix;
 
 	FrameBufferObject* S_ShadowBuffer;
-
-
-	//GLuint FramebufferName;
-	//GLuint depthTexture;
-	//GLuint depthBufferTexture;
+	FrameBufferObject* S_ShadowBufferTemp;
 };
 

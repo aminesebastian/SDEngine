@@ -59,16 +59,16 @@ bool Engine::Init() {
 
 void Engine::MainLoop()  {
 	while (!S_Display->IsClosed()) {
-		float now = SDL_GetTicks();
+		long first = SDL_GetPerformanceCounter();
 
 		InputLoop();
 		GameLoop();
 		RenderingLoop();
 		UILoop();
 
-		S_DeltaTime = now - S_LastFrameTime;
+		S_DeltaTime = (float)((first - S_LastFrameTime) * 1000) / SDL_GetPerformanceFrequency();
 		S_FrameRate = 1.0f / (S_DeltaTime/1000.0f);
-		S_LastFrameTime = now;
+		S_LastFrameTime = first;
 		S_WorldTime += S_DeltaTime;
 		S_Display->Update();
 	}

@@ -1,58 +1,10 @@
-﻿  EngineStatics.cpp
-  FAABB.cpp
+﻿  Main.cpp
 f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
   f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
 f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Light.cpp
-f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  Main.cpp
-f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  RenderingEngine.cpp
-f:\suburban digital\sdengine\sdengine\DefferedCompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\Camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-RenderingEngine.cpp(25): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-RenderingEngine.cpp(26): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-RenderingEngine.cpp(27): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-RenderingEngine.cpp(73): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(76): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(79): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-RenderingEngine.cpp(82): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-  SAsset.cpp
-f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-SAsset.cpp(101): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  StaticMesh.cpp
-f:\suburban digital\sdengine\sdengine\Engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\Engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\Engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-StaticMesh.cpp(27): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(33): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(63): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(86): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(95): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(105): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(115): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(125): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(134): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(136): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(146): warning C4018: '<': signed/unsigned mismatch
-StaticMesh.cpp(157): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
   Generating code
-  14 of 1527 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    26 functions had inline decision re-evaluated but remain unchanged
+  1 of 1578 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Release\SDEngine.exe

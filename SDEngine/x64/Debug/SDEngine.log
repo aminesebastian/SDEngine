@@ -1,48 +1,5 @@
-﻿  RenderingEngine.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+﻿  Main.cpp
 f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
   f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
 f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(25): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(26): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(27): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(72): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(75): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(78): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(81): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-  Engine.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(33): warning C4305: '=': truncation from 'double' to 'float'
-f:\suburban digital\sdengine\sdengine\engine.cpp(62): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(70): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(71): warning C4244: '=': conversion from 'float' to 'long', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  World.cpp
-  ToneMapper.cpp
-  StaticMesh.cpp
-  Shader.cpp
-  SSAOPostProcessing.cpp
-  SAsset.cpp
-  PostProcessingLayer.cpp
-  Material.cpp
-  Main.cpp
-  Light.cpp
-  Grid.cpp
-  FAABB.cpp
-  EyeActor.cpp
-  DefferedCompositor.cpp
-  DOFPostProcessing.cpp
-  Camera.cpp
-  BloomPostProcessing.cpp
-  AssetManager.cpp
   SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Debug\SDEngine.exe

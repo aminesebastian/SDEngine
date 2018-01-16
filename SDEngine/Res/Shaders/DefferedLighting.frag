@@ -119,10 +119,18 @@ float GenerateVarianceShadowCoverage(vec4 fragPosWorld, int lightIndex) {
 	vec2 uvScale		= textureSize(shadowDepth, 0) / SCREEN_RES;
 
 	float fragDepth		= (1+fragLSPos.z)/2.0;
-	vec2 moments		= texture(shadowDepth, NDCfragLSPos.xy/uvScale).xy;
+
+	vec2 moments = vec2(0.0);
+
+	for (int i=0;i<16;i++){
+		int index = int(16.0*random(texCoord0.xyy, i))%16;
+		moments += texture(shadowDepth, NDCfragLSPos.xy/uvScale + poissonDisk[index]/700.0).xy; 	
+	}
+	moments /= 16.0;
+
 
 	float p				= step(fragDepth, moments.x);
-	float variance		= max(moments.y - moments.x * moments.x, 0.00002);
+	float variance		= max(moments.y - moments.x * moments.x, 0.00008);
 
 	float d				= fragDepth - moments.x;
 	float pMax			= linstep(0.2, 1.0, variance / (variance + d*d));

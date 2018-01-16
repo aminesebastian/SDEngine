@@ -50,6 +50,8 @@ public:
 
 	EDebugState GetDebugState();
 	void SetDebugState(EDebugState NewState);
+
+	DefferedCompositor* GetDefferedCompositor() { return S_DefferedCompositor; }
 private:
 	Shader* S_Shader;
 	Shader* S_TranslucencyBlendShader;

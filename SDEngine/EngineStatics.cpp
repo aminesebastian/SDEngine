@@ -1,6 +1,9 @@
 #include "EngineStatics.h"
 #include "Material.h"
 #include "Shader.h"
+#include "FrameBufferObject.h"
+#include "Engine.h"
+#include "DefferedCompositor.h"
 
 EngineStatics::EngineStatics() {}
 EngineStatics::~EngineStatics() {}
@@ -35,7 +38,6 @@ Shader* EngineStatics::GetGausBlur7x1Shader() {
 	}
 	return S_GausBlur7x1Shader;
 }
-
 Material* EngineStatics::GetDefaultMaterial() {
 	if(S_DefaultMaterial == nullptr) {
 		S_DefaultMaterial = new Material(new Shader("./Res/Shaders/DefaultGeometryPassShader"));

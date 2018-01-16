@@ -3,6 +3,7 @@
 #include <GLM/gtx/transform.hpp>
 #include "EngineStatics.h"
 #include "Engine.h"
+#include "DefferedCompositor.h"
 
 Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) :
 	Entity(Name, IntialTransform) {
@@ -30,48 +31,17 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 		S_ShadowBuffer->AddTextureIndex(new FFBOTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
 		S_ShadowBuffer->Init(2048, 2048);
 
-		//FramebufferName = 0;
-		//glGenFramebuffers(1, &FramebufferName);
-
-		//glGenTextures(1, &depthTexture);
-		//glBindTexture(GL_TEXTURE_2D, depthTexture);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F, 2048, 2048, 0, GL_RGBA, GL_FLOAT, 0);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		//float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-		//glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, depthTexture, 0);
-
-		//glGenTextures(1, &depthBufferTexture);
-		//glBindTexture(GL_TEXTURE_2D, depthBufferTexture);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 2048, 2048, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBufferTexture, 0);
-
-		////glDrawBuffer(GL_NONE);
-		////glReadBuffer(GL_NONE);
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		//	cout << "ERROR: Unable to create shadow buffer for light." << endl;
-		//}
+		S_ShadowBufferTemp = new FrameBufferObject();
+		S_ShadowBufferTemp->AddTextureIndex(new FFBOTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
+		S_ShadowBufferTemp->Init(2048, 2048);
 	}
 }
 Light::~Light() {}
 
 void Light::Tick(float DeltaTime) {
-	//if(S_LightInfo.Type == DIRECTIONAL) {
-	//	GetTransform().GetRotation().y += DeltaTime/1000;
-	//}
+	if(S_LightInfo.Type == DIRECTIONAL) {
+		GetTransform().GetRotation().y += DeltaTime/1000;
+	}
 }
 void Light::Draw(Camera* Camera) {
 	if (bDebugLight) {
@@ -102,7 +72,7 @@ mat4 Light::GetLightOrthogonalMatrix() {
 	return S_ShadowOrthoMatrix;
 }
 
-void Light::GenerateShadowTexture() {
+void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 	S_ShadowBuffer->BindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -121,5 +91,36 @@ void Light::GenerateShadowTexture() {
 			}
 		}
 	}
+
 	//glCullFace(GL_BACK);
+
+	S_ShadowBufferTemp->BindForWriting();
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	EngineStatics::GetGausBlur7x1Shader()->Bind();
+	EngineStatics::GetGausBlur7x1Shader()->SetShaderVector2("SCALE", vec2(1.0f, 0.0f));
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, S_ShadowBuffer->GetTexture(0));
+	glUniform1i(glGetUniformLocation(EngineStatics::GetGausBlur7x1Shader()->GetProgram(), S_ShadowBuffer->GetTextureName(0).c_str()), 0);
+
+	Compositor->DrawScreenQuad();
+
+	S_ShadowBuffer->BindForWriting();
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	EngineStatics::GetGausBlur7x1Shader()->SetShaderVector2("SCALE", vec2(0.0f, 1.0f));
+
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, S_ShadowBufferTemp->GetTexture(0));
+	glUniform1i(glGetUniformLocation(EngineStatics::GetGausBlur7x1Shader()->GetProgram(), S_ShadowBufferTemp->GetTextureName(0).c_str()), 0);
+
+	Compositor->DrawScreenQuad();
+}
+void Light::BlurTexture(FrameBufferObject* ReadBuffer, FrameBufferObject* WriteBuffer) {
+	
 }

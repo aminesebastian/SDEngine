@@ -20,7 +20,7 @@ void DefferedCompositor::RecompileShaders() {
 void DefferedCompositor::CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* Camera) {
 	for (GLuint i = 0; i < Lights.size(); i++) {
 		if (Lights[i]->CastsShadows()) {
-			Lights[i]->GenerateShadowTexture();
+			Lights[i]->GenerateShadowTexture(this);
 		}
 	}
 	ReadBuffer->BindForReading();
