@@ -2,13 +2,29 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <map>
+#include <unordered_map>
+#include <set>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
 
 typedef std::string TString;
 typedef int int32;
+
 template <typename  N>
 using SArray = std::vector<N>;
+
+template <typename  K, typename V>
+using SMapPair = std::pair<K, V>;
+
+template <typename  K, typename V>
+using SHashMap = std::unordered_map<K, V>;
+
+template <typename  K, typename V>
+using SSortedMap = std::map<K, V>;
+
+template <typename  N>
+using SSet = std::vector<N>;
 
 using namespace glm;
 

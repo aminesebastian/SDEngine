@@ -118,8 +118,6 @@ void Engine::InputLoop() {
 					vec3 origin;
 					vec3 direction;
 					ScreenPosToWorldRay(e.motion.x, e.motion.y, WINDOW_WIDTH, WINDOW_HEIGHT, S_Camera->GetViewMatrix(), S_Camera->GetProjectionMatrix(), origin, direction);
-					//cout << "Testing Collision From Origin Of X: " << origin.x << " Y: " << origin.y << " Z: " << origin.z << endl;
-					//cout << "In Direction X: " << direction.x << " Y: " << direction.y << " Z: " << direction.z << endl;
 					for (int i = 0; i < S_World->GetWorldEntities().size(); i++) {
 						Entity* temp = S_World->GetWorldEntities()[i];
 						if (temp->IsVisible()) {
@@ -129,6 +127,7 @@ void Engine::InputLoop() {
 								bool collide = temp->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, temp->GetTransform(), dist, collisionPoint);
 								if (collide) {
 									cout << "Ray Collided With: " << temp->GetName() << " at a distance of " << dist << endl;
+									break;
 								}
 							}
 						}
@@ -142,6 +141,7 @@ void Engine::InputLoop() {
 								bool collide = light->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, light->GetTransform(), dist, collisionPoint);
 								if (collide) {
 									cout << "Ray Collided With: " << light->GetName() << " at a distance of " << dist << endl;
+									break;
 								}
 							}
 						}

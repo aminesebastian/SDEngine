@@ -41,6 +41,7 @@ public:
 	void SetCastsShadows(bool CastsShadows) { bCastShadows = CastsShadows; }
 
 	void BlurTexture(FrameBufferObject* ReadBuffer, FrameBufferObject* WriteBuffer);
+
 private:
 	FLightInfo S_LightInfo;
 	StaticMesh* S_Probe;

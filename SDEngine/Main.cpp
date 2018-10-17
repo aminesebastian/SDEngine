@@ -38,31 +38,10 @@ int main(int argc, char* argv[]) {
 	init_logger("SD_EngineLog.txt");
 	PrintToLog("Engine Launched!");
 
-	//Transform skySphereTransform;
-	//skySphereTransform.SetUniformScale(100.0f);
-	//Texture2D* skySphereTexture = new Texture2D("res/ForestEnvironment.jpg");
-
-	//Material* skyMaterial = new Material(EngineStatics::GetDefaultGeometryPassShader());
-	//skyMaterial->SetTextureParameter("albedo", skySphereTexture);
-	//skyMaterial->SetShaderModel(EShaderModel::UNLIT);
-	//StaticMesh* sky = new StaticMesh(skySphereTransform, skyMaterial, "./res/SkySphere.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(sky);
-
-
 	Transform planeTransform;
 	Material* planeMat = EngineStatics::GetDefaultMaterial();
 	StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
 	S_Engine->GetWorld()->RegisterEntity(plane);
-
-	//Transform innerEyetransform;
-	//innerEyetransform.SetUniformScale(3.0f);
-	//innerEyetransform.SetRotation(-60, 0, 0);
-	//innerEyetransform.GetPosition().y = 10;
-
-	//SAsset* eyeAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Eye.sasset");
-	//StaticMesh* eyeMesh = eyeAsset->GetAsStaticMesh();
-	//eyeMesh->SetTransform(innerEyetransform);
-	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
 
 	Transform headTransform;
 	headTransform.GetPosition().z = 7;
@@ -77,20 +56,25 @@ int main(int argc, char* argv[]) {
 	gizmo->SetTransform(gizmoTransform);
 	S_Engine->GetWorld()->RegisterEntity(gizmo);
 
+	//Transform innerEyetransform;
+	//innerEyetransform.SetUniformScale(0.5f);
+	//innerEyetransform.SetRotation(-60, 0, 0);
+	//innerEyetransform.GetPosition().z = 10;
+
+	//SAsset* eyeAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/Eye.sasset");
+	//StaticMesh* eyeMesh = eyeAsset->GetAsStaticMesh("Eye");
+	//eyeMesh->SetTransform(innerEyetransform);
+	//S_Engine->GetWorld()->RegisterEntity(eyeMesh);
+
 	//Transform outerEyeTransform;
-	//outerEyeTransform.SetUniformScale(3.0f);
+	//outerEyeTransform.SetUniformScale(0.5f);
 	//outerEyeTransform.SetRotation(-60, 0, 0);
-	//outerEyeTransform.GetPosition().y = 10;
+	//outerEyeTransform.GetPosition().z = 10;
 
-	//Texture2D* outerRoughness = new Texture2D("res/Eye/T_EyeClearRoughness.tga");
-	//Texture2D* outerNormal = new Texture2D("res/Eye/T_EyeClearNormal.tga");
-
-	//Material* outerEyeMaterial = new Material("./Res/Shaders/TranslucentShader");
-	//outerEyeMaterial->SetShaderModel(EShaderModel::TRANSLUCENT);
-	//outerEyeMaterial->SetVec3Parameter("Albedo", vec3(1.0, 1.0, 1.0));
-	//outerEyeMaterial->SetScalarParameter("Opacity", 0.2f);
-	//StaticMesh* outerEye = new StaticMesh(outerEyeTransform, outerEyeMaterial, "./res/Eye/EyeClear.fbx");
-	//S_Engine->GetWorld()->RegisterEntity(outerEye);
+	//SAsset* eyeClearAsset = S_Engine->GetAssetManager()->GetAsset("./Res/Assets/EyeClear.sasset");
+	//StaticMesh* eyeClearMesh = eyeAsset->GetAsStaticMesh("EyeClear");
+	//eyeClearMesh->SetTransform(outerEyeTransform);
+	//S_Engine->GetWorld()->RegisterEntity(eyeClearMesh);
 
 	//Grid grid(40, 2);
 //	S_Engine->GetWorld()->RegisterEntity(&grid);

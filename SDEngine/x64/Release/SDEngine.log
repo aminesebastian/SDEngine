@@ -1,269 +1,349 @@
 ﻿  Actor.cpp
   AssetManager.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   BloomPostProcessing.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   Camera.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  DefferedCompositor.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\defferedcompositor.cpp(33): warning C4267: 'argument': conversion from 'size_t' to 'GLint', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   DOFPostProcessing.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Display.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+  DefferedCompositor.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\defferedcompositor.cpp(33): warning C4267: 'argument': conversion from 'size_t' to 'GLint', possible loss of data
+  Engine.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\engine.cpp(19): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\engine.cpp(33): warning C4305: '=': truncation from 'double' to 'float'
+f:\suburban digital\sdengine\indev\sdengine\engine.cpp(62): warning C4244: 'initializing': conversion from 'Uint64' to 'long', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.cpp(70): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   EngineStatics.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   Entity.cpp
   EyeActor.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   FAABB.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   FrameBufferObject.cpp
-  GBuffer.cpp
   Grid.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   Light.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   Main.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  Engine.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(33): warning C4305: '=': truncation from 'double' to 'float'
-f:\suburban digital\sdengine\sdengine\engine.cpp(62): warning C4244: 'initializing': conversion from 'Uint64' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.cpp(70): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   Material.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  ObjLoader.cpp
-f:\suburban digital\sdengine\sdengine\objloader.cpp(27): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(84): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(121): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(136): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(164): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(262): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(296): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(329): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(378): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\objloader.cpp(386): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
   PostProcessingLayer.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Compiling...
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   RenderingEngine.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(25): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(26): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(27): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(73): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(76): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(79): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-f:\suburban digital\sdengine\sdengine\renderingengine.cpp(82): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(25): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(26): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(27): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(73): warning C4244: 'argument': conversion from 'T' to 'GLint', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(76): warning C4244: 'argument': conversion from 'T' to 'GLint', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(79): warning C4244: 'argument': conversion from 'T' to 'GLint', possible loss of data
+          with
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\renderingengine.cpp(82): warning C4244: 'argument': conversion from 'T' to 'GLint', possible loss of data
+          with
+          [
+              T=float
+          ]
   SAsset.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\sasset.cpp(101): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  Shader.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\shader.cpp(99): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
-  SMath.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\sasset.cpp(101): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   SSAOPostProcessing.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\ssaopostprocessing.cpp(80): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\ssaopostprocessing.cpp(80): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Compiling...
+  Shader.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\shader.cpp(99): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
   StaticMesh.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(27): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(33): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(63): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(86): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(95): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(105): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(115): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(125): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(134): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(136): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(146): warning C4018: '<': signed/unsigned mismatch
-f:\suburban digital\sdengine\sdengine\staticmesh.cpp(157): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-  ImageUtils.cpp
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(278): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(286): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(284): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(326): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(348): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(346): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(384): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(486): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(499): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(572): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(610): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(628): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(1545): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(1574): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(1592): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2586): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2711): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2717): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2726): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2728): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2737): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2773): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2777): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2799): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2802): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2813): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(2853): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3053): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3064): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3068): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3248): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3252): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3260): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3268): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3281): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3298): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3302): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3450): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3478): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3489): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3490): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3504): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3523): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3541): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3552): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3562): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3589): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3590): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3807): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3811): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3817): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3829): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3858): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3866): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3883): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3916): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(3950): warning C4312: 'type cast': conversion from 'int' to 'unsigned char *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4063): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4072): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4077): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4081): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4131): warning C4312: 'type cast': conversion from 'int' to 'float *' of greater size
-f:\suburban digital\sdengine\sdengine\imageutils.cpp(4338): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-  Texture2D.cpp
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(27): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(33): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(63): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(86): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(95): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(105): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(115): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(125): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(134): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(136): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(146): warning C4018: '<': signed/unsigned mismatch
+f:\suburban digital\sdengine\indev\sdengine\staticmesh.cpp(157): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
   ToneMapper.cpp
-f:\suburban digital\sdengine\sdengine\defferedcompositor.h(27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   Transform.cpp
-  TypeDefenitions.cpp
   World.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(37): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-f:\suburban digital\sdengine\sdengine\camera.h(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  SLogger.c
-f:\suburban digital\sdengine\sdengine\slogger.c(28): warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(void)'
-f:\suburban digital\sdengine\sdengine\slogger.c(22): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-f:\suburban digital\sdengine\sdengine\slogger.c(26): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-f:\suburban digital\sdengine\sdengine\slogger.c(48): warning C4047: 'function': 'char *const ' differs in levels of indirection from 'char *[20]'
-f:\suburban digital\sdengine\sdengine\slogger.c(48): warning C4024: 'sprintf': different types for formal and actual parameter 1
-f:\suburban digital\sdengine\sdengine\slogger.c(51): warning C4047: 'function': 'char *const ' differs in levels of indirection from 'char *[3]'
-f:\suburban digital\sdengine\sdengine\slogger.c(51): warning C4024: 'sprintf': different types for formal and actual parameter 1
-f:\suburban digital\sdengine\sdengine\slogger.c(55): warning C4047: 'function': 'const char *const ' differs in levels of indirection from 'char *[20]'
-f:\suburban digital\sdengine\sdengine\slogger.c(55): warning C4024: 'vfprintf': different types for formal and actual parameter 2
-f:\suburban digital\sdengine\sdengine\slogger.c(56): warning C4047: 'function': 'const char *const ' differs in levels of indirection from 'char *[3]'
-f:\suburban digital\sdengine\sdengine\slogger.c(56): warning C4024: 'vfprintf': different types for formal and actual parameter 2
-f:\suburban digital\sdengine\sdengine\slogger.c(46): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(505): note: see declaration of 'localtime'
-f:\suburban digital\sdengine\sdengine\slogger.c(48): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-f:\suburban digital\sdengine\sdengine\slogger.c(51): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+f:\suburban digital\sdengine\indev\sdengine\engine.h(20): warning C4005: 'PrintToLog': macro redefinition
+  f:\suburban digital\sdengine\indev\sdengine\engine.h(19): note: see previous definition of 'PrintToLog'
+f:\suburban digital\sdengine\indev\sdengine\camera.h(49): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
+f:\suburban digital\sdengine\indev\sdengine\camera.h(54): warning C4244: '=': conversion from 'genType' to 'T', possible loss of data
+          with
+          [
+              genType=double
+          ]
+          and
+          [
+              T=float
+          ]
   Generating code
-  All 1649 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 1893 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Release\SDEngine.exe
+  SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\InDev\x64\Release\SDEngine.exe

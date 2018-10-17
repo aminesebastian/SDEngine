@@ -34,7 +34,7 @@ public:
 		return lookAt(S_Transform.GetPosition(), S_Transform.GetPosition() + S_Transform.GetForwardVector(), S_UpVector);
 	}
 	inline float GetThetaFOV() {
-		return glm::tan(S_FOV / 2.0);
+		return (float)glm::tan(S_FOV / 2.0);
 	}
 	inline float GetFOV() {
 		return S_FOV;

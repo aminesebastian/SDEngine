@@ -14,8 +14,11 @@
 #define LOG_WARNING "WARNING"
 #define LOG_ERROR "ERROR"
 
-#define PrintToLog(...) _slog(__FILE__,__LINE__,__VA_ARGS__)
-#define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
+#ifndef MacrosDefined
+	#define MacrosDefined
+	#define PrintToLog(...) _slog(__FILE__,__LINE__,__VA_ARGS__)
+	#define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
+#endif
 
 class AssetManager;
 class Camera;
@@ -58,7 +61,7 @@ private:
 	float S_DeltaTime = 0.0f;	
 	int S_FrameRate = 0;
 	float S_WorldTime = 0.0f;
-	long S_LastFrameTime = 0.0f;
+	long S_LastFrameTime = 0;
 	bool bIsInitialized = false;
 	bool bShouldLoop = false;
 

@@ -1,8 +1,8 @@
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Eye/T_EyeBaseColor.tga);
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Eye/T_EyeRMAO.tga);
-Texture(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Eye/T_EyeNormal.tga);
+Texture(Res/Eye/T_EyeBaseColor.tga);
+Texture(Res/Eye/T_EyeRMAO.tga);
+Texture(Res/Eye/T_EyeNormal.tga);
 
-Shader(C:/Users/amine/OneDrive/Documents/GitHub/SDEngine/SDEngine/Res/Shaders/TestEyeShader);
+Shader(Res/Shaders/TestEyeShader);
 
 TextureParam(0, albedo);
 TextureParam(1, RMAO);

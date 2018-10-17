@@ -42,7 +42,6 @@ vec3 FAABB::GetMinExtent() {
 vec3 FAABB::GetMaxExtent() {
 	return S_AABBMax;
 }
-
 bool FAABB::IntersectWithRay(vec3 RayOrigin, vec3 RayDirection, Transform OwnerTransform, float& IntersectionDistance, vec3& CollisionPoint) {
 	float tMin = 0.0f;
 	float tMax = 100000.0f;

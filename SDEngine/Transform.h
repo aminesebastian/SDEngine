@@ -10,12 +10,12 @@ class Transform {
 public:
 	/*
 	@param Position
-	+X -> Right
-	-X -> Left
-	+Z -> Towards Camera
-	-Z -> Away From Camera
-	+Y -> Up
-	-Y -> Down
+	+Y -> Right
+	-Y -> Left
+	+X -> Towards Camera
+	-X -> Away From Camera
+	+Z -> Up
+	-Z -> Down
 	*/
 	Transform(const vec3 Position = vec3(0.0, 0.0, 0.0), const vec3 Rotation = vec3(0.0, 0.0, 0.0), const vec3 Scale = vec3(1,1,1)) :
 		S_Position(Position),

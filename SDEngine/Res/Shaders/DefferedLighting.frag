@@ -21,6 +21,21 @@ layout (location = 4) out vec3 TexCoordOut;
 layout (location = 6) out vec4 HDR;
 layout (location = 7) out vec4 LitOutput;
 
+const float PI = 3.14159265359;
+const int NUM_LIGHTS = 50;
+struct LightInfo {
+	float Intensity;
+	vec3 Color;
+	float Attenuation;
+	vec3 Position;
+	vec3 Direction;
+	int Type;
+	int CastsShadow;
+	mat4 VPMatrix;
+};
+uniform int LIGHT_COUNT;
+uniform	LightInfo lights[NUM_LIGHTS];
+
 vec2 poissonDisk[16] = vec2[]( 
    vec2( -0.94201624, -0.39906216 ), 
    vec2( 0.94558609, -0.76890725 ), 
@@ -40,21 +55,9 @@ vec2 poissonDisk[16] = vec2[](
    vec2( 0.14383161, -0.14100790 ) 
 );
 
-const float PI = 3.14159265359;
-const int NUM_LIGHTS = 50;
-struct LightInfo {
-	float Intensity;
-	vec3 Color;
-	float Attenuation;
-	vec3 Position;
-	vec3 Direction;
-	int Type;
-	int CastsShadow;
-	mat4 VPMatrix;
-};
-uniform int LIGHT_COUNT;
-uniform	LightInfo lights[NUM_LIGHTS];
-
+/**
+ * Loop to accumulate all lighting.
+ */
 vec3 Luminance();
 
 vec3 PointLight(vec3 P, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity);
@@ -169,88 +172,74 @@ float random(vec3 seed, int i){
 }
 vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity) {
     vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
-    vec3 L = normalize(lightCentre - fragmentPosition);
-	float distance    = length(lightCentre - fragmentPosition);
-    float attenuation = lightRadius / (distance * distance);
+    vec3 L				 = normalize(lightCentre - fragmentPosition);
+	float distance		 = length(lightCentre - fragmentPosition);
+    float attenuation	 = lightRadius / (distance * distance);
+    float NdotL			 = max(dot(N, L), 0.0);
+	vec3 eyeDir		     = normalize(CAMERA_POS - fragmentPosition);
+	vec3 radiance		 = lightColour * attenuation * lightIntensity; 
 
-    float NdotL = max(dot(N, L), 0.0);
+	float roughness	     = max(texture(RMAO, texCoord0).r, 0.01);
+	float metallic		 = texture(RMAO, texCoord0).g;
+	
+	vec3 H				 = normalize(eyeDir + L);
+	float NDF			 = DistributionGGX(N, H, roughness);        
+    float G				 = GeometrySmith(N, eyeDir, L, roughness);      
+	vec3 F0				 = vec3(0.04);
+	F0					 = mix(F0, albedoGamma, metallic);
+	vec3 F				 = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
+	vec3 kS				 = F;
+    vec3 kD				 = vec3(1.0) - kS;
+    kD					*= 1.0 - metallic;
 
-	float roughness = max(texture(RMAO, texCoord0).r, 0.01);
-	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
-
-
-	vec3 radiance = lightColour * attenuation * lightIntensity;  
-	vec3 H = normalize(eyeDir + L);
-
-	float NDF = DistributionGGX(N, H, roughness);        
-    float G   = GeometrySmith(N, eyeDir, L, roughness);      
-
-	float metallic = texture(RMAO, texCoord0).g;
-	vec3 F0 = vec3(0.04);
-	F0      = mix(F0, albedoGamma, metallic);
-	vec3 F    = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
-
-	vec3 kS = F;
-    vec3 kD = vec3(1.0) - kS;
-    kD *= 1.0 - metallic;
-
-	vec3 nominator    = NDF * G * F;
-    float denominator = 4 * max(dot(N, eyeDir), 0.0) * max(dot(N, L), 0.0) + 0.001; 
+	vec3 nominator		 = NDF * G * F;
+    float denominator	 = 4 * max(dot(N, eyeDir), 0.0) * max(dot(N, L), 0.0) + 0.001; 
     vec3 brdf = nominator / denominator;
 
     return (kD * albedoGamma / PI + brdf) * radiance * NdotL; 
 }
 vec3 DirectionalLight(vec3 fragmentPosition, vec3 N, vec3 lightDirection, vec3 lightColour, float lightIntensity) {
-    vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
-    vec3 L = -1*normalize(lightDirection);
-
-    float NdotL = max(dot(N, L), 0.0);
-
-	float roughness = max(texture(RMAO, texCoord0).r, 0.01);
-	vec3 eyeDir = normalize(CAMERA_POS - fragmentPosition);
-
-
-	vec3 radiance = lightColour * lightIntensity;  
-	vec3 H = normalize(eyeDir + L);
-
-	float NDF = DistributionGGX(N, H, roughness);        
-    float G   = GeometrySmith(N, eyeDir, L, roughness);      
-
+    vec3 albedoGamma  = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
+    vec3 L			  = -1*normalize(lightDirection);
+    float NdotL		  = max(dot(N, L), 0.0);
+	vec3 eyeDir		  = normalize(CAMERA_POS - fragmentPosition);
+	vec3 radiance	  = lightColour * lightIntensity;  
+	
+	float roughness   = max(texture(RMAO, texCoord0).r, 0.01);
 	float metallic = texture(RMAO, texCoord0).g;
-	vec3 F0 = vec3(0.04);
-	F0      = mix(F0, albedoGamma, metallic);
-	vec3 F  = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
 
-	vec3 kS = F;
-    vec3 kD = vec3(1.0) - kS;
-    kD *= 1.0 - metallic;
+	vec3 H			  = normalize(eyeDir + L);
+	float NDF		  = DistributionGGX(N, H, roughness);        
+    float G			  = GeometrySmith(N, eyeDir, L, roughness);      
+	vec3 F0			  = vec3(0.04);
+	F0				  = mix(F0, albedoGamma, metallic);
+	vec3 F			  = fresnelSchlick(max(dot(H, eyeDir), 0.0), F0); 
+	vec3 kS		      = F;
+    vec3 kD		      = vec3(1.0) - kS;
+    kD			     *= 1.0 - metallic;
 
 	vec3 nominator    = NDF * G * F;
     float denominator = 4 * max(dot(N, eyeDir), 0.0) * max(dot(N, L), 0.0) + 0.001; 
-    vec3 brdf = nominator / denominator;
+    vec3 brdf		  = nominator / denominator;
 
     return (kD * albedoGamma / PI + brdf) * radiance * NdotL; 
 }
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
+vec3 fresnelSchlick(float cosTheta, vec3 F0) {
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
-float DistributionGGX(vec3 N, vec3 H, float roughness)
-{
+float DistributionGGX(vec3 N, vec3 H, float roughness) {
     float a      = roughness*roughness;
     float a2     = a*a;
     float NdotH  = max(dot(N, H), 0.0);
     float NdotH2 = NdotH*NdotH;
 	
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
+    float nom    = a2;
+    float denom  = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom		 = PI * denom * denom;
 	
     return nom / denom;
 }
-
-float GeometrySchlickGGX(float NdotV, float roughness)
-{
+float GeometrySchlickGGX(float NdotV, float roughness) {
     float r = (roughness + 1.0);
     float k = (r*r) / 8.0;
 
@@ -259,8 +248,7 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 	
     return nom / denom;
 }
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
-{
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
     float ggx2  = GeometrySchlickGGX(NdotV, roughness);

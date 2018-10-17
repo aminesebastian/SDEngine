@@ -24,7 +24,7 @@ public:
 	void DrawScreenQuad();
 	Shader* GetLightingShader() { return S_LightingShader; }
 	Shader* GetPostProcessShader(int Index) { return S_PostProcessingShaders[Index]; }
-	int GetPostProcessShaderCount() { return S_PostProcessingShaders.size(); }
+	int GetPostProcessShaderCount() { return (int)S_PostProcessingShaders.size(); }
 private:
 
 	Shader* S_LightingShader;

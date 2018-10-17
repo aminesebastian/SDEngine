@@ -1,2 +1,2 @@
-Mesh(C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\SDEngine\Res\Eye\Eye.fbx);
-Material(C:\Users\amine\OneDrive\Documents\GitHub\SDEngine\SDEngine\Res\Assets\EyeMaterial.sasset);
+Mesh(Res\Eye\Eye.fbx);
+Material(Res\Assets\EyeMaterial.sasset);

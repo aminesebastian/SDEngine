@@ -16,6 +16,6 @@ private:
 	SAsset* GetAssetFromPool(TString Asset);
 	SAsset* OpenAsset(TString Asset);
 
-	SArray<SAsset*> S_AssetPool;
+	SHashMap<TString, SAsset*> S_AssetCache;
 };
 
