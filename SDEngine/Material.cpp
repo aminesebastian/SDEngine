@@ -94,13 +94,13 @@ bool Material::SetShaderModel(EShaderModel Model) {
 	S_ShaderModel = Model;
 	return true;
 }
-void Material::BindMaterial(Transform EntityTransform, Camera* Camera) {
+void Material::BindMaterial(Entity* Entity, Camera* Camera) {
 	S_Shader->Bind();
-	S_Shader->Update(EntityTransform, Camera);
+	S_Shader->Update(Entity->GetTransform(), Entity->GetLastFrameTransform(), Camera);
 	glEnable(GL_TEXTURE_2D);
 
-	S_Shader->SetShaderFloat("FRAME_TIME", Engine::GetInstance()->GetDeltaTime());
-	S_Shader->SetShaderFloat("TIME", Engine::GetInstance()->GetWorldTime());
+	S_Shader->SetShaderFloat("FRAME_TIME", (float)Engine::GetInstance()->GetFrameTime());
+	S_Shader->SetShaderFloat("TIME", (float)Engine::GetInstance()->GetWorldTime());
 
 	S_Shader->SetShaderInteger("MAT_ID", S_ShaderModel);
 	for (int i = 0; i < this->S_TextureParameters.size(); i++) {

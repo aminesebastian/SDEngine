@@ -1,22 +1,40 @@
 #pragma once
 #include "PostProcessingLayer.h"
 
+class VariableGausianBlur;
+
 class BloomPostProcessing : public PostProcessingLayer {
 public:
-	BloomPostProcessing();
+	BloomPostProcessing(vec2 FinalOutputDimensions);
 	~BloomPostProcessing();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) override;
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders();
+	virtual bool PopulatePostProcessingDetailsPanel() override;
+
+	void SetBloomThreshold(float Threshold);
+	float GetBloomThreshold();
+
+	void SetBloomSize(float Size);
+	float GetBloomSize();
+
+	void SetBloomWeight(float Weight);
+	float GetBloomWeight();
 
 private:
 
-	void RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer, bool bFirstPass);
-	void RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
-	void BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
+	void ClipHDR(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
+	void BlendOutput(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer);
 
-	Shader* S_BloomShader;
-	FrameBufferObject* S_XBloomBuffer;
-	FrameBufferObject* S_YBloomBuffer;
+	float BloomThreshold;
+	float BloomWeight;
+	int BlurPasses;
+
+	Shader* S_ClipHDRShader;
+	Shader* S_BlendBloom;
+
+	RenderTarget* ClippedHDRBuffer;
+	RenderTarget* BloomOutputBuffer;
+	VariableGausianBlur* S_GausBlur;
 };
 

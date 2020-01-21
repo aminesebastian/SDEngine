@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Shader.h"
+#include "MathLibrary.h"
+#include <limits>
 
 
 UWorld::UWorld() : S_DeltaTime(0), S_WorldTime(0) {}
@@ -10,6 +12,8 @@ UWorld::~UWorld() {
 	delete &S_LightList;
 }
 
+SArray<Entity*> UWorld::GetWorldEntities() { return S_EntityList; }
+SArray<Light*> UWorld::GetWorldLights() { return S_LightList; }
 void UWorld::TickWorld(float DeltaTime) {
 	for (int i = 0; i < S_EntityList.size(); i++) {
 		if (S_EntityList[i]->NeedsTick()) {

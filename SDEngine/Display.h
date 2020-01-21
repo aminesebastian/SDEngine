@@ -2,7 +2,6 @@
 #include <string>
 #include <SDL/SDL.h>
 #include <GLM/glm.hpp>
-#include <AntTweakBar.h>
 
 class Display {
 
@@ -14,25 +13,25 @@ public:
 	void Update();
 	void Clear(float R, float G, float B, float A);
 	bool IsClosed();
+	void WindowResized(int NewWidth, int NewHeight);
+	void CloseDisplay();
+	SDL_Window* GetWindow();
+	SDL_GLContext GetContext();
 
-	inline glm::vec2 GetDimensions() const{
-		return glm::vec2(S_Width, S_Height);
+	inline glm::vec2 GetDimensions() const {
+		return DisplayDimensions;
 	}
 	inline float GetAspectRatio() const {
-		return ((float)S_Width) / ((float)S_Height);
+		return ((float)DisplayDimensions.x) / ((float)DisplayDimensions.y);
 	}
-	void ResizeDisplay(int NewWidth, int NewHeight);
-	void CloseDisplay() { bIsClosed = true; }
-	SDL_Window* GetWindow() { return S_Window; }
 private:
 	Display(const Display& other) {}
 	void operator=(const Display& other) {}
 
-	SDL_Window* S_Window;
-	SDL_GLContext S_GLContext;
+	SDL_Window* Window;
+	SDL_GLContext GLContext;
 	bool bIsClosed;
 
-	int S_Width;
-	int S_Height;
+	glm::vec2 DisplayDimensions;
 };
 

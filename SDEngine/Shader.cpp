@@ -18,14 +18,13 @@ Shader::Shader(const std::string& ShaderName, bool bUseDefaultGeometry) {
 		}
 	}
 	S_ShaderName = S_FragmentShaderPath.substr(lastSlash + 1, S_FragmentShaderPath.length() - lastSlash);
-
 	RecompileShader();
 }
+
+
 void Shader::RecompileShader() {
 	glDeleteProgram(S_Program);
 	S_Program = glCreateProgram();
-
-
 
 	glDeleteShader(S_Shaders[0]);
 	glDeleteShader(S_Shaders[1]);
@@ -66,6 +65,8 @@ Shader::~Shader() {
 }
 
 std::string Shader::LoadShader(const std::string& fileName) {
+	SStack<TString> precompilerStack;
+
 	std::ifstream file;
 	file.open((fileName).c_str());
 
@@ -76,6 +77,25 @@ std::string Shader::LoadShader(const std::string& fileName) {
 		while (file.good()){
 			getline(file, line);
 			output.append(line + "\n");
+			//TString trimmedLine = TStringUtils::Trim(line);
+			////Add or remove directive from stack.
+			//if (trimmedLine[0] == '#' && trimmedLine.length() > 1) {
+			//	if (trimmedLine[1] == 'i') {
+			//		precompilerStack.push(trimmedLine);
+			//	}else if (trimmedLine[1] == 'e') {
+			//		precompilerStack.pop();
+			//	}
+			//	continue;
+			//}
+
+			////Add line to shader lines.
+			//if (precompilerStack.size() > 0) {
+			//	if (S_Flags->find(precompilerStack.top()) != S_Flags->end()) {
+			//		output.append(line + "\n");
+			//	}
+			//} else {
+			//	output.append(line + "\n");
+			//}
 		}
 		file.close();
 	}else{
@@ -96,7 +116,7 @@ GLuint Shader::CreateShader(const std::string& text, GLenum ShaderType) {
 	shaderSourceStrings[0] = text.c_str();
 
 	GLint shaderSourceStringLengths[1];
-	shaderSourceStringLengths[0] = text.length();
+	shaderSourceStringLengths[0] = (GLint)text.length();
 
 	glShaderSource(shader, 1, shaderSourceStrings, shaderSourceStringLengths);
 	glCompileShader(shader);
@@ -125,6 +145,10 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 	}
 	return success;
 }
+TString Shader::StripDirectiveName(TString RawLine) {
+	TString line = TStringUtils::Trim(RawLine);
+	return line;
+}
 
 void Shader::Bind() {
 	glUseProgram(S_Program);
@@ -136,10 +160,22 @@ void Shader::Bind() {
 /* Sets the FAR_CLIP
 /* Sets the CAMERA_POS
 /************************************************************************/
-void Shader::Update(const Transform& Transform, Camera* Camera) {
+void Shader::Update(const class Transform& Transform, Camera* Camera) {
+	UpdateWithDefaults(Transform, Camera);
 
-	mat4 tempMVP = Camera->GetProjectionMatrix()* Camera->GetViewMatrix() * Transform.GetModelMatrix();
+	mat4 lastFrameMVP = Camera->GetProjectionMatrix()* Camera->GetLastFrameViewMatrix() * Transform.GetModelMatrix();
+	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
+}
+void Shader::Update(const class Transform& Transform,  const class Transform& LastFrameTrasnform, Camera* Camera) {
+	UpdateWithDefaults(Transform, Camera);
 
+	mat4 lastFrameMVP = Camera->GetProjectionMatrix() * Camera->GetLastFrameViewMatrix() * LastFrameTrasnform.GetModelMatrix();
+	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
+}
+void Shader::UpdateWithDefaults(const class Transform& Transform, Camera* Camera) {
+	mat4 tempMVP = Camera->GetProjectionMatrix() * Camera->GetViewMatrix() * Transform.GetModelMatrix();
+
+	SetShaderMatrix3("NORMAL_MODEL_MATRIX", glm::transpose(glm::inverse(Transform.GetModelMatrix())));
 	SetShaderMatrix4("MODEL_MATRIX", Transform.GetModelMatrix());
 	SetShaderMatrix4("VIEW_MATRIX", Camera->GetViewMatrix());
 	SetShaderMatrix4("PROJECTION_MATRIX", Camera->GetProjectionMatrix());
@@ -147,10 +183,8 @@ void Shader::Update(const Transform& Transform, Camera* Camera) {
 	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
 	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());
 
-	SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
+	SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetLocation());
 }
-
-
 void Shader::SetShaderInteger(string Name, int Value) {
 	glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
 }
@@ -165,6 +199,9 @@ void Shader::SetShaderVector2(string Name, vec2 Vector) {
 }
 void Shader::SetShaderFloat(string Name, float Value) {
 	glUniform1f(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
+}
+void Shader::SetShaderMatrix3(string Name, mat3 Matrix) {
+	glUniformMatrix3fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, GL_FALSE, &Matrix[0][0]);
 }
 void Shader::SetShaderMatrix4(string Name, mat4 Matrix) {
 	glUniformMatrix4fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, GL_FALSE, &Matrix[0][0]);

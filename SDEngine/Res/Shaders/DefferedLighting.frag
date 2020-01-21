@@ -9,20 +9,15 @@ uniform sampler2D albedo;
 uniform sampler2D RMAO;
 uniform sampler2D normal;
 uniform sampler2D texCoord;
+uniform sampler2D motion;
 uniform sampler2D shadowDepth;
 
 uniform vec2 SCREEN_RES;
 
-layout (location = 0) out vec4 WorldPosOut;   
-layout (location = 1) out vec4 AlbedoOut;  
-layout (location = 2) out vec4 RMAOOut;	      
-layout (location = 3) out vec3 NormalOut;     
-layout (location = 4) out vec3 TexCoordOut;	
-layout (location = 6) out vec4 HDR;
-layout (location = 7) out vec4 LitOutput;
+layout (location = 0) out vec4 Output;   
 
 const float PI = 3.14159265359;
-const int NUM_LIGHTS = 50;
+const int NUM_LIGHTS = 28;
 struct LightInfo {
 	float Intensity;
 	vec3 Color;
@@ -74,22 +69,8 @@ float linstep(float low, float high, float value);
 float GenerateVarianceShadowCoverage(vec4 fragPosWorld, int lightIndex);
 
 void main()	{	
-	WorldPosOut			= texture(worldPosition, texCoord0);	
-	AlbedoOut	 		= texture(albedo, texCoord0);			
-	TexCoordOut			= texture(texCoord, texCoord0).rgb;
-	NormalOut			= texture(normal, texCoord0).rgb;	
-	RMAOOut				= texture(RMAO, texCoord0);	
-
 	vec4 lighting		= vec4(Luminance(), 1.0);
-	float brightness	= dot(lighting.rgb, vec3(0.2126, 0.7152, 0.0722));
-
-	lighting			= clamp(lighting, 0.0, 1.0);
-
-    HDR					= lighting * max(0.0, brightness-1.0f);
-	LitOutput			= lighting;
-
-	//LitOutput			= vec4(GeneratePoissonShadowCoverage(texture(worldPosition, texCoord0), 27));
-	//LitOutput			= vec4(GenerateVarianceShadowCoverage(texture(worldPosition, texCoord0), 27));
+	Output				= lighting;
 }
 vec3 Luminance() {
 	vec3 finalLightIntensity;
@@ -101,7 +82,7 @@ vec3 Luminance() {
 			}else{
 				vec3 directionalContrib = DirectionalLight(texture(worldPosition, texCoord0).xyz, texture(normal, texCoord0).xyz, lights[i].Direction, lights[i].Color, lights[i].Intensity);	
 				if(lights[i].CastsShadow == 1) {
-					directionalContrib *= GenerateVarianceShadowCoverage(texture(worldPosition, texCoord0), i);
+					directionalContrib *= GeneratePoissonShadowCoverage(texture(worldPosition, texCoord0), i);
 				}
 				finalLightIntensity += directionalContrib;
 			}		
@@ -171,7 +152,7 @@ float random(vec3 seed, int i){
 	return fract(sin(dot_product) * 43758.5453);
 }
 vec3 PointLight(vec3 fragmentPosition, vec3 N, vec3 lightCentre, float lightRadius, vec3 lightColour, float lightIntensity) {
-    vec3 albedoGamma     = texture(albedo, texCoord0).rgb;// * texture(albedo, texCoord0).rgb;
+    vec3 albedoGamma     = texture(albedo, texCoord0).rgb;
     vec3 L				 = normalize(lightCentre - fragmentPosition);
 	float distance		 = length(lightCentre - fragmentPosition);
     float attenuation	 = lightRadius / (distance * distance);

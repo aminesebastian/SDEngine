@@ -3,16 +3,18 @@
 #include <iostream>
 #include "Engine.h"
 #include "EngineStatics.h"
+#include "MathLibrary.h"
 
 StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, Material* Material, const std::string& ModelName)
 	: Entity(Name, SpawnTransform) {
 	loadModel(ModelName);
 	InitMesh();
 	S_MaterialID = 0;
-	S_Material = Material;
 
 	if(Material == nullptr) {
 		Material = EngineStatics::GetDefaultMaterial();
+	} else {
+		S_Material = Material;
 	}
 }
 StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, const std::string& ModelName)
@@ -24,13 +26,13 @@ StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, const std:
 }
 StaticMesh::StaticMesh(TString Name, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides)
 	: Entity(Name, SpawnTransform) {
-	for (int i = 0; i < NumVertecies; i++) {
-		S_Positions.push_back(Verticies[i].GetPosition());
+	for (unsigned int i = 0; i < NumVertecies; i++) {
+		S_Verticies.push_back(Verticies[i].GetPosition());
 		S_TexCoords.push_back(Verticies[i].GetTexCoord());
 		S_Normals.push_back(Verticies[i].GetNormal());
 	}
 
-	for (int i = 0; i < NumIndicides; i++) {
+	for (unsigned int i = 0; i < NumIndicides; i++) {
 		S_Indicies.push_back(Indicies[i]);
 	}
 
@@ -60,7 +62,7 @@ void StaticMesh::processNode(aiNode* Node, const aiScene* Scene) {
 		populateVertecies(mesh);
 	}
 	//Handle Children
-	for (int i = 0; i < Node->mNumChildren; i++) {
+	for (unsigned int i = 0; i < Node->mNumChildren; i++) {
 		this->processNode(Node->mChildren[i], Scene);
 	}
 }
@@ -77,32 +79,32 @@ void StaticMesh::processNode(aiNode* Node, const aiScene* Scene) {
  **************************************************************************************************/
 
 void StaticMesh::populateVertecies(aiMesh* Mesh) {
-	S_Positions.reserve(Mesh->mNumVertices);
+	S_Verticies.reserve(Mesh->mNumVertices);
 	S_Normals.reserve(Mesh->mNumVertices);
 	S_Tangents.reserve(Mesh->mNumVertices);
 	S_TexCoords.reserve(Mesh->mNumVertices);
 	S_Indicies.reserve(Mesh->mNumFaces);
 
-	for (int i = 0; i < Mesh->mNumVertices; i++) {
+	for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 		vec3 tempPos;
 		tempPos.x = Mesh->mVertices[i].x;
 		tempPos.y = Mesh->mVertices[i].y;
 		tempPos.z = Mesh->mVertices[i].z;
 
-		S_Positions.push_back(tempPos);
+		S_Verticies.push_back(tempPos);
 	}
 	if (Mesh->HasNormals()) {
-		for (int i = 0; i < Mesh->mNumVertices; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 			vec3 tempNormal;
 			tempNormal.x = Mesh->mNormals[i].x;
 			tempNormal.y = Mesh->mNormals[i].y;
 			tempNormal.z = Mesh->mNormals[i].z;
 
-			S_Positions.push_back(tempNormal);
+			S_Verticies.push_back(tempNormal);
 		}
 	}
 	if (Mesh->HasNormals()) {
-		for (int i = 0; i < Mesh->mNumVertices; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 			vec3 tempNormal;
 			tempNormal.x = Mesh->mNormals[i].x;
 			tempNormal.y = Mesh->mNormals[i].y;
@@ -112,7 +114,7 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 		}
 	}
 	if (Mesh->HasTangentsAndBitangents()) {
-		for (int i = 0; i < Mesh->mNumVertices; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 			vec3 tempTangent;
 			tempTangent.x = Mesh->mTangents[i].x;
 			tempTangent.y = Mesh->mTangents[i].y;
@@ -122,7 +124,7 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 		}
 	}
 	if (Mesh->HasTextureCoords(0)) {
-		for (int i = 0; i < Mesh->mNumVertices; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 			vec2 tempUV;
 			tempUV.x = Mesh->mTextureCoords[0][i].x;
 			tempUV.y = Mesh->mTextureCoords[0][i].y;
@@ -131,9 +133,9 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 		}
 	}
 	if (Mesh->HasFaces()) {
-		for (int i = 0; i < Mesh->mNumFaces; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumFaces; i++) {
 			aiFace tempface = Mesh->mFaces[i];
-			for (int j = 0; j < tempface.mNumIndices; j++) {
+			for (unsigned int j = 0; j < tempface.mNumIndices; j++) {
 				S_Indicies.push_back(tempface.mIndices[j]);
 			}
 		}
@@ -143,7 +145,7 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 		//}
 	}
 	if (Mesh->HasVertexColors(0)) {
-		for (int i = 0; i < Mesh->mNumVertices; i++) {
+		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 			vec3 tempColor;
 			tempColor.x = Mesh->mColors[i]->r;
 			tempColor.y = Mesh->mColors[i]->g;
@@ -154,7 +156,7 @@ void StaticMesh::populateVertecies(aiMesh* Mesh) {
 	}
 }
 void StaticMesh::InitMesh() {
-	S_DrawCount = S_Positions.size();
+	S_DrawCount = (unsigned int)S_Verticies.size();
 
 	glGenVertexArrays(1, &S_VertexArrayObject);
 	glBindVertexArray(S_VertexArrayObject);
@@ -162,14 +164,14 @@ void StaticMesh::InitMesh() {
 	glGenBuffers(NUM_BUFFERS, S_VertexArrayBuffers);
 
 	//Position
-	if (!S_Positions.empty()) {
+	if (!S_Verticies.empty()) {
 		glBindBuffer(GL_ARRAY_BUFFER, S_VertexArrayBuffers[POSITION_VB]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(S_Positions[0]) * S_Positions.size(), &S_Positions[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(S_Verticies[0]) * S_Verticies.size(), &S_Verticies[0], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-		S_AABB = new FAABB(S_Positions);
+		S_AABB = new FAABB(S_Verticies);
 	}
 
 	//Texcoord
@@ -235,15 +237,22 @@ void StaticMesh::Draw(Camera* Camera) { //Clean this up
 		return;
 	}
 	if (S_Material->GetShaderModel() != EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::GEOMETRY) {
-		S_Material->BindMaterial(GetTransform(), Camera);
+		S_Material->BindMaterial(this, Camera);
+		glBindVertexArray(S_VertexArrayObject);
+		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}else if (S_Material->GetShaderModel() == EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::TRANSLUCENCY) {
+		S_Material->BindMaterial(this, Camera);
 		glBindVertexArray(S_VertexArrayObject);
 		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
-	if (S_Material->GetShaderModel() == EShaderModel::TRANSLUCENT && Engine::GetInstance()->GetRenderingEngine()->GetRenderingStage() == ERenderingStage::TRANSLUCENCY) {
-		S_Material->BindMaterial(GetTransform(), Camera);
-		glBindVertexArray(S_VertexArrayObject);
-		glDrawElements(GL_TRIANGLES, S_DrawCount, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+}
+bool StaticMesh::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance) {
+	if (GetAxisAlignedBoundingBox()->IntersectWithRay(Origin, Direction, GetTransform(), HitPoint, Distance)) {
+		mat4 invModelMatrix = glm::inverse(GetTransform().GetModelMatrix());
+		vec3 objectSpaceOrigin = invModelMatrix * vec4(Origin.x, Origin.y, Origin.z, 1.0f);
+		vec3 objectSpaceDirection = invModelMatrix * vec4(Direction.x, Direction.y, Direction.z, 0.0f);
+		return MathLibrary::LineTraceAgainstTriangles(objectSpaceOrigin, objectSpaceDirection, S_Verticies, S_Indicies, HitPoint, Distance);
 	}
 }

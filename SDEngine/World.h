@@ -1,12 +1,11 @@
 #pragma once
 #include <iostream>
-#include <vector>
+#include "TypeDefenitions.h"
 
 class Entity;
 class Camera;
 class Shader;
 class Light;
-
 
 using namespace std;
 
@@ -23,12 +22,12 @@ public:
 	void RegisterLight(Light* light);
 	bool DestroyLight(Light* light);
 
-	vector<Entity*> GetWorldEntities() { return S_EntityList; }
-	vector<Light*> GetWorldLights() { return S_LightList; }
+	SArray<Entity*> GetWorldEntities();
+	SArray<Light*> GetWorldLights();
 
 private:
-	vector<Entity*> S_EntityList;
-	vector<Light*>  S_LightList;
+	SArray<Entity*> S_EntityList;
+	SArray<Light*>  S_LightList;
 
 	float S_DeltaTime;
 	float S_WorldTime;

@@ -1,5 +1,2 @@
-﻿  Main.cpp
-f:\suburban digital\sdengine\sdengine\engine.h(18): warning C4005: 'PrintToLog': macro redefinition
-  f:\suburban digital\sdengine\sdengine\engine.h(17): note: see previous definition of 'PrintToLog'
-f:\suburban digital\sdengine\sdengine\engine.h(61): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-  SDEngine.vcxproj -> F:\Suburban Digital\SDEngine\x64\Debug\SDEngine.exe
+﻿  Entity.cpp
+  SDEngine.vcxproj -> E:\Suburban Digital\SDEngine\InDev\x64\Debug\SDEngine.exe

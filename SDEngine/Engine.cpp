@@ -1,42 +1,52 @@
 #include "Engine.h"
 #include "Light.h"
+#include "Scene.h"
 #include "AssetManager.h"
-#include <AntTweakBar.h>
 #include "Camera.h"
+#include "EngineUI.h"
+#include "MathLibrary.h"
+
+#include "Lib/Imgui/imgui.h"
+#include "Lib/Imgui/imgui_impl_sdl.h"
+#include "Lib/Imgui/imgui_impl_opengl3.h"
 
 Engine::Engine() {
 	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
-	S_RenderingEngine = new URenderingEngine(S_Display);
 	S_World = new UWorld();
 
 	Transform cameraTransform;
 	cameraTransform.SetRotation(0, 50, -180);
-	cameraTransform.GetPosition().x = 35;
-	cameraTransform.GetPosition().z = 35;
-	S_Camera = new Camera("Camera", cameraTransform, radians(50.0f), S_Display->GetAspectRatio(), 0.01f, 1000.0f);
-
-	TwInit(TW_OPENGL, NULL);
-	TwWindowSize(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
-	S_InfoBar = TwNewBar("StatUnit");
-	TwDefine(" StatUnit refresh=0.1 ");
-	TwDefine(" StatUnit alpha=30 ");
-	TwAddVarRO(S_InfoBar, "Frame Time", TW_TYPE_FLOAT, &S_DeltaTime, "");
-	TwAddVarRO(S_InfoBar, "Frame Rate", TW_TYPE_INT32, &S_FrameRate, "");
+	cameraTransform.GetLocation().x = 35;
+	cameraTransform.GetLocation().z = 35;
+	S_Camera = new Camera("Camera", cameraTransform, radians(50.0f), S_Display->GetDimensions(), 0.01f, 100000.0f);
+	S_World->RegisterEntity(S_Camera);
 
 	S_AssetManager = new AssetManager();
 
 	for (int i = 0; i < 322; i++) {
 		S_InputKeys[i].bKeyDown = false;
 	}
-	lightRotateAngle = 0;
-	lightRotateRadius = 2;
-	lightRotateSpeed = (2 * 3.14159265358979323846264338327950288) / 25000;
 
-	bGameMode = true;
+	S_RenderingEngine = new URenderingEngine(S_Display->GetDimensions());
+	bGameMode         = true;
+	S_CurrentScene    = nullptr;
+	SelectedEntity    = nullptr;
+	S_DeltaTime       = 0.0f;
+	S_FrameRate       = 0;
+	S_WorldTime       = 0.0f;
+	S_LastFrameTime   = 0;
+	bIsInitialized    = false;
+	bShouldLoop       = false;
+	lastMouseX        = 0;
+	lastMouseY        = 0;
+	movementSpeed     = 300.0f;
+	lookSpeed         = 200.0f;
+	MousePosition     = vec2(0.0f, 0.0f);
+	S_EngineUI        = new EngineUI();
 }
 Engine::~Engine() {
-	delete &S_Display;
-	delete &S_RenderingEngine;
+	delete& S_Display;
+	delete& S_RenderingEngine;
 }
 
 Engine* Engine::GetInstance() {
@@ -50,54 +60,68 @@ AssetManager* Engine::GetAssetManager() {
 bool Engine::Init() {
 	if (bIsInitialized) { return false; }
 
-	S_RenderingEngine->ChangeShader("./Res/Shaders/DefaultGeometryPassShader");
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	S_LastFrameTime = SDL_GetPerformanceCounter();
+
+	S_EngineUI->InitalizeUI(S_Display->GetWindow(), S_Display->GetContext());
 
 	bIsInitialized = true;
 	return true;
 }
 
-void Engine::MainLoop()  {
+bool Engine::LoadScene(Scene* SceneToLoad) {
+	if (S_CurrentScene != nullptr) {
+		S_CurrentScene->SaveScene();
+		delete S_CurrentScene;
+	}
+
+	if (SceneToLoad->LoadScene()) {
+		S_CurrentScene = SceneToLoad;
+		return true;
+	} else {
+		delete SceneToLoad;
+		return false;
+	}
+}
+
+void Engine::MainLoop() {
 	while (!S_Display->IsClosed()) {
-		long first = SDL_GetPerformanceCounter();
+		Uint64 first = SDL_GetPerformanceCounter();
 
 		InputLoop();
 		GameLoop();
 		RenderingLoop();
 		UILoop();
 
-		S_DeltaTime = (float)((first - S_LastFrameTime) * 1000) / SDL_GetPerformanceFrequency();
-		S_FrameRate = 1.0f / (S_DeltaTime/1000.0f);
+		S_DeltaTime = (double)((first - S_LastFrameTime)) / SDL_GetPerformanceFrequency();
+
+		S_FrameRate = (int)(1.0f / S_DeltaTime);
 		S_LastFrameTime = first;
 		S_WorldTime += S_DeltaTime;
 		S_Display->Update();
 	}
 }
 void Engine::GameLoop() {
-	S_World->TickWorld(S_DeltaTime);
-	//for (int i = 0; i < S_World->GetWorldLights().size() - 1; i++) {
-	//	lightRotateAngle += lightRotateSpeed * S_DeltaTime;
-	//	float x = glm::cos(lightRotateAngle + (i*0.23))*lightRotateRadius;
-	//	float y = glm::sin(lightRotateAngle + (i*0.23))*lightRotateRadius;
-
-	//	S_World->GetWorldLights()[i]->GetTransform().GetPosition().x = x;
-	//	S_World->GetWorldLights()[i]->GetTransform().GetPosition().y = y;
-	//}
+	S_World->TickWorld((float)S_DeltaTime);
+	S_EngineUI->UpdateUI(S_Display->GetWindow());
 }
 void Engine::RenderingLoop() {
 	S_RenderingEngine->RenderWorld(S_World, S_Camera);
 }
 void Engine::UILoop() {
-	TwDraw();
+	S_EngineUI->RenderUI((float)S_DeltaTime);
 }
 void Engine::InputLoop() {
 	SDL_Event e;
-	bool bHandled;
+
 	while (SDL_PollEvent(&e)) {
-		bHandled = TwEventSDL(&e, SDL_MAJOR_VERSION, SDL_MINOR_VERSION);
-		if(bHandled) {
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+			ImGui_ImplSDL2_ProcessEvent(&e);
 			return;
 		}
+
 		switch (e.type) {
 			case SDL_QUIT:
 				S_Display->CloseDisplay();
@@ -110,45 +134,25 @@ void Engine::InputLoop() {
 				S_InputKeys[e.key.keysym.scancode].bKeyDown = false;
 				OnKeyUp(e.key.keysym.scancode);
 				break;
-			case SDL_WINDOWEVENT_RESIZED:
-				S_Display->ResizeDisplay(e.window.data1, e.window.data2);
+			case SDL_WINDOWEVENT:
+				switch (e.window.event) {
+					case SDL_WINDOWEVENT_SIZE_CHANGED:
+						S_Display->WindowResized(e.window.data1, e.window.data2);
+						S_Camera->SetRenderTargetDimensions(S_Display->GetDimensions());
+						break;
+				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if (SDL_BUTTON_LMASK) {
-					vec3 origin;
-					vec3 direction;
-					ScreenPosToWorldRay(e.motion.x, e.motion.y, WINDOW_WIDTH, WINDOW_HEIGHT, S_Camera->GetViewMatrix(), S_Camera->GetProjectionMatrix(), origin, direction);
-					for (int i = 0; i < S_World->GetWorldEntities().size(); i++) {
-						Entity* temp = S_World->GetWorldEntities()[i];
-						if (temp->IsVisible()) {
-							if (temp->HasAxisAlignedBoundingBox()) {
-								float dist;
-								vec3 collisionPoint;
-								bool collide = temp->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, temp->GetTransform(), dist, collisionPoint);
-								if (collide) {
-									cout << "Ray Collided With: " << temp->GetName() << " at a distance of " << dist << endl;
-									break;
-								}
-							}
-						}
-					}
-					for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-						Light* light = S_World->GetWorldLights()[i];
-						if (light->IsVisible() && light->GetDebugMode()) {
-							if (light->HasAxisAlignedBoundingBox()) {
-								float dist;
-								vec3 collisionPoint;
-								bool collide = light->GetAxisAlignedBoundingBox()->IntersectWithRay(origin, direction, light->GetTransform(), dist, collisionPoint);
-								if (collide) {
-									cout << "Ray Collided With: " << light->GetName() << " at a distance of " << dist << endl;
-									break;
-								}
-							}
-						}
+					FHitInfo hitInfo;
+
+					if (MathLibrary::LineTraceAgainstWorldFromScreen(hitInfo, vec2(MousePosition.x, MousePosition.y), S_Camera, S_World)) {
+						SetSelectedEntity(hitInfo.HitEntity);
 					}
 				}
 				break;
 			case SDL_MOUSEMOTION:
+				MousePosition = vec2(e.motion.x, e.motion.y);
 				if (e.type == SDL_MOUSEMOTION) {
 					if (e.motion.state & SDL_BUTTON_RMASK) {
 						SDL_ShowCursor(0);
@@ -157,8 +161,8 @@ void Engine::InputLoop() {
 						lastMouseY = e.motion.y;
 					} else if (e.motion.state & SDL_BUTTON_MMASK) {
 						SDL_ShowCursor(0);
-						S_Camera->GetTransform().GetPosition() -= S_Camera->GetTransform().GetRightVector()*(float)(e.motion.x - lastMouseX) / 250.0f;
-						S_Camera->GetTransform().GetPosition() += S_Camera->GetTransform().GetUpVector()*(float)(e.motion.y - lastMouseY) / 250.0f;
+						S_Camera->AddLocation(-S_Camera->GetTransform().GetRightVector() * (float)(e.motion.x - lastMouseX) / 250.0f);
+						S_Camera->AddLocation(S_Camera->GetTransform().GetUpVector() * (float)(e.motion.y - lastMouseY) / 250.0f);
 						lastMouseX = e.motion.x;
 						lastMouseY = e.motion.y;
 					} else {
@@ -169,7 +173,7 @@ void Engine::InputLoop() {
 				}
 				break;
 			case SDL_MOUSEWHEEL:
-				movementSpeed = clamp(movementSpeed + ((float)e.wheel.y / 100.0f), 0.01f, 2.5f);
+				movementSpeed = clamp(movementSpeed + ((float)e.wheel.y * GetFrameTime() * 1000.0f), 1.0f, 1000.0f);
 				break;
 			default:
 				break;
@@ -185,11 +189,6 @@ void Engine::OnKeyDown(int KeyCode) {
 	if (KeyCode == SDL_SCANCODE_F) {
 		S_Camera->SetTransform(S_Camera->GetInitialTransform());
 	}
-	if (KeyCode == SDL_SCANCODE_L) {
-		for (int i = 0; i < S_World->GetWorldLights().size(); i++) {
-			S_World->GetWorldLights()[i]->ToggleDebug(!S_World->GetWorldLights()[i]->GetDebugMode());
-		}
-	}
 	if (S_InputKeys[SDL_SCANCODE_P].bKeyDown) {
 		S_RenderingEngine->SetDebugEnabled(!S_RenderingEngine->GetDebugEnabled());
 	}
@@ -197,7 +196,7 @@ void Engine::OnKeyDown(int KeyCode) {
 		bGameMode = !bGameMode;
 	}
 	if (S_InputKeys[SDL_SCANCODE_1].bKeyDown) {
-		if(S_RenderingEngine->GetDebugEnabled()) {
+		if (S_RenderingEngine->GetDebugEnabled()) {
 			S_RenderingEngine->SetDebugState(WIREFRAME);
 		}
 	}
@@ -227,53 +226,29 @@ void Engine::OnKeyUp(int KeyCode) {
 }
 void Engine::KeyAxisMapping() {
 	if (S_InputKeys[SDL_SCANCODE_W].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetForwardVector() * movementSpeed;
+		S_Camera->AddLocation(S_Camera->GetTransform().GetForwardVector() * movementSpeed * (float)GetFrameTime());
 	}
 	if (S_InputKeys[SDL_SCANCODE_S].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() - S_Camera->GetTransform().GetForwardVector() * movementSpeed;
+		S_Camera->AddLocation(-S_Camera->GetTransform().GetForwardVector() * movementSpeed * (float)GetFrameTime());
 	}
 	if (S_InputKeys[SDL_SCANCODE_A].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetRightVector() * movementSpeed;
+		S_Camera->AddLocation(S_Camera->GetTransform().GetRightVector() * movementSpeed * (float)GetFrameTime());
 	}
 	if (S_InputKeys[SDL_SCANCODE_D].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() - S_Camera->GetTransform().GetRightVector() * movementSpeed;
+		S_Camera->AddLocation(-S_Camera->GetTransform().GetRightVector() * movementSpeed * (float)GetFrameTime());
 	}
 	if (S_InputKeys[SDL_SCANCODE_Q].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() - S_Camera->GetTransform().GetUpVector() * movementSpeed;
+		S_Camera->AddLocation(-S_Camera->GetTransform().GetUpVector() * movementSpeed * (float)GetFrameTime());
 	}
 	if (S_InputKeys[SDL_SCANCODE_E].bKeyDown) {
-		S_Camera->GetTransform().GetPosition() = S_Camera->GetTransform().GetPosition() + S_Camera->GetTransform().GetUpVector() * movementSpeed;
+		S_Camera->AddLocation(S_Camera->GetTransform().GetUpVector() * movementSpeed * (float)GetFrameTime());
 	}
 }
-void Engine::ScreenPosToWorldRay(int mouseX, int mouseY, int screenWidth, int screenHeight, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut) {
-	// The ray Start and End positions, in Normalized Device Coordinates (Have you read Tutorial 4 ?)
-	mouseY = screenHeight - mouseY;
-	glm::vec4 lRayStart_NDC(
-		((float)mouseX / (float)screenWidth - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
-		((float)mouseY / (float)screenHeight - 0.5f) * 2.0f, // [0, 768] -> [-1,1]
-		-1.0f, // The near plane maps to Z=-1 in Normalized Device Coordinates
-		1.0f
-	);
-	glm::vec4 lRayEnd_NDC(
-		((float)mouseX / (float)screenWidth - 0.5f) * 2.0f,
-		((float)mouseY / (float)screenHeight - 0.5f) * 2.0f,
-		0.0f,
-		1.0f
-	);
-
-	glm::mat4 M = glm::inverse(ProjectionMatrix * ViewMatrix);
-
-	glm::vec4 lRayStart_world = M * lRayStart_NDC; 
-	lRayStart_world/=lRayStart_world.w;
-
-	glm::vec4 lRayEnd_world   = M * lRayEnd_NDC; 
-	lRayEnd_world  /=lRayEnd_world.w;
 
 
-	glm::vec3 lRayDir_world(lRayEnd_world - lRayStart_world);
-	lRayDir_world = glm::normalize(lRayDir_world);
-
-
-	RayOriginOut = glm::vec3(lRayStart_world);
-	RayDirectionOut = glm::normalize(lRayDir_world);
+Entity* Engine::GetSelectedEntity() {
+	return SelectedEntity;
+}
+void Engine::SetSelectedEntity(Entity* Entity) {
+	SelectedEntity = Entity;
 }

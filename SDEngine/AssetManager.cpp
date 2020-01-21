@@ -19,12 +19,12 @@ SAsset* AssetManager::GetAsset(TString Asset) {
 
 SAsset* AssetManager::OpenAsset(TString Asset) {
 	SAsset* temp = new SAsset(Asset);
-	S_AssetCache.insert(SMapPair<TString, SAsset*>(Asset, temp));
+	S_AssetCache.insert(SPair<TString, SAsset*>(Asset, temp));
 	return temp;
 }
 SAsset* AssetManager::GetAssetFromPool(TString Asset) {
 	SHashMap<TString, SAsset*>::const_iterator it;
-	S_AssetCache.find(Asset);
+	it = S_AssetCache.find(Asset);
 
 	if (it != S_AssetCache.end()) {
 		return S_AssetCache.find(Asset)->second;
@@ -33,10 +33,10 @@ SAsset* AssetManager::GetAssetFromPool(TString Asset) {
 }
 bool AssetManager::IsAssetOpen(TString Asset) {
 	SHashMap<TString, SAsset*>::const_iterator it;
-	S_AssetCache.find(Asset);
+	it = S_AssetCache.find(Asset);
 
 	if (it != S_AssetCache.end()) {
-		true;
+		return true;
 	}
 	return false;
 }

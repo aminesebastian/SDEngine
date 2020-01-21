@@ -4,6 +4,7 @@
 #include "EngineStatics.h"
 #include "Engine.h"
 #include "DefferedCompositor.h"
+#include "UserInterface.h"
 
 Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) :
 	Entity(Name, IntialTransform) {
@@ -11,7 +12,6 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 	S_LightInfo.Intensity = Intensity;
 	S_LightInfo.Color = Color;
 	S_LightInfo.Attenuation = Attenuation;
-	bDebugLight = false;
 	S_DebugMaterial = new Material(EngineStatics::GetLightDebugShader());
 	S_DebugMaterial->SetShaderModel(EShaderModel::UNLIT);
 	S_DebugMaterial->SetVec3Parameter("Color", Color);
@@ -23,16 +23,17 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 		S_Probe = new StaticMesh(GetName(), GetTransform(), S_DebugMaterial, "./res/Arrow.fbx");
 	}
 
+
 	S_AABB = new FAABB(S_Probe->GetVerticies());
 	if (S_LightInfo.Type == DIRECTIONAL) {
 		S_ShadowOrthoMatrix = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -40.0f, 40.0f);
 
-		S_ShadowBuffer = new FrameBufferObject();
-		S_ShadowBuffer->AddTextureIndex(new FFBOTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
+		S_ShadowBuffer = new RenderTarget();
+		S_ShadowBuffer->AddTextureIndex(new FRenderTargetTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
 		S_ShadowBuffer->Init(2048, 2048);
 
-		S_ShadowBufferTemp = new FrameBufferObject();
-		S_ShadowBufferTemp->AddTextureIndex(new FFBOTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
+		S_ShadowBufferTemp = new RenderTarget();
+		S_ShadowBufferTemp->AddTextureIndex(new FRenderTargetTextureEntry("shadowDepth", GL_RG32F, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_RGBA, GL_FLOAT));
 		S_ShadowBufferTemp->Init(2048, 2048);
 	}
 }
@@ -40,21 +41,19 @@ Light::~Light() {}
 
 void Light::Tick(float DeltaTime) {
 	if(S_LightInfo.Type == DIRECTIONAL) {
-		GetTransform().GetRotation().y += DeltaTime/1000;
+		//GetTransform().GetRotation().y += DeltaTime/1000;
 	}
 }
 void Light::Draw(Camera* Camera) {
-	if (bDebugLight) {
-		S_Probe->SetTransform(GetTransform());
-		S_Probe->Draw(Camera);
-	}
+	S_Probe->SetTransform(GetTransform());
+	S_Probe->Draw(Camera);
 }
 void Light::SendShaderInformation(Shader* shader, int index) {
 	shader->SetShaderInteger("lights[" + std::to_string(index) + "].Type", GetLightInfo().Type);
 	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Intensity", GetLightInfo().Intensity);
 	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Attenuation", GetLightInfo().Attenuation);
 	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Color", GetLightInfo().Color);
-	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Position", GetTransform().GetPosition());
+	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Position", GetTransform().GetLocation());
 	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Direction", GetTransform().GetForwardVector());
 	shader->SetShaderInteger("lights[" + std::to_string(index) + "].CastsShadow", CastsShadows());
 	shader->SetShaderMatrix4("lights[" + std::to_string(index) + "].VPMatrix", GetLightOrthogonalMatrix()*GetLightViewMatrix());
@@ -70,6 +69,19 @@ mat4 Light::GetLightViewMatrix() {
 }
 mat4 Light::GetLightOrthogonalMatrix() {
 	return S_ShadowOrthoMatrix;
+}
+
+bool Light::PopulateDetailsPanel() {
+	Entity::PopulateDetailsPanel();
+	if (ImGui::CollapsingHeader("Light Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
+		ImGui::Text("Intensity");
+		ImGui::DragFloat("Intensity", &S_LightInfo.Intensity, 0.01f);
+		ImGui::Text("Attenuation");
+		ImGui::DragFloat("Attenuation", &S_LightInfo.Attenuation, 0.01f);
+		ImGui::Text("Color");
+		ImGui::ColorEdit3("Color", &S_LightInfo.Color[0]);
+	}
+	return true;
 }
 
 void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
@@ -121,6 +133,10 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 
 	Compositor->DrawScreenQuad();
 }
-void Light::BlurTexture(FrameBufferObject* ReadBuffer, FrameBufferObject* WriteBuffer) {
+void Light::BlurTexture(RenderTarget* ReadBuffer, RenderTarget* WriteBuffer) {
 	
+}
+
+bool Light::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance) {
+	return S_Probe->TraceAgainstRay(Origin, Direction, HitPoint, Distance);
 }

@@ -2,9 +2,9 @@
 #include <string>
 #include <GLEW/glew.h>
 #include <string>
-#include "Transform.h"
 #include "Texture2D.h"
 #include "TypeDefenitions.h"
+#include "Transform.h"
 
 class Camera;
 
@@ -21,7 +21,8 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const Transform& Transform, Camera* Camera);
+	void Update(const class Transform& Transform, Camera* Camera);
+	void Update(const class Transform& Transform,  const class Transform& LastFrameTrasnform, Camera* Camera);
 	void RecompileShader();
 
 	void SetShaderInteger(string Name, int Value);
@@ -29,11 +30,13 @@ public:
 	void SetShaderVector3(string Name, vec3 Vector);
 	void SetShaderVector2(string Name, vec2 Vector);
 	void SetShaderFloat(string Name, float Value);
+	void SetShaderMatrix3(string Name, mat3 Matrix);
 	void SetShaderMatrix4(string Name, mat4 Matrix);
 	void SetShaderTexture(string Name, Texture2D* Texture, GLuint Sample);
 
-	GLuint& GetProgram() { return S_Program; }
+	TString StripDirectiveName(TString RawLine);
 
+	GLuint& GetProgram() { return S_Program; }
 private:
 	enum {
 		MODEL_MATRIX_U,
@@ -56,6 +59,7 @@ private:
 	TString S_VertexShaderPath;
 	TString S_ShaderName;
 
+	void UpdateWithDefaults(const class Transform& Transform, Camera* Camera);
 	std::string LoadShader(const std::string& fileName);
 	GLuint CreateShader(const std::string& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);

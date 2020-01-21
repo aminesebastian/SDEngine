@@ -2,6 +2,7 @@
 #include <string>
 #include "TypeDefenitions.h"
 
+
 class UWorld;
 class Shader;
 class Camera;
@@ -9,6 +10,8 @@ class GBuffer;
 class Display;
 class DefferedCompositor;
 class PostProcessingLayer;
+class VariableGausianBlur;
+class RenderTarget;
 
 enum ERenderingStage {
 	GEOMETRY,
@@ -28,21 +31,18 @@ enum EDebugState {
 
 class URenderingEngine {
 public:
-	URenderingEngine(Display* Display);
+	URenderingEngine(vec2 RenderTargetDimensions);
 	~URenderingEngine();
 
-	void ChangeShader(std::string ShaderName);
-	void RenderWorld(UWorld* World, Camera* Camera);
-	void GemoetryPass(UWorld* World, Camera* Camera, GBuffer* WriteBuffer);
-	void TranslucencyPass(UWorld* World, Camera* Camera, GBuffer* ReadBuffer, GBuffer* WriteBuffer);
-	void BlendTransparencyPass(UWorld* World, Camera* Camera, GBuffer* TranslucencyBuffer, GBuffer* ReadBuffer, GBuffer* WriteBuffer);
-	void RecompileShaders(UWorld* World);
-	void DebugGBuffer();
-	int GetTranslucentObjectCount(UWorld* World);
+	void ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions);
+	vec2 GetRenderTargetDimensions();
 
-	GBuffer* GetReadGBuffer() { return S_CurrentBuffer == 1 ? S_Buffer1 : S_Buffer2; }
-	GBuffer* GetFreeGBuffer() { return S_CurrentBuffer == 1 ? S_Buffer2 : S_Buffer1; }
-	void FlipCurrentBufferIndex();
+	void RenderWorld(UWorld* World, Camera* Camera);
+	void GemoetryPass(UWorld* World, Camera* Camera);
+	void TranslucencyPass(UWorld* World, Camera* Camera);
+	void BlendTransparencyPass(UWorld* World, Camera* Camera);
+	void RecompileShaders(UWorld* World);
+	int GetTranslucentObjectCount(UWorld* World);
 
 	ERenderingStage GetRenderingStage() { return S_CurrentStage; }
 	bool GetDebugEnabled();
@@ -52,22 +52,52 @@ public:
 	void SetDebugState(EDebugState NewState);
 
 	DefferedCompositor* GetDefferedCompositor() { return S_DefferedCompositor; }
+
+	void FlipOutputBuffers();
+	RenderTarget* GetCurrentOutputBuffer();
+	RenderTarget* GetPreviousOutputBuffer();
+
+	SArray<PostProcessingLayer*> GetPostProcessingLayers();
+	void EnablePostProcessingLayer(TString Layer);
+	void DisablePostProcessingLayer(TString Layer);
+	void TogglePostProcessingLayer(TString Layer);
+	bool IsPostProcessingLayerEnabled(TString Layer);
+
+	PostProcessingLayer* GetPostProcessingLayer(TString Layer);
+
+	inline float* GetGeometryPassTime() {
+		return &S_GeometryPassTime;
+	}
+	inline float* GetLightingPassTime() {
+		return &S_LightingPassTime;
+	}
+protected:
+	virtual void GenerateRenderTargets();
+	virtual void RegisterPostProcessEffects();
 private:
-	Shader* S_Shader;
 	Shader* S_TranslucencyBlendShader;
 	
-	GBuffer* S_Buffer1;
-	GBuffer* S_Buffer2;
-	GBuffer* S_TranslucencyBuffer;
+	GBuffer* S_GBuffer;
+
+	int32 CurrentBuffer;
+	RenderTarget* S_OutputBuffer1;
+	RenderTarget* S_OutputBuffer2;
+
+	RenderTarget* S_TranslucencyBuffer;
 
 	SArray<PostProcessingLayer*> S_PostProcessingLayers;
 
-	int S_CurrentBuffer = 1;
-	Display* S_Display;
+	vec2 RenderTargetDimensions;
 	DefferedCompositor* S_DefferedCompositor;
 	ERenderingStage S_CurrentStage;
 
 	bool bDebugMode;
 	EDebugState S_DebugState;
+
+	float S_GeometryPassTime;
+	float S_LightingPassTime;
+	float S_AOPassTime;
+	float S_BloomPassTime;
+	float S_TonemappingTime;
 };
 

@@ -15,13 +15,14 @@
 #define LOG_ERROR "ERROR"
 
 #ifndef MacrosDefined
-	#define MacrosDefined
-	#define PrintToLog(...) _slog(__FILE__,__LINE__,__VA_ARGS__)
-	#define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
+#define MacrosDefined
+#define PrintToLog(...) _slog(__FILE__,__LINE__,LOG_GENERAL,__VA_ARGS__)
 #endif
 
 class AssetManager;
 class Camera;
+class Scene;
+class EngineUI;
 
 struct FInputKey {
 	bool bKeyDown;
@@ -36,44 +37,51 @@ public:
 	Camera* GetCurrentCamera() { return S_Camera; }
 	bool Init();
 	void StartEngine() { bShouldLoop = true; MainLoop(); }
-	vec2 GetScreenRes() { return vec2(WINDOW_WIDTH, WINDOW_HEIGHT); }
+	vec2 GetScreenRes() { return vec2(S_Display->GetDimensions().x, S_Display->GetDimensions().y); }
 
 
-	float GetDeltaTime() { return S_DeltaTime; }
+	float GetFrameTime() { return S_DeltaTime; }
+	float GetFrameRate() { return S_FrameRate; }
 	float GetWorldTime() { return S_WorldTime; }
 
 	static Engine* GetInstance();
 
 	AssetManager* GetAssetManager();
 
-	TwBar* GetInfoBar() { return S_InfoBar; }
-
-	void ScreenPosToWorldRay(int mouseX, int mouseY, int screenWidth, int screenHeight, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut);
-
 	bool IsInGameMode() { return bGameMode; }
+
+	bool LoadScene(Scene* SceneToLoad);
+
+	Entity* GetSelectedEntity();
+	void SetSelectedEntity(Entity* Entity);
+
 private:
 	Engine();
 	virtual ~Engine();
 	static Engine* S_EngineInstance;
 
+	Entity* SelectedEntity;
+
+	vec2 MousePosition;
+
 	AssetManager* S_AssetManager;
 
-	float S_DeltaTime = 0.0f;	
-	int S_FrameRate = 0;
-	float S_WorldTime = 0.0f;
-	long S_LastFrameTime = 0;
-	bool bIsInitialized = false;
-	bool bShouldLoop = false;
+	Scene* S_CurrentScene;
 
-	float lightRotateAngle;
-	float lightRotateSpeed;
-	float lightRotateRadius;
+	EngineUI* S_EngineUI;
 
-	/*Temporary*/
-	int lastMouseX = 0;
-	int lastMouseY = 0;
-	float movementSpeed = 0.5f;
-	float lookSpeed = 200.0f;
+	float S_DeltaTime;
+	float S_FrameRate;
+	float S_WorldTime;
+	Uint64 S_LastFrameTime;
+	bool bIsInitialized;
+	bool bShouldLoop;
+
+
+	int lastMouseX;
+	int lastMouseY;
+	float movementSpeed;
+	float lookSpeed;
 
 	FInputKey S_InputKeys[1000];
 
@@ -81,7 +89,6 @@ private:
 	URenderingEngine* S_RenderingEngine;
 	UWorld* S_World;
 	Camera* S_Camera;
-	TwBar* S_InfoBar;
 
 	bool bGameMode;
 

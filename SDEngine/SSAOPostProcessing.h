@@ -1,29 +1,53 @@
 #pragma once
 #include "PostProcessingLayer.h"
+#include "VariableGausianBlur.h"
 #include "TypeDefenitions.h"
 
 class SSAOPostProcessing : public PostProcessingLayer {
 public:
-	SSAOPostProcessing();
+	SSAOPostProcessing(vec2 FinalOutputDimensions);
 	~SSAOPostProcessing();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) override;
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders();
+	virtual bool PopulatePostProcessingDetailsPanel() override;
 
-	void RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
-	void Blur(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
+	void RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* OutputBuffer);
+	void Blur(DefferedCompositor* Compositor, Camera* Camera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
 	void GenerateKernel();
 	void GenerateNoise();
+
+	void SetBias(float Bias);
+	float GetBias();
+
+	void SetPower(float Power);
+	float GetPower();
+
+	void SetRadius(float Radius);
+	float GetRadius();
+
+	void SetSampleCount(int Samples);
+	int GetSampleCount();
+
+	void SetNoiseSize(int Size);
+	int GetNoiseSize();
+
+	void SetBlurRadius(int Radius);
+	int GetBlurRadius();
+
 private:
-	Shader* S_SSAOShader;
-	FrameBufferObject* S_SSAOBuffer;
+	Shader* SSAOShader;
+	RenderTarget* OcclusionBuffer;
 
-	SArray<vec3> S_Noise;
-	SArray<vec3> S_Kernel;
-
-	GLuint S_NoiseTexture;
-
-	int S_NoiseSize = 16;
-	int S_KernelSize = 64;
+	float Bias;
+	float Power;
+	float Radius;
+	int S_NoiseSize;
+	int S_KernelSize;
+	int BlurRadius;
+	vec2 NoiseScale;
+	GLuint NoiseTexture;
+	SArray<vec3> Noise;
+	SArray<vec3> SampleKernel;
 };
 

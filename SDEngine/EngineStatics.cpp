@@ -1,7 +1,7 @@
 #include "EngineStatics.h"
 #include "Material.h"
 #include "Shader.h"
-#include "FrameBufferObject.h"
+#include "RenderTarget.h"
 #include "Engine.h"
 #include "DefferedCompositor.h"
 
@@ -16,7 +16,10 @@ Shader* EngineStatics::GetLightDebugShader() {
 }
 Shader* EngineStatics::GetDefaultGeometryPassShader() {
 	if (S_DefaultGeometryPassShader == nullptr) {
-		S_DefaultGeometryPassShader = new Shader("./Res/Shaders/DefaultGeometryPassShader");
+		std::lock_guard<std::mutex> guard(S_DefaultShaderCompilationMutex);
+		if (S_DefaultGeometryPassShader == nullptr) {
+			S_DefaultGeometryPassShader = new Shader("./Res/Shaders/DefaultGeometryPassShader");
+		}
 	}
 	return S_DefaultGeometryPassShader;
 }

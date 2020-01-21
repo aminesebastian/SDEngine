@@ -3,18 +3,18 @@
 
 class DOFLayer : public PostProcessingLayer {
 public:
-	DOFLayer();
+	DOFLayer(vec2 FinalOutputDimensions);
 	~DOFLayer();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) override;
-	void RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer, bool bFirstPass);
-	void RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
-	void BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer);
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
+	void RenderXPass(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer, bool bFirstPass);
+	void RenderYPass(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer);
+	void BlendOutput(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer);
 	virtual void RecompileShaders();
 private:
 	Shader* S_DepthOfFieldShader;
 
-	FrameBufferObject* S_XBlurBuffer;
-	FrameBufferObject* S_YBlurBuffer;
+	RenderTarget* S_XBlurBuffer;
+	RenderTarget* S_YBlurBuffer;
 };
 

@@ -47,7 +47,7 @@ public:
 	virtual ~StaticMesh();
 
 	virtual void Draw(Camera* Camera) override;
-
+	virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance);
 
 	void loadModel(const std::string& ModelName);
 	void processNode(aiNode* Node, const aiScene* Scene);
@@ -63,7 +63,7 @@ public:
 	void SetMaterial(Material* NewMaterial) { S_Material = NewMaterial; }
 	Material* GetMaterial() { return S_Material; }
 
-	SArray<vec3> GetVerticies() { return S_Positions; }
+	SArray<vec3> GetVerticies() { return S_Verticies; }
 private:
 	void operator=(const StaticMesh& other) {}
 	void InitMesh();
@@ -83,12 +83,12 @@ private:
 	unsigned int S_DrawCount;
 	std::vector<Texture2D*> Textures;
 
-	std::vector<vec3> S_Positions;
+	std::vector<vec3> S_Verticies;
 	std::vector<vec2> S_TexCoords;
 	std::vector<vec3> S_Normals;
 	std::vector<vec3> S_Tangents;
 	std::vector<vec3> S_VertexColors;
-	std::vector<unsigned int> S_Indicies;
+	std::vector<uint32> S_Indicies;
 
 	Material* S_Material;
 	bool S_UseCustomColor = false;

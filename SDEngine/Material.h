@@ -7,6 +7,7 @@ extern "C" {
 #include "SLogger.h"
 }
 
+
 using namespace std;
 
 struct FTextureParameter {
@@ -40,6 +41,8 @@ enum EShaderModel {
 	SSS
 };
 
+class Entity;
+
 class Material {
 
 public:
@@ -58,7 +61,7 @@ public:
 
 	bool SetShaderModel(EShaderModel Model);
 	EShaderModel GetShaderModel() { return S_ShaderModel; }
-	void BindMaterial(Transform EntityTransform, Camera* Camera);
+	void BindMaterial(Entity* Entity, Camera* Camera);
 
 private:
 	Shader* S_Shader;

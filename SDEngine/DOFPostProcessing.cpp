@@ -1,19 +1,19 @@
 #include "DOFPostProcessing.h"
 
-DOFLayer::DOFLayer() {
+DOFLayer::DOFLayer(vec2 FinalOutputDimensions) : PostProcessingLayer("Depth of Field", FinalOutputDimensions) {
 	S_DepthOfFieldShader = new Shader("Res/Shaders/PostProcessing/DOF", false);
 
-	S_XBlurBuffer = new FrameBufferObject();
-	S_XBlurBuffer->AddTextureIndex(new FFBOTextureEntry("xBlur", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	S_XBlurBuffer = new RenderTarget();
+	S_XBlurBuffer->AddTextureIndex(new FRenderTargetTextureEntry("xBlur", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	S_XBlurBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	S_YBlurBuffer = new FrameBufferObject();
-	S_YBlurBuffer->AddTextureIndex(new FFBOTextureEntry("yBlur", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	S_YBlurBuffer = new RenderTarget();
+	S_YBlurBuffer->AddTextureIndex(new FRenderTargetTextureEntry("yBlur", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	S_YBlurBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 DOFLayer::~DOFLayer() {}
 
-void DOFLayer::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
+void DOFLayer::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) {
 	int Passes = 2;					
 	bool horizontal = true;
 	bool firstPass = true;
@@ -28,7 +28,7 @@ void DOFLayer::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, Frame
 	}
 	BlendOutput(Compositor, Camera, ReadBuffer, OutputBuffer);
 }
-void DOFLayer::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer, bool bFirstPass) {
+void DOFLayer::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer, bool bFirstPass) {
 	ReadBuffer->BindForReading();
 	S_YBlurBuffer->BindForReading();
 	S_XBlurBuffer->BindForWriting();
@@ -36,7 +36,7 @@ void DOFLayer::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, Frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_DepthOfFieldShader->Bind();
 	S_DepthOfFieldShader->SetShaderInteger("PASS", 0);
-	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
+	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetLocation());
 	ReadBuffer->BindTextures(S_DepthOfFieldShader);
 
 	if (bFirstPass) {
@@ -56,7 +56,7 @@ void DOFLayer::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, Frame
 
 	Compositor->DrawScreenQuad();
 }
-void DOFLayer::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
+void DOFLayer::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	S_XBlurBuffer->BindForReading();
 	S_YBlurBuffer->BindForWriting();
@@ -64,7 +64,7 @@ void DOFLayer::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, Frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_DepthOfFieldShader->Bind();
 	S_DepthOfFieldShader->SetShaderInteger("PASS", 1);
-	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
+	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetLocation());
 	ReadBuffer->BindTextures(S_DepthOfFieldShader);
 
 	glEnable(GL_TEXTURE_2D);
@@ -75,7 +75,7 @@ void DOFLayer::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, Frame
 
 	Compositor->DrawScreenQuad();
 }
-void DOFLayer::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
+void DOFLayer::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	S_YBlurBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
@@ -83,7 +83,7 @@ void DOFLayer::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, Frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	S_DepthOfFieldShader->Bind();
 	S_DepthOfFieldShader->SetShaderInteger("PASS", 2);
-	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
+	S_DepthOfFieldShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetLocation());
 	ReadBuffer->BindTextures(S_DepthOfFieldShader);
 
 	glEnable(GL_TEXTURE_2D);

@@ -98,7 +98,7 @@ TString SAsset::getFucntionName(TString Line) {
 SArray<TString> SAsset::getParameters(TString Line) {
 	SArray<TString> parameters;
 	TString curr = "";
-	int firstSkip = getFucntionName(Line).length() + 1;
+	int firstSkip = (int)getFucntionName(Line).length() + 1;
 	TString parameterString = Line.substr(firstSkip, Line.length() - firstSkip);
 	for (int i = 0; i < parameterString.length(); i++) {
 		if(curr == "" && parameterString[i] == ' ') { //Skip leading spaces

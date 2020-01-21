@@ -1,96 +1,95 @@
 #include "BloomPostProcessing.h"
+#include "VariableGausianBlur.h"
 #include "Engine.h"
 
-BloomPostProcessing::BloomPostProcessing() {
-	S_BloomShader = new Shader("Res/Shaders/PostProcessing/Bloom", false);
 
-	S_XBloomBuffer = new FrameBufferObject();
-	S_XBloomBuffer->AddTextureIndex(new FFBOTextureEntry("xBloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
-	S_XBloomBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
+BloomPostProcessing::BloomPostProcessing(vec2 FinalOutputDimensions) : PostProcessingLayer("Bloom", FinalOutputDimensions) {
+	S_ClipHDRShader = new Shader("Res/Shaders/PostProcessing/Bloom/ClipHDR", false);
+	S_BlendBloom = new Shader("Res/Shaders/PostProcessing/Bloom/BlendBloom", false);
+	S_GausBlur = new VariableGausianBlur(FinalOutputDimensions);
 
-	S_YBloomBuffer = new FrameBufferObject();
-	S_YBloomBuffer->AddTextureIndex(new FFBOTextureEntry("yBloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
-	S_YBloomBuffer->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
+	ClippedHDRBuffer = new RenderTarget();
+	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
+	ClippedHDRBuffer->Init(FinalOutputDimensions.x, FinalOutputDimensions.y);
+
+	BloomOutputBuffer = new RenderTarget();
+	BloomOutputBuffer->AddTextureIndex(new FRenderTargetTextureEntry("Bloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT, GL_RGBA, GL_FLOAT));
+	BloomOutputBuffer->Init(FinalOutputDimensions.x, FinalOutputDimensions.y);
+
+	BlurPasses = 2;
+	BloomThreshold = 1.0f;
+	BloomWeight = 1.0f;
+	SetBloomSize(3.0f);
 }
 BloomPostProcessing::~BloomPostProcessing() {}
 
-void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
-	int Passes = 5;						//Passes must be odd
-	bool horizontal = true;
-	bool firstPass = true;
-	for (int i = 0; i < Passes*2; i++) {
-		if(horizontal) {
-			RenderXPass(Compositor, Camera, ReadBuffer, OutputBuffer, firstPass);
-		}else{
-			RenderYPass(Compositor, Camera, ReadBuffer, OutputBuffer);
-		}
-		horizontal = !horizontal;
-		firstPass = false;
-	}
-	BlendOutput(Compositor, Camera, ReadBuffer, OutputBuffer);
+void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
+	ClipHDR(Compositor, CurrentLitFrame, ClippedHDRBuffer);
+	S_GausBlur->GausianBlur(Compositor, BlurPasses, ClippedHDRBuffer, BloomOutputBuffer);
+	BlendOutput(Compositor, BloomOutputBuffer, CurrentLitFrame, OutputBuffer);
 }
-void BloomPostProcessing::RenderXPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer, bool bFirstPass) {
+
+void BloomPostProcessing::ClipHDR(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* ClipBuffer) {
 	ReadBuffer->BindForReading();
-	S_YBloomBuffer->BindForReading();
-	S_XBloomBuffer->BindForWriting();
+	ClipBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_BloomShader->Bind();
-	S_BloomShader->SetShaderInteger("PASS", 0);
-	S_BloomShader->SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetPosition());
-	ReadBuffer->BindTextures(S_BloomShader);
+	S_ClipHDRShader->Bind();
+	S_ClipHDRShader->SetShaderFloat("THRESHOLD", BloomThreshold);
 
-	if(bFirstPass) {
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0 + 9);
-		glGenerateMipmapEXT(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(6));
-		glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_YBloomBuffer->GetTextureName(0).c_str()), 9);
-	}else{
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0 + 9);
-		glGenerateMipmapEXT(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, S_YBloomBuffer->GetTexture(0));
-		glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_YBloomBuffer->GetTextureName(0).c_str()), 9);
-	}
-	Compositor->DrawScreenQuad();
-}
-void BloomPostProcessing::RenderYPass(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
-	ReadBuffer->BindForReading();
-	S_XBloomBuffer->BindForReading();
-	S_YBloomBuffer->BindForWriting();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_BloomShader->Bind();
-	S_BloomShader->SetShaderInteger("PASS", 1);
-	ReadBuffer->BindTextures(S_BloomShader);
-
-	glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0 + 10);
-	glGenerateMipmapEXT(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, S_XBloomBuffer->GetTexture(0));
-	glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_XBloomBuffer->GetTextureName(0).c_str()), 10);
+	ReadBuffer->BindTexture(S_ClipHDRShader, 0, 0, "Input");
 
 	Compositor->DrawScreenQuad();
 }
-void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) {
-	ReadBuffer->BindForReading();
-	S_YBloomBuffer->BindForReading();
+void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, RenderTarget* BloomBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer) {
 	OutputBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_BloomShader->Bind();
-	S_BloomShader->SetShaderInteger("PASS", 2);
-	ReadBuffer->BindTextures(S_BloomShader);
+	S_BlendBloom->Bind();
+	S_BlendBloom->SetShaderFloat("BLOOM_WEIGHT", BloomWeight);
 
-	glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0 + 10);
-	glGenerateMipmapEXT(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, S_YBloomBuffer->GetTexture(0));
-	glUniform1i(glGetUniformLocation(S_BloomShader->GetProgram(), S_YBloomBuffer->GetTextureName(0).c_str()), 10);
+	BloomBuffer->BindForReading();
+	BloomBuffer->BindTexture(S_BlendBloom, 0, 0, "Bloom");
+	LitBuffer->BindForReading();
+	LitBuffer->BindTexture(S_BlendBloom, 0, 1, "Input");
 
 	Compositor->DrawScreenQuad();
 }
 void BloomPostProcessing::RecompileShaders() {
-	S_BloomShader->RecompileShader();
+	S_ClipHDRShader->RecompileShader();
+	S_BlendBloom->RecompileShader();
+	S_GausBlur->RecompileShaders();
+}
+
+void BloomPostProcessing::SetBloomThreshold(float Threshold) {
+	BloomThreshold = Threshold;
+}
+float BloomPostProcessing::GetBloomThreshold() {
+	return BloomThreshold;
+}
+
+void BloomPostProcessing::SetBloomSize(float Size) {
+	S_GausBlur->SetBlurSize(Size);
+}
+float BloomPostProcessing::GetBloomSize() {
+	return S_GausBlur->GetBlurSize();
+}
+
+void BloomPostProcessing::SetBloomWeight(float Weight) {
+	BloomWeight = Weight;
+}
+float BloomPostProcessing::GetBloomWeight() {
+	return BloomWeight;
+}
+
+bool BloomPostProcessing::PopulatePostProcessingDetailsPanel() {
+	float bloomSize = GetBloomSize();
+	if (ImGui::SliderFloat("Size", &bloomSize, 0.0f, 10.0f)) {
+		SetBloomSize(bloomSize);
+	}
+	ImGui::SliderFloat("Weight", &BloomWeight, 0.0f, 10.0f);
+	ImGui::SliderFloat("Threshold", &BloomThreshold, 0.0f, 5.0f);
+	ImGui::SliderInt("Passes", &BlurPasses, 1, 5, "%d Passes");
+
+	return true;
 }

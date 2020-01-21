@@ -1,9 +1,10 @@
 #pragma once
 #include <GLEW/glew.h>
+#include <mutex>
 
 class Material;
 class Shader;
-class FrameBufferObject;
+class RenderTarget;
 
 static Shader* S_LightDebugShader;
 static Material* S_DefaultMaterial;
@@ -15,6 +16,9 @@ static Shader* S_GausBlur7x1Shader;
 
 static GLuint quadVAO = 0;
 static GLuint quadVBO;
+
+/** Compilation mutex */
+static std::mutex S_DefaultShaderCompilationMutex;
 
 class EngineStatics {
 public:
@@ -28,7 +32,6 @@ public:
 	static Shader* GetLineShader();
 
 	static Shader* GetGausBlur7x1Shader();
-private:
 
 };
 

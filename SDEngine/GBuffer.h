@@ -1,7 +1,7 @@
 #pragma once
-#include "FrameBufferObject.h"
+#include "RenderTarget.h"
 
-class GBuffer : public FrameBufferObject {
+class GBuffer : public RenderTarget {
 public:
 
 	enum GBUFFER_TEXTURE_TYPE {
@@ -11,8 +11,7 @@ public:
 		GBUFFER_TEXTURE_TYPE_NORMAL, //RGB Normal, A EMPTY
 		GBUFFER_TEXTURE_TYPE_TEXCOORD, //RG UV, BA EMPTY
 		GBUFFER_TEXTURE_TYPE_TRANSLUCENCY, //RGB Color, A Alpha
-		GBUFFER_TEXTURE_TYPE_HDR,	//RGB HDR, A EMPTY
-		GBUFFER_TEXTURE_TYPE_FINAL_COMP,	//RGB Output, A EMPTY SHOULD BE EMISSIVE
+		GBUFFER_TEXTURE_TYPE_MOTION,	//RGB MotionPerPixel
 		GBUFFER_NUM_TEXTURES
 	};
 

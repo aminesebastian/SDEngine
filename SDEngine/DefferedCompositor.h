@@ -15,9 +15,9 @@ public:
 	DefferedCompositor(string LightingShader);
 	~DefferedCompositor();
 
-	void CompositeLighting(GBuffer* ReadBuffer, GBuffer* WriteBuffer, vector<Light*> Lights, Camera* camera);
+	void CompositeLighting(GBuffer* GBufferIn, RenderTarget* OutputBuffer, vector<Light*> Lights, Camera* camera);
 	void CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex);
-	void OutputToScreen(GBuffer* ReadBuffer);
+	void OutputToScreen(RenderTarget* ReadBuffer);
 
 	void RecompileShaders();
 

@@ -3,10 +3,10 @@
 
 class ToneMapper : public PostProcessingLayer {
 public:
-	ToneMapper();
+	ToneMapper(vec2 FinalOutputDimensions);
 	~ToneMapper();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, FrameBufferObject* ReadBuffer, FrameBufferObject* OutputBuffer) override;
+	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders();
 private:
 	Shader* S_TonemapperShader;
