@@ -1,9 +1,0 @@
-﻿  Scene.cpp
-E:\Suburban Digital\SDEngine\InDev\SDEngine\Engine.h(20,1): warning C4005:  'PrintToLog': macro redefinition
-E:\Suburban Digital\SDEngine\InDev\SDEngine\Engine.h(19): message :  see previous definition of 'PrintToLog'
-  Generating code
-  360 of 1595 functions (22.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    52 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  SDEngine.vcxproj -> E:\Suburban Digital\SDEngine\InDev\x64\Release\SDEngine.exe
