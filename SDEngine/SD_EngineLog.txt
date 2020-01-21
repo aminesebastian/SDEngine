@@ -585,3 +585,11 @@ E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-21 1:29:23: [GEN
 E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-21 1:29:23: [GENERAL] Plane Loaded!
 E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-21 1:29:37: [GENERAL] Head Loaded!
 E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-21 1:29:38: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Main.cpp:30: 2020-1-21 2:53:51: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:44: 2020-1-21 2:53:51: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:54: 2020-1-21 2:54:6: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:63: 2020-1-21 2:54:6: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Main.cpp:30: 2020-1-21 2:57:42: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:44: 2020-1-21 2:57:42: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:54: 2020-1-21 2:57:56: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:63: 2020-1-21 2:57:56: [GENERAL] Gizmo Loaded!
