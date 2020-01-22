@@ -104,13 +104,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./UserInterface/Widgets;./UserInterface;.;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,7 +139,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,81 +147,90 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="BloomPostProcessing.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DefferedCompositor.cpp" />
-    <ClCompile Include="DOFPostProcessing.cpp" />
-    <ClCompile Include="Display.cpp" />
-    <ClCompile Include="Downsampler.cpp" />
-    <ClCompile Include="EngineStatics.cpp" />
-    <ClCompile Include="EngineUI.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EyeActor.cpp" />
-    <ClCompile Include="FAABB.cpp" />
-    <ClCompile Include="RenderTarget.cpp" />
-    <ClCompile Include="GBuffer.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="DetailsPanelProvider.cpp" />
+    <ClCompile Include="Entities\EditorSprite.cpp" />
+    <ClCompile Include="Engine\Object.cpp" />
+    <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
+    <ClCompile Include="Entities\Actor.cpp" />
+    <ClCompile Include="Engine\AssetManager.cpp" />
+    <ClCompile Include="Entities\TransformGizmo.cpp" />
+    <ClCompile Include="Utilities\Logger.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp" />
+    <ClCompile Include="Entities\Camera.cpp" />
+    <ClCompile Include="Rendering\DefferedCompositor.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\DOFPostProcessing.cpp" />
+    <ClCompile Include="Engine\Display.cpp" />
+    <ClCompile Include="Rendering\Utilities\Downsampler.cpp" />
+    <ClCompile Include="Engine\EngineStatics.cpp" />
+    <ClCompile Include="UserInterface\EngineUI.cpp" />
+    <ClCompile Include="Entities\Entity.cpp" />
+    <ClCompile Include="Entities\EyeActor.cpp" />
+    <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp" />
+    <ClCompile Include="Rendering\RenderTarget.cpp" />
+    <ClCompile Include="Rendering\GBuffer.cpp" />
+    <ClCompile Include="Entities\Grid.cpp" />
+    <ClCompile Include="UserInterface\DetailsPanelProvider.cpp" />
     <ClCompile Include="Lib\Imgui\imgui.cpp" />
     <ClCompile Include="Lib\Imgui\imgui_demo.cpp" />
     <ClCompile Include="Lib\Imgui\imgui_draw.cpp" />
     <ClCompile Include="Lib\Imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Lib\Imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="Lib\Imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Entities\Light.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="MotionBlurPostProcessing.cpp" />
-    <ClCompile Include="ObjLoader.cpp" />
-    <ClCompile Include="PostProcessingLayer.cpp" />
-    <ClCompile Include="RenderingEngine.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="UserInterfaceUtilities.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Rendering\Material.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\MotionBlurPostProcessing.cpp" />
+    <ClCompile Include="Utilities\ObjLoader.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\PostProcessingLayer.cpp" />
+    <ClCompile Include="Engine\RenderViewport.cpp" />
+    <ClCompile Include="Engine\Scene.cpp" />
+    <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp" />
     <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp" />
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp" />
-    <ClCompile Include="VariableGausianBlur.cpp" />
-    <ClCompile Include="SAsset.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SLogger.c" />
-    <ClCompile Include="MathLibrary.cpp" />
-    <ClCompile Include="SSAOPostProcessing.cpp" />
-    <ClCompile Include="StaticMesh.cpp" />
-    <ClCompile Include="ImageUtils.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="WorkerThread.cpp" />
-    <ClCompile Include="ThreadManager.cpp" />
-    <ClCompile Include="ToneMapper.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="TypeDefenitions.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
+    <ClCompile Include="Engine\SAsset.cpp" />
+    <ClCompile Include="Rendering\Shader.cpp" />
+    <ClCompile Include="Utilities\Math\MathLibrary.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp" />
+    <ClCompile Include="Entities\StaticMesh.cpp" />
+    <ClCompile Include="Utilities\ImageUtils.cpp" />
+    <ClCompile Include="Rendering\Texture2D.cpp" />
+    <ClCompile Include="Engine\WorkerThread.cpp" />
+    <ClCompile Include="Engine\ThreadManager.cpp" />
+    <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp" />
+    <ClCompile Include="Utilities\Transform.cpp" />
+    <ClCompile Include="Utilities\TypeDefenitions.cpp" />
+    <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="BloomPostProcessing.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="DefferedCompositor.h" />
-    <ClInclude Include="DOFPostProcessing.h" />
-    <ClInclude Include="Display.h" />
-    <ClInclude Include="Downsampler.h" />
-    <ClInclude Include="DragFloat.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="EngineStatics.h" />
-    <ClInclude Include="EngineUI.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="EyeActor.h" />
-    <ClInclude Include="FAABB.h" />
-    <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="GBuffer.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="DetailsPanelProvider.h" />
+    <ClInclude Include="Entities\EditorSprite.h" />
+    <ClInclude Include="Engine\Object.h" />
+    <ClInclude Include="Physics\CollisionChannels.h" />
+    <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
+    <ClInclude Include="Entities\Actor.h" />
+    <ClInclude Include="Engine\AssetManager.h" />
+    <ClInclude Include="Entities\TransformGizmo.h" />
+    <ClInclude Include="Utilities\Logger.h" />
+    <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h" />
+    <ClInclude Include="Entities\Camera.h" />
+    <ClInclude Include="Rendering\DefferedCompositor.h" />
+    <ClInclude Include="Rendering\PostProcessing\DOFPostProcessing.h" />
+    <ClInclude Include="Engine\Display.h" />
+    <ClInclude Include="Rendering\Utilities\Downsampler.h" />
+    <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\EngineStatics.h" />
+    <ClInclude Include="UserInterface\EngineUI.h" />
+    <ClInclude Include="Entities\Entity.h" />
+    <ClInclude Include="Entities\EyeActor.h" />
+    <ClInclude Include="Physics\AxisAlignedBoundingBox.h" />
+    <ClInclude Include="Rendering\RenderTarget.h" />
+    <ClInclude Include="Rendering\GBuffer.h" />
+    <ClInclude Include="Entities\Grid.h" />
+    <ClInclude Include="UserInterface\DetailsPanelProvider.h" />
     <ClInclude Include="Lib\Imgui\imconfig.h" />
     <ClInclude Include="Lib\Imgui\imgui.h" />
     <ClInclude Include="Lib\Imgui\imgui_impl_opengl3.h" />
@@ -230,38 +239,39 @@
     <ClInclude Include="Lib\Imgui\imstb_rectpack.h" />
     <ClInclude Include="Lib\Imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\Imgui\imstb_truetype.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="MotionBlurPostProcessing.h" />
-    <ClInclude Include="ObjLoader.h" />
-    <ClInclude Include="PostProcessingLayer.h" />
-    <ClInclude Include="RenderingEngine.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="UserInterface.h" />
-    <ClInclude Include="UserInterfaceUtilities.h" />
+    <ClInclude Include="Entities\Light.h" />
+    <ClInclude Include="Rendering\Material.h" />
+    <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h" />
+    <ClInclude Include="Utilities\ObjLoader.h" />
+    <ClInclude Include="Rendering\PostProcessing\PostProcessingLayer.h" />
+    <ClInclude Include="Engine\RenderViewport.h" />
+    <ClInclude Include="Engine\Scene.h" />
+    <ClInclude Include="UserInterface\UserInterface.h" />
+    <ClInclude Include="UserInterface\UserInterfaceUtilities.h" />
     <ClInclude Include="UserInterface\Widgets\BaseWidget.h" />
     <ClInclude Include="UserInterface\Widgets\DragFloat.h" />
-    <ClInclude Include="VariableGausianBlur.h" />
-    <ClInclude Include="SAsset.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="SLogger.h" />
-    <ClInclude Include="MathLibrary.h" />
-    <ClInclude Include="SSAOPostProcessing.h" />
-    <ClInclude Include="StaticMesh.h" />
-    <ClInclude Include="ImageUtils.h" />
-    <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="WorkerThread.h" />
-    <ClInclude Include="ThreadManager.h" />
-    <ClInclude Include="ToneMapper.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TypeDefenitions.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
+    <ClInclude Include="Engine\SAsset.h" />
+    <ClInclude Include="Rendering\Shader.h" />
+    <ClInclude Include="Utilities\Math\MathLibrary.h" />
+    <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h" />
+    <ClInclude Include="Entities\StaticMesh.h" />
+    <ClInclude Include="Utilities\ImageUtils.h" />
+    <ClInclude Include="Rendering\Texture2D.h" />
+    <ClInclude Include="Engine\WorkerThread.h" />
+    <ClInclude Include="Engine\ThreadManager.h" />
+    <ClInclude Include="Rendering\PostProcessing\ToneMapper.h" />
+    <ClInclude Include="Utilities\Transform.h" />
+    <ClInclude Include="Utilities\TypeDefenitions.h" />
+    <ClInclude Include="Engine\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefaultGeometryPassShader.frag" />
     <None Include="Res\Shaders\DefaultGeometryPassShader.vert" />
     <None Include="Res\Shaders\DefferedLighting.frag" />
     <None Include="Res\Shaders\DefferedLighting.vert" />
+    <None Include="Res\Shaders\EditorSpriteShader.frag" />
+    <None Include="Res\Shaders\EditorSpriteShader.vert" />
     <None Include="Res\Shaders\GridShader.frag" />
     <None Include="Res\Shaders\GridShader.vert" />
     <None Include="Res\Shaders\HeadShader.frag" />
@@ -292,6 +302,8 @@
     <None Include="Res\Shaders\PostProcessing\SSAO.vert" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
     <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
+    <None Include="Res\Shaders\SelectionOutlineShader.frag" />
+    <None Include="Res\Shaders\SelectionOutlineShader.vert" />
     <None Include="Res\Shaders\ShadowShader.frag" />
     <None Include="Res\Shaders\ShadowShader.vert" />
     <None Include="Res\Shaders\SkySphereShader.frag" />
@@ -300,6 +312,8 @@
     <None Include="Res\Shaders\TestEyeShader.vert" />
     <None Include="Res\Shaders\TorusShader.frag" />
     <None Include="Res\Shaders\TorusShader.vert" />
+    <None Include="Res\Shaders\TransformGizmoShader.frag" />
+    <None Include="Res\Shaders\TransformGizmoShader.vert" />
     <None Include="Res\Shaders\TranslucencyCompositor.frag" />
     <None Include="Res\Shaders\TranslucencyCompositor.vert" />
     <None Include="Res\Shaders\TranslucentShader.frag" />

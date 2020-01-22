@@ -79,116 +79,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMesh.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="DefferedCompositor.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderingEngine.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageUtils.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjLoader.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Grid.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Actor.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="EyeActor.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="TypeDefenitions.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Display.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="SLogger.c">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="SAsset.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineStatics.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="PostProcessingLayer.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="ToneMapper.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="BloomPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="SSAOPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="DOFPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="FAABB.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadManager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="WorkerThread.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="VariableGausianBlur.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Downsampler.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="MotionBlurPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
     </ClCompile>
     <ClCompile Include="Lib\Imgui\imgui.cpp">
       <Filter>External Libraries\imgui</Filter>
@@ -199,9 +91,6 @@
     <ClCompile Include="Lib\Imgui\imgui_impl_sdl.cpp">
       <Filter>External Libraries\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="EngineUI.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="Lib\Imgui\imgui_widgets.cpp">
       <Filter>External Libraries\imgui</Filter>
     </ClCompile>
@@ -211,134 +100,149 @@
     <ClCompile Include="Lib\Imgui\imgui_draw.cpp">
       <Filter>External Libraries\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="DetailsPanelProvider.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderTarget.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterfaceUtilities.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp">
       <Filter>Source Files\UserInterface\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp">
       <Filter>Source Files\UserInterface\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="MathLibrary.cpp">
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\DefferedCompositor.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\AssetManager.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineStatics.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\DOFPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Utilities\Downsampler.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\GBuffer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Camera.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Display.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\EngineUI.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\DetailsPanelProvider.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\EyeActor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Grid.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\MotionBlurPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\PostProcessingLayer.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\RenderTarget.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SAsset.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ImageUtils.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Light.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Material.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ObjLoader.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\TypeDefenitions.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Math\MathLibrary.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Transform.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WorkerThread.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Texture2D.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\StaticMesh.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ThreadManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\TransformGizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderViewport.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\EngineFunctionLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\EditorSprite.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="StaticMesh.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="DefferedCompositor.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderingEngine.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageUtils.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjLoader.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Grid.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Actor.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="EyeActor.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeDefenitions.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Display.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="SAsset.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="SLogger.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineStatics.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="PostProcessingLayer.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="ToneMapper.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="BloomPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="SSAOPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="DOFPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="FAABB.h">
-      <Filter>Headers\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadManager.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="WorkerThread.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="VariableGausianBlur.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Downsampler.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="MotionBlurPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
     <ClInclude Include="Lib\Imgui\imgui.h">
       <Filter>External Libraries\imgui</Filter>
     </ClInclude>
@@ -347,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="Lib\Imgui\imgui_impl_sdl.h">
       <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineUI.h">
-      <Filter>Headers\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Lib\Imgui\imconfig.h">
       <Filter>External Libraries\imgui</Filter>
@@ -366,28 +267,141 @@
     <ClInclude Include="Lib\Imgui\imstb_truetype.h">
       <Filter>External Libraries\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="DetailsPanelProvider.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderTarget.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterfaceUtilities.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="DragFloat.h" />
     <ClInclude Include="UserInterface\Widgets\DragFloat.h">
       <Filter>Headers\UserInterface\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Widgets\BaseWidget.h">
       <Filter>Headers\UserInterface\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="MathLibrary.h">
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\DefferedCompositor.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AssetManager.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\EngineStatics.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\DOFPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Utilities\Downsampler.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\GBuffer.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Actor.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Camera.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Display.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\EngineUI.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\DetailsPanelProvider.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Grid.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Entity.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\EyeActor.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\PostProcessingLayer.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\RenderTarget.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SAsset.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ImageUtils.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Light.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Material.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ObjLoader.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\TypeDefenitions.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Math\MathLibrary.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Transform.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UserInterface.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UserInterfaceUtilities.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WorkerThread.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\ToneMapper.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Texture2D.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\StaticMesh.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Shader.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ThreadManager.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Logger.h" />
+    <ClInclude Include="Entities\TransformGizmo.h" />
+    <ClInclude Include="Engine\RenderViewport.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
+    <ClInclude Include="Engine\Object.h" />
+    <ClInclude Include="Physics\CollisionChannels.h" />
+    <ClInclude Include="Physics\AxisAlignedBoundingBox.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\EditorSprite.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">
@@ -528,5 +542,19 @@
     <None Include="Res\Shaders\PostProcessing\GBlur5x1.vert">
       <Filter>Shaders\PostProcessing</Filter>
     </None>
+    <None Include="Res\Shaders\SelectionOutlineShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SelectionOutlineShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TransformGizmoShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TransformGizmoShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\EditorSpriteShader.vert" />
+    <None Include="Res\Shaders\EditorSpriteShader.frag" />
   </ItemGroup>
 </Project>

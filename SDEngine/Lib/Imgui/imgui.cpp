@@ -682,7 +682,7 @@ CODE
        Button("Hello###ID");  // Label = "Hello",  ID = hash of (..., "###ID")
        Button("World###ID");  // Label = "World",  ID = hash of (..., "###ID")  // Same as above, even though the label looks different
 
-       sprintf(buf, "My game (%f FPS)###MyGame", fps);
+       sprintf_s(buf, "My game (%f FPS)###MyGame", fps);
        Begin(buf);            // Variable title,   ID = hash of "MyGame"
 
    - Solving ID conflict in a more general manner:
@@ -811,7 +811,7 @@ CODE
 // Visual Studio warnings
 #ifdef _MSC_VER
 #pragma warning (disable: 4127)     // condition expression is constant
-#pragma warning (disable: 4996)     // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
+#pragma warning (disable: 4996)     // 'This function or variable may be unsafe': strcpy, strdup, sprintf_s, vsnprintf, sscanf, fopen
 #if defined(_MSC_VER) && _MSC_VER >= 1922 // MSVC 2019 16.2 or later
 #pragma warning (disable: 5054)     // operator '|': deprecated between enumerations of different types
 #endif
@@ -1353,13 +1353,13 @@ const char* ImStrSkipBlank(const char* str)
 // B) When buf==NULL vsnprintf() will return the output size.
 #ifndef IMGUI_DISABLE_DEFAULT_FORMAT_FUNCTIONS
 
-// We support stb_sprintf which is much faster (see: https://github.com/nothings/stb/blob/master/stb_sprintf.h)
-// You may set IMGUI_USE_STB_SPRINTF to use our default wrapper, or set IMGUI_DISABLE_DEFAULT_FORMAT_FUNCTIONS
+// We support stb_sprintf_s which is much faster (see: https://github.com/nothings/stb/blob/master/stb_sprintf_s.h)
+// You may set IMGUI_USE_STB_sprintf_s to use our default wrapper, or set IMGUI_DISABLE_DEFAULT_FORMAT_FUNCTIONS
 // and setup the wrapper yourself. (FIXME-OPT: Some of our high-level operations such as ImGuiTextBuffer::appendfv() are
-// designed using two-passes worst case, which probably could be improved using the stbsp_vsprintfcb() function.)
-#ifdef IMGUI_USE_STB_SPRINTF
-#define STB_SPRINTF_IMPLEMENTATION
-#include "stb_sprintf.h"
+// designed using two-passes worst case, which probably could be improved using the stbsp_vsprintf_scb() function.)
+#ifdef IMGUI_USE_STB_sprintf_s
+#define STB_sprintf_s_IMPLEMENTATION
+#include "stb_sprintf_s.h"
 #endif
 
 #if defined(_MSC_VER) && !defined(vsnprintf)
@@ -1370,7 +1370,7 @@ int ImFormatString(char* buf, size_t buf_size, const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-#ifdef IMGUI_USE_STB_SPRINTF
+#ifdef IMGUI_USE_STB_sprintf_s
     int w = stbsp_vsnprintf(buf, (int)buf_size, fmt, args);
 #else
     int w = vsnprintf(buf, buf_size, fmt, args);
@@ -1386,7 +1386,7 @@ int ImFormatString(char* buf, size_t buf_size, const char* fmt, ...)
 
 int ImFormatStringV(char* buf, size_t buf_size, const char* fmt, va_list args)
 {
-#ifdef IMGUI_USE_STB_SPRINTF
+#ifdef IMGUI_USE_STB_sprintf_s
     int w = stbsp_vsnprintf(buf, (int)buf_size, fmt, args);
 #else
     int w = vsnprintf(buf, buf_size, fmt, args);

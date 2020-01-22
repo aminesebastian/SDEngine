@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseWidget.h"
-#include "TypeDefenitions.h"
+#include "Utilities/TypeDefenitions.h"
 #include <functional>
 
 struct FDragFloatEntry {

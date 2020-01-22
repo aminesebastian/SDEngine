@@ -700,7 +700,7 @@ public:
      *  @param type Texture type to check for
      *  @return Number of textures for this type.
      *  @note A texture can be easily queried using #GetTexture() */
-    unsigned int GetTextureCount(aiTextureType type) const;
+    unsigned int GetAttachedTextureCount(aiTextureType type) const;
 
     // -------------------------------------------------------------------
     /** Helper function to get all parameters pertaining to a

@@ -1,7 +1,5 @@
+Shader(Res/Shaders/TransformGizmoShader);
+
 Texture(Res/Gizmo/T_PositionGizmo_BaseColor.png);
-Texture(Res/Gizmo/T_PositionGizmo_RMAO.png);
-Texture(Res/Gizmo/T_PositionGizmo_Normal.png);
 
 TextureParam(0, albedo);
-TextureParam(1, RMAO);
-TextureParam(2, normal);
