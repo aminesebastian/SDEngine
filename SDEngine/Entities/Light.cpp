@@ -6,8 +6,8 @@
 #include "Rendering/DefferedCompositor.h"
 #include "UserInterface/UserInterface.h"
 
-Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) :
-	Entity(Name, IntialTransform) {
+Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) : Actor(Name) {
+	SetTransform(IntialTransform);
 	S_LightInfo.Type = Type;
 	S_LightInfo.Intensity = Intensity;
 	S_LightInfo.Color = Color;
@@ -17,13 +17,10 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 	S_DebugMaterial->SetVec3Parameter("Color", Color);
 
 	bCastShadows = CastShadows;
-	if(S_LightInfo.Type == POINT) {
-		Sprite = new EditorSprite("./Res/Textures/Editor/Sprites/PointLightSprite.png", Color);
-		S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
-	}else{
-		S_Probe = new StaticMesh(GetName(), GetTransform(), S_DebugMaterial, "./res/Arrow.fbx");
-		S_AABB = new AxisAlignedBoundingBox(S_Probe->GetVerticies());
-	}
+
+	RegisterComponent(new EditorSpriteComponent("PointLightSprite", "./Res/Textures/Editor/Sprites/PointLightSprite.png", Color));
+
+	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 
 	if (S_LightInfo.Type == DIRECTIONAL) {
 		S_ShadowOrthoMatrix = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -40.0f, 40.0f);
@@ -41,23 +38,7 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 }
 Light::~Light() {}
 
-void Light::Tick(float DeltaTime) {
-	if(S_LightInfo.Type == DIRECTIONAL) {
-		//GetTransform().GetRotation().y += DeltaTime/1000;
-	}
-}
-void Light::Draw(Camera* Camera, bool bCallerProvidesShader) {
-	if (!Engine::GetInstance()->IsInGameMode()) {
-		if (S_LightInfo.Type == POINT) {
-			Sprite->SetLocation(GetLocation());
-			Sprite->SetTint(GetLightInfo().Color);
-			Sprite->Draw(Camera, bCallerProvidesShader);
-		} else {
-			S_Probe->SetTransform(GetTransform());
-			S_Probe->Draw(Camera, bCallerProvidesShader);
-		}
-	}
-}
+
 void Light::SendShaderInformation(Shader* shader, int index) {
 	shader->SetShaderInteger("lights[" + std::to_string(index) + "].Type", GetLightInfo().Type);
 	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Intensity", GetLightInfo().Intensity);
@@ -75,19 +56,19 @@ void Light::SendShaderInformation(Shader* shader, int index) {
 	}
 }
 mat4 Light::GetLightViewMatrix() {
-	return lookAt(vec3(0,0,0), S_Transform.GetForwardVector(), vec3(0, 0, 1));
+	return lookAt(vec3(0,0,0), CurrentTransform.GetForwardVector(), vec3(0, 0, 1));
 }
 mat4 Light::GetLightOrthogonalMatrix() {
 	return S_ShadowOrthoMatrix;
 }
 
 bool Light::PopulateDetailsPanel() {
-	Entity::PopulateDetailsPanel();
+	Actor::PopulateDetailsPanel();
 	if (ImGui::CollapsingHeader("Light Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::Text("Intensity");
-		ImGui::DragFloat("Intensity", &S_LightInfo.Intensity, 0.01f);
+		ImGui::DragFloat("Intensity", &S_LightInfo.Intensity, 0.01f, 0.0f, 10000000.0f);
 		ImGui::Text("Attenuation");
-		ImGui::DragFloat("Attenuation", &S_LightInfo.Attenuation, 0.01f);
+		ImGui::DragFloat("Attenuation", &S_LightInfo.Attenuation, 0.01f, 0.0f, 10000000.0f);
 		ImGui::Text("Color");
 		ImGui::ColorEdit3("Color", &S_LightInfo.Color[0]);
 	}
@@ -101,23 +82,17 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 	S_ShadowBuffer->BindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	SArray<Entity*> entityList = Engine::GetInstance()->GetWorld()->GetWorldEntities();
-	//glCullFace(GL_FRONT);
-	for(int i=0; i<entityList.size(); i++) {
-		if (entityList[i]->IsVisible()) {
-			StaticMesh* temp = dynamic_cast<StaticMesh*>(entityList[i]);
-			if (temp) {
-				EngineStatics::GetShadowShader()->Bind();
-				mat4 mvp;
-				mvp = GetLightOrthogonalMatrix() * GetLightViewMatrix();
-				mvp = mvp * temp->GetTransform().GetModelMatrix();
-				EngineStatics::GetShadowShader()->SetShaderMatrix4("MVP", mvp);
-				temp->Draw(NULL); // CLEAN THIS UP
-			}
+	SArray<Actor*> entityList = Engine::GetInstance()->GetWorld()->GetWorldActors();
+	for (Actor* actor : Engine::GetInstance()->GetWorld()->GetWorldActors()) {
+		if (actor->IsVisible()) {
+			EngineStatics::GetShadowShader()->Bind();
+			mat4 mvp;
+			mvp = GetLightOrthogonalMatrix() * GetLightViewMatrix();
+			mvp = mvp * actor->GetTransform().GetModelMatrix();
+			EngineStatics::GetShadowShader()->SetShaderMatrix4("MVP", mvp);
+			actor->DrawAdvanced(nullptr, SHADOW_MAP_RENDER);
 		}
 	}
-
-	//glCullFace(GL_BACK);
 
 	S_ShadowBufferTemp->BindForWriting();
 
@@ -149,15 +124,15 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 void Light::BlurTexture(RenderTarget* ReadBuffer, RenderTarget* WriteBuffer) {
 	
 }
-bool Light::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) {
-	if (Channel == EDITOR) {
-		if (!Engine::GetInstance()->IsInGameMode()) {
-			if (S_LightInfo.Type == DIRECTIONAL) {
-				return S_Probe->TraceAgainstRay(Origin, Direction, HitPoint, Distance);
-			} else {
-				return Sprite->TraceAgainstRay(Origin, Direction, HitPoint, Distance);
-			}	
-		}
-	}
-	return false;
-}
+//bool Light::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) {
+//	if (Channel == EDITOR) {
+//		if (!Engine::GetInstance()->IsInGameMode()) {
+//			if (S_LightInfo.Type == DIRECTIONAL) {
+//				return S_Probe->TraceAgainstRay(Origin, Direction, HitPoint, Distance);
+//			} else {
+//				return Sprite->TraceAgainstRay(Origin, Direction, HitPoint, Distance);
+//			}	
+//		}
+//	}
+//	return false;
+//}

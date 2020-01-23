@@ -73,8 +73,8 @@ void main()	{
 	Output				= lighting;
 }
 vec3 Luminance() {
-	vec3 finalLightIntensity;
 	if(texture(albedo, texCoord0).a == 0) {
+		vec3 finalLightIntensity;
 		finalLightIntensity = texture(albedo, texCoord0).rgb * 0.03f;
 		for(int i=0; i<LIGHT_COUNT; i++) {
 			if(lights[i].Type == 0) {
@@ -87,10 +87,10 @@ vec3 Luminance() {
 				finalLightIntensity += directionalContrib;
 			}		
 		}
+		return texture(albedo, texCoord0).rgb * finalLightIntensity * texture(RMAO, texCoord0).b;
 	}else{
-		finalLightIntensity = vec3(1);
+		return texture(albedo, texCoord0).rgb;
 	}
-	return texture(albedo, texCoord0).rgb * finalLightIntensity * texture(RMAO, texCoord0).b;
 }
 float linstep(float low, float high, float value) {
 	return clamp((value-low)/(high-low), 0.0, 1.0);

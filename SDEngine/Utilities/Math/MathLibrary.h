@@ -7,7 +7,7 @@ using namespace glm;
 #define ERROR_EPSILON 1e-8
 
 class Entity;
-class UWorld;
+class World;
 class Camera;
 
 struct FHitInfo {
@@ -39,8 +39,8 @@ public:
 	}
 
 	static void ScreenCoordinatesToWorldRay(vec2 MouseCoordinates, vec2 ScreenDimensions, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut);
-	static bool LineTraceAgainstWorldFromScreen(FHitInfo& HitInfo, vec2 MouseCoordinates, Camera* Camera, UWorld* World, ECollisionChannel Channel = VISIBILITY);
-	static bool LineTraceAgainstWorld(FHitInfo& HitInfo, UWorld* World, vec3 RayOrigin, vec3 RayDirection, ECollisionChannel Channel = VISIBILITY);
+	static bool LineTraceAgainstWorldFromScreen(FHitInfo& HitInfo, vec2 MouseCoordinates, Camera* Camera, World* World, ECollisionChannel Channel = VISIBILITY);
+	static bool LineTraceAgainstWorld(FHitInfo& HitInfo, World* World, vec3 RayOrigin, vec3 RayDirection, ECollisionChannel Channel = VISIBILITY);
 	/**
 	 * Intersects a ray against a triangle.
 	 * 

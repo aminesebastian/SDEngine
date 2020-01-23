@@ -33,7 +33,7 @@ class Engine {
 public:
 	Display* GetDisplay();
 	RenderViewport* GetFocusedViewport();
-	UWorld* GetWorld();
+	World* GetWorld();
 	Camera* GetCurrentCamera();
 	bool Initialize();
 	void StartEngine();
@@ -88,7 +88,7 @@ private:
 
 	Display* S_Display;
 	RenderViewport* FocusedViewport;
-	UWorld* S_World;
+	World* S_World;
 	Camera* S_Camera;
 
 	bool bGameMode;

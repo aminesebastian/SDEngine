@@ -2,13 +2,14 @@
 #include "Rendering/Shader.h"
 #include "Engine/World.h"
 #include "Rendering/GBuffer.h"
-#include "Entities/Entity.h"
+#include "Entities/Actor.h"
 #include "Entities/Light.h"
 #include "Entities/TransformGizmo.h"
 #include "Display.h"
 #include "Rendering/DefferedCompositor.h"
 #include <GLEW/glew.h>
 #include "Engine/EngineStatics.h"
+#include "Rendering/RenderTypeDefenitions.h"
 #include "Rendering/PostProcessing/ToneMapper.h"
 #include "Rendering/PostProcessing/BloomPostProcessing.h"
 #include "Rendering/PostProcessing/SSAOPostProcessing.h"
@@ -103,16 +104,9 @@ void RenderViewport::RegisterPostProcessEffects() {
 }
 
 
-void RenderViewport::RecompileShaders(UWorld* World) {
+void RenderViewport::RecompileShaders() {
 	S_DefferedCompositor->RecompileShaders();
 	S_TranslucencyBlendShader->RecompileShader();
-	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
-		StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
-		if (temp && temp->GetMaterial() != nullptr) {
-			temp->GetMaterial()->GetShader()->RecompileShader();
-		}
-	}
-
 	TransformGizmoEntity->RecompileShaders();
 
 	for (PostProcessingLayer* layerPair : S_PostProcessingLayers) {
@@ -169,100 +163,58 @@ void RenderViewport::FlipOutputBuffers() {
 	CurrentBuffer = ((CurrentBuffer + 1) % 2);
 }
 
-void RenderViewport::RenderWorld(UWorld* World, Camera* Camera) {
+void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 	CurrentBuffer = 0;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearBufferfv(GL_COLOR, S_GBuffer->GBUFFER_TEXTURE_TYPE_POSITION, &vec3(0.0f, 0.0f, 0.0f)[0]);
 
-	for (Entity* entity : World->GetWorldEntities()) {
-		entity->PreFrameRendered();
+	for (Actor* actor : RenderWorld->GetWorldActors()) {
+		actor->PreFrameRendered();
 	}
 
 	S_CurrentStage = ERenderingStage::GEOMETRY;
-	GemoetryPass(World, Camera);
+	GemoetryPass(RenderWorld, RenderCamera);
 
 	S_CurrentStage = ERenderingStage::LIGHTING;
-	S_DefferedCompositor->CompositeLighting(S_GBuffer, GetCurrentOutputBuffer(), World->GetWorldLights(), Camera);
+	S_DefferedCompositor->CompositeLighting(S_GBuffer, GetCurrentOutputBuffer(), RenderWorld->GetWorldLights(), RenderCamera);
 
 	S_CurrentStage = ERenderingStage::POST_PROCESSING;
-	RenderPostProcessing(World, Camera);
+	RenderPostProcessing(RenderWorld, RenderCamera);
 	
 	S_CurrentStage = EDITOR_ELEMENTS;
-	RenderEditorElements(World, Camera);
+	RenderEditorElements(RenderWorld, RenderCamera);
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetCurrentOutputBuffer());
 
-	for (Entity* entity : World->GetWorldEntities()) {
-		entity->PostFrameRendered();
+	for (Actor* actor : RenderWorld->GetWorldActors()) {
+		actor->PostFrameRendered();
 	}
 }
-void RenderViewport::GemoetryPass(UWorld* World, Camera* Camera) {
+void RenderViewport::GemoetryPass(World* RenderWorld, Camera* RenderCamera) {
 	S_GBuffer->BindForWriting();
 
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
-		Entity* entity = World->GetWorldEntities()[i];
-		if (World->GetWorldEntities()[i]->IsVisible()) {
-			if (Engine::GetInstance()->GetSelectedEntity() == entity) {
+	for (Actor* actor : RenderWorld->GetWorldActors()) {
+		if (actor->IsVisible()) {
+			if (Engine::GetInstance()->GetSelectedEntity() == actor) {
 				glEnable(GL_STENCIL_TEST);
 				glStencilFunc(GL_ALWAYS, 1, -1);
 				glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 			}
-			entity->Draw(Camera);
-			if (Engine::GetInstance()->GetSelectedEntity() == entity) {
+			actor->Draw(RenderCamera);
+			if (Engine::GetInstance()->GetSelectedEntity() == actor) {
 				glDisable(GL_STENCIL_TEST);
 			}
 		}
 	}
 }
-void RenderViewport::TranslucencyPass(UWorld* World, Camera* Camera) {
-	//WriteBuffer->BindForWriting();
-	//ReadBuffer->BindForReading();
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClearBufferfv(GL_COLOR, WriteBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY, &vec3(0.0f, 0.0f, 0.0f)[0]);
-	//for (int i = 0; i < World->GetWorldEntities().size(); i++) {
-	//	if (World->GetWorldEntities()[i]->IsVisible()) {
-	//		StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
-	//		if (temp) {
-	//			if (temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
-	//				temp->GetMaterial()->GetShader()->Bind();
-	//				for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
-	//					glEnable(GL_TEXTURE_2D);
-	//					glActiveTexture(GL_TEXTURE0 + i);
-	//					glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-	//					glUniform1i(glGetUniformLocation(temp->GetMaterial()->GetShader()->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
-	//				}
-	//				for (int i = 0; i < World->GetWorldLights().size(); i++) {
-	//					World->GetWorldLights()[i]->SendShaderInformation(temp->GetMaterial()->GetShader(), i);
-	//				}
-	//				World->GetWorldEntities()[i]->Draw(Camera);
-	//			}
-	//		}
-	//	}
-	//}
-}
-void RenderViewport::BlendTransparencyPass(UWorld* World, Camera* Camera) {
-	//S_TranslucencyBuffer->BindForReading();
-	//WriteBuffer->BindForWriting();
-	//S_TranslucencyBlendShader->Bind();
-
-	//for (int i = 0; i < ReadBuffer->GBUFFER_NUM_TEXTURES; i++) {
-	//	glEnable(GL_TEXTURE_2D);
-	//	glActiveTexture(GL_TEXTURE0 + i);
-	//	glBindTexture(GL_TEXTURE_2D, ReadBuffer->GetTexture(i));
-	//	glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), ReadBuffer->GetTextureName(i).c_str()), i);
-	//}
-	//glEnable(GL_TEXTURE_2D);
-	//glActiveTexture(GL_TEXTURE0 + TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
-	//glBindTexture(GL_TEXTURE_2D, TranslucencyBuffer->GetTexture(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY));
-	//glUniform1i(glGetUniformLocation(S_TranslucencyBlendShader->GetProgram(), TranslucencyBuffer->GetTextureName(TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY).c_str()), TranslucencyBuffer->GBUFFER_TEXTURE_TYPE_TRANSLUCENCY);
-	//S_DefferedCompositor->DrawScreenQuad();
-}
-void RenderViewport::RenderPostProcessing(UWorld* World, Camera* Camera) {
+void RenderViewport::TranslucencyPass(World* RenderWorld, Camera* RenderCamera) { }
+void RenderViewport::BlendTransparencyPass(World* RenderWorld, Camera* Camera) { }
+void RenderViewport::RenderPostProcessing(World* RenderWorld, Camera* Camera) {
 	for (PostProcessingLayer* layerPair : S_PostProcessingLayers) {
 		// Skip any layers that are disabled.
 		if (!layerPair->IsEnabled()) {
@@ -273,7 +225,7 @@ void RenderViewport::RenderPostProcessing(UWorld* World, Camera* Camera) {
 		layerPair->RenderLayer(S_DefferedCompositor, Camera, S_GBuffer, GetPreviousOutputBuffer(), GetCurrentOutputBuffer());
 	}
 }
-void RenderViewport::RenderEditorElements(UWorld* World, Camera* Camera) {
+void RenderViewport::RenderEditorElements(World* RenderWorld, Camera* RenderCamera) {
 	// Draw selection outline if exists.
 	Entity* selectedEntity = Engine::GetInstance()->GetSelectedEntity();
 	if (selectedEntity) {
@@ -284,7 +236,7 @@ void RenderViewport::RenderEditorElements(UWorld* World, Camera* Camera) {
 		glBlitFramebuffer(0, 0, (GLint)resolution.x, (GLint)resolution.y, 0, 0, (GLint)resolution.x, (GLint)resolution.y, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 
 		SelectionOutlineShader->Bind();
-		SelectionOutlineShader->Update(selectedEntity->GetTransform(), selectedEntity->GetLastFrameTransform(), Camera);
+		SelectionOutlineShader->Update(selectedEntity->GetTransform(), selectedEntity->GetLastFrameTransform(), RenderCamera);
 
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_NOTEQUAL, 1, -1);
@@ -293,17 +245,17 @@ void RenderViewport::RenderEditorElements(UWorld* World, Camera* Camera) {
 		glLineWidth(5);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		selectedEntity->Draw(Camera, true);
+		selectedEntity->DrawAdvanced(RenderCamera, EDrawType::EDITOR_OUTLINE_RENDER);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDisable(GL_STENCIL_TEST);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
-		TransformGizmoEntity->UpdateVisibility(true);
+		TransformGizmoEntity->SetVisibility(true);
 		TransformGizmoEntity->SetLocation(selectedEntity->GetLocation());
-		TransformGizmoEntity->Draw(Camera);
+		TransformGizmoEntity->Draw(RenderCamera);
 	} else {
-		TransformGizmoEntity->UpdateVisibility(false);
+		TransformGizmoEntity->SetVisibility(false);
 	}
 }
 
@@ -332,19 +284,8 @@ EDebugState RenderViewport::GetDebugState() {
 void RenderViewport::SetDebugState(EDebugState NewState) {
 	S_DebugState = NewState;
 }
-int RenderViewport::GetTranslucentObjectCount(UWorld* World) {
-	int count = 0;
-	for (int i = 0; i < World->GetWorldEntities().size(); i++) {
-		if (World->GetWorldEntities()[i]->IsVisible()) {
-			StaticMesh* temp = dynamic_cast<StaticMesh*>(World->GetWorldEntities()[i]);
-			if (temp) {
-				if (temp->GetMaterial()->GetShaderModel() == EShaderModel::TRANSLUCENT) {
-					count++;
-				}
-			}
-		}
-	}
-	return count;
+int RenderViewport::GetTranslucentObjectCount(World* World) {
+	return 0;
 }
 void RenderViewport::ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions) {
 	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} X {1} to {2} x {3}", (int)RenderTargetDimensions.x, (int)RenderTargetDimensions.y, (int)NewRenderTargetDimensions.x, (int)NewRenderTargetDimensions.y);

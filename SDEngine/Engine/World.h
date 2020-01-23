@@ -2,28 +2,28 @@
 #include <iostream>
 #include "Utilities/TypeDefenitions.h"
 
-class Entity;
+class Actor;
 class Camera;
 class Shader;
 class Light;
 
 using namespace std;
 
-class UWorld {
+class World {
 public:
-	UWorld();
-	virtual ~UWorld();
+	World();
+	virtual ~World();
 
 	void TickWorld(float DeltaTime);
 
-	void RegisterEntity(Entity* entity);
-	bool DestroyEntity(Entity* entity);
+	void RegisterActor(Actor* ActorToRegister);
+	bool DestroyActor(Actor* ActorToDestroy);
 
-	SArray<Entity*> GetWorldEntities();
+	SArray<Actor*> GetWorldActors();
 	SArray<Light*> GetWorldLights();
 
 private:
-	SArray<Entity*> S_EntityList;
-	SArray<Light*>  S_LightList;
+	SArray<Actor*> ActorList;
+	SArray<Light*> LightList;
 };
 

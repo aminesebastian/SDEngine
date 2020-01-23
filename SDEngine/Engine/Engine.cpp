@@ -1,6 +1,7 @@
 #include "AssetManager.h"
 #include "Engine.h"
 #include "Scene.h"
+#include "Entities/Entity.h"
 #include "Entities/Camera.h"
 #include "Entities/Light.h"
 #include "Utilities/Logger.h"
@@ -13,14 +14,14 @@
 
 Engine::Engine() {
 	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
-	S_World = new UWorld();
+	S_World = new World();
 
 	Transform cameraTransform;
 	cameraTransform.SetRotation(0, glm::radians(50.0f), glm::radians(-180.0f));
 	cameraTransform.GetLocation().x = 35;
 	cameraTransform.GetLocation().z = 35;
 	S_Camera = new Camera("Camera", cameraTransform, radians(50.0f), S_Display->GetDimensions(), 0.01f, 100000.0f);
-	S_World->RegisterEntity(S_Camera);
+	S_World->RegisterActor(S_Camera);
 
 	S_AssetManager = new AssetManager();
 
@@ -190,11 +191,11 @@ void Engine::InputLoop() {
 
 void Engine::OnKeyDown(int KeyCode) {
 	if (KeyCode == SDL_SCANCODE_RETURN) {
-		FocusedViewport->RecompileShaders(S_World);
+		FocusedViewport->RecompileShaders();
 	}
-	if (KeyCode == SDL_SCANCODE_F) {
-		S_Camera->SetTransform(S_Camera->GetInitialTransform());
-	}
+	//if (KeyCode == SDL_SCANCODE_F) {
+	//	S_Camera->SetTransform(S_Camera->GetInitialTransform());
+	//}
 	if (S_InputKeys[SDL_SCANCODE_P].bKeyDown) {
 		FocusedViewport->SetDebugEnabled(!FocusedViewport->GetDebugEnabled());
 	}
@@ -251,7 +252,6 @@ void Engine::KeyAxisMapping() {
 	}
 }
 
-
 AssetManager* Engine::GetAssetManager() {
 	return S_AssetManager;
 }
@@ -261,7 +261,7 @@ Display* Engine::GetDisplay() {
 RenderViewport* Engine::GetFocusedViewport() {
 	return FocusedViewport;
 }
-UWorld* Engine::GetWorld() {
+World* Engine::GetWorld() {
 	return S_World;
 }
 Camera* Engine::GetCurrentCamera() {

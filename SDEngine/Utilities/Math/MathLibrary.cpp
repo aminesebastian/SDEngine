@@ -44,13 +44,13 @@ void MathLibrary::ScreenCoordinatesToWorldRay(vec2 MouseCoordinates, vec2 Screen
 	RayDirectionOut = glm::normalize(lRayDir_world);
 }
 
-bool MathLibrary::LineTraceAgainstWorldFromScreen(FHitInfo& HitInfo, vec2 MouseCoordinates, Camera* Camera, UWorld* World, ECollisionChannel Channel) {
+bool MathLibrary::LineTraceAgainstWorldFromScreen(FHitInfo& HitInfo, vec2 MouseCoordinates, Camera* Camera, World* World, ECollisionChannel Channel) {
 	vec3 origin;
 	vec3 direction;
 	ScreenCoordinatesToWorldRay(MouseCoordinates, Camera->GetRenderTargetDimensions(), Camera->GetViewMatrix(), Camera->GetProjectionMatrix(), origin, direction);
 	return LineTraceAgainstWorld(HitInfo, World, origin, direction, Channel);
 }
-bool MathLibrary::LineTraceAgainstWorld(FHitInfo& HitInfo, UWorld* World, vec3 RayOrigin, vec3 RayDirection, ECollisionChannel Channel) {
+bool MathLibrary::LineTraceAgainstWorld(FHitInfo& HitInfo, World* World, vec3 RayOrigin, vec3 RayDirection, ECollisionChannel Channel) {
 	// Preallocate pointer to closest hit entity.
 	Entity* hitEntity = nullptr;
 
@@ -59,8 +59,8 @@ bool MathLibrary::LineTraceAgainstWorld(FHitInfo& HitInfo, UWorld* World, vec3 R
 	vec3 minCollisionPoint = vec3(0.0f, 0.0f, 0.0f);
 
 	// Check all world entities.
-	for (Entity* temp : World->GetWorldEntities()) {
-		if (temp->IsVisible() && temp->HasAxisAlignedBoundingBox()) {
+	for (Entity* temp : World->GetWorldActors()) {
+		/*if (temp->IsVisible() && temp->HasAxisAlignedBoundingBox()) {
 			float dist;
 			vec3 collisionPoint;
 			bool collide = temp->TraceAgainstRay(RayOrigin, RayDirection, collisionPoint, dist, Channel);
@@ -72,7 +72,7 @@ bool MathLibrary::LineTraceAgainstWorld(FHitInfo& HitInfo, UWorld* World, vec3 R
 					minCollisionPoint = collisionPoint;
 				}
 			}
-		}
+		}*/
 	}
 
 	if (hitEntity) {

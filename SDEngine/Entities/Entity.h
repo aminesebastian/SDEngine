@@ -1,28 +1,28 @@
 #pragma once
-#include "Utilities/Transform.h"
-#include "Rendering/Shader.h"
-#include "Engine/World.h"
-#include "UserInterface/DetailsPanelProvider.h"
+#include "Engine/EngineObject.h"
 #include "Physics/AxisAlignedBoundingBox.h"
 #include "Physics/CollisionChannels.h"
+#include "Rendering/Shader.h"
+#include "Utilities/Logger.h"
+#include "Utilities/Transform.h"
+#include "Rendering/RenderTypeDefenitions.h"
 
-class BaseWidget;
-class Material;
+class Camera;
 
-class Entity : public IDetailsPanelProvider {
+/**
+ * An entity is any object that can be placed in a scene.
+ * It contains all the definitions necessary to encapsulate a transformation.
+ * It does not contain nor does it recieve gameplay events or functions.
+ */
+class Entity : public EngineObject {
 
 public:
-	Entity(TString Name, const Transform SpawnTransform);
 	Entity(TString Name);
 	virtual ~Entity();
 
-	virtual void Draw(Camera* Camera, bool bCallerProvidesShader = false);
-	virtual bool PopulateDetailsPanel() override;
-	virtual TString GetDetailsPanelName() override;
-
-	Transform GetTransform();
-	Transform GetInitialTransform();
-	Transform GetLastFrameTransform();
+	bool IsVisible();
+	void SetVisibility(bool Show);
+	void ToggleVisibility();
 
 	vec3 GetLocation();
 	vec3 GetRotation();
@@ -47,40 +47,28 @@ public:
 	void SetScale(float X, float Y, float Z);
 	void SetUniformScale(float Scale);
 
+	Transform GetTransform();
 	void SetTransform(Transform NewTransform);
+	Transform GetLastFrameTransform();
+	void SetLastFrameTransform(Transform OldTransform);
 
-	bool IsVisible();
-	void UpdateVisibility(bool bShow);
-	void ToggleVisibility();
-	void CompleteSpawn(UWorld* World);
-	bool NeedsTick();
-	bool NeedsBeginPlay();
-
-	TString GetName();
-
-	virtual void BeginPlay();
-	virtual void Tick(float DeltaTime);
-	virtual void Destroy();
-
+	//////////
+	//RENDER//
+	//////////
+	/**
+	* Draws the mesh. This method should never be overridden.
+	* It makes a call to DrawAdvanced with DrawType SCENE_RENDER.
+	*/
+	void Draw(Camera* RenderCamera);
+	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) = 0;
 	virtual void PreFrameRendered();
 	virtual void PostFrameRendered();
 
-	virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel = VISIBILITY);
-
-	AxisAlignedBoundingBox* GetAxisAlignedBoundingBox();
-	bool HasAxisAlignedBoundingBox();
-
 protected:
-	TString S_Name;
-	const UWorld* S_World;
-	Transform S_Transform;
-	Transform S_LastFrameTransform;
-	Transform S_InitialTransform;
-	bool bVisible = true;
-	bool bNeedsTick = true;
-	bool bNeedsBeginPlay = true;
-	AxisAlignedBoundingBox* S_AABB;
-
-	SArray<BaseWidget*> DetailsPanelWidgets;
+	Transform CurrentTransform;
+	Transform LastFrameTransform;
+	bool bVisible;
+	bool bNeedsTick;
+	bool bNeedsBeginPlay;
 };
 

@@ -1,39 +1,38 @@
 #include "World.h"
 #include "Entities/Camera.h"
 #include "Entities/Light.h"
+#include "Entities/Actor.h"
 #include "Rendering/Shader.h"
 #include "Utilities/Math/MathLibrary.h"
 #include "Utilities/EngineFunctionLibrary.h"
 #include <limits>
 
 
-UWorld::UWorld() {}
-UWorld::~UWorld() {}
+World::World() {}
+World::~World() {}
 
-SArray<Entity*> UWorld::GetWorldEntities() { return S_EntityList; }
-SArray<Light*> UWorld::GetWorldLights() { return S_LightList; }
-void UWorld::TickWorld(float DeltaTime) {
-	for (int i = 0; i < S_EntityList.size(); i++) {
-		if (S_EntityList[i]->NeedsTick()) {
-			S_EntityList[i]->Tick(DeltaTime);
-		}
+SArray<Actor*> World::GetWorldActors() { return ActorList; }
+SArray<Light*> World::GetWorldLights() { return LightList; }
+void World::TickWorld(float DeltaTime) {
+	for (int i = 0; i < ActorList.size(); i++) {
+		ActorList[i]->Tick(DeltaTime);
 	}
 }
 
-void UWorld::RegisterEntity(Entity* entity) {
-	S_EntityList.push_back(entity);
-	if (IsA<Light>(entity)) {
-		S_LightList.push_back(Cast<Light>(entity));
+void World::RegisterActor(Actor* ActorToRegister) {
+	ActorList.push_back(ActorToRegister);
+	if (IsA<Light>(ActorToRegister)) {
+		LightList.push_back(Cast<Light>(ActorToRegister));
 	}
 }
-bool UWorld::DestroyEntity(Entity* entity) {
-	for (int i = 0; i < S_EntityList.size(); i++) {
-		if (S_EntityList[i] == entity) {
-			S_EntityList.erase(S_EntityList.begin() + i);
-			if (IsA<Light>(entity)) {
-				for (int j = 0; j < S_LightList.size(); j++) {
-					if (S_LightList[j] == entity) {
-						S_LightList.erase(S_LightList.begin() + j);
+bool World::DestroyActor(Actor* ActorToDestroy) {
+	for (int i = 0; i < ActorList.size(); i++) {
+		if (ActorList[i] == ActorToDestroy) {
+			ActorList.erase(ActorList.begin() + i);
+			if (IsA<Light>(ActorToDestroy)) {
+				for (int j = 0; j < LightList.size(); j++) {
+					if (LightList[j] == ActorToDestroy) {
+						LightList.erase(LightList.begin() + j);
 					}
 				}
 			}

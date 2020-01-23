@@ -3,7 +3,7 @@
 #include "Utilities/TypeDefenitions.h"
 
 
-class UWorld;
+class World;
 class Shader;
 class Camera;
 class GBuffer;
@@ -42,15 +42,15 @@ public:
 	void ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions);
 	vec2 GetRenderTargetDimensions();
 
-	void RenderWorld(UWorld* World, Camera* Camera);
-	void GemoetryPass(UWorld* World, Camera* Camera);
-	void TranslucencyPass(UWorld* World, Camera* Camera);
-	void BlendTransparencyPass(UWorld* World, Camera* Camera);
-	void RenderPostProcessing(UWorld* World, Camera* Camera);
-	void RenderEditorElements(UWorld* World, Camera* Camera);
+	void RenderWorld(World* RenderWorld, Camera* RenderCamera);
+	void GemoetryPass(World* RenderWorld, Camera* RenderCamera);
+	void TranslucencyPass(World* RenderWorld, Camera* RenderCamera);
+	void BlendTransparencyPass(World* RenderWorld, Camera* RenderCamera);
+	void RenderPostProcessing(World* RenderWorld, Camera* RenderCamera);
+	void RenderEditorElements(World* RenderWorld, Camera* RenderCamera);
 
-	void RecompileShaders(UWorld* World);
-	int GetTranslucentObjectCount(UWorld* World);
+	void RecompileShaders();
+	int GetTranslucentObjectCount(World* RenderWorld);
 
 	ERenderingStage GetRenderingStage() { return S_CurrentStage; }
 	bool GetDebugEnabled();

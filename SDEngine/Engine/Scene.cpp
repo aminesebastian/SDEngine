@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include "Entities/StaticMesh.h"
+#include "Entities/Actors/HeadActor.h"
 #include "Engine/EngineStatics.h"
 #include "SAsset.h"
 #include "Engine/Engine.h"
@@ -27,28 +28,24 @@ bool Scene::SaveScene() {
 	return true;
 }
 void Scene::LoadPlane() {
-	Transform planeTransform;
-	Material* planeMat = EngineStatics::GetDefaultMaterial();
-	StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
-	Engine::GetInstance()->GetWorld()->RegisterEntity(plane);
+	//Transform planeTransform;
+	//Material* planeMat = EngineStatics::GetDefaultMaterial();
+	//StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
+	//Engine::GetInstance()->GetWorld()->RegisterActor(plane);
 
-	SD_ENGINE_INFO("Plane Loaded!");
+	//SD_ENGINE_INFO("Plane Loaded!");
 }
 void Scene::LoadHead() {
 	Transform headTransform;
 	headTransform.GetLocation().z = 7;
-	SAsset* headAsset = Engine::GetInstance()->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	StaticMesh* head = headAsset->GetAsStaticMesh("Head");
+	//SAsset* headAsset = Engine::GetInstance()->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
+	//StaticMesh* head = headAsset->GetAsStaticMesh("Head");
+	//head->SetTransform(headTransform);
+	HeadActor* head = new HeadActor("TestHead");
 	head->SetTransform(headTransform);
-	Engine::GetInstance()->GetWorld()->RegisterEntity(head);
+	Engine::GetInstance()->GetWorld()->RegisterActor(head);
 
 	SD_ENGINE_INFO("Head Loaded!");
-}
-void Scene::LoadSponza() {
-	Transform sponzaTransform;
-	StaticMesh* sponza = new StaticMesh("Sponza", sponzaTransform, "./Res/Sponza.fbx");
-	Engine::GetInstance()->GetWorld()->RegisterEntity(sponza);
-	SD_ENGINE_INFO("Sponza Loaded!");
 }
 void Scene::LoadLights() {
 	int count = 0;
@@ -64,9 +61,8 @@ void Scene::LoadLights() {
 				tempTransform.GetLocation().z = 9 + (float)k * 6.5f;
 				vec3 tempColor = vec3(r, g, b);
 				float atten = (((float)(rand()) / (float)(RAND_MAX)) + 1) * 20;
-				tempTransform.SetUniformScale(0.25f);
 				Light* tempLight = new Light("Light " + std::to_string(count), tempTransform, POINT, 25, tempColor, atten);
-				Engine::GetInstance()->GetWorld()->RegisterEntity(tempLight);
+				Engine::GetInstance()->GetWorld()->RegisterActor(tempLight);
 				count++;
 			}
 		}
@@ -77,5 +73,5 @@ void Scene::LoadLights() {
 	fillLightTransform.GetLocation().z = 30;
 	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, vec3(0.75, 0.9, 0.8));
 	fillLight->SetCastsShadows(true);
-	Engine::GetInstance()->GetWorld()->RegisterEntity(fillLight);
+	Engine::GetInstance()->GetWorld()->RegisterActor(fillLight);
 }

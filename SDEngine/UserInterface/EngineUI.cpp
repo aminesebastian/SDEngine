@@ -1,6 +1,7 @@
 #include "EngineUI.h"
 #include "Engine/Engine.h"
 #include "Utilities/Logger.h"
+#include "Utilities/EngineFunctionLibrary.h"
 #include "Rendering/PostProcessing/PostProcessingLayer.h"
 
 EngineUI::EngineUI() {
@@ -56,7 +57,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGui::Text("World");
 	ImGui::PushItemWidth(-1);
 	if (ImGui::ListBoxHeader("##empty")) {
-		for (Entity* entity : engine->GetWorld()->GetWorldEntities()) {
+		for (Entity* entity : engine->GetWorld()->GetWorldActors()) {
 			std::string& item_name = entity->GetName();
 			if (ImGui::Selectable(item_name.c_str(), false)) {
 				engine->SetSelectedEntity(entity);
@@ -71,10 +72,12 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	if (ImGui::BeginTabBar("##empty", tab_bar_flags)) {
 		if (ImGui::BeginTabItem("Details")) {
 			if (engine->GetSelectedEntity()) {
-				ImGui::Text(engine->GetSelectedEntity()->GetName().c_str());
-				engine->GetSelectedEntity()->PopulateDetailsPanel();
+				if (IsA<Actor>(engine->GetSelectedEntity())) {
+					ImGui::Text(engine->GetSelectedEntity()->GetName().c_str());
+					Cast<Actor>(engine->GetSelectedEntity())->PopulateDetailsPanel();
+				}
 			} else {
-				ImGui::Text("Select an Entity to Modify");
+				ImGui::Text("Select an Actor to Modify");
 			}
 			ImGui::EndTabItem();
 		}

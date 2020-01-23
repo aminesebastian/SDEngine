@@ -145,9 +145,6 @@
     <ClCompile Include="UserInterface\DetailsPanelProvider.cpp">
       <Filter>Source Files\UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\EyeActor.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Entities\Grid.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -232,13 +229,31 @@
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\EditorSprite.cpp">
+    <ClCompile Include="Engine\EngineObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IRenderable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actors\HeadActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\DataStructures\Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\EditorSpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -318,9 +333,6 @@
     <ClInclude Include="Entities\Entity.h">
       <Filter>Headers\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\EyeActor.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h">
       <Filter>Headers\Rendering\PostProcessingLayer</Filter>
     </ClInclude>
@@ -396,12 +408,19 @@
       <Filter>Headers\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
-    <ClInclude Include="Engine\Object.h" />
     <ClInclude Include="Physics\CollisionChannels.h" />
     <ClInclude Include="Physics\AxisAlignedBoundingBox.h">
       <Filter>Headers\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\EditorSprite.h" />
+    <ClInclude Include="Engine\EngineObject.h" />
+    <ClInclude Include="Entities\Component.h" />
+    <ClInclude Include="Engine\IRenderable.h" />
+    <ClInclude Include="Entities\Actors\HeadActor.h" />
+    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
+    <ClInclude Include="Utilities\DataStructures\Tree.h" />
+    <ClInclude Include="Entities\EditorSpriteComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

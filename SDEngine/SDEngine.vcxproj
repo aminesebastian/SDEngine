@@ -151,8 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Entities\EditorSprite.cpp" />
-    <ClCompile Include="Engine\Object.cpp" />
+    <ClCompile Include="Entities\Component.cpp" />
+    <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
+    <ClCompile Include="Engine\EngineObject.cpp" />
+    <ClCompile Include="Engine\IRenderable.cpp" />
+    <ClCompile Include="Entities\Actors\HeadActor.cpp" />
+    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
+    <ClCompile Include="Utilities\DataStructures\Tree.cpp" />
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
     <ClCompile Include="Entities\Actor.cpp" />
     <ClCompile Include="Engine\AssetManager.cpp" />
@@ -167,7 +173,6 @@
     <ClCompile Include="Engine\EngineStatics.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
-    <ClCompile Include="Entities\EyeActor.cpp" />
     <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp" />
     <ClCompile Include="Rendering\RenderTarget.cpp" />
     <ClCompile Include="Rendering\GBuffer.cpp" />
@@ -207,9 +212,16 @@
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entities\EditorSprite.h" />
-    <ClInclude Include="Engine\Object.h" />
+    <ClInclude Include="Entities\Component.h" />
+    <ClInclude Include="Entities\EditorSpriteComponent.h" />
+    <ClInclude Include="Engine\EngineObject.h" />
+    <ClInclude Include="Entities\Actors\HeadActor.h" />
     <ClInclude Include="Physics\CollisionChannels.h" />
+    <ClInclude Include="Engine\IRenderable.h" />
+    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
+    <ClInclude Include="Utilities\DataStructures\Tree.h" />
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
     <ClInclude Include="Entities\Actor.h" />
     <ClInclude Include="Engine\AssetManager.h" />
@@ -225,7 +237,6 @@
     <ClInclude Include="Engine\EngineStatics.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Entities\Entity.h" />
-    <ClInclude Include="Entities\EyeActor.h" />
     <ClInclude Include="Physics\AxisAlignedBoundingBox.h" />
     <ClInclude Include="Rendering\RenderTarget.h" />
     <ClInclude Include="Rendering\GBuffer.h" />

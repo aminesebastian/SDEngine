@@ -45,7 +45,7 @@ template <typename  K, typename V>
 using SSortedMap = std::map<K, V>;
 
 template <typename  N>
-using SSet = std::unordered_set<N>;
+using SSet = std::vector<N>;
 
 using namespace glm;
 
