@@ -90,9 +90,9 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGui::End();
 }
 void EngineUI::RenderUI(float DeltaTime) {
-	FrameTimeCache.emplace_back(DeltaTime);
-	if (FrameTimeCache.size() > MaxFrameTimeCache) {
-		FrameTimeCache.erase(FrameTimeCache.begin(), FrameTimeCache.begin() + 1);
+	FrameTimeCache.Add(DeltaTime);
+	if (FrameTimeCache.Count() > MaxFrameTimeCache) {
+		FrameTimeCache.RemoveAt(0);
 	}
 
 	ImGui::Render();
@@ -110,5 +110,5 @@ float EngineUI::GetSmoothedFrameTime() {
 	for (float val : FrameTimeCache) {
 		total += val;
 	}
-	return total / FrameTimeCache.size();
+	return total / FrameTimeCache.Count();
 }

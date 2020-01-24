@@ -105,6 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +141,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\DataStructures\Array.cpp" />
     <ClCompile Include="Entities\Component.cpp" />
     <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
     <ClCompile Include="Engine\EngineObject.cpp" />
@@ -158,7 +161,7 @@
     <ClCompile Include="Entities\Actors\HeadActor.cpp" />
     <ClCompile Include="Entities\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
-    <ClCompile Include="Utilities\DataStructures\Tree.cpp" />
+    <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
     <ClCompile Include="Entities\Actor.cpp" />
     <ClCompile Include="Engine\AssetManager.cpp" />
@@ -199,7 +202,7 @@
     <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
     <ClCompile Include="Engine\SAsset.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
-    <ClCompile Include="Utilities\Math\MathLibrary.cpp" />
+    <ClCompile Include="Core\Math\MathLibrary.cpp" />
     <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp" />
     <ClCompile Include="Entities\StaticMesh.cpp" />
     <ClCompile Include="Utilities\ImageUtils.cpp" />
@@ -212,6 +215,7 @@
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\DataStructures\Array.h" />
     <ClInclude Include="Entities\Component.h" />
     <ClInclude Include="Entities\EditorSpriteComponent.h" />
     <ClInclude Include="Engine\EngineObject.h" />
@@ -221,7 +225,8 @@
     <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
     <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
     <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
-    <ClInclude Include="Utilities\DataStructures\Tree.h" />
+    <ClInclude Include="Core\DataStructures\DataStructures.h" />
+    <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
     <ClInclude Include="Entities\Actor.h" />
     <ClInclude Include="Engine\AssetManager.h" />
@@ -264,7 +269,7 @@
     <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
     <ClInclude Include="Engine\SAsset.h" />
     <ClInclude Include="Rendering\Shader.h" />
-    <ClInclude Include="Utilities\Math\MathLibrary.h" />
+    <ClInclude Include="Core\Math\MathLibrary.h" />
     <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h" />
     <ClInclude Include="Entities\StaticMesh.h" />
     <ClInclude Include="Utilities\ImageUtils.h" />

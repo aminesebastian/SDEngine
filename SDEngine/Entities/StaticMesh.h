@@ -7,6 +7,7 @@
 #include <ASSIMP/Importer.hpp>
 #include <ASSIMP/scene.h>
 #include <ASSIMP/postprocess.h>
+#include "Core/DataStructures/DataStructures.h"
 
 using namespace glm;
 
@@ -32,26 +33,26 @@ struct FSubMesh {
 
 	GLuint VertexArrayObject;
 	int32 GetVertexCount() {
-		return (int32)Verticies.size();
+		return Verticies.Count();
 	}
 	int32 GetBufferCount() {
 		int count = 0;
-		if (!Verticies.empty()) {
+		if (!Verticies.IsEmpty()) {
 			count++;
 		}
-		if (!TexCoords.empty()) {
+		if (!TexCoords.IsEmpty()) {
 			count++;
 		}
-		if (!Normals.empty()) {
+		if (!Normals.IsEmpty()) {
 			count++;
 		}
-		if (!Tangents.empty()) {
+		if (!Tangents.IsEmpty()) {
 			count++;
 		}
-		if (!VertexColors.empty()) {
+		if (!VertexColors.IsEmpty()) {
 			count++;
 		}
-		if (!Indices.empty()) {
+		if (!Indices.IsEmpty()) {
 			count++;
 		}
 		return count;

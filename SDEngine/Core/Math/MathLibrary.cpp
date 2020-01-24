@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "Entities/Light.h"
 #include "Entities/Camera.h"
+#include "Core/DataStructures/DataStructures.h"
 
 MathLibrary::MathLibrary() {}
 MathLibrary::~MathLibrary() {}
@@ -118,7 +119,7 @@ bool MathLibrary::LineTraceAgainstTriangle(vec3 RayOrigin, vec3 RayDirection, ve
 }
 bool MathLibrary::LineTraceAgainstTriangles(vec3 RayOrigin, vec3 RayDirection, SArray<vec3> Verticies, SArray<uint32> Indecies, vec3& HitLocation, float& Distance) {
 	float distance = 0.0f;
-	for (int32 i = 0; i < Indecies.size() - 2; i += 3) {
+	for (int32 i = 0; i < Indecies.Count() - 2; i += 3) {
 		if (LineTraceAgainstTriangle(RayOrigin, RayDirection, Verticies[Indecies[i]], Verticies[Indecies[i + 1]], Verticies[Indecies[i + 2]], distance)) {
 			HitLocation = RayOrigin + (RayDirection * Distance);
 			Distance = distance;

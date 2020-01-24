@@ -1,4 +1,5 @@
 #include "Tree.h"
+#include "Core/DataStructures/DataStructures.h"
 
 template<typename T>
 STree<T>::STree() {

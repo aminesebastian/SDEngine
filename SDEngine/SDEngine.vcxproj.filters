@@ -184,9 +184,6 @@
     <ClCompile Include="Utilities\TypeDefenitions.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Math\MathLibrary.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\Transform.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
@@ -250,10 +247,16 @@
     <ClCompile Include="Entities\Actors\StaticMeshActor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\DataStructures\Tree.cpp">
+    <ClCompile Include="Entities\EditorSpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\EditorSpriteComponent.cpp">
+    <ClCompile Include="Core\Math\MathLibrary.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataStructures\Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataStructures\Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -366,9 +369,6 @@
     <ClInclude Include="Utilities\TypeDefenitions.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Math\MathLibrary.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\Transform.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
@@ -419,8 +419,13 @@
     <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
     <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
     <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
-    <ClInclude Include="Utilities\DataStructures\Tree.h" />
     <ClInclude Include="Entities\EditorSpriteComponent.h" />
+    <ClInclude Include="Core\Math\MathLibrary.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataStructures\DataStructures.h" />
+    <ClInclude Include="Core\DataStructures\Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

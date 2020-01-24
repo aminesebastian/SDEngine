@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/Engine.h"
 #include "Entities/StaticMesh.h"
+#include "Core/DataStructures/DataStructures.h"
 
 /*Should only be created through asset manager*/
 class SAsset {

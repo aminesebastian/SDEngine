@@ -1,4 +1,5 @@
 #include "StaticMeshComponent.h"
+#include "Core/DataStructures/DataStructures.h"
 #include "Entities/StaticMesh.h"
 #include "Entities/Actor.h"
 
@@ -13,13 +14,9 @@ void StaticMeshComponent::DrawAdvanced(Camera* RenderCamera, EDrawType DrawType)
 		return;
 	}
 
-	if (GetOwner()) {
-		SetTransform(GetOwner()->GetTransform());
-	}
-
 	for (FSubMesh* subMesh : Mesh->GetSubMeshes()) {
 		if (DrawType == SCENE_RENDER) {
-			subMesh->SubMeshMaterial->BindMaterial(this, RenderCamera);
+			subMesh->SubMeshMaterial->BindMaterial(GetWorldTransform(), GetLastFrameWorldTransform(), RenderCamera);
 		}
 
 		glBindVertexArray(subMesh->VertexArrayObject);

@@ -32,6 +32,9 @@ EditorSpriteComponent::EditorSpriteComponent(const TString& Name) : Component(Na
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+	SetCastShadows(false);
+	SetHiddenInGame(true);
 }
 EditorSpriteComponent::~EditorSpriteComponent() {
 
@@ -42,17 +45,13 @@ void EditorSpriteComponent::DrawAdvanced(Camera* RenderCamera, EDrawType DrawTyp
 		return;
 	}
 
-	if (GetOwner()) {
-		SetTransform(GetOwner()->GetTransform());
-	}
-
 	if (RenderCamera != nullptr) {
 		SetRotation(RenderCamera->GetRotation());
 	}
 
 	if (DrawType == SCENE_RENDER) {
 		EngineStatics::GetSpriteShader()->Bind();
-		EngineStatics::GetSpriteShader()->Update(GetTransform(), RenderCamera);
+		EngineStatics::GetSpriteShader()->Update(GetWorldTransform(), GetLastFrameWorldTransform(), RenderCamera);
 		EngineStatics::GetSpriteShader()->SetShaderVector3("TINT", Tint);
 		Sprite->Bind("Sprite", EngineStatics::GetSpriteShader(), 0);
 	}

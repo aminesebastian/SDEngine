@@ -15,8 +15,6 @@
 
 typedef std::string TString;
 
-typedef int int32;
-
 typedef char    int8;
 typedef short   int16;
 typedef int     int32;
@@ -28,9 +26,6 @@ typedef unsigned __int64	uint64;
 
 template <typename  N>
 using SStack = std::stack<N>;
-
-template <typename  N>
-using SArray = std::vector<N>;
 
 template <typename  K, typename V>
 using SPair = std::pair<K, V>;
@@ -160,66 +155,6 @@ public:
 		result.b = b / scalar;
 		return result;
 	}
-};
-
-template<typename T, typename K>
-class SFastHashTable {
-public:
-	SFastHashTable() {
-		m_CurrentID = 0;
-	}
-	~SFastHashTable() {
-
-	}
-
-	void Put(T Key, K Value) {
-		m_IDMap.insert(m_CurrentID, Key);
-		m_ValueArray.push_back(Value);
-	}
-
-	K Get(T Key) {
-		int32 id = GetFastID(Key);
-		return GetFast(id);
-	}
-	K GetFast(int32 ID) {
-		return m_ValueArray[ID];
-	}
-
-	int32 GetFastID(T Key) {
-		SHashMap<T, int>::const_iterator it;
-		m_IDMap.find(Asset);
-
-		if (it != m_IDMap.end()) {
-			return it.first;
-		}
-		return -1;
-	}
-
-	bool Contains(T Key) {
-		SHashMap<T, int>::const_iterator it;
-		m_IDMap.find(Asset);
-
-		if (it != S_AssetCache.end()) {
-			return true;
-		}
-		return false;
-	}
-	bool FastContains(int32 ID) {
-		return ID < m_ValueArray.size() ? m_ValueArray[ID] != nullptr : false;
-	}
-
-	bool Remove(T Key) {
-		int32 id = GetFastID(Key);
-		RemoveFast(id);
-	}
-	bool RemoveFast(int32 ID) {
-		m_ValueArray[ID] = nullptr;
-	}
-
-private:
-	int32			 m_CurrentID;
-	SHashMap<T, int> m_IDMap;
-	SArray<K>		 m_ValueArray;
 };
 
 class TStringUtils {

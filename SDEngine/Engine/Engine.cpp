@@ -6,7 +6,7 @@
 #include "Entities/Light.h"
 #include "Utilities/Logger.h"
 #include "UserInterface/EngineUI.h"
-#include "Utilities/Math/MathLibrary.h"
+#include "Core/Math/MathLibrary.h"
 
 #include "Lib/Imgui/imgui.h"
 #include "Lib/Imgui/imgui_impl_sdl.h"
@@ -180,7 +180,7 @@ void Engine::InputLoop() {
 				}
 				break;
 			case SDL_MOUSEWHEEL:
-				movementSpeed = clamp(movementSpeed + ((float)e.wheel.y * GetFrameTime() * 1000.0f), 1.0f, 1000.0f);
+				movementSpeed = glm::clamp(movementSpeed + ((float)e.wheel.y * GetFrameTime() * 1000.0f), 1.0f, 1000.0f);
 				break;
 			default:
 				break;

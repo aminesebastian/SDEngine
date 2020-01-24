@@ -12,7 +12,7 @@ class Camera;
 /**
  * An entity is any object that can be placed in a scene.
  * It contains all the definitions necessary to encapsulate a transformation.
- * It does not contain nor does it recieve gameplay events or functions.
+ * It does not contain nor does it receive gameplay events or functions.
  */
 class Entity : public EngineObject {
 
@@ -23,6 +23,14 @@ public:
 	bool IsVisible();
 	void SetVisibility(bool Show);
 	void ToggleVisibility();
+
+	bool IsHiddenInGame();
+	void SetHiddenInGame(bool Hidden);
+
+	bool ShouldCastShadows();
+	void SetCastShadows(bool CastShadows);
+
+	bool ShouldBeDrawn(EDrawType DrawType);
 
 	vec3 GetLocation();
 	vec3 GetRotation();
@@ -66,9 +74,11 @@ public:
 
 protected:
 	Transform CurrentTransform;
-	Transform LastFrameTransform;
+	Transform LastFrameTrasnform;
 	bool bVisible;
+	bool bHiddenInGame;
 	bool bNeedsTick;
 	bool bNeedsBeginPlay;
+	bool bCastShadows;
 };
 

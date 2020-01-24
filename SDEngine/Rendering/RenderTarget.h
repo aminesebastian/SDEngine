@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <cassert>
 #include "Rendering/Texture2D.h"
+#include "Core/DataStructures/DataStructures.h"
 #include "Utilities/TypeDefenitions.h"
 
 class Shader;

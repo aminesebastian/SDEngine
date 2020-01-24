@@ -96,13 +96,12 @@ void RenderViewport::RegisterPostProcessEffects() {
 			delete layer;
 		}
 	}
-	S_PostProcessingLayers.clear();
-	S_PostProcessingLayers.emplace_back(new SSAOPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.emplace_back(new BloomPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.emplace_back(new MotionBlurPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.emplace_back(new ToneMapper(RenderTargetDimensions));
+	S_PostProcessingLayers.Clear();
+	S_PostProcessingLayers.Add(new SSAOPostProcessing(RenderTargetDimensions));
+	S_PostProcessingLayers.Add(new BloomPostProcessing(RenderTargetDimensions));
+	S_PostProcessingLayers.Add(new MotionBlurPostProcessing(RenderTargetDimensions));
+	S_PostProcessingLayers.Add(new ToneMapper(RenderTargetDimensions));
 }
-
 
 void RenderViewport::RecompileShaders() {
 	S_DefferedCompositor->RecompileShaders();
@@ -199,7 +198,7 @@ void RenderViewport::GemoetryPass(World* RenderWorld, Camera* RenderCamera) {
 	glEnable(GL_DEPTH_TEST);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
-		if (actor->IsVisible()) {
+		if (actor->ShouldBeDrawn(EDrawType::SCENE_RENDER)) {
 			if (Engine::GetInstance()->GetSelectedEntity() == actor) {
 				glEnable(GL_STENCIL_TEST);
 				glStencilFunc(GL_ALWAYS, 1, -1);
@@ -245,7 +244,9 @@ void RenderViewport::RenderEditorElements(World* RenderWorld, Camera* RenderCame
 		glLineWidth(5);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		selectedEntity->DrawAdvanced(RenderCamera, EDrawType::EDITOR_OUTLINE_RENDER);
+		if (selectedEntity->ShouldBeDrawn(EDrawType::EDITOR_OUTLINE_RENDER)) {
+			selectedEntity->DrawAdvanced(RenderCamera, EDrawType::EDITOR_OUTLINE_RENDER);
+		}
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDisable(GL_STENCIL_TEST);

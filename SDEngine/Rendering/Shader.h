@@ -19,8 +19,8 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const class Transform& Transform, Camera* Camera);
-	void Update(const class Transform& Transform,  const class Transform& LastFrameTrasnform, Camera* Camera);
+	void Update(const class Transform& RenderTransform, Camera* Camera);
+	void Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, Camera* Camera);
 	void RecompileShader();
 
 	void SetShaderInteger(TString Name, int Value);
@@ -57,7 +57,6 @@ private:
 	TString S_VertexShaderPath;
 	TString S_ShaderName;
 
-	void UpdateWithDefaults(const class Transform& Transform, Camera* Camera);
 	TString LoadShader(const TString& fileName);
 	GLuint CreateShader(const TString& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const TString& errorMessage);

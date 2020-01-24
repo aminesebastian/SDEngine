@@ -1,7 +1,7 @@
 #pragma once
 #include "Entities/Entity.h"
 #include "Utilities/Transform.h"
-#include "Utilities/DataStructures/Tree.h"
+#include "Core/DataStructures/DataStructures.h"
 #include "Utilities/EngineFunctionLibrary.h"
 #include "Rendering/RenderTypeDefenitions.h"
 #include "UserInterface/DetailsPanelProvider.h"
@@ -22,12 +22,14 @@ public:
 	virtual void Tick(float DeltaTime);
 	virtual void Destroy();
 
-	//////////
-	//RENDER//
-	//////////
-	virtual void PreFrameRendered() override;
-	virtual void PostFrameRendered() override;
-	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
+	////////////
+	//LOCATION//
+	////////////
+	vec3 GetWorldLocation();
+	vec3 GetWorldRotation();
+	vec3 GetWorldScale();
+	Transform GetWorldTransform();
+	Transform GetLastFrameWorldTransform();
 
 	//////////////
 	//COMPONENTS//
@@ -36,16 +38,24 @@ public:
 	bool DeregisterComponent(Component* Component);
 	SSet<Component*> GetComponents();
 
+	//////////
+	//RENDER//
+	//////////
+	virtual void PreFrameRendered() override;
+	virtual void PostFrameRendered() override;
+	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
+
 	//////////////////
 	//USER INTERFACE//
 	//////////////////
-	bool PopulateDetailsPanel();
-	TString GetDetailsPanelName();
+	virtual bool PopulateDetailsPanel() override;
+	virtual TString GetDetailsPanelName() override;
 
 protected:
 	Component* RootComponent;
 	SArray<BaseWidget*> DetailsPanelWidgets;
+
 private:
-	SSet<Component*> Components;
+	SSet<Component*> Children;
 };
 

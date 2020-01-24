@@ -8,7 +8,7 @@ SAsset::SAsset(TString FilePath) {
 	TString curr = "";
 	S_Data = *new SArray<TString>();
 	while(getline(file, curr)) {
-		S_Data.push_back(curr);
+		S_Data.Add(curr);
 	}
 	file.close();
 }
@@ -21,7 +21,7 @@ Material* SAsset::GetAsMaterial() {
 
 	/*Shader Stage*/
 	bool useDefaultShader = true;
-	for (int i = 0; i < S_Data.size(); i++) {
+	for (int i = 0; i < S_Data.Count(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "Shader") {
 			newMaterial = new Material(getParameters(currLine)[0]);
@@ -39,19 +39,19 @@ Material* SAsset::GetAsMaterial() {
 	}
 
 	/*Texture Stage*/
-	for(int i=0; i<S_Data.size(); i++) {
+	for(int i=0; i<S_Data.Count(); i++) {
 		TString currLine = S_Data[i];
 		if(getFucntionName(currLine) == "Texture") {
-			texturePaths.push_back(getParameters(currLine)[0]);
+			texturePaths.Add(getParameters(currLine)[0]);
 		}
 	}
 	/*Load textures as assets if needed*/
-	for (int i = 0; i < texturePaths.size(); i++) {
+	for (int i = 0; i < texturePaths.Count(); i++) {
 		manager->GetAsset(texturePaths[i]);
 	}
 
 	/*Parameters*/
-	for (int i = 0; i < S_Data.size(); i++) {
+	for (int i = 0; i < S_Data.Count(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "TextureParam") {
 			int index = atoi(getParameters(currLine)[0].c_str());
@@ -65,7 +65,7 @@ StaticMesh* SAsset::GetAsStaticMesh(TString StaticMeshName) {
 	StaticMesh* newMesh = nullptr;
 	Material* newMaterial = nullptr;
 
-	for (int i = 0; i < S_Data.size(); i++) {
+	for (int i = 0; i < S_Data.Count(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "Mesh") {
 			newMesh = new StaticMesh(StaticMeshName, getParameters(currLine)[0]);
@@ -77,7 +77,7 @@ StaticMesh* SAsset::GetAsStaticMesh(TString StaticMeshName) {
 	}
 
 	int materialIndex = 0;
-	for (int i = 0; i < S_Data.size(); i++) {
+	for (int i = 0; i < S_Data.Count(); i++) {
 		TString currLine = S_Data[i];
 		if (getFucntionName(currLine) == "Material") {
 			newMaterial = Engine::GetInstance()->GetAssetManager()->GetAsset(getParameters(currLine)[0])->GetAsMaterial();
@@ -110,10 +110,10 @@ SArray<TString> SAsset::getParameters(TString Line) {
 			continue;
 		}
 		if(parameterString[i] == ',') {
-			parameters.push_back(curr);
+			parameters.Add(curr);
 			curr = "";
 		}else if(parameterString[i] == ')') {
-			parameters.push_back(curr);
+			parameters.Add(curr);
 			curr = "";
 			break;
 		}else{

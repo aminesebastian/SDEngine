@@ -1,7 +1,6 @@
 #pragma once
-#include <string>
 #include "Utilities/TypeDefenitions.h"
-
+#include "Core/DataStructures/DataStructures.h"
 
 class World;
 class Shader;

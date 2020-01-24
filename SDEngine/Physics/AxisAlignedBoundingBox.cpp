@@ -3,13 +3,14 @@
 #include "Engine/EngineStatics.h"
 #include "Entities/Camera.h"
 #include <limits>
-#include "Utilities/Math/MathLibrary.h"
+#include "Core/Math/MathLibrary.h"
+#include "Core/DataStructures/DataStructures.h"
 
 AxisAlignedBoundingBox::AxisAlignedBoundingBox(SArray<vec3> Verticies) {
 	vec3 min = vec3(0, 0, 0);
 	vec3 max = vec3(0, 0, 0);
 
-	for (int i = 0; i < Verticies.size(); i++) {
+	for (int i = 0; i < Verticies.Count(); i++) {
 		if (Verticies[i].x < min.x) {
 			min.x = Verticies[i].x;
 		}

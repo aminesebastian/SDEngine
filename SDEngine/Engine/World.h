@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Utilities/TypeDefenitions.h"
+#include "Core/DataStructures/DataStructures.h"
 
 class Actor;
 class Camera;

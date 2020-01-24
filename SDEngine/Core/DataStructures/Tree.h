@@ -1,6 +1,9 @@
 #pragma once
 #include "Utilities/TypeDefenitions.h"
 
+template <typename K>
+class SArray;
+
 template <typename T>
 class STreeNode {
 public:
@@ -25,7 +28,7 @@ public:
 	SArray<T*> GetAllNodes();
 
 private:
-	STreeNode* Root;
+	STreeNode<T>* Root;
 
 	bool RemoveInternal(T* DataToRemove, STreeNode<T>* Node, STreeNode<T>* PreviousNode);
 };

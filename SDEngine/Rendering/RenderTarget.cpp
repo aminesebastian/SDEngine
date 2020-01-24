@@ -20,7 +20,7 @@ RenderTarget::~RenderTarget() {
 
 void RenderTarget::AddTextureIndex(FRenderTargetTextureEntry* Texture) {
 	if (TextureCount < 8) {
-		TextureEntries.push_back(Texture);
+		TextureEntries.Add(Texture);
 		TextureCount++;
 	}
 }
@@ -48,7 +48,7 @@ bool RenderTarget::FinalizeRenderTarget() {
 	}
 	SArray<GLuint> attachments;
 	for (int i = 0; i < TextureCount; i++) {
-		attachments.push_back(GL_COLOR_ATTACHMENT0 + i);
+		attachments.Add(GL_COLOR_ATTACHMENT0 + i);
 	}
 
 	glDrawBuffers(TextureCount, &attachments[0]);

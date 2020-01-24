@@ -1,6 +1,7 @@
 #pragma once
 #include "Utilities/TypeDefenitions.h"
 #include "Physics/CollisionChannels.h"
+#include "Core/DataStructures/DataStructures.h"
 
 using namespace glm;
 
@@ -9,6 +10,8 @@ using namespace glm;
 class Entity;
 class World;
 class Camera;
+template<typename T>
+class SArray;
 
 struct FHitInfo {
 	bool bHit;

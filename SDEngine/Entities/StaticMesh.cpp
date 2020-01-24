@@ -3,7 +3,7 @@
 #include "Engine/Engine.h"
 #include "Engine/EngineStatics.h"
 #include "Utilities/Logger.h"
-#include "Utilities/Math/MathLibrary.h"
+#include "Core/Math/MathLibrary.h"
 
 StaticMesh::StaticMesh(const TString& Name, const TString& FilePath) : EngineObject(Name) {
 	LoadModel(FilePath);
@@ -37,7 +37,7 @@ void StaticMesh::ProcessNode(aiNode* Node, const aiScene* Scene) {
 	for (GLuint i = 0; i < Node->mNumMeshes; i++) {
 		aiMesh* mesh = Scene->mMeshes[Node->mMeshes[i]];
 		FSubMesh* subMesh = GenerateSubMesh(mesh);
-		SubMeshes.push_back(subMesh);
+		SubMeshes.Add(subMesh);
 	}
 	// Handle Children
 	for (unsigned int i = 0; i < Node->mNumChildren; i++) {
@@ -47,11 +47,11 @@ void StaticMesh::ProcessNode(aiNode* Node, const aiScene* Scene) {
 FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 	FSubMesh* subMesh = new FSubMesh();
 	subMesh->SubMeshMaterial = EngineStatics::GetDefaultMaterial();
-	subMesh->Verticies.reserve(Mesh->mNumVertices);
-	subMesh->Normals.reserve(Mesh->mNumVertices);
-	subMesh->Tangents.reserve(Mesh->mNumVertices);
-	subMesh->TexCoords.reserve(Mesh->mNumVertices);
-	subMesh->Indices.reserve(Mesh->mNumFaces);
+	subMesh->Verticies.PreAllocate(Mesh->mNumVertices);
+	subMesh->Normals.PreAllocate(Mesh->mNumVertices);
+	subMesh->Tangents.PreAllocate(Mesh->mNumVertices);
+	subMesh->TexCoords.PreAllocate(Mesh->mNumVertices);
+	subMesh->Indices.PreAllocate(Mesh->mNumFaces);
 
 	for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
 		vec3 tempPos;
@@ -59,7 +59,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 		tempPos.y = Mesh->mVertices[i].y;
 		tempPos.z = Mesh->mVertices[i].z;
 
-		subMesh->Verticies.push_back(tempPos);
+		subMesh->Verticies.Add(tempPos);
 	}
 	if (Mesh->HasNormals()) {
 		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
@@ -68,7 +68,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempNormal.y = Mesh->mNormals[i].y;
 			tempNormal.z = Mesh->mNormals[i].z;
 
-			subMesh->Verticies.push_back(tempNormal);
+			subMesh->Verticies.Add(tempNormal);
 		}
 	}
 	if (Mesh->HasNormals()) {
@@ -78,7 +78,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempNormal.y = Mesh->mNormals[i].y;
 			tempNormal.z = Mesh->mNormals[i].z;
 
-			subMesh->Normals.push_back(tempNormal);
+			subMesh->Normals.Add(tempNormal);
 		}
 	}
 	if (Mesh->HasTangentsAndBitangents()) {
@@ -88,7 +88,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempTangent.y = Mesh->mTangents[i].y;
 			tempTangent.z = Mesh->mTangents[i].z;
 
-			subMesh->Tangents.push_back(tempTangent);
+			subMesh->Tangents.Add(tempTangent);
 		}
 	}
 	if (Mesh->HasTextureCoords(0)) {
@@ -97,14 +97,14 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempUV.x = Mesh->mTextureCoords[0][i].x;
 			tempUV.y = Mesh->mTextureCoords[0][i].y;
 
-			subMesh->TexCoords.push_back(tempUV);
+			subMesh->TexCoords.Add(tempUV);
 		}
 	}
 	if (Mesh->HasFaces()) {
 		for (unsigned int i = 0; i < Mesh->mNumFaces; i++) {
 			aiFace tempface = Mesh->mFaces[i];
 			for (unsigned int j = 0; j < tempface.mNumIndices; j++) {
-				subMesh->Indices.push_back(tempface.mIndices[j]);
+				subMesh->Indices.Add(tempface.mIndices[j]);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempColor.y = Mesh->mColors[i]->g;
 			tempColor.z = Mesh->mColors[i]->b;
 
-			subMesh->VertexColors.push_back(tempColor);
+			subMesh->VertexColors.Add(tempColor);
 		}
 	}
 
@@ -125,7 +125,7 @@ void StaticMesh::GenerateGPUBuffers() {
 	for (FSubMesh* subMesh : SubMeshes) {
 		// Preallocate the VertexArrayBuffersArray
 		for (int i = 0; i < subMesh->GetBufferCount(); i++) {
-			subMesh->VertexArrayBuffers.push_back(0);
+			subMesh->VertexArrayBuffers.Add(0);
 		}
 
 		glGenVertexArrays(1, &subMesh->VertexArrayObject);
@@ -134,53 +134,53 @@ void StaticMesh::GenerateGPUBuffers() {
 		glGenBuffers(subMesh->GetBufferCount(), &subMesh->VertexArrayBuffers[0]);
 
 		//Position
-		if (!subMesh->Verticies.empty()) {
+		if (!subMesh->Verticies.IsEmpty()) {
 			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[POSITION_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Verticies[0]) * subMesh->Verticies.size(), &subMesh->Verticies[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Verticies[0]) * subMesh->Verticies.Count(), &subMesh->Verticies[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		//Tex Coord
-		if (!subMesh->TexCoords.empty()) {
+		if (!subMesh->TexCoords.IsEmpty()) {
 			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[TEXCOORD_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->TexCoords[0]) * subMesh->TexCoords.size(), &subMesh->TexCoords[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->TexCoords[0]) * subMesh->TexCoords.Count(), &subMesh->TexCoords[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		//Normal
-		if (!subMesh->Normals.empty()) {
+		if (!subMesh->Normals.IsEmpty()) {
 			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[NORMAL_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Normals[0]) * subMesh->Normals.size(), &subMesh->Normals[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Normals[0]) * subMesh->Normals.Count(), &subMesh->Normals[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(2);
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		//Colors
-		if (!subMesh->VertexColors.empty()) {
+		if (!subMesh->VertexColors.IsEmpty()) {
 			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[COLORS_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->VertexColors[0]) * subMesh->VertexColors.size(), &subMesh->VertexColors[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->VertexColors[0]) * subMesh->VertexColors.Count(), &subMesh->VertexColors[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		//Tangents
-		if (!subMesh->Tangents.empty()) {
+		if (!subMesh->Tangents.IsEmpty()) {
 			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[TANGENT_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Tangents[0]) * subMesh->Tangents.size(), &subMesh->Tangents[0], GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->Tangents[0]) * subMesh->Tangents.Count(), &subMesh->Tangents[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(3);
 			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		//Index
-		if (!subMesh->Indices.empty()) {
+		if (!subMesh->Indices.IsEmpty()) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, subMesh->VertexArrayBuffers[INDEX_VB]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(subMesh->Indices[0]) * subMesh->Indices.size(), &subMesh->Indices[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(subMesh->Indices[0]) * subMesh->Indices.Count(), &subMesh->Indices[0], GL_STATIC_DRAW);
 		}
 
 		glBindVertexArray(0);

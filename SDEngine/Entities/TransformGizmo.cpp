@@ -4,7 +4,7 @@
 #include "Engine/Engine.h"
 #include "Engine/RenderViewport.h"
 #include "Rendering/Shader.h"
-#include "Utilities/Math/MathLibrary.h"
+#include "Core/Math/MathLibrary.h"
 #include "Entities/Camera.h"
 
 TransformGizmo::TransformGizmo(RenderViewport* RenderEngine) : Actor("TransformGizmo") {

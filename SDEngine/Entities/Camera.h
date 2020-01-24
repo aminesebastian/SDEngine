@@ -10,7 +10,7 @@ using namespace glm;
 class Camera : public Actor {
 
 public:
-	Camera(TString Name, const Transform Transform, float FOV, vec2 Dimensions, float NearClip, float FarClip);
+	Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip);
 	virtual ~Camera();
 	float GetNearClipPlane();
 	float GetFarClipPlane();

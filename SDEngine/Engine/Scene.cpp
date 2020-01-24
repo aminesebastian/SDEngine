@@ -28,7 +28,7 @@ bool Scene::SaveScene() {
 	return true;
 }
 void Scene::LoadPlane() {
-	//Transform planeTransform;
+	//CurrentTransform planeTransform;
 	//Material* planeMat = EngineStatics::GetDefaultMaterial();
 	//StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
 	//Engine::GetInstance()->GetWorld()->RegisterActor(plane);

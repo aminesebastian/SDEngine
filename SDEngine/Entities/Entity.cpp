@@ -6,24 +6,67 @@
 
 Entity::Entity(TString Name) : EngineObject(Name) {
 	bVisible = true;
+	bHiddenInGame = false;
 	bNeedsTick = true;
 	bNeedsBeginPlay = true;
 }
 Entity::~Entity() {};
 
-Transform Entity::GetTransform() { return CurrentTransform; }
+bool Entity::IsVisible() {
+	return bVisible;
+}
+void Entity::SetVisibility(bool Show) {
+	bVisible = Show;
+}
+void Entity::ToggleVisibility() {
+	bVisible = !bVisible;
+}
+bool Entity::IsHiddenInGame() {
+	return bHiddenInGame;
+}
+void Entity::SetHiddenInGame(bool Hidden) {
+	bHiddenInGame = Hidden;
+}
+
+bool Entity::ShouldCastShadows() {
+	return bCastShadows;
+}
+void Entity::SetCastShadows(bool CastShadows) {
+	bCastShadows = CastShadows;
+}
+
+
+bool Entity::ShouldBeDrawn(EDrawType DrawType) {
+	if (DrawType == SCENE_RENDER || DrawType == EDITOR_OUTLINE_RENDER) {
+		if (IsVisible() && !IsHiddenInGame()) {
+			return true;
+		}
+		if (IsVisible() && IsHiddenInGame() && !Engine::GetInstance()->IsInGameMode()) {
+			return true;
+		}
+	} else if (DrawType == SHADOW_MAP_RENDER) {
+		return IsVisible() && ShouldCastShadows();
+	}
+	return false;
+}
+
+Transform Entity::GetTransform() {
+	return CurrentTransform;
+}
 void Entity::SetTransform(Transform NewTransform) {
 	CurrentTransform = NewTransform;
 }
-Transform Entity::GetLastFrameTransform() { return LastFrameTransform; }
+Transform Entity::GetLastFrameTransform() {
+	return LastFrameTrasnform;
+}
 void Entity::SetLastFrameTransform(Transform OldTransform) {
-	LastFrameTransform = OldTransform;
+	LastFrameTrasnform = OldTransform;
 }
 vec3 Entity::GetLinearVelocity() {
-	return CurrentTransform.GetLocation() - LastFrameTransform.GetLocation();
+	return CurrentTransform.GetLocation() - LastFrameTrasnform.GetLocation();
 }
 vec3 Entity::GetAngularVelocity() {
-	return CurrentTransform.GetRotation() - LastFrameTransform.GetRotation();
+	return CurrentTransform.GetRotation() - LastFrameTrasnform.GetRotation();
 }
 
 vec3 Entity::GetLocation() {
@@ -77,10 +120,6 @@ void Entity::SetScale(float X, float Y, float Z) {
 void Entity::SetUniformScale(float Scale) {
 	CurrentTransform.SetScale(vec3(Scale, Scale, Scale));
 }
-
-bool Entity::IsVisible() { return bVisible; }
-void Entity::SetVisibility(bool Show) { bVisible = Show; }
-void Entity::ToggleVisibility() { bVisible = !bVisible; }
 
 void Entity::PreFrameRendered() {
 

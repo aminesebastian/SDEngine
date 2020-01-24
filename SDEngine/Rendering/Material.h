@@ -57,8 +57,8 @@ public:
 
 	bool SetShaderModel(EShaderModel Model);
 	EShaderModel GetShaderModel() { return S_ShaderModel; }
-	void BindMaterial(Entity* Entity, Camera* Camera);
-
+	void BindMaterial(const Transform& RenderTransform, Camera* RenderCamera);
+	void BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, Camera* RenderCamera);
 private:
 	Shader* S_Shader;
 	EShaderModel S_ShaderModel;

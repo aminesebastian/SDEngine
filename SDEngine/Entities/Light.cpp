@@ -84,7 +84,7 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 
 	SArray<Actor*> entityList = Engine::GetInstance()->GetWorld()->GetWorldActors();
 	for (Actor* actor : Engine::GetInstance()->GetWorld()->GetWorldActors()) {
-		if (actor->IsVisible()) {
+		if (actor->ShouldBeDrawn(SHADOW_MAP_RENDER)) {
 			EngineStatics::GetShadowShader()->Bind();
 			mat4 mvp;
 			mvp = GetLightOrthogonalMatrix() * GetLightViewMatrix();
