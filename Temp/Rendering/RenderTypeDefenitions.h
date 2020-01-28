@@ -1,0 +1,7 @@
+#pragma once
+
+enum EDrawType {
+	SCENE_RENDER,
+	EDITOR_OUTLINE_RENDER,
+	SHADOW_MAP_RENDER
+};

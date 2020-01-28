@@ -1,0 +1,612 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{ca49810e-d583-4551-8709-1898e938dfb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{13a7b081-ef44-4d30-b7b2-3e2df88b24ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Entities">
+      <UniqueIdentifier>{03868701-fcb6-4426-9c76-ccad46b1e8db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Rendering">
+      <UniqueIdentifier>{19560051-d993-4bb1-a6ef-66fe470b7316}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Utilities">
+      <UniqueIdentifier>{cf11a89e-ec53-4293-af9b-dc358dcfeb89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\PostProcessing">
+      <UniqueIdentifier>{f0c1df1f-c8c2-4002-b377-08c606f826cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\IndividualShaders">
+      <UniqueIdentifier>{7e03f0c8-f91f-401e-acc4-7610dc922084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine">
+      <UniqueIdentifier>{532c70ea-70df-4b09-aff3-b7a4bd774575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Rendering\PostProcessingLayer">
+      <UniqueIdentifier>{3c2d05d3-233b-4972-9533-193fd99a427f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Physics">
+      <UniqueIdentifier>{bc75905e-90ed-4302-9ab3-0ed9c7e628de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\PostProcessing\Bloom">
+      <UniqueIdentifier>{4d64d88c-125e-4554-bb1d-d2602a18fb5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{21393857-7b27-46cb-8a3a-603322db22ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{5a6e0009-c4ee-441b-bafd-8b81a5874f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\PostProcessing">
+      <UniqueIdentifier>{054a74a6-a851-48e6-a84d-f451b44b46c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{67ed7848-4d26-4587-b72d-6aa74e3e0cd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{4899ab9b-bea1-491b-a60e-6b883302fca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{ddbbf119-6b8f-4af6-8fe7-cbbbb072831d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\PostProcessing\MotionBlur">
+      <UniqueIdentifier>{43d996a6-0bfe-44ed-8f4b-6c53fc5994ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries">
+      <UniqueIdentifier>{d7d64250-2803-4f82-8f0b-6de5a61f560e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External Libraries\imgui">
+      <UniqueIdentifier>{698a9d4a-66a5-4b13-8aaa-f74192961a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UserInterface">
+      <UniqueIdentifier>{69cc627d-dbef-439e-9f8c-49d043f67917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UserInterface">
+      <UniqueIdentifier>{d1d7cb2f-20f8-468d-ad3e-ed45320ed1ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\UserInterface\Widgets">
+      <UniqueIdentifier>{78224631-4412-4e21-a895-b8dd947dd1ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UserInterface\Widgets">
+      <UniqueIdentifier>{ea31d433-419f-4d9d-a280-2deb22260e85}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui_impl_opengl3.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui_impl_sdl.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui_widgets.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui_demo.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Imgui\imgui_draw.cpp">
+      <Filter>External Libraries\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Widgets\DragFloat.cpp">
+      <Filter>Source Files\UserInterface\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp">
+      <Filter>Source Files\UserInterface\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\DefferedCompositor.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineStatics.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\DOFPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Utilities\Downsampler.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\GBuffer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Camera.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Display.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\EngineUI.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\DetailsPanelProvider.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Grid.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\MotionBlurPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\PostProcessingLayer.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\RenderTarget.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ImageUtils.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Light.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Material.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ObjLoader.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\TypeDefenitions.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Transform.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp">
+      <Filter>Source Files\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\WorkerThread.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Texture2D.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\StaticMesh.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ThreadManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\TransformGizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\RenderViewport.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\EngineFunctionLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IRenderable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actors\HeadActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\EditorSpriteComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math\MathLibrary.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataStructures\Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataStructures\Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Asset.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\AssetManager.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataStructures\ByteBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\SerializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\DeserializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataTypes\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Lib\Imgui\imgui.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imgui_impl_opengl3.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imgui_impl_sdl.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imconfig.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imgui_internal.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imstb_textedit.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imstb_rectpack.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Imgui\imstb_truetype.h">
+      <Filter>External Libraries\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Widgets\DragFloat.h">
+      <Filter>Headers\UserInterface\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Widgets\BaseWidget.h">
+      <Filter>Headers\UserInterface\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\DefferedCompositor.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineStatics.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\DOFPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Utilities\Downsampler.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\GBuffer.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Actor.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Camera.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Display.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\EngineUI.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\DetailsPanelProvider.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Grid.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Entity.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\PostProcessingLayer.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\RenderTarget.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ImageUtils.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Light.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Material.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ObjLoader.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\TypeDefenitions.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Transform.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UserInterface.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UserInterfaceUtilities.h">
+      <Filter>Headers\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\WorkerThread.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\PostProcessing\ToneMapper.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Texture2D.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\StaticMesh.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Shader.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ThreadManager.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Logger.h" />
+    <ClInclude Include="Entities\TransformGizmo.h" />
+    <ClInclude Include="Engine\RenderViewport.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
+    <ClInclude Include="Physics\CollisionChannels.h" />
+    <ClInclude Include="Physics\AxisAlignedBoundingBox.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineObject.h" />
+    <ClInclude Include="Entities\Component.h" />
+    <ClInclude Include="Engine\IRenderable.h" />
+    <ClInclude Include="Entities\Actors\HeadActor.h" />
+    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
+    <ClInclude Include="Entities\EditorSpriteComponent.h" />
+    <ClInclude Include="Core\Math\MathLibrary.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataStructures\DataStructures.h" />
+    <ClInclude Include="Core\DataStructures\Tree.h" />
+    <ClInclude Include="Core\Assets\Asset.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\ISerializeableAsset.h" />
+    <ClInclude Include="Core\Assets\AssetManager.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Assets\IAssetFactory.h" />
+    <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
+    <ClInclude Include="Include\ZLIB\zconf.h" />
+    <ClInclude Include="Include\ZLIB\zlib.h" />
+    <ClInclude Include="Core\Assets\Factories\StaticMeshAssetFactory.h" />
+    <ClInclude Include="Core\Utilities\SerializationStream.h" />
+    <ClInclude Include="Core\Utilities\DeserializationStream.h" />
+    <ClInclude Include="Core\DataTypes\String.h" />
+    <ClInclude Include="Core\Assets\Factories\MaterialAssetFactory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\Shaders\DefferedLighting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\DefferedLighting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Output.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Output.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\ToneMapping.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\DefaultGeometryPassShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\DefaultGeometryPassShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LightDebugShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LightDebugShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucentShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucentShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TestEyeShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TestEyeShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\GridShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\GridShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucencyCompositor.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\TranslucencyCompositor.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\SkySphereShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SkySphereShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TorusShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TorusShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\HeadShader.frag">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\HeadShader.vert">
+      <Filter>Shaders\IndividualShaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\SSAO.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\SSAO.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\DOF.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\DOF.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\ShadowShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\ShadowShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LineShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\LineShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.frag">
+      <Filter>Shaders\PostProcessing\Bloom</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.vert">
+      <Filter>Shaders\PostProcessing\Bloom</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.frag">
+      <Filter>Shaders\PostProcessing\Bloom</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.vert">
+      <Filter>Shaders\PostProcessing\Bloom</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Downsample.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\Downsample.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.frag">
+      <Filter>Shaders\PostProcessing\MotionBlur</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.vert">
+      <Filter>Shaders\PostProcessing\MotionBlur</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\GBlur5x1.frag">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\PostProcessing\GBlur5x1.vert">
+      <Filter>Shaders\PostProcessing</Filter>
+    </None>
+    <None Include="Res\Shaders\SelectionOutlineShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SelectionOutlineShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TransformGizmoShader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\TransformGizmoShader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\EditorSpriteShader.vert" />
+    <None Include="Res\Shaders\EditorSpriteShader.frag" />
+  </ItemGroup>
+</Project>

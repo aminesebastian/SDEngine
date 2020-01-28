@@ -104,14 +104,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstaticd.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,7 +140,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -149,11 +149,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstatic.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\DataStructures\Array.cpp" />
+    <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
+    <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Entities\Component.cpp" />
     <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
     <ClCompile Include="Engine\EngineObject.cpp" />
@@ -161,7 +163,6 @@
     <ClCompile Include="Entities\Actors\HeadActor.cpp" />
     <ClCompile Include="Entities\Components\StaticMeshComponent.cpp" />
     <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
-    <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
     <ClCompile Include="Entities\Actor.cpp" />
     <ClCompile Include="Engine\AssetManager.cpp" />
@@ -216,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
+    <ClInclude Include="Core\DataStructures\DataStructures.h" />
+    <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Entities\Component.h" />
     <ClInclude Include="Entities\EditorSpriteComponent.h" />
     <ClInclude Include="Engine\EngineObject.h" />
@@ -225,8 +229,6 @@
     <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
     <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
     <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
-    <ClInclude Include="Core\DataStructures\DataStructures.h" />
-    <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
     <ClInclude Include="Entities\Actor.h" />
     <ClInclude Include="Engine\AssetManager.h" />

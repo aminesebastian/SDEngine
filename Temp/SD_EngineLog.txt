@@ -1,0 +1,595 @@
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:42: SD_EngineLog.txt
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:41: SD_EngineLog.txt
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:41: Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:43: Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:43: Engine Launcfhed!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:43: TimeEngine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:43: 2017-2-6 20:5:13: Engine Launched!
+43: 2017-2-6 20:7:44: Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:43: 2017-2-6 20:10:48: Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:40: 2017-2-6 20:22:39: [GENERAL]Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-6 20:30:16: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-6 20:40:33: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-6 21:14:15: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-6 21:14:42: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-13 20:19:40: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-2-20 19:9:25: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-3-27 19:16:22: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-3-27 19:17:6: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 19:20:55: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 19:55:45: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:6:8: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:7:32: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:8:48: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:9:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:9:32: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:9:46: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:10:22: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:14:32: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:31:28: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:32:10: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:36:47: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:37:47: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:38:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:40:57: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:42:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:43:27: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:46:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:49:7: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:55:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:57:7: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 20:57:46: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 21:3:38: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-27 21:6:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:2:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:2:56: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:3:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:15:37: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:19:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:22:31: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-28 12:30:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:2:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:4:58: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:17:18: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:45:22: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:52:35: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:56:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-3-29 10:58:24: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 10:32:24: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 10:33:15: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 10:54:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:4:0: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:5:13: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:7:32: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:8:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:9:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 11:20:37: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-3 19:45:56: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 11:35:54: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 11:44:27: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 11:57:5: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 11:57:27: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 11:58:14: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 12:13:23: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 12:14:29: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 12:18:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-4 12:20:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 10:41:17: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 10:46:34: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 10:51:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 10:56:19: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 11:18:35: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 11:21:49: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 11:25:52: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:13:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:27:19: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:33:12: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:33:52: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:40:0: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:41:33: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:42:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:44:27: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:52:34: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:58:45: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 20:59:55: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:0:41: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:1:49: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:4:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:4:58: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:6:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:6:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:7:6: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:7:58: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:8:57: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:9:37: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:23:27: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:25:14: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:26:15: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:27:5: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:27:34: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:29:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:31:31: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:31:52: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:33:47: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:34:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-5 21:48:52: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 11:37:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 11:38:56: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 12:1:42: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 12:22:5: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 12:45:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 12:58:6: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-6 13:49:38: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-8 16:50:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-8 17:37:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-8 17:47:26: [GENERAL] Engine Launched!
+f:\sd engine\sdengine\main.cpp:38: 2017-4-9 4:29:34: [GENERAL] Engine Launched!
+f:\sd engine\sdengine\main.cpp:38: 2017-4-9 4:46:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 5:3:45: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 5:4:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 5:4:24: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 5:7:51: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:18:42: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:22:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:22:57: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:24:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:26:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:32:17: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:33:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:51:19: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:53:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-4-9 15:53:24: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 16:18:11: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 16:18:26: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 16:19:11: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 16:24:57: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 16:27:13: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 17:36:53: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 17:37:46: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 17:50:11: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:17:50: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:18:22: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:19:2: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:29:55: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:31:41: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:36:18: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:36:50: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:38:26: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:39:25: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:39:52: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:40:58: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:41:36: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:44:36: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:47:17: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:48:6: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:48:47: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:49:44: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 18:54:7: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:3:15: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:4:10: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:11:24: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:13:22: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:14:12: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:14:32: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:14:40: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:14:49: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:20:44: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:20:53: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:22:3: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:22:36: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:24:55: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-9 19:28:29: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:5:21: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:5:55: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:6:6: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:6:46: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:17:13: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:18:26: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:21:52: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 10:24:19: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 11:8:58: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 11:24:15: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 12:56:43: [GENERAL] Engine Launched!
+Main.cpp:36: 2017-4-10 13:33:29: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 13:49:48: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 13:51:18: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 13:51:41: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 14:5:50: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 14:9:20: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 15:4:9: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 15:44:9: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 15:57:14: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 17:27:49: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 17:32:6: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:37: 2017-4-10 17:39:56: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 17:45:1: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 17:51:51: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 18:27:53: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 18:39:25: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:29:37: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:31:18: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:33:51: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:35:4: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:39:12: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:39:41: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:40:21: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:41:30: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:42:28: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:49:17: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:52:5: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:52:32: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:53:28: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 19:54:17: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:10:12: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:11:30: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:15:3: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:21:6: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:23:47: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:27:19: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:33:54: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:34:14: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:38:20: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:38:34: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:39:3: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:47:2: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 20:52:45: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 22:56:7: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-10 22:56:41: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 10:12:43: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 10:13:24: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 10:24:2: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 10:59:1: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 10:59:56: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-12 11:8:28: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 11:36:5: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:1:2: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:15:32: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:18:33: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:23:23: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:35:55: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:40:5: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 12:43:17: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 13:29:18: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 13:39:58: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 14:4:20: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 14:15:39: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-13 15:39:14: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:17:15: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:26:15: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:30:33: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:34:49: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:37:29: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:48:36: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 18:57:0: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-4-17 19:12:26: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-9-5 13:29:1: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-9-5 16:34:35: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-9-7 14:27:35: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 17:32:45: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 17:42:38: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 18:14:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 18:22:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 18:23:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 18:42:15: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:3:51: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:8:22: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:9:44: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:11:14: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:11:39: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:13:4: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:15:56: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:41:35: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:42:57: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 19:59:52: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 20:2:0: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 20:6:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-7 20:8:42: [GENERAL] Engine Launched!
+Main.cpp:37: 2017-9-11 20:32:6: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-11 20:33:8: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 14:53:53: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 15:12:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 15:16:29: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 15:23:28: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 15:26:35: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 15:27:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 18:43:2: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 18:47:54: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 18:51:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:11:7: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:11:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:12:20: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:13:0: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:14:5: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:14:55: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:15:38: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:17:12: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:19:10: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:20:8: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:21:50: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:22:53: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:23:22: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:23:45: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:24:15: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:24:56: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:25:55: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-12 19:52:49: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 18:58:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:16:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:18:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:19:30: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:20:1: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:21:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:21:48: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:22:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:23:13: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 19:24:5: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:16:10: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:16:51: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:17:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:18:13: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:19:25: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:20:17: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:22:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:33:21: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-13 22:36:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 0:30:54: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 0:31:33: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 0:35:46: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 0:37:36: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 0:40:43: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:1:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:1:46: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:2:55: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:6:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:12:20: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:14:40: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:24:48: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:29:47: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:36:3: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:45:10: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:46:31: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:48:51: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 1:55:42: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 2:4:16: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 2:11:8: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 2:24:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:4:57: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:8:37: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:9:33: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:10:9: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:10:33: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:27:22: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:30:8: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:40:19: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 3:55:46: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 4:39:32: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-9-14 14:28:49: [GENERAL] Engine Launched!
+c:\users\amine\onedrive\documents\github\sdengine\sdengine\main.cpp:38: 2017-9-14 14:36:11: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 14:51:47: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 15:4:9: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 15:17:10: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 18:2:20: [GENERAL] Engine Launched!
+Main.cpp:38: 2017-9-14 18:18:55: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 18:44:1: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 18:44:31: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 19:0:20: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 19:5:22: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 19:7:20: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 19:23:53: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 22:5:27: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 22:26:22: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 22:48:17: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 22:52:39: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-14 23:3:4: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 1:45:12: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 1:45:31: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 1:45:59: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 1:46:26: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 2:15:32: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 2:23:42: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 2:24:15: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 3:33:7: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 3:45:1: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 23:20:6: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 23:22:41: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-15 23:32:19: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 0:5:45: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 0:53:38: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 23:28:27: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 23:31:1: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 23:35:1: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-16 23:45:31: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 0:17:4: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 1:13:9: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 1:15:12: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 1:52:30: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 1:55:16: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 3:29:37: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 3:31:8: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 3:49:55: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 5:50:2: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 6:6:59: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 19:23:27: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-17 19:29:54: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 14:14:25: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 14:41:19: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 16:38:39: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:13:12: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:16:27: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:17:10: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:17:25: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:19:2: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:22:50: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:29:54: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-18 17:32:25: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 1:57:2: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:4:40: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:29:4: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:30:19: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:30:56: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:31:41: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 16:32:49: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-19 17:56:0: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 16:53:13: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 16:59:51: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 17:5:33: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 17:6:13: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 17:6:28: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 18:16:17: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 18:17:23: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-22 18:18:45: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-23 2:21:19: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-9-23 2:22:43: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-12-22 19:23:24: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-22 23:3:50: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-22 23:57:50: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-23 0:28:47: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-23 4:35:50: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-23 5:20:23: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-23 17:41:15: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-24 4:2:1: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-25 1:31:49: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-25 2:22:39: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-25 4:10:31: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-26 19:8:4: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-28 19:49:16: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-28 20:55:33: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-12-28 20:59:5: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-12-29 19:9:14: [GENERAL] Engine Launched!
+Main.cpp:39: 2017-12-29 23:21:52: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-30 4:53:30: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-30 23:35:20: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2017-12-31 4:59:41: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2018-1-1 2:41:47: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2018-1-1 3:58:55: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2018-1-1 21:44:17: [GENERAL] Engine Launched!
+Main.cpp:39: 2018-1-5 3:24:48: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\sdengine\main.cpp:39: 2018-8-13 23:16:44: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-16 23:38:10: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-16 23:40:21: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-17 0:24:0: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-19 17:31:25: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:58: 2018-10-19 17:32:12: [GENERAL] Sponza Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-19 17:46:22: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:58: 2018-10-19 17:46:47: [GENERAL] Sponza Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-19 17:57:48: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:58: 2018-10-19 17:58:12: [GENERAL] Sponza Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-19 19:6:41: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-19 19:8:7: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-20 0:23:35: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:33: 2018-10-20 0:23:35: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:43: 2018-10-20 0:23:39: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:52: 2018-10-20 0:23:39: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:66: 2018-10-20 0:43:38: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:33: 2018-10-20 0:43:38: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:43: 2018-10-20 0:43:42: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:52: 2018-10-20 0:43:42: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-20 21:21:15: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-20 21:21:19: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-20 21:21:19: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-20 21:21:19: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-21 1:51:14: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-21 1:51:18: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-21 1:51:18: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-21 1:51:18: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-22 22:48:2: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-22 22:48:6: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-22 22:48:6: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-22 22:48:6: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-23 0:52:9: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-23 0:52:14: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-23 0:52:14: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-23 0:52:14: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-23 21:10:2: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-23 21:10:6: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-23 21:10:6: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-23 21:10:6: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-24 23:31:36: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-24 23:31:40: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-24 23:31:40: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-24 23:31:40: [GENERAL] Plane Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:62: 2018-10-25 0:2:25: [GENERAL] Engine Launched!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:39: 2018-10-25 0:2:29: [GENERAL] Head Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:48: 2018-10-25 0:2:29: [GENERAL] Gizmo Loaded!
+f:\suburban digital\sdengine\indev\sdengine\main.cpp:29: 2018-10-25 0:2:29: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-17 19:46:45: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-17 19:46:45: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-17 19:46:59: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-17 19:46:59: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-17 20:10:48: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-17 20:35:44: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-17 20:35:44: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-17 20:35:57: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-17 20:35:57: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-18 2:4:44: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-18 2:4:44: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-18 2:4:58: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-18 2:4:58: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-18 16:49:47: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-18 16:49:47: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-18 16:50:1: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-18 16:50:1: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 2:36:27: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 2:36:27: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 2:36:42: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 2:36:42: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 5:2:20: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 5:2:20: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 5:2:35: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 5:2:35: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 18:1:54: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 18:1:54: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 18:2:8: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 18:2:8: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 21:8:34: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 21:8:34: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 21:8:48: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 21:8:48: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 22:57:46: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 22:57:46: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 22:58:0: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 22:58:0: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 23:46:35: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 23:46:35: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 23:46:49: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 23:46:49: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-19 23:50:43: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-19 23:50:43: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-19 23:50:57: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-19 23:50:57: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-20 16:25:4: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-20 16:25:4: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-20 16:25:18: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-20 16:25:18: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-20 16:52:51: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-20 16:52:51: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-20 16:53:5: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-20 16:53:5: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-20 17:23:37: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-20 17:23:37: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-20 17:23:51: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-20 17:23:51: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-20 19:30:31: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-20 19:30:31: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-20 19:30:45: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-20 19:30:45: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-20 23:49:47: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-20 23:49:47: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-20 23:50:1: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-20 23:50:1: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-21 0:41:47: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-21 0:41:47: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-21 0:42:1: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-21 0:42:1: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Main.cpp:30: 2020-1-21 1:29:23: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:44: 2020-1-21 1:29:23: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:54: 2020-1-21 1:29:37: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\InDev\SDEngine\Scene.cpp:63: 2020-1-21 1:29:38: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Main.cpp:30: 2020-1-21 2:53:51: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:44: 2020-1-21 2:53:51: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:54: 2020-1-21 2:54:6: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\test\SDEngine\SDEngine\Scene.cpp:63: 2020-1-21 2:54:6: [GENERAL] Gizmo Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Main.cpp:30: 2020-1-21 2:57:42: [GENERAL] Engine Launched!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:44: 2020-1-21 2:57:42: [GENERAL] Plane Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:54: 2020-1-21 2:57:56: [GENERAL] Head Loaded!
+E:\Suburban Digital\SDEngine\SDEngine\Scene.cpp:63: 2020-1-21 2:57:56: [GENERAL] Gizmo Loaded!

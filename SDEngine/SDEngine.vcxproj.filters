@@ -253,10 +253,13 @@
     <ClCompile Include="Core\Math\MathLibrary.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Core\DataStructures\Tree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Core\DataStructures\Array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\DataStructures\Tree.cpp">
+    <ClCompile Include="Core\DataStructures\ByteBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -423,9 +426,10 @@
     <ClInclude Include="Core\Math\MathLibrary.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
     <ClInclude Include="Core\DataStructures\DataStructures.h" />
     <ClInclude Include="Core\DataStructures\Tree.h" />
+    <ClInclude Include="Core\DataStructures\Array.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">
