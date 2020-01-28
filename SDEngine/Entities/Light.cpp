@@ -5,6 +5,9 @@
 #include "Engine/Engine.h"
 #include "Rendering/DefferedCompositor.h"
 #include "UserInterface/UserInterface.h"
+#include "Core/Assets/AssetManager.h"
+#include "Rendering/Texture2D.h"
+
 
 Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) : Actor(Name) {
 	SetTransform(IntialTransform);
@@ -18,7 +21,7 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 
 	bCastShadows = CastShadows;
 
-	RegisterComponent(new EditorSpriteComponent("PointLightSprite", "./Res/Textures/Editor/Sprites/PointLightSprite.png", Color));
+	RegisterComponent(new EditorSpriteComponent("PointLightSprite", Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Textures/PointLightSprite.sasset"), Color));
 
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 

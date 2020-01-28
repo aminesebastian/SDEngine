@@ -14,7 +14,7 @@ enum class EShaderType {
 class Shader {
 
 public:
-	Shader() {}
+	Shader();
 	Shader(const TString& ShaderName, bool bUseDefaultGeometry = true);
 	virtual ~Shader();
 
@@ -31,8 +31,6 @@ public:
 	void SetShaderMatrix3(TString Name, mat3 Matrix);
 	void SetShaderMatrix4(TString Name, mat4 Matrix);
 	void SetShaderTexture(TString Name, Texture2D* Texture, int32 Offset);
-
-	TString StripDirectiveName(TString RawLine);
 
 	GLuint& GetProgram() { return S_Program; }
 private:

@@ -4,8 +4,13 @@
 #include "Engine/EngineStatics.h"
 #include "Utilities/Logger.h"
 #include "Core/Math/MathLibrary.h"
+#include "Core\Utilities\SerializationStream.h"
+#include "Core\Utilities\DeserializationStream.h"
 
-StaticMesh::StaticMesh(const TString& Name, const TString& FilePath) : EngineObject(Name) {
+StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name) {
+	bSentToGPU = false;
+}
+StaticMesh::StaticMesh(const TString& Name, const TString& FilePath) : StaticMesh(Name) {
 	LoadModel(FilePath);
 }
 StaticMesh::~StaticMesh() {
@@ -17,12 +22,16 @@ StaticMesh::~StaticMesh() {
 SArray<FSubMesh*> StaticMesh::GetSubMeshes() {
 	return SubMeshes;
 }
+bool StaticMesh::SentToGPU() {
+	return bSentToGPU;
+}
 
 void StaticMesh::LoadModel(const TString FilePath) {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(FilePath, aiProcess_Triangulate |
 		aiProcess_FlipUVs |
 		aiProcess_CalcTangentSpace |
+		aiProcess_JoinIdenticalVertices |
 		aiProcess_GenSmoothNormals);
 
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -30,7 +39,6 @@ void StaticMesh::LoadModel(const TString FilePath) {
 		return;
 	}
 	ProcessNode(scene->mRootNode, scene);
-	GenerateGPUBuffers();
 }
 void StaticMesh::ProcessNode(aiNode* Node, const aiScene* Scene) {
 	// Handle Root
@@ -68,17 +76,16 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempNormal.y = Mesh->mNormals[i].y;
 			tempNormal.z = Mesh->mNormals[i].z;
 
-			subMesh->Verticies.Add(tempNormal);
+			subMesh->Normals.Add(tempNormal);
 		}
 	}
-	if (Mesh->HasNormals()) {
+	if (Mesh->HasTextureCoords(0)) {
 		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
-			vec3 tempNormal;
-			tempNormal.x = Mesh->mNormals[i].x;
-			tempNormal.y = Mesh->mNormals[i].y;
-			tempNormal.z = Mesh->mNormals[i].z;
+			vec2 tempUV;
+			tempUV.x = Mesh->mTextureCoords[0][i].x;
+			tempUV.y = Mesh->mTextureCoords[0][i].y;
 
-			subMesh->Normals.Add(tempNormal);
+			subMesh->TexCoords.Add(tempUV);
 		}
 	}
 	if (Mesh->HasTangentsAndBitangents()) {
@@ -89,15 +96,6 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 			tempTangent.z = Mesh->mTangents[i].z;
 
 			subMesh->Tangents.Add(tempTangent);
-		}
-	}
-	if (Mesh->HasTextureCoords(0)) {
-		for (unsigned int i = 0; i < Mesh->mNumVertices; i++) {
-			vec2 tempUV;
-			tempUV.x = Mesh->mTextureCoords[0][i].x;
-			tempUV.y = Mesh->mTextureCoords[0][i].y;
-
-			subMesh->TexCoords.Add(tempUV);
 		}
 	}
 	if (Mesh->HasFaces()) {
@@ -122,6 +120,10 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 	return subMesh;
 }
 void StaticMesh::GenerateGPUBuffers() {
+	if (bSentToGPU) {
+		SD_ENGINE_WARN("There was an attempt to resend data to the GPU for static mesh: {0}.", GetName());
+		return;
+	}
 	for (FSubMesh* subMesh : SubMeshes) {
 		// Preallocate the VertexArrayBuffersArray
 		for (int i = 0; i < subMesh->GetBufferCount(); i++) {
@@ -159,14 +161,6 @@ void StaticMesh::GenerateGPUBuffers() {
 			glEnableVertexAttribArray(2);
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
-		//Colors
-		if (!subMesh->VertexColors.IsEmpty()) {
-			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[COLORS_VB]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->VertexColors[0]) * subMesh->VertexColors.Count(), &subMesh->VertexColors[0], GL_STATIC_DRAW);
-
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-		}
 
 		//Tangents
 		if (!subMesh->Tangents.IsEmpty()) {
@@ -183,6 +177,47 @@ void StaticMesh::GenerateGPUBuffers() {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(subMesh->Indices[0]) * subMesh->Indices.Count(), &subMesh->Indices[0], GL_STATIC_DRAW);
 		}
 
+		//Colors
+		if (!subMesh->VertexColors.IsEmpty()) {
+			glBindBuffer(GL_ARRAY_BUFFER, subMesh->VertexArrayBuffers[COLORS_VB]);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->VertexColors[0]) * subMesh->VertexColors.Count(), &subMesh->VertexColors[0], GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
 		glBindVertexArray(0);
 	}
+	bSentToGPU = true;
+}
+bool StaticMesh::SerializeToBuffer(ByteBuffer& Buffer) const {
+	SerializationStream ss(Buffer);
+	ss.SerializeInteger32(SubMeshes.Count());
+	for (int i = 0; i < SubMeshes.Count(); i++) {
+		FSubMesh* subMesh = SubMeshes[i];
+		ss.SerializeVec3Array(subMesh->Verticies);
+		ss.SerializeVec3Array(subMesh->Normals);
+		ss.SerializeVec3Array(subMesh->Tangents);
+		ss.SerializeVec3Array(subMesh->VertexColors);
+		ss.SerializeVec2Array(subMesh->TexCoords);
+		ss.SerializeUnsignedInteger32Array(subMesh->Indices);
+	}
+	return true;
+}
+bool StaticMesh::DeserializeFromBuffer(const ByteBuffer& Buffer) {
+	DeserializationStream ds(Buffer);
+	int32 subMeshCount;
+	ds.DeserializeInteger32(subMeshCount);
+
+	for (int i = 0; i < subMeshCount; i++) {
+		FSubMesh* subMesh = new FSubMesh();
+		ds.DeserializeVec3Array(subMesh->Verticies);
+		ds.DeserializeVec3Array(subMesh->Normals);
+		ds.DeserializeVec3Array(subMesh->Tangents);
+		ds.DeserializeVec3Array(subMesh->VertexColors);
+		ds.DeserializeVec2Array(subMesh->TexCoords);
+		ds.DeserializeUnsignedInteger32Array(subMesh->Indices);
+		SubMeshes.Add(subMesh);
+	}
+	return true;
 }

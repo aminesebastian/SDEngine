@@ -5,7 +5,8 @@
 #include "Rendering/PostProcessing/PostProcessingLayer.h"
 
 EngineUI::EngineUI() {
-	MaxFrameTimeCache = 200;
+	MaxFrameTimeCache = 50;
+	SD_ENGINE_INFO("Engine UI Created");
 }
 EngineUI::~EngineUI() {
 
@@ -26,6 +27,7 @@ bool EngineUI::InitalizeUI(SDL_Window* Window, SDL_GLContext Context) {
 	// Setup Platform/Renderer bindings
 	ImGui_ImplSDL2_InitForOpenGL(Window, Context);
 	ImGui_ImplOpenGL3_Init("#version 130");
+	SD_ENGINE_INFO("Engine UI Initialized")
 	return true;
 }
 void EngineUI::UpdateUI(SDL_Window* Window) {

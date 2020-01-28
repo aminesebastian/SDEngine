@@ -19,8 +19,6 @@
 #include "Rendering/Utilities/VariableGausianBlur.h"
 #include "Rendering/RenderTarget.h"
 #include "Utilities/Logger.h"
-#include "SAsset.h"
-#include "AssetManager.h"
 
 RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
 	CurrentBuffer             = 0;
@@ -33,6 +31,7 @@ RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimens
 	S_TranslucencyBuffer      = nullptr;
 	S_OutputBuffer1           = nullptr;
 	S_OutputBuffer2           = nullptr;
+	SD_ENGINE_INFO("Render Viewport Created");
 }
 RenderViewport::~RenderViewport() {
 
@@ -47,6 +46,7 @@ void RenderViewport::Initialize() {
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
 	bInitialized = true;
+	SD_ENGINE_INFO("Viewport Initialized")
 }
 void RenderViewport::GenerateRenderTargets() {
 	if (!bInitialized) {

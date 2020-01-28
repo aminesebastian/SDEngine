@@ -1,8 +1,6 @@
-#include "AssetManager.h"
 #include "Entities/StaticMesh.h"
 #include "Entities/Actors/HeadActor.h"
 #include "Engine/EngineStatics.h"
-#include "SAsset.h"
 #include "Engine/Engine.h"
 #include "Entities/Light.h"
 #include "Scene.h"

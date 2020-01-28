@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Engine/Engine.h"
 #include "Entities/Light.h"
+#include "Core\Utilities\SerializationStream.h"
+#include "Core\Utilities\DeserializationStream.h"
 
 Material::Material(const std::string BaseShaderName) : Material(new Shader(BaseShaderName)) {}
 Material::Material(Shader* Shader) {
@@ -130,4 +132,14 @@ void Material::BindMaterial(const Transform& RenderTransform, const Transform& L
 		}
 	}
 	glDisable(GL_TEXTURE_2D);
+}
+
+bool Material::SerializeToBuffer(ByteBuffer& Buffer) const {
+	SerializationStream ss(Buffer);
+
+	return true;
+}
+bool Material::DeserializeFromBuffer(const ByteBuffer& Buffer) {
+	DeserializationStream ds(Buffer);
+	return true;
 }

@@ -112,9 +112,6 @@
     <ClCompile Include="Rendering\DefferedCompositor.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\AssetManager.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\EngineStatics.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -159,9 +156,6 @@
     </ClCompile>
     <ClCompile Include="Rendering\RenderTarget.cpp">
       <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\SAsset.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\ImageUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
@@ -262,6 +256,27 @@
     <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Assets\Asset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\DeserializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\SerializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -299,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="Rendering\DefferedCompositor.h">
       <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\AssetManager.h">
-      <Filter>Headers\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineStatics.h">
       <Filter>Headers\Engine</Filter>
@@ -347,9 +359,6 @@
     </ClInclude>
     <ClInclude Include="Rendering\RenderTarget.h">
       <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\SAsset.h">
-      <Filter>Headers\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\ImageUtils.h">
       <Filter>Headers\Utilities</Filter>
@@ -428,6 +437,15 @@
     <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Core\DataStructures\Array.h" />
     <ClInclude Include="Core\DataTypes\TypeDefenitions.h" />
+    <ClInclude Include="Core\Assets\Asset.h" />
+    <ClInclude Include="Core\Assets\AssetManager.h" />
+    <ClInclude Include="Core\Assets\Factories\MaterialAssetFactory.h" />
+    <ClInclude Include="Core\Assets\Factories\StaticMeshAssetFactory.h" />
+    <ClInclude Include="Core\Assets\IAssetFactory.h" />
+    <ClInclude Include="Core\Assets\ISerializeableAsset.h" />
+    <ClInclude Include="Core\Utilities\DeserializationStream.h" />
+    <ClInclude Include="Core\Utilities\SerializationStream.h" />
+    <ClInclude Include="Core\Assets\Factories\Texture2DAssetFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

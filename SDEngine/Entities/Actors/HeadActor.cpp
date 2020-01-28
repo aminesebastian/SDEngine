@@ -1,10 +1,9 @@
 #include "HeadActor.h"
-#include <Engine\SAsset.h>
-#include "Engine/AssetManager.h"
+#include "Core/Assets/AssetManager.h"
+
 
 HeadActor::HeadActor(const TString& Name) : StaticMeshActor(Name) {
-	SAsset* headAsset = Engine::GetInstance()->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	StaticMesh* head = headAsset->GetAsStaticMesh("Head");
+	StaticMesh* head = Engine::GetInstance()->GetAssetManager()->GetAsset<StaticMesh>("./Res/Assets/Head.sasset");
 	SetStaticMesh(head);
 }
 HeadActor::~HeadActor() {

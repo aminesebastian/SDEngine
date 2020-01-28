@@ -153,10 +153,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\Asset.cpp" />
+    <ClCompile Include="Core\Assets\AssetManager.cpp" />
+    <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp" />
+    <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp" />
+    <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp" />
     <ClCompile Include="Core\DataStructures\Array.cpp" />
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
     <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp" />
+    <ClCompile Include="Core\Utilities\DeserializationStream.cpp" />
+    <ClCompile Include="Core\Utilities\SerializationStream.cpp" />
     <ClCompile Include="Entities\Component.cpp" />
     <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
     <ClCompile Include="Engine\EngineObject.cpp" />
@@ -166,7 +173,6 @@
     <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
     <ClCompile Include="Entities\Actor.cpp" />
-    <ClCompile Include="Engine\AssetManager.cpp" />
     <ClCompile Include="Entities\TransformGizmo.cpp" />
     <ClCompile Include="Utilities\Logger.cpp" />
     <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp" />
@@ -202,7 +208,6 @@
     <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp" />
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp" />
     <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
-    <ClCompile Include="Engine\SAsset.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
     <ClCompile Include="Core\Math\MathLibrary.cpp" />
     <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp" />
@@ -216,11 +221,20 @@
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Assets\Asset.h" />
+    <ClInclude Include="Core\Assets\AssetManager.h" />
+    <ClInclude Include="Core\Assets\Factories\MaterialAssetFactory.h" />
+    <ClInclude Include="Core\Assets\Factories\StaticMeshAssetFactory.h" />
+    <ClInclude Include="Core\Assets\Factories\Texture2DAssetFactory.h" />
+    <ClInclude Include="Core\Assets\IAssetFactory.h" />
+    <ClInclude Include="Core\Assets\ISerializeableAsset.h" />
     <ClInclude Include="Core\DataStructures\Array.h" />
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
     <ClInclude Include="Core\DataStructures\DataStructures.h" />
     <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Core\DataTypes\TypeDefenitions.h" />
+    <ClInclude Include="Core\Utilities\DeserializationStream.h" />
+    <ClInclude Include="Core\Utilities\SerializationStream.h" />
     <ClInclude Include="Entities\Component.h" />
     <ClInclude Include="Entities\EditorSpriteComponent.h" />
     <ClInclude Include="Engine\EngineObject.h" />
@@ -232,7 +246,6 @@
     <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
     <ClInclude Include="Entities\Actor.h" />
-    <ClInclude Include="Engine\AssetManager.h" />
     <ClInclude Include="Entities\TransformGizmo.h" />
     <ClInclude Include="Utilities\Logger.h" />
     <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h" />
@@ -270,7 +283,6 @@
     <ClInclude Include="UserInterface\Widgets\BaseWidget.h" />
     <ClInclude Include="UserInterface\Widgets\DragFloat.h" />
     <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
-    <ClInclude Include="Engine\SAsset.h" />
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Core\Math\MathLibrary.h" />
     <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h" />

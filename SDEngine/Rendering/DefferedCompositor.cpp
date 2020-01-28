@@ -6,7 +6,7 @@
 
 DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_LightingShader = new Shader(LightingShader, false);
-	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output", false));
+	S_FinalOutputShader = (new Shader("./Res/Shaders/PostProcessing/Output", false));
 }
 DefferedCompositor::~DefferedCompositor() {}
 

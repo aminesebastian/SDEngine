@@ -3,6 +3,9 @@
 #include "Entities/Camera.h"
 #include "Utilities/Logger.h"
 
+Shader::Shader() {
+	S_Program = 0;
+}
 Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) {
 	S_FragmentShaderPath = ShaderName + ".frag";
 	if(bUseDefaultGeometry) {
@@ -67,8 +70,8 @@ TString Shader::LoadShader(const TString& fileName) {
 	std::ifstream file;
 	file.open((fileName).c_str());
 
-	TString output;
-	TString line;
+	std::string output;
+	std::string line;
 
 	if (file.is_open()){
 		while (file.good()){
@@ -142,10 +145,7 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 	}
 	return success;
 }
-TString Shader::StripDirectiveName(TString RawLine) {
-	TString line = TStringUtils::Trim(RawLine);
-	return line;
-}
+
 
 void Shader::Bind() {
 	glUseProgram(S_Program);
@@ -198,5 +198,5 @@ void Shader::SetShaderMatrix4(TString Name, mat4 Matrix) {
 }
 void Shader::SetShaderTexture(TString Name, Texture2D* Texture, int32 Offset) {
 	//glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Sample);
-	Texture->Bind(Name, this, Offset);
+	Texture->Bind(Name.c_str(), this, Offset);
 }

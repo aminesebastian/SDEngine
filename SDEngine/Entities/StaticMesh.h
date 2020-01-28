@@ -8,6 +8,7 @@
 #include <ASSIMP/scene.h>
 #include <ASSIMP/postprocess.h>
 #include "Core/DataStructures/DataStructures.h"
+#include "Core/Assets/ISerializeableAsset.h"
 
 using namespace glm;
 
@@ -30,8 +31,13 @@ struct FSubMesh {
 	SArray<uint32> Indices;
 	SArray<GLuint> VertexArrayBuffers;
 	Material* SubMeshMaterial;
-
 	GLuint VertexArrayObject;
+
+	FSubMesh() {
+		SubMeshMaterial = nullptr;
+		VertexArrayObject = 0;
+	}
+
 	int32 GetVertexCount() {
 		return Verticies.Count();
 	}
@@ -59,9 +65,10 @@ struct FSubMesh {
 	}
 };
 
-class StaticMesh : public EngineObject {
+class StaticMesh : public EngineObject, public ISerializeableAsset {
 
 public:
+	StaticMesh(const TString& Name);
 	StaticMesh(const TString& Name, const TString& FilePath);
 	virtual ~StaticMesh();
 
@@ -69,6 +76,17 @@ public:
 	 * Gets all the submeshes that make up this static mesh.
 	 */
 	SArray<FSubMesh*> GetSubMeshes();
+	/**
+	* Checks to see if the data for this static mesh has already been sent to the GPU.
+	*/
+	bool SentToGPU();
+	/**
+	* Generates the OpenGL buffers for all the submeshes.
+	*/
+	void GenerateGPUBuffers();
+
+	bool SerializeToBuffer(ByteBuffer& Buffer) const override;
+	bool DeserializeFromBuffer(const ByteBuffer& Buffer) override;
 protected:
 	/**
 	 * Begins loading model from file.
@@ -90,12 +108,8 @@ protected:
 	 * @return A generated submesh object containing all the information about the mesh.
 	 */
 	FSubMesh* GenerateSubMesh(aiMesh* Mesh);
-	/**
-	 * Generates the OpenGL buffers for all the submeshes.
-	 */
-	void GenerateGPUBuffers();
-
 private:
 	SArray<FSubMesh*> SubMeshes;
+	bool bSentToGPU;
 };
 
