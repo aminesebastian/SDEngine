@@ -156,6 +156,7 @@
     <ClCompile Include="Core\DataStructures\Array.cpp" />
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
     <ClCompile Include="Core\DataStructures\Tree.cpp" />
+    <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp" />
     <ClCompile Include="Entities\Component.cpp" />
     <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
     <ClCompile Include="Engine\EngineObject.cpp" />
@@ -212,7 +213,6 @@
     <ClCompile Include="Engine\ThreadManager.cpp" />
     <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
-    <ClCompile Include="Utilities\TypeDefenitions.cpp" />
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +220,7 @@
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
     <ClInclude Include="Core\DataStructures\DataStructures.h" />
     <ClInclude Include="Core\DataStructures\Tree.h" />
+    <ClInclude Include="Core\DataTypes\TypeDefenitions.h" />
     <ClInclude Include="Entities\Component.h" />
     <ClInclude Include="Entities\EditorSpriteComponent.h" />
     <ClInclude Include="Engine\EngineObject.h" />
@@ -280,7 +281,6 @@
     <ClInclude Include="Engine\ThreadManager.h" />
     <ClInclude Include="Rendering\PostProcessing\ToneMapper.h" />
     <ClInclude Include="Utilities\Transform.h" />
-    <ClInclude Include="Utilities\TypeDefenitions.h" />
     <ClInclude Include="Engine\World.h" />
   </ItemGroup>
   <ItemGroup>

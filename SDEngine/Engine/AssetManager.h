@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Engine.h"
 #include "SAsset.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 
 class AssetManager {

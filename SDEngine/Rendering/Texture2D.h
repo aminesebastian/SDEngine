@@ -1,6 +1,6 @@
 #pragma once
 #include <GLEW/glew.h>
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 class Shader;
 

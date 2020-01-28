@@ -2,7 +2,7 @@
 #include <GLM/glm.hpp>
 #include <GLEW/glew.h>
 #include "Core/DataStructures/DataStructures.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 #include "Utilities/Transform.h"
 
 class Camera;

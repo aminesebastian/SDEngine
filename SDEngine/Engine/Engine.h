@@ -4,7 +4,7 @@
 #include "RenderViewport.h"
 #include "Rendering/Material.h"
 #include "Rendering/Texture2D.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1200

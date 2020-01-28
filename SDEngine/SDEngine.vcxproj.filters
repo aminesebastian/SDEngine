@@ -181,9 +181,6 @@
     <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\TypeDefenitions.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\Transform.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
@@ -260,6 +257,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -369,9 +369,6 @@
     <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h">
       <Filter>Headers\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\TypeDefenitions.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\Transform.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
@@ -430,6 +427,7 @@
     <ClInclude Include="Core\DataStructures\DataStructures.h" />
     <ClInclude Include="Core\DataStructures\Tree.h" />
     <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataTypes\TypeDefenitions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

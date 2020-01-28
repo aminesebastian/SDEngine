@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/DataStructures/Array.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 #include "ZLIB/zlib.h"
 
 class ByteBuffer {

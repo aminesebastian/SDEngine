@@ -1,5 +1,5 @@
 #pragma once
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 template <typename K>
 class SArray;
