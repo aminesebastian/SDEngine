@@ -20,12 +20,11 @@ public:
 			return LoadAsset(AssetPath)->Get<T>();
 		}
 	}
-	bool SaveAssetToDisk(const ISerializeableAsset* Asset, const TString& AssetPath, const TString& AssetType);
+	bool SaveAssetToDisk(Asset* Target, const TString& AssetPath, const TString& AssetType);
 	bool IsAssetOpen(TString AssetPath) const;
 	const IAssetFactory* GetAssetFactoryForType(TString AssetType) const;
 	bool RegisterNewFactory(TString AssetType, const IAssetFactory* Factory);
 	Asset* GetNewAssetTemplate(TString AssetType) const;
-
 private:
 	Asset* LoadAsset(TString AssetPath);
 	Asset* GetAssetFromPool(TString AssetPath) const;

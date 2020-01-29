@@ -61,8 +61,8 @@ public:
 	void BindMaterial(const Transform& RenderTransform, Camera* RenderCamera);
 	void BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, Camera* RenderCamera);
 
-	bool SerializeToBuffer(ByteBuffer& Buffer) const override;
-	bool DeserializeFromBuffer(const ByteBuffer& Buffer) override;
+	bool SerializeToBuffer(SerializationStream& Stream) const override;
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:
 	Shader* S_Shader;
 	EShaderModel S_ShaderModel;

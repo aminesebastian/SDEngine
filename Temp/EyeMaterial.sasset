@@ -1,9 +1,0 @@
-Texture(Res/Eye/T_EyeBaseColor.tga);
-Texture(Res/Eye/T_EyeRMAO.tga);
-Texture(Res/Eye/T_EyeNormal.tga);
-
-Shader(Res/Shaders/TestEyeShader);
-
-TextureParam(0, albedo);
-TextureParam(1, RMAO);
-TextureParam(2, normal);

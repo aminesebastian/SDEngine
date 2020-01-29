@@ -4,8 +4,8 @@
 #include "Engine/EngineStatics.h"
 #include "Utilities/Logger.h"
 #include "Core/Math/MathLibrary.h"
-#include "Core\Utilities\SerializationStream.h"
-#include "Core\Utilities\DeserializationStream.h"
+#include "Core/Utilities/Serialization/DeserializationStream.h"
+#include "Core/Utilities/Serialization/DeserializationStream.h"
 
 StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name) {
 	bSentToGPU = false;
@@ -190,33 +190,31 @@ void StaticMesh::GenerateGPUBuffers() {
 	}
 	bSentToGPU = true;
 }
-bool StaticMesh::SerializeToBuffer(ByteBuffer& Buffer) const {
-	SerializationStream ss(Buffer);
-	ss.SerializeInteger32(SubMeshes.Count());
+bool StaticMesh::SerializeToBuffer(SerializationStream& Stream) const {
+	Stream.SerializeInteger32(SubMeshes.Count());
 	for (int i = 0; i < SubMeshes.Count(); i++) {
 		FSubMesh* subMesh = SubMeshes[i];
-		ss.SerializeVec3Array(subMesh->Verticies);
-		ss.SerializeVec3Array(subMesh->Normals);
-		ss.SerializeVec3Array(subMesh->Tangents);
-		ss.SerializeVec3Array(subMesh->VertexColors);
-		ss.SerializeVec2Array(subMesh->TexCoords);
-		ss.SerializeUnsignedInteger32Array(subMesh->Indices);
+		Stream.SerializeVec3Array(subMesh->Verticies);
+		Stream.SerializeVec3Array(subMesh->Normals);
+		Stream.SerializeVec3Array(subMesh->Tangents);
+		Stream.SerializeVec3Array(subMesh->VertexColors);
+		Stream.SerializeVec2Array(subMesh->TexCoords);
+		Stream.SerializeUnsignedInteger32Array(subMesh->Indices);
 	}
 	return true;
 }
-bool StaticMesh::DeserializeFromBuffer(const ByteBuffer& Buffer) {
-	DeserializationStream ds(Buffer);
+bool StaticMesh::DeserializeFromBuffer(DeserializationStream& Stream) {
 	int32 subMeshCount;
-	ds.DeserializeInteger32(subMeshCount);
+	Stream.DeserializeInteger32(subMeshCount);
 
 	for (int i = 0; i < subMeshCount; i++) {
 		FSubMesh* subMesh = new FSubMesh();
-		ds.DeserializeVec3Array(subMesh->Verticies);
-		ds.DeserializeVec3Array(subMesh->Normals);
-		ds.DeserializeVec3Array(subMesh->Tangents);
-		ds.DeserializeVec3Array(subMesh->VertexColors);
-		ds.DeserializeVec2Array(subMesh->TexCoords);
-		ds.DeserializeUnsignedInteger32Array(subMesh->Indices);
+		Stream.DeserializeVec3Array(subMesh->Verticies);
+		Stream.DeserializeVec3Array(subMesh->Normals);
+		Stream.DeserializeVec3Array(subMesh->Tangents);
+		Stream.DeserializeVec3Array(subMesh->VertexColors);
+		Stream.DeserializeVec2Array(subMesh->TexCoords);
+		Stream.DeserializeUnsignedInteger32Array(subMesh->Indices);
 		SubMeshes.Add(subMesh);
 	}
 	return true;

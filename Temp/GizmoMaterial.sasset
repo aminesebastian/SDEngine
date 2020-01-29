@@ -1,5 +1,0 @@
-Shader(Res/Shaders/TransformGizmoShader);
-
-Texture(Res/Gizmo/T_PositionGizmo_BaseColor.png);
-
-TextureParam(0, albedo);

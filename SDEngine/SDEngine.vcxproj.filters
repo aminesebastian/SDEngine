@@ -268,13 +268,16 @@
     <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Utilities\DeserializationStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Utilities\SerializationStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Serialization\DeserializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Serialization\SerializationStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\AssetMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -446,6 +449,9 @@
     <ClInclude Include="Core\Utilities\DeserializationStream.h" />
     <ClInclude Include="Core\Utilities\SerializationStream.h" />
     <ClInclude Include="Core\Assets\Factories\Texture2DAssetFactory.h" />
+    <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
+    <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
+    <ClInclude Include="Core\Assets\AssetMetadata.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

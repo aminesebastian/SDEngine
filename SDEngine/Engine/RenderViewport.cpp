@@ -164,8 +164,6 @@ void RenderViewport::FlipOutputBuffers() {
 
 void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 	CurrentBuffer = 0;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glClearBufferfv(GL_COLOR, S_GBuffer->GBUFFER_TEXTURE_TYPE_POSITION, &vec3(0.0f, 0.0f, 0.0f)[0]);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PreFrameRendered();

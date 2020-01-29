@@ -58,11 +58,11 @@ Shader* EngineStatics::GetSpriteShader() {
 Material* EngineStatics::GetDefaultMaterial() {
 	if(S_DefaultMaterial == nullptr) {
 		S_DefaultMaterial = new Material(new Shader("./Res/Shaders/DefaultGeometryPassShader"));
-		Texture2D* albedoTexture = new Texture2D("./Res/Textures/Checkerboard1K.PNG");
+		Texture2D* albedoTexture = new Texture2D("alb", "./Res/Textures/Checkerboard1K.PNG");
 		S_DefaultMaterial->SetTextureParameter("albedo", albedoTexture);
-		Texture2D* normalTexture = new Texture2D("./Res/EmptyNormal.png");
+		Texture2D* normalTexture = new Texture2D("norm", "./Res/EmptyNormal.png");
 		S_DefaultMaterial->SetTextureParameter("normal", normalTexture);
-		Texture2D* RMAO = new Texture2D("./Res/EmptyRMAO.png");
+		Texture2D* RMAO = new Texture2D("rmao", "./Res/EmptyRMAO.png");
 		S_DefaultMaterial->SetTextureParameter("RMAO", RMAO);
 	}
 	return S_DefaultMaterial;

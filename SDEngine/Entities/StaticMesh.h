@@ -85,8 +85,8 @@ public:
 	*/
 	void GenerateGPUBuffers();
 
-	bool SerializeToBuffer(ByteBuffer& Buffer) const override;
-	bool DeserializeFromBuffer(const ByteBuffer& Buffer) override;
+	bool SerializeToBuffer(SerializationStream& Stream) const override;
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 protected:
 	/**
 	 * Begins loading model from file.

@@ -1,24 +1,48 @@
 #include "Asset.h"
 #include "Core/Assets/AssetManager.h"
+#include "Core/Assets/AssetMetadata.h"
 #include "Engine/EngineStatics.h"
 #include <iostream>
 #include <fstream>
 #include "Utilities/Logger.h"
 
-Asset::Asset(TString AssetType, ISerializeableAsset* AssetPointer) : AssetType(AssetType), AssetPointer(AssetPointer), bInitialized(false) {}
+Asset::Asset(TString AssetType, ISerializeableAsset* AssetPointer) : AssetType(AssetType), AssetPointer(AssetPointer), bInitialized(false) {
+	Metadata = nullptr;
+}
 Asset::~Asset() {}
 
-bool Asset::Initialize(TString FilePath, TString AssetType, ByteBuffer* UncompressedAssetData) {
+bool Asset::Initialize(TString FilePath, TString AssetType, ByteBuffer& UncompressedAssetData) {
+	this->FilePath = FilePath;
+	this->AssetType = AssetType;
+
 	if (bInitialized) {
 		return true;
 	}
 	if (!AssetPointer) {
 		return false;
 	}
-	if (!AssetPointer->DeserializeFromBuffer(*UncompressedAssetData)) {
+
+	DeserializationStream stream(UncompressedAssetData);
+	Metadata = new AssetMetadata(stream);
+	if (!AssetPointer->DeserializeFromBuffer(stream)) {
 		return false;
 	}
 	bInitialized = true;
+	return true;
+}
+bool Asset::SerializeForSavingToDisk(ByteBuffer& Buffer) {
+	if (!bInitialized) {
+		return nullptr;
+	}
+	if (!AssetPointer) {
+		return false;
+	}
+
+	SerializationStream stream(Buffer);
+	Metadata = new AssetMetadata(GetAssetType(), 1, stream);
+	if (!AssetPointer->SerializeToBuffer(stream)) {
+		return false;
+	}
 	return true;
 }
 TString Asset::GetAssetName() const {
@@ -26,6 +50,9 @@ TString Asset::GetAssetName() const {
 }
 TString Asset::GetAssetPath() const {
 	return FilePath;
+}
+TString Asset::GetAssetType() const {
+	return AssetType;
 }
 const SArray<char>& Asset::GetRawData() const {
 	return RawData;

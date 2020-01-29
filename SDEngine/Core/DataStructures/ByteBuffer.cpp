@@ -18,6 +18,7 @@ ByteBuffer::ByteBuffer(const SArray<char>& Data, bool bShouldDecompressData) : B
 	}
 }
 ByteBuffer::~ByteBuffer() {}
+
 const SArray<char>& ByteBuffer::GetData() const {
 	return Buffer;
 }
@@ -29,57 +30,57 @@ void ByteBuffer::Add(TString Data) {
 		Buffer.Add(Data[i]);
 	}
 }
-void ByteBuffer::AddLine(char Data) {
-	Buffer.Add(Data);
-	Buffer.Add('\n');
-}
-void ByteBuffer::AddLine(TString Data) {
-	for (char charToAdd : Data) {
-		Buffer.Add(charToAdd);
-	}
-	Buffer.Add('\n');
-}
 int32 ByteBuffer::Size() const {
 	return Buffer.Count();
 }
-TString ByteBuffer::GetCompressedString() const {
-	int compressionlevel = Z_BEST_COMPRESSION;
-	z_stream zs;                        // z_stream is zlib's control structure
-	memset(&zs, 0, sizeof(zs));
-
-	if (deflateInit(&zs, compressionlevel) != Z_OK)
-		throw(std::runtime_error("deflateInit failed while compressing."));
-
-	zs.next_in = (Bytef*)& Buffer[0];
-	zs.avail_in = Buffer.Count();           // set the z_stream's input
-
-	int ret;
-	SArray<char> output;
-	output.PreAllocate(Buffer.Count());
-	char outbuffer[32768];
-	std::string outstring;
-
-	// retrieve the compressed bytes blockwise
-	do {
-		zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
-		zs.avail_out = sizeof(outbuffer);
-
-		ret = deflate(&zs, Z_FINISH);
-
-		if (outstring.size() < (int32)zs.total_out) {
-			// append the block to the output string
-			outstring.append(outbuffer, zs.total_out - outstring.size());
-		}
-	} while (ret == Z_OK);
-
-	deflateEnd(&zs);
-
-	if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
-		SD_ENGINE_ERROR("An error occured while attempting to compress a byte buffer: {0} {1}.", ret, zs.msg);
+bool ByteBuffer::WriteToCompressedFile(TString FilePath) {
+	TString compressedData = GetCompressedString();
+	std::ofstream outFile(FilePath.c_str(), std::ofstream::binary);
+	if (!outFile) {
+		SD_ENGINE_ERROR("An error occured when attempting to write compressed file: {0}.", FilePath);
+		return false;
 	}
-
-	return outstring;
+	outFile.write(compressedData.c_str(), compressedData.size());
+	outFile.close();
+	return true;
 }
+bool ByteBuffer::FromCompressedFile(TString FilePath) {
+	Buffer.Clear();
+
+	std::ifstream file;
+	file.open(FilePath.c_str(), std::ios::binary);
+	if (!file) {
+		SD_ENGINE_ERROR("An error occured when attempting to open compressed file: {0}.", FilePath);
+		return nullptr;
+	}
+	file.seekg(0, std::ios::end);
+	const int length = file.tellg();
+	file.seekg(0, std::ios::beg);
+	SArray<char> data(length);
+	data.Fill(0, 0, length);
+	file.read(&data[0], length);
+	file.close();
+	DecompressFromCompressedString(data);
+	return true;
+}
+bool ByteBuffer::FromFile(TString FilePath) {
+	Buffer.Clear();
+
+	std::ifstream file;
+	file.open(FilePath.c_str(), std::ios::binary);
+	if (!file) {
+		SD_ENGINE_ERROR("An error occured when attempting to open file: {0}.", FilePath);
+		return nullptr;
+	}
+	file.seekg(0, std::ios::end);
+	const int length = file.tellg();
+	file.seekg(0, std::ios::beg);
+	Buffer.Fill(0, length);
+	file.read(&Buffer[0], length);
+	file.close();
+	return true;
+}
+
 bool ByteBuffer::DecompressFromCompressedString(const SArray<char>& CompressedData) {
 	z_stream zs;                        // z_stream is zlib's control structure
 	memset(&zs, 0, sizeof(zs));
@@ -120,52 +121,42 @@ bool ByteBuffer::DecompressFromCompressedString(const SArray<char>& CompressedDa
 	Add(decompressedString);
 	return true;
 }
-bool ByteBuffer::WriteToCompressedFile(TString FilePath) {
-	TString compressedData = GetCompressedString();
-	std::ofstream outFile(FilePath.c_str(), std::ofstream::binary);
-	if (!outFile) {
-		SD_ENGINE_ERROR("An error occured when attempting to write compressed file: {0}.", FilePath);
-		return false;
-	}
-	outFile.write(compressedData.c_str(), compressedData.size());
-	outFile.close();
-	return true;
-}
 
-//////////
-//STATIC//
-//////////
-ByteBuffer* ByteBuffer::FromCompressedFile(TString FilePath) {
-	std::ifstream file;
-	file.open(FilePath.c_str(), std::ios::binary);
-	if (!file) {
-		SD_ENGINE_ERROR("An error occured when attempting to open compressed file: {0}.", FilePath);
-		return nullptr;
+TString ByteBuffer::GetCompressedString() const {
+	int compressionlevel = Z_BEST_COMPRESSION;
+	z_stream zs;                        // z_stream is zlib's control structure
+	memset(&zs, 0, sizeof(zs));
+
+	if (deflateInit(&zs, compressionlevel) != Z_OK)
+		throw(std::runtime_error("deflateInit failed while compressing."));
+
+	zs.next_in = (Bytef*)& Buffer[0];
+	zs.avail_in = Buffer.Count();           // set the z_stream's input
+
+	int ret;
+	SArray<char> output;
+	output.PreAllocate(Buffer.Count());
+	char outbuffer[32768];
+	std::string outstring;
+
+	// retrieve the compressed bytes blockwise
+	do {
+		zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
+		zs.avail_out = sizeof(outbuffer);
+
+		ret = deflate(&zs, Z_FINISH);
+
+		if (outstring.size() < (int32)zs.total_out) {
+			// append the block to the output string
+			outstring.append(outbuffer, zs.total_out - outstring.size());
+		}
+	} while (ret == Z_OK);
+
+	deflateEnd(&zs);
+
+	if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
+		SD_ENGINE_ERROR("An error occured while attempting to compress a byte buffer: {0} {1}.", ret, zs.msg);
 	}
-	file.seekg(0, std::ios::end);
-	const int length = file.tellg();
-	file.seekg(0, std::ios::beg);
-	SArray<char> data(length);
-	data.Fill(0, 0, length);
-	file.read(&data[0], length);
-	file.close();
-	ByteBuffer* buffer = new ByteBuffer(data, true);
-	return buffer;
-}
-ByteBuffer* ByteBuffer::FromFile(TString FilePath) {
-	std::ifstream file;
-	file.open(FilePath.c_str(), std::ios::binary);
-	if (!file) {
-		SD_ENGINE_ERROR("An error occured when attempting to open file: {0}.", FilePath);
-		return nullptr;
-	}
-	file.seekg(0, std::ios::end);
-	const int length = file.tellg();
-	file.seekg(0, std::ios::beg);
-	SArray<char> data(length);
-	data.Fill(0, length);
-	file.read(&data[0], length);
-	file.close();
-	ByteBuffer* buffer = new ByteBuffer(data, false);
-	return buffer;
+
+	return outstring;
 }

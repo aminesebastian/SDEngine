@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <GLEW\glew.h>
 #include <SDL/SDL.h>
 #include <GLM/glm.hpp>
 
@@ -33,5 +34,8 @@ private:
 	bool bIsClosed;
 
 	glm::vec2 DisplayDimensions;
+
+
+	static void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 };
 
