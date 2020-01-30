@@ -19,6 +19,7 @@
 #include "Rendering/Utilities/VariableGausianBlur.h"
 #include "Rendering/RenderTarget.h"
 #include "Utilities/Logger.h"
+#include "BaseUIWidget.h"
 
 RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
 	CurrentBuffer             = 0;
@@ -32,6 +33,8 @@ RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimens
 	S_OutputBuffer1           = nullptr;
 	S_OutputBuffer2           = nullptr;
 	SD_ENGINE_INFO("Render Viewport Created");
+
+	TestWidget = new BaseUIWidget();
 }
 RenderViewport::~RenderViewport() {
 
@@ -183,6 +186,8 @@ void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetCurrentOutputBuffer());
+
+	TestWidget->Draw();
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PostFrameRendered();

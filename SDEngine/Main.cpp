@@ -26,8 +26,8 @@ int main(int argc, char* argv[]) {
 	manager->RegisterNewFactory("Material", new MaterialAssetFactory());
 	manager->RegisterNewFactory("Texture2D", new Texture2DAssetFactory());
 
-	serializeTexture("light_texture", "./Res/Textures/Editor/Sprites/PointLightSprite.png", "./Res/Assets/Textures/PointLightSprite.sasset", manager);
-	serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
+	//serializeTexture("light_texture", "./Res/Textures/Editor/Sprites/PointLightSprite.png", "./Res/Assets/Textures/PointLightSprite.sasset", manager);
+	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
 
 	SD_ENGINE_INFO("Engine Launched!");
 

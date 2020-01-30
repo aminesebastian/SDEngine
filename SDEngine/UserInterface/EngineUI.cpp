@@ -3,6 +3,7 @@
 #include "Utilities/Logger.h"
 #include "Utilities/EngineFunctionLibrary.h"
 #include "Rendering/PostProcessing/PostProcessingLayer.h"
+#include "BaseUIWidget.h"
 
 EngineUI::EngineUI() {
 	MaxFrameTimeCache = 50;
@@ -15,18 +16,18 @@ bool EngineUI::InitalizeUI(SDL_Window* Window, SDL_GLContext Context) {
 	SD_ENGINE_INFO("Initializing Engine UI")
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
-	//ImGui::StyleColorsClassic();
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplSDL2_InitForOpenGL(Window, Context);
 	ImGui_ImplOpenGL3_Init("#version 130");
+
+
 	SD_ENGINE_INFO("Engine UI Initialized")
 	return true;
 }
@@ -53,6 +54,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 			}
 		}	
 	}
+
 	ImGui::End();
 
 	ImGui::Begin("Details Panel");
@@ -73,6 +75,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("##empty", tab_bar_flags)) {
 		if (ImGui::BeginTabItem("Details")) {
+			engine->GetFocusedViewport()->TestWidget->PopulateDetailsPanel();
 			if (engine->GetSelectedEntity()) {
 				if (IsA<Actor>(engine->GetSelectedEntity())) {
 					ImGui::Text(engine->GetSelectedEntity()->GetName().c_str());
@@ -99,6 +102,15 @@ void EngineUI::RenderUI(float DeltaTime) {
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	ImGuiIO& io = ImGui::GetIO(); 
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
 }
 bool EngineUI::DestroyUI() {
 	ImGui_ImplOpenGL3_Shutdown();

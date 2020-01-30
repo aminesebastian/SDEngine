@@ -280,6 +280,12 @@
     <ClCompile Include="Core\Assets\AssetMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\ContentBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUIWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -452,6 +458,8 @@
     <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
+    <ClInclude Include="UserInterface\ContentBrowser.h" />
+    <ClInclude Include="BaseUIWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">
@@ -606,5 +614,7 @@
     </None>
     <None Include="Res\Shaders\EditorSpriteShader.vert" />
     <None Include="Res\Shaders\EditorSpriteShader.frag" />
+    <None Include="Res\Shaders\UIShader.frag" />
+    <None Include="Res\Shaders\UIShader.vert" />
   </ItemGroup>
 </Project>

@@ -218,6 +218,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseUIWidget.cpp" />
+    <ClCompile Include="UserInterface\ContentBrowser.cpp" />
     <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
     <ClCompile Include="Core\Assets\Asset.cpp" />
     <ClCompile Include="Core\Assets\AssetManager.cpp" />
@@ -287,6 +289,8 @@
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseUIWidget.h" />
+    <ClInclude Include="UserInterface\ContentBrowser.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="Core\Assets\Asset.h" />
     <ClInclude Include="Core\Assets\AssetManager.h" />
@@ -417,6 +421,8 @@
     <None Include="Res\Shaders\TranslucencyCompositor.vert" />
     <None Include="Res\Shaders\TranslucentShader.frag" />
     <None Include="Res\Shaders\TranslucentShader.vert" />
+    <None Include="Res\Shaders\UIShader.frag" />
+    <None Include="Res\Shaders\UIShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,6 +14,7 @@ void EngineStatics::RecompileShaders() {
 	GetShadowShader()->RecompileShader();
 	GetLineShader()->RecompileShader();
 	GetSpriteShader()->RecompileShader();
+	GetUIShader()->RecompileShader();
 }
 
 Shader* EngineStatics::GetLightDebugShader() {
@@ -54,6 +55,12 @@ Shader* EngineStatics::GetSpriteShader() {
 		SpriteShader = new Shader("./Res/Shaders/EditorSpriteShader");
 	}
 	return SpriteShader;
+}
+Shader* EngineStatics::GetUIShader() {
+	if (UIShader == nullptr) {
+		UIShader = new Shader("./Res/Shaders/UIShader", false);
+	}
+	return UIShader;
 }
 Material* EngineStatics::GetDefaultMaterial() {
 	if(S_DefaultMaterial == nullptr) {

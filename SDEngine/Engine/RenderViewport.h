@@ -31,6 +31,8 @@ enum EDebugState {
 	DETAIL_LIGHT
 };
 
+class BaseUIWidget;
+
 class RenderViewport {
 public:
 	RenderViewport(vec2 RenderTargetDimensions);
@@ -74,6 +76,7 @@ public:
 
 	void OnMouseMove(vec2 MouseCoords);
 
+	BaseUIWidget* TestWidget;
 protected:
 	virtual void GenerateRenderTargets();
 	virtual void RegisterPostProcessEffects();
@@ -100,5 +103,7 @@ private:
 	bool bDebugMode;
 	bool bInitialized;
 	EDebugState S_DebugState;
+
+
 };
 
