@@ -1,5 +1,6 @@
 #version 400
 in vec2 texCoord0;
+in vec2 screenPos0;
 
 uniform vec2 RENDER_TARGET_RESOLUTION;
 uniform float SCREEN_ASPECT_RATIO;
@@ -11,25 +12,60 @@ uniform vec2 SHAPE_SIZE;
 uniform vec4 COLOR;
 
 out vec4 FragColor;
-	
-float roundedRectangle (vec2 uv, vec2 size, float radius, float thickness) {
-  float d = length(max(abs(uv), size) - size) - radius;
-  return 1.0 - smoothstep(thickness, thickness+0.01, d);
+
+float udRoundBox( vec3 p, vec3 b, float r )
+{
+  return length(max(abs(p)-b,0.0))-r;
 }
 
-void main()	{		
-	vec2 npos = texCoord0;		   // 0.0 .. 1.0
-	vec2 uv = (2.0 * npos - 1.0);          // -1.0 .. 1.0
-	
-	float adjustedBorder = BORDER_RADIUS / 100.0f;
+// substracts shape d1 from shape d2
+float opS( float d1, float d2 )
+{
+    return max(-d1,d2);
+}
+
+// to get the border of a udRoundBox, simply substract a smaller udRoundBox !
+float udRoundBoxBorder( vec3 p, vec3 b, float r, float borderFactor )
+{
+  return opS(udRoundBox(p, b*borderFactor, r), udRoundBox(p, b, r));
+}
+
+void main() {;
+	vec2 absoluteShapeCoordinate = abs((texCoord0 *2.0) - 1.0f) * SHAPE_SIZE;
+	float doubledRadius = BORDER_RADIUS * 2.0f;
+	vec2 cornersVector  = SHAPE_SIZE - vec2(doubledRadius);
+	float thickness		= 4.0f;
+	vec2 chokeVector	= SHAPE_SIZE - thickness;
+	float radialAlpha	= 1.0f;
+	float squareAlpha	= 1.0f;
+
+	if(absoluteShapeCoordinate.x > cornersVector.x && absoluteShapeCoordinate.y > cornersVector.y) {
+		radialAlpha = (doubledRadius-length(cornersVector - absoluteShapeCoordinate))/doubledRadius;
+		//radialAlpha = smoothstep(0.0, 0.05, radialAlpha);
+	}else{
+		float horizontal = smoothstep(SHAPE_SIZE.x, SHAPE_SIZE.x - thickness, absoluteShapeCoordinate.x); 
+		float vertical = smoothstep(SHAPE_SIZE.y, SHAPE_SIZE.y - thickness, absoluteShapeCoordinate.y); 
+		//squareAlpha = horizontal * vertical;
+	}
+
+	FragColor = COLOR * smoothstep(0.0, 0.00, radialAlpha) * squareAlpha;
 
 
-	float thickness = 0.01f;
-	float sizeOffset = 1.0f - thickness - 0.01f;
-	vec2 size = vec2(sizeOffset - adjustedBorder, sizeOffset - adjustedBorder);
-	float intensity = roundedRectangle(uv, size, adjustedBorder, thickness);
-	
-	FragColor = mix(vec4(1.0f, 0.0f, 0.0f, 1.0f), vec4(COLOR.rgb, 1.0f), intensity) * COLOR.a;
+//	vec2 uv = texCoord0;
+//	
+//    // box setup
+//    vec3 boxPosition = vec3(0.5, 0.5, 0.0);
+//    vec3 boxSize = vec3(SHAPE_SIZE/RENDER_TARGET_RESOLUTION, 1.0f);
+//    float boxRounding = 0.1;
+//    
+//    // render the box
+//    vec3 curPosition = vec3(uv, 0.0);    
+//    float dist = udRoundBoxBorder(curPosition - boxPosition, boxSize, boxRounding, 0.0);    
+//    float THRESHOLD = 0.0001;
+//    if (dist <= THRESHOLD) {
+//        FragColor = vec4(1.0);
+//	}
+	//FragColor = vec4(vec3(udRoundBox(vec3(adjustedCoords, 0.0f), vec3(2.0, 2.0, 0.0), .01f)), 0.2f); 
 }
 
 

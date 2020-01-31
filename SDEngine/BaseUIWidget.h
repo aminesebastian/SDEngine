@@ -28,7 +28,7 @@ protected:
 
 		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
-		return posMatrix * combinedRotMatrix * scaleMatrix;
+		return scaleMatrix * posMatrix * combinedRotMatrix;
 	}
 private:
 	vec2 Location;
