@@ -17,8 +17,8 @@ bool EngineUI::InitalizeUI(SDL_Window* Window, SDL_GLContext Context) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  
+	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -103,14 +103,14 @@ void EngineUI::RenderUI(float DeltaTime) {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	ImGuiIO& io = ImGui::GetIO(); 
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-	}
+	//ImGuiIO& io = ImGui::GetIO(); 
+	//if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+	//	SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+	//	SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+	//	ImGui::UpdatePlatformWindows();
+	//	ImGui::RenderPlatformWindowsDefault();
+	//	SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	//}
 }
 bool EngineUI::DestroyUI() {
 	ImGui_ImplOpenGL3_Shutdown();

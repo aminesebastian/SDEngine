@@ -187,7 +187,10 @@ void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetCurrentOutputBuffer());
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	TestWidget->Draw();
+	glDisable(GL_BLEND);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PostFrameRendered();

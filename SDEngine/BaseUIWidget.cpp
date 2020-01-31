@@ -11,18 +11,35 @@
 BaseUIWidget::BaseUIWidget() {
 	quadVAO = 0;
 	quadVBO = 0;
-	ScreenTransform.SetLocation(vec3(0.5f, 0.5f, 0.0f));
-	ScreenTransform.SetScale(vec3(100.0f, 100.0f, 100.0f));
+	Location = vec2(0.5f, 0.5f);
+	Scale = vec2(100.0f, 100.0f);
+	BorderRadius = 0;
+	BackgroundColor = FColor(1.0f, 1.0f, 1.0f, 1.0);
+	Rotation = 0.0f;
 
 	DragFloat* location = new DragFloat("Location");
-	location->AddEntry(&ScreenTransform.GetLocation().x, "X %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.1f, 2.0f);
-	location->AddEntry(&ScreenTransform.GetLocation().y, "Y %.3fpx", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.1f, 2.0f);
+	location->AddEntry(&Location.x, "X %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
+	location->AddEntry(&Location.y, "Y %.3fpx", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
 	DetailsPanelWidgets.Add(location);
 
 	DragFloat* scale = new DragFloat("Scale");
-	scale->AddEntry(&ScreenTransform.GetScale().x, "Width %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.1f, 2.0f);
-	scale->AddEntry(&ScreenTransform.GetScale().y, "Height %.3fpx", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.1f, 2.0f);
+	scale->AddEntry(&Scale.x, "Width %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
+	scale->AddEntry(&Scale.y, "Height %.3fpx", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
 	DetailsPanelWidgets.Add(scale);
+
+	DragFloat* borderRadiusControl = new DragFloat("Border Radius");
+	borderRadiusControl->AddEntry(&BorderRadius, "Radius %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
+	DetailsPanelWidgets.Add(borderRadiusControl);
+
+	std::function<float(float)> toDegrees = ([](float radians) { return glm::degrees(radians); });
+	std::function<float(float)> toRadians = ([](float degrees) { return glm::radians(degrees); });
+
+	DragFloat* rotation = new DragFloat("Angle");
+	FDragFloatEntry* z = rotation->AddEntry(&Rotation, "%.3f", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
+	z->OnFormatForViewFunction = toDegrees;
+	z->OnFormatFromView = toRadians;
+
+	DetailsPanelWidgets.Add(rotation);
 }
 BaseUIWidget::~BaseUIWidget() {
 
@@ -30,12 +47,20 @@ BaseUIWidget::~BaseUIWidget() {
 void BaseUIWidget::Draw() {
 	EngineStatics::GetUIShader()->Bind();
 	vec2 screenResolution = Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions();
+	float screenAspectRatio = screenResolution.x / screenResolution.y;
+	float shapeAspectRatio = Scale.x / Scale.y;
+	float adjustedBorderRadius = BorderRadius * shapeAspectRatio;
 
-	Transform tempTransform(ScreenTransform);
-	tempTransform.SetLocation(vec3(ScreenTransform.GetLocation().x / screenResolution.x, ScreenTransform.GetLocation().y / screenResolution.y, 0.0f));
-	tempTransform.SetScale(vec3(ScreenTransform.GetScale().x / screenResolution.x, ScreenTransform.GetScale().y / screenResolution.y, 1.0f));
+	EngineStatics::GetUIShader()->SetShaderMatrix4("MODEL_MATRIX", CalculateModelMatrix(screenResolution));
+	EngineStatics::GetUIShader()->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
+	EngineStatics::GetUIShader()->SetShaderVector2("SHAPE_SIZE", Scale);
+	EngineStatics::GetUIShader()->SetShaderFloat("SCREEN_ASPECT_RATIO", screenAspectRatio);
+	EngineStatics::GetUIShader()->SetShaderFloat("SHAPE_ASPECT_RATIO", shapeAspectRatio);
+	EngineStatics::GetUIShader()->SetShaderFloat("BORDER_RADIUS", BorderRadius);
+	EngineStatics::GetUIShader()->SetShaderFloat("X_BORDER_RADIUS", adjustedBorderRadius / screenResolution.x);
+	EngineStatics::GetUIShader()->SetShaderFloat("Y_BORDER_RADIUS", adjustedBorderRadius / screenResolution.y);
+	EngineStatics::GetUIShader()->SetShaderVector4("COLOR", BackgroundColor);
 
-	EngineStatics::GetUIShader()->SetShaderMatrix4("MODEL_MATRIX", tempTransform.GetModelMatrix());
 	//Engine::GetInstance()->GetFocusedViewport()->GetDefferedCompositor()->DrawScreenQuad();
 	if (quadVAO == 0) {
 		GLfloat quadVertices[] = {
@@ -71,5 +96,9 @@ bool BaseUIWidget::PopulateDetailsPanel() {
 			widget->Draw();
 		}
 	}
+
+	ImGui::Text("Color");
+	ImGui::ColorEdit4("Color", &BackgroundColor[0]);
+
 	return true;
 }
