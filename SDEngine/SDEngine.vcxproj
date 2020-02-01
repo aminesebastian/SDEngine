@@ -218,7 +218,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseUIWidget.cpp" />
+    <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="UserInterface\PictorumWidget.cpp" />
+    <ClCompile Include="UserInterface\PictorumRenderer.cpp" />
     <ClCompile Include="UserInterface\ContentBrowser.cpp" />
     <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
     <ClCompile Include="Core\Assets\Asset.cpp" />
@@ -273,7 +275,6 @@
     <ClCompile Include="Engine\RenderViewport.cpp" />
     <ClCompile Include="Engine\Scene.cpp" />
     <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp" />
-    <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp" />
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp" />
     <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
@@ -289,7 +290,11 @@
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseUIWidget.h" />
+    <ClInclude Include="Core\Input\InputUtilities.h" />
+    <ClInclude Include="Core\Input\IUserInputReciever.h" />
+    <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="UserInterface\PictorumWidget.h" />
+    <ClInclude Include="UserInterface\PictorumRenderer.h" />
     <ClInclude Include="UserInterface\ContentBrowser.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="Core\Assets\Asset.h" />
@@ -353,7 +358,6 @@
     <ClInclude Include="Engine\Scene.h" />
     <ClInclude Include="UserInterface\UserInterface.h" />
     <ClInclude Include="UserInterface\UserInterfaceUtilities.h" />
-    <ClInclude Include="UserInterface\Widgets\BaseWidget.h" />
     <ClInclude Include="UserInterface\Widgets\DragFloat.h" />
     <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
     <ClInclude Include="Rendering\Shader.h" />

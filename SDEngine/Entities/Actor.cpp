@@ -121,7 +121,7 @@ SSet<Component*> Actor::GetComponents() {
 bool Actor::PopulateDetailsPanel() {
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 	if (ImGui::CollapsingHeader("Transform", flags)) {
-		for (BaseWidget* widget : DetailsPanelWidgets) {
+		for (DragFloat* widget : DetailsPanelWidgets) {
 			widget->Draw();
 		}
 	}

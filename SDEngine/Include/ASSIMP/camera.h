@@ -181,7 +181,7 @@ struct aiCamera
     {}
 
     /** @brief Get a *right-handed* camera matrix from me
-     *  @param out Camera matrix to be filled
+     *  @param out _Camera matrix to be filled
      */
     void GetCameraMatrix (aiMatrix4x4& out) const
     {

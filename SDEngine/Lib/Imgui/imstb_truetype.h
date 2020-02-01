@@ -367,7 +367,7 @@ int main(int argc, char **argv)
 //  
 //////////////////////////////////////////////////////////////////////////////
 // 
-// Complete program: print "Hello World!" banner, with bugs
+// Complete program: print "Hello _World!" banner, with bugs
 //
 #if 0
 char buffer[24<<20];
@@ -4852,7 +4852,7 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const
 //                        codepoint-to-glyph conversion using table fmt=12
 //                        codepoint-to-glyph conversion using table fmt=4
 //                        stbtt_GetBakedQuad with non-square texture (Zer)
-//                    updated Hello World! sample to use kerning and subpixel
+//                    updated Hello _World! sample to use kerning and subpixel
 //                    fixed some warnings
 //   0.3  (2009-06-24) cmap fmt=12, compound shapes (MM)
 //                    userdata, malloc-from-userdata, non-zero fill (stb)

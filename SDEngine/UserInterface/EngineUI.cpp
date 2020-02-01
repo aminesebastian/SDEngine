@@ -3,7 +3,7 @@
 #include "Utilities/Logger.h"
 #include "Utilities/EngineFunctionLibrary.h"
 #include "Rendering/PostProcessing/PostProcessingLayer.h"
-#include "BaseUIWidget.h"
+#include "UserInterface/PictorumRenderer.h"
 
 EngineUI::EngineUI() {
 	MaxFrameTimeCache = 50;
@@ -75,7 +75,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("##empty", tab_bar_flags)) {
 		if (ImGui::BeginTabItem("Details")) {
-			engine->GetFocusedViewport()->TestWidget->PopulateDetailsPanel();
+			engine->GetFocusedViewport()->UIViewport->PopulateDetailsPanel();
 			if (engine->GetSelectedEntity()) {
 				if (IsA<Actor>(engine->GetSelectedEntity())) {
 					ImGui::Text(engine->GetSelectedEntity()->GetName().c_str());

@@ -103,9 +103,6 @@
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp">
       <Filter>Source Files\UserInterface\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp">
-      <Filter>Source Files\UserInterface\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -283,7 +280,13 @@
     <ClCompile Include="UserInterface\ContentBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseUIWidget.cpp">
+    <ClCompile Include="UserInterface\PictorumWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\PictorumRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -313,9 +316,6 @@
       <Filter>External Libraries\imgui</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Widgets\DragFloat.h">
-      <Filter>Headers\UserInterface\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Widgets\BaseWidget.h">
       <Filter>Headers\UserInterface\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Engine.h">
@@ -459,7 +459,11 @@
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="UserInterface\ContentBrowser.h" />
-    <ClInclude Include="BaseUIWidget.h" />
+    <ClInclude Include="UserInterface\PictorumWidget.h" />
+    <ClInclude Include="UserInterface\PictorumRenderer.h" />
+    <ClInclude Include="Core\Input\IUserInputReciever.h" />
+    <ClInclude Include="Core\Input\InputUtilities.h" />
+    <ClInclude Include="Core\Input\InputSubsystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

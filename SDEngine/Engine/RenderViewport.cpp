@@ -19,7 +19,9 @@
 #include "Rendering/Utilities/VariableGausianBlur.h"
 #include "Rendering/RenderTarget.h"
 #include "Utilities/Logger.h"
-#include "BaseUIWidget.h"
+#include "UserInterface/PictorumRenderer.h"
+#include "UserInterface/PictorumWidget.h"
+
 
 RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
 	CurrentBuffer             = 0;
@@ -33,8 +35,6 @@ RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimens
 	S_OutputBuffer1           = nullptr;
 	S_OutputBuffer2           = nullptr;
 	SD_ENGINE_INFO("Render Viewport Created");
-
-	TestWidget = new BaseUIWidget();
 }
 RenderViewport::~RenderViewport() {
 
@@ -49,6 +49,11 @@ void RenderViewport::Initialize() {
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
 	bInitialized = true;
+
+	UIViewport = new PictorumRenderer("EditorViewport");
+	UIViewport->AddToViewport(new PictorumWidget());
+	Engine::GetInstance()->RegisterInputReciever(UIViewport);
+
 	SD_ENGINE_INFO("Viewport Initialized")
 }
 void RenderViewport::GenerateRenderTargets() {
@@ -189,7 +194,7 @@ void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	TestWidget->Draw();
+	UIViewport->Draw(Engine::GetInstance()->GetFrameTime());
 	glDisable(GL_BLEND);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {

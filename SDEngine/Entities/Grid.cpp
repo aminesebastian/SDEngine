@@ -3,7 +3,7 @@
 
 
 void Grid::Draw(Camera* Camera, bool bCallerProvidesShader) {
-	//S_GridMaterial->BindMaterial(this, Camera);
+	//S_GridMaterial->BindMaterial(this, _Camera);
 	//glBegin(GL_LINES);
 	//for (int i = -S_HalfSize; i <= S_HalfSize; i++){
 	//	if ((i+10)%S_StepInterval == 0 || i == S_HalfSize || i == -S_HalfSize) {

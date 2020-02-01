@@ -1,5 +1,4 @@
 #pragma once
-#include "BaseWidget.h"
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/DataStructures/DataStructures.h"
 #include <functional>
@@ -17,11 +16,11 @@ struct FDragFloatEntry {
 	std::function<float(float)> OnFormatFromView;
 };
 
-class DragFloat : public BaseWidget{
+class DragFloat  {
 public:
 	DragFloat(TString Label);
 	~DragFloat();
-	virtual bool Draw() override;
+	bool Draw();
 
 	FDragFloatEntry* AddEntry(float* Value, TString Format = " %.3f", FColor Color = vec3(0.0f, 0.0f, 0.0f), float Min = 0.0f, float Max = 0.0f, float ValuePerPixel = 1.0f, float Power = 1.0f);
 private:

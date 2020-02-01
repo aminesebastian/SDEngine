@@ -7,7 +7,7 @@
 #include "UserInterface/DetailsPanelProvider.h"
 
 class Component;
-class BaseWidget;
+class DragFloat;
 
 class Actor : public Entity, public IDetailsPanelProvider {
 public:
@@ -53,7 +53,7 @@ public:
 
 protected:
 	Component* RootComponent;
-	SArray<BaseWidget*> DetailsPanelWidgets;
+	SArray<DragFloat*> DetailsPanelWidgets;
 
 private:
 	SSet<Component*> Children;

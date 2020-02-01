@@ -45,11 +45,12 @@ public:
 		}
 	}
 	template <typename Type>
-	void AddUnique(Type Data) {
+	bool AddUnique(Type Data) {
 		if (Contains(Data)) {
-			return;
+			return false;
 		}
 		Add(Data);
+		return true;
 	}
 	template <class... _Valty>
 	Type Emplace(_Valty&& ... _Val) {
@@ -76,7 +77,7 @@ public:
 	}
 	template <typename Type>
 	bool Contains(Type Data) {
-		return Find(Type) >= 0;
+		return Find(Data) >= 0;
 	}
 	const int32 Count() const {
 		return (int32)size();

@@ -12,8 +12,8 @@ public:
 	@param Position
 	+Y -> Right
 	-Y -> Left
-	+X -> Towards Camera
-	-X -> Away From Camera
+	+X -> Towards _Camera
+	-X -> Away From _Camera
 	+Z -> Up
 	-Z -> Down
 	*/

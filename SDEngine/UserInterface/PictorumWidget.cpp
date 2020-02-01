@@ -1,4 +1,4 @@
-#include "BaseUIWidget.h"
+#include "PictorumWidget.h"
 #include "Engine/EngineStatics.h"
 #include "Engine/Engine.h"
 #include "Engine/RenderViewport.h"
@@ -7,14 +7,15 @@
 #include "UserInterface/UserInterface.h"
 #include "UserInterface/UserInterfaceUtilities.h"
 #include "UserInterface/Widgets/DragFloat.h"
+#include "Utilities/Logger.h"
 
-BaseUIWidget::BaseUIWidget() {
+PictorumWidget::PictorumWidget() {
 	quadVAO = 0;
 	quadVBO = 0;
 	Location = vec2(0.5f, 0.5f);
-	Scale = vec2(100.0f, 100.0f);
+	Scale = vec2(0.1f, 0.1f);
 	BorderRadius = 0;
-	BackgroundColor = FColor(1.0f, 1.0f, 1.0f, 1.0);
+	BackgroundColor = FColor(0.5f, 0.5f, 0.5f, 1.0);
 	Rotation = 0.0f;
 
 	DragFloat* location = new DragFloat("Location");
@@ -38,13 +39,16 @@ BaseUIWidget::BaseUIWidget() {
 	FDragFloatEntry* z = rotation->AddEntry(&Rotation, "%.3f", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
 	z->OnFormatForViewFunction = toDegrees;
 	z->OnFormatFromView = toRadians;
-
+	IsMouseDown = false;
 	DetailsPanelWidgets.Add(rotation);
 }
-BaseUIWidget::~BaseUIWidget() {
+PictorumWidget::~PictorumWidget() {
 
 }
-void BaseUIWidget::Draw() {
+void PictorumWidget::Tick(float DeltaTime) {
+
+}
+void PictorumWidget::Draw(float DeltaTime) {
 	EngineStatics::GetUIShader()->Bind();
 	vec2 screenResolution = Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions();
 	float screenAspectRatio = screenResolution.x / screenResolution.y;
@@ -86,13 +90,50 @@ void BaseUIWidget::Draw() {
 	glBindVertexArray(0);
 	glEnable(GL_DEPTH_TEST);
 }
-TString BaseUIWidget::GetDetailsPanelName() {
+void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) {
+	MinBounds = Location - (Scale/2.0f);
+	MaxBounds = Location + (Scale/2.0f);
+}
+mat4 PictorumWidget::CalculateModelMatrix(const vec2& ScreenDimensions) const {
+	vec2 adjustedLocation = vec2((Location.x * 2.0f) - ScreenDimensions.x, ScreenDimensions.y - (Location.y * 2.0f));
+
+	mat4 posMatrix = glm::translate(vec3(adjustedLocation.x / ScreenDimensions.x, adjustedLocation.y / ScreenDimensions.y, 0.0f));
+	mat4 scaleMatrix = glm::scale(vec3(Scale.x / ScreenDimensions.x, Scale.y / ScreenDimensions.y, 0.0f));
+	mat4 rotXMatrix = glm::rotate(0.0f, vec3(1, 0, 0));
+	mat4 rotYMatrix = glm::rotate(0.0f, vec3(0, 1, 0));
+	mat4 rotZMatrix = glm::rotate(Rotation, vec3(0, 0, 1));
+
+	mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+
+	return posMatrix * scaleMatrix * combinedRotMatrix;
+}
+
+void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	BackgroundColor += FColor(0.1f, 0.1f, 0.1f);
+}
+void PictorumWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	BackgroundColor -= FColor(0.1f, 0.1f, 0.1f);
+	IsMouseDown = false;
+}
+void PictorumWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
+	if (IsMouseDown) {
+		Location += MouseDelta;
+	}
+}
+void PictorumWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	Event.CaptureMouse();
+	IsMouseDown = true;
+}
+void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	IsMouseDown = false;
+}
+TString PictorumWidget::GetDetailsPanelName() {
 	return "UI Widget";
 }
-bool BaseUIWidget::PopulateDetailsPanel() {
+bool PictorumWidget::PopulateDetailsPanel() {
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 	if (ImGui::CollapsingHeader("Transform", flags)) {
-		for (BaseWidget* widget : DetailsPanelWidgets) {
+		for (DragFloat* widget : DetailsPanelWidgets) {
 			widget->Draw();
 		}
 	}

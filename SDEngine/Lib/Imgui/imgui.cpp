@@ -680,7 +680,7 @@ CODE
      but windows are uniquely identified by their ID. Use "###" to pass a label that isn't part of ID:
 
        Button("Hello###ID");  // Label = "Hello",  ID = hash of (..., "###ID")
-       Button("World###ID");  // Label = "World",  ID = hash of (..., "###ID")  // Same as above, even though the label looks different
+       Button("_World###ID");  // Label = "_World",  ID = hash of (..., "###ID")  // Same as above, even though the label looks different
 
        sprintf_s(buf, "My game (%f FPS)###MyGame", fps);
        Begin(buf);            // Variable title,   ID = hash of "MyGame"
@@ -804,8 +804,8 @@ CODE
 #endif
 
 // Debug options
-#define IMGUI_DEBUG_NAV_SCORING     0   // Display navigation scoring preview when hovering items. Display last moving direction matches when holding CTRL
-#define IMGUI_DEBUG_NAV_RECTS       0   // Display the reference navigation rectangle for each window
+#define IMGUI_DEBUG_NAV_SCORING     0   // _Display navigation scoring preview when hovering items. _Display last moving direction matches when holding CTRL
+#define IMGUI_DEBUG_NAV_RECTS       0   // _Display the reference navigation rectangle for each window
 #define IMGUI_DEBUG_INI_SETTINGS    0   // Save additional comments in .ini file
 
 // Visual Studio warnings
@@ -9961,7 +9961,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
                     total_area += ImTriangleArea(triangle[0], triangle[1], triangle[2]);
                 }
 
-                // Display vertex information summary. Hover to get all triangles drawn in wire-frame
+                // _Display vertex information summary. Hover to get all triangles drawn in wire-frame
                 ImFormatString(buf, IM_ARRAYSIZE(buf), "Mesh: ElemCount: %d, VtxOffset: +%d, IdxOffset: +%d, Area: ~%0.f px", pcmd->ElemCount, pcmd->VtxOffset, pcmd->IdxOffset, total_area);
                 ImGui::Selectable(buf);
                 if (fg_draw_list && ImGui::IsItemHovered() && show_drawcmd_details)
@@ -9981,7 +9981,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
                     fg_draw_list->Flags = backup_flags;
                 }
 
-                // Display individual triangles/vertices. Hover on to get the corresponding triangle highlighted.
+                // _Display individual triangles/vertices. Hover on to get the corresponding triangle highlighted.
                 ImGuiListClipper clipper(pcmd->ElemCount/3); // Manually coarse clip our print out of individual vertices to save CPU, only items that may be visible.
                 while (clipper.Step())
                     for (int prim = clipper.DisplayStart, idx_i = elem_offset + clipper.DisplayStart*3; prim < clipper.DisplayEnd; prim++)
@@ -10207,7 +10207,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         ImGui::TreePop();
     }
 
-    // Overlay: Display windows Rectangles and Begin Order
+    // Overlay: _Display windows Rectangles and Begin Order
     if (show_windows_rects || show_windows_begin_order)
     {
         for (int n = 0; n < g.Windows.Size; n++)
@@ -10233,7 +10233,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
     }
 
 #ifdef IMGUI_HAS_TABLE
-    // Overlay: Display Tables Rectangles
+    // Overlay: _Display Tables Rectangles
     if (show_tables_rects)
     {
         for (int table_n = 0; table_n < g.Tables.GetSize(); table_n++)
@@ -10244,7 +10244,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
 #endif // #define IMGUI_HAS_TABLE
 
 #ifdef IMGUI_HAS_DOCK
-    // Overlay: Display Docking info
+    // Overlay: _Display Docking info
     if (show_docking_nodes && g.IO.KeyCtrl)
     {
     }

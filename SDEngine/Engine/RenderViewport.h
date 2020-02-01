@@ -31,7 +31,7 @@ enum EDebugState {
 	DETAIL_LIGHT
 };
 
-class BaseUIWidget;
+class PictorumRenderer;
 
 class RenderViewport {
 public:
@@ -76,7 +76,7 @@ public:
 
 	void OnMouseMove(vec2 MouseCoords);
 
-	BaseUIWidget* TestWidget;
+	PictorumRenderer* UIViewport;
 protected:
 	virtual void GenerateRenderTargets();
 	virtual void RegisterPostProcessEffects();
