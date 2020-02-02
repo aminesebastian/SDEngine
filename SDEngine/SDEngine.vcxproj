@@ -219,6 +219,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="LayoutWidget.cpp" />
+    <ClCompile Include="SolidWidget.cpp" />
     <ClCompile Include="UserInterface\PictorumWidget.cpp" />
     <ClCompile Include="UserInterface\PictorumRenderer.cpp" />
     <ClCompile Include="UserInterface\ContentBrowser.cpp" />
@@ -293,6 +295,8 @@
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="LayoutWidget.h" />
+    <ClInclude Include="SolidWidget.h" />
     <ClInclude Include="UserInterface\PictorumWidget.h" />
     <ClInclude Include="UserInterface\PictorumRenderer.h" />
     <ClInclude Include="UserInterface\ContentBrowser.h" />

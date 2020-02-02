@@ -289,6 +289,12 @@
     <ClCompile Include="Core\Input\InputSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LayoutWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -464,6 +470,8 @@
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="LayoutWidget.h" />
+    <ClInclude Include="SolidWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

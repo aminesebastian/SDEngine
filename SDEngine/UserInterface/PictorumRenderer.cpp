@@ -18,7 +18,7 @@ void PictorumRenderer::Tick(float DeltaTime) {
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
-		widget->Draw(DeltaTime);
+		widget->DrawContents(DeltaTime);
 	}
 }
 
@@ -39,7 +39,6 @@ void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Butto
 		if (eventHandle.ShouldCaptureMouse()) {
 			bMouseCaptured = true;
 			SDL_ShowCursor(0);
-			SD_ENGINE_INFO("What happen: {0}", SDL_GetError());
 		}
 	}
 }

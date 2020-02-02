@@ -20,7 +20,7 @@
 #include "Rendering/RenderTarget.h"
 #include "Utilities/Logger.h"
 #include "UserInterface/PictorumRenderer.h"
-#include "UserInterface/PictorumWidget.h"
+#include "SolidWidget.h"
 
 
 RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
@@ -51,7 +51,7 @@ void RenderViewport::Initialize() {
 	bInitialized = true;
 
 	UIViewport = new PictorumRenderer("EditorViewport");
-	UIViewport->AddToViewport(new PictorumWidget());
+	UIViewport->AddToViewport(new SolidWidget());
 	Engine::GetInstance()->RegisterInputReciever(UIViewport);
 
 	SD_ENGINE_INFO("Viewport Initialized")
