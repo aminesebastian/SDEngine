@@ -1,4 +1,8 @@
 #include "Core/Assets/AssetManager.h"
+#include "Core/Input/InputSubsystem.h"
+#include "Core/Math/MathLibrary.h"
+#include "Core/Pictorum/PictorumRenderer.h"
+
 #include "Engine.h"
 #include "Scene.h"
 #include "Entities/Entity.h"
@@ -6,9 +10,7 @@
 #include "Entities/Light.h"
 #include "Utilities/Logger.h"
 #include "UserInterface/EngineUI.h"
-#include "UserInterface/PictorumRenderer.h"
-#include "Core/Math/MathLibrary.h"
-#include "Core/Input/InputSubsystem.h"
+
 
 Engine::Engine() {
 	_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
@@ -37,7 +39,8 @@ Engine::Engine() {
 	lookSpeed                = 200.0f;
 
 	_CurrentViewport = new RenderViewport(_Display->GetDimensions());
-	_EngineUI = new EngineUI();
+	_IMGuiEngineUI = new EngineUI();
+	_EngineUI =  new PictorumRenderer("EditorViewport");
 }
 Engine::~Engine() {
 	delete& _Display;
@@ -59,8 +62,9 @@ bool Engine::Initialize() {
 
 	_CurrentViewport->Initialize();
 	_InputSubsystem->Initialize();
-	_InputSubsystem->RegisterInputReciever(this);
-	_EngineUI->InitalizeUI(_Display->GetWindow(), _Display->GetContext());
+	RegisterInputReciever(this);
+	RegisterInputReciever(_EngineUI);
+	_IMGuiEngineUI->InitalizeUI(_Display->GetWindow(), _Display->GetContext());
 
 	bIsInitialized = true;
 	return true;
@@ -103,13 +107,15 @@ void Engine::MainLoop() {
 }
 void Engine::GameLoop() {
 	_World->TickWorld((float)DeltaTime);
-	_EngineUI->UpdateUI(_Display->GetWindow());
+	_IMGuiEngineUI->UpdateUI(_Display->GetWindow());
+	_EngineUI->Tick(DeltaTime);
 }
 void Engine::RenderingLoop() {
 	_CurrentViewport->RenderWorld(_World, _Camera);
 }
 void Engine::UILoop() {
-	_EngineUI->RenderUI((float)DeltaTime);
+	_IMGuiEngineUI->RenderUI((float)DeltaTime);
+	_EngineUI->Draw(DeltaTime);
 }
 void Engine::InputLoop() {
 	SDL_Event e;
@@ -226,6 +232,9 @@ Camera* Engine::GetCurrentCamera() {
 }
 InputSubsystem* Engine::GetInputSubsystem() {
 	return _InputSubsystem;
+}
+PictorumRenderer* Engine::GetEngineUI() {
+	return _EngineUI;
 }
 float Engine::GetFrameTime() {
 	return DeltaTime;

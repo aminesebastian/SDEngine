@@ -8,6 +8,7 @@
 #include "Core/Input/InputUtilities.h"
 #include "Core/Input/IUserInputReciever.h"
 
+
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1200
 #define WINDOW_BIT_DEPTH 8
@@ -26,6 +27,7 @@ class InputSubsystem;
 class Camera;
 class Scene;
 class EngineUI;
+class PictorumRenderer;
 
 class Engine : public IUserInputReciever {
 
@@ -40,6 +42,7 @@ public:
 	Camera* GetCurrentCamera();
 	InputSubsystem* GetInputSubsystem();
 	AssetManager* GetAssetManager();
+	PictorumRenderer* GetEngineUI();
 
 	bool LoadScene(Scene* SceneToLoad);
 	bool RegisterInputReciever(IUserInputReciever* Reciever);
@@ -54,12 +57,13 @@ public:
 private:
 	AssetManager* _AssetManager;
 	InputSubsystem* _InputSubsystem;
-	EngineUI* _EngineUI;
+	EngineUI* _IMGuiEngineUI;
 	RenderViewport* _CurrentViewport;
 	Display* _Display;
 	World* _World;
 	Camera* _Camera;
 	Scene* _LoadedScene;
+	PictorumRenderer* _EngineUI;
 	Entity* _SelectedEntity;
 	
 	float movementSpeed;

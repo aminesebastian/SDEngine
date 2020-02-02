@@ -19,9 +19,7 @@
 #include "Rendering/Utilities/VariableGausianBlur.h"
 #include "Rendering/RenderTarget.h"
 #include "Utilities/Logger.h"
-#include "UserInterface/PictorumRenderer.h"
-#include "SolidWidget.h"
-
+#include "Core/Pictorum/PictorumRenderer.h"
 
 RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
 	CurrentBuffer             = 0;
@@ -50,9 +48,7 @@ void RenderViewport::Initialize() {
 	RegisterPostProcessEffects();
 	bInitialized = true;
 
-	UIViewport = new PictorumRenderer("EditorViewport");
-	UIViewport->AddToViewport(new SolidWidget());
-	Engine::GetInstance()->RegisterInputReciever(UIViewport);
+
 
 	SD_ENGINE_INFO("Viewport Initialized")
 }
@@ -191,11 +187,6 @@ void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
 
 	S_CurrentStage = ERenderingStage::OUTPUT;
 	S_DefferedCompositor->OutputToScreen(GetCurrentOutputBuffer());
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	UIViewport->Draw(Engine::GetInstance()->GetFrameTime());
-	glDisable(GL_BLEND);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PostFrameRendered();

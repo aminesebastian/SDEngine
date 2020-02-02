@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "SDL/SDL_scancode.h"
+#include "Core/Input/InputUtilities.h"
 
 class IUserInputReciever {
 public:

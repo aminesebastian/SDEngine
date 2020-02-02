@@ -280,19 +280,19 @@
     <ClCompile Include="UserInterface\ContentBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\PictorumWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\PictorumRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Input\InputSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LayoutWidget.cpp">
+    <ClCompile Include="Core\Pictorum\Widgets\LayoutWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SolidWidget.cpp">
+    <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\PictorumWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -465,13 +465,15 @@
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="UserInterface\ContentBrowser.h" />
-    <ClInclude Include="UserInterface\PictorumWidget.h" />
-    <ClInclude Include="UserInterface\PictorumRenderer.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
-    <ClInclude Include="LayoutWidget.h" />
-    <ClInclude Include="SolidWidget.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\LayoutWidget.h" />
+    <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
+    <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
+    <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
+    <ClInclude Include="Core\Pictorum\Pictorum.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

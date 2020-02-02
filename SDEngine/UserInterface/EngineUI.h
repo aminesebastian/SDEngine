@@ -4,6 +4,8 @@
 #include "Core/DataStructures/DataStructures.h"
 #include <SDL/SDL.h>
 
+class PictorumWidget;
+
 class EngineUI {
 public:
 	EngineUI();
@@ -19,5 +21,7 @@ public:
 
 private:
 	float GetSmoothedFrameTime();
+
+	PictorumWidget* SelectedWidget;
 };
 

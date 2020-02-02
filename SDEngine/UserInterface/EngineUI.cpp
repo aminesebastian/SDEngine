@@ -1,12 +1,14 @@
+#include "Core/Pictorum/PictorumRenderer.h"
+#include "Core/Pictorum/PictorumWidget.h"
 #include "EngineUI.h"
 #include "Engine/Engine.h"
 #include "Utilities/Logger.h"
 #include "Utilities/EngineFunctionLibrary.h"
 #include "Rendering/PostProcessing/PostProcessingLayer.h"
-#include "UserInterface/PictorumRenderer.h"
 
 EngineUI::EngineUI() {
 	MaxFrameTimeCache = 50;
+	SelectedWidget = nullptr;
 	SD_ENGINE_INFO("Engine UI Created");
 }
 EngineUI::~EngineUI() {
@@ -75,7 +77,6 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("##empty", tab_bar_flags)) {
 		if (ImGui::BeginTabItem("Details")) {
-			engine->GetFocusedViewport()->UIViewport->PopulateDetailsPanel();
 			if (engine->GetSelectedEntity()) {
 				if (IsA<Actor>(engine->GetSelectedEntity())) {
 					ImGui::Text(engine->GetSelectedEntity()->GetName().c_str());
@@ -92,6 +93,51 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 		ImGui::EndTabBar();
 	}
 
+	ImGui::End();
+
+
+	// UI
+	ImGui::Begin("User Interface Panel");
+	ImGui::Text("UI Stack");
+	ImGui::PushItemWidth(-1);
+	if (ImGui::ListBoxHeader("##empty")) {
+		for (PictorumWidget* rootWidget : Engine::GetInstance()->GetEngineUI()->GetWidgets()) {
+			std::string& item_name = rootWidget->GetName();
+			if (ImGui::Selectable(item_name.c_str(), false)) {
+				SelectedWidget = rootWidget;
+			}
+		}
+		ImGui::ListBoxFooter();
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::BeginTabBar("##empty", tab_bar_flags)) {
+		if (ImGui::BeginTabItem("Details")) {
+			if (SelectedWidget) {
+				ImGui::Text(SelectedWidget->GetDetailsPanelName().c_str());
+				
+				ImGui::PushID("Root");
+				SelectedWidget->PopulateDetailsPanel();
+				ImGui::PopID();
+
+				SArray<PictorumWidget*> children;
+				SelectedWidget->GetAllChildren(children);
+				int index = 0;
+				for (PictorumWidget* childWidget : children) {
+					ImGui::PushID("Child" + index);
+					ImGui::Text(childWidget->GetDetailsPanelName().c_str());
+					childWidget->PopulateDetailsPanel();
+					ImGui::PopID();
+					index++;
+				}
+			} else {
+				ImGui::Text("Select a Widget to Modify");
+			}
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
 	ImGui::End();
 }
 void EngineUI::RenderUI(float DeltaTime) {

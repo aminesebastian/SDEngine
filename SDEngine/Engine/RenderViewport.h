@@ -31,8 +31,6 @@ enum EDebugState {
 	DETAIL_LIGHT
 };
 
-class PictorumRenderer;
-
 class RenderViewport {
 public:
 	RenderViewport(vec2 RenderTargetDimensions);
@@ -75,8 +73,6 @@ public:
 	PostProcessingLayer* GetPostProcessingLayer(TString Layer);
 
 	void OnMouseMove(vec2 MouseCoords);
-
-	PictorumRenderer* UIViewport;
 protected:
 	virtual void GenerateRenderTargets();
 	virtual void RegisterPostProcessEffects();

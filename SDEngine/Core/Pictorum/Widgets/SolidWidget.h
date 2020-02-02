@@ -1,10 +1,11 @@
 #pragma once
-#include "UserInterface/PictorumWidget.h"
+#include "Core/Pictorum/PictorumWidget.h"
+
 class SolidWidget : public PictorumWidget {
 public:
-	SolidWidget();
+	SolidWidget(TString Name);
 	~SolidWidget();
-	virtual void Draw(float DeltaTime) override;
+	virtual void Draw(float DeltaTime, FRenderGeometry Geometry) override;
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
@@ -12,7 +13,6 @@ public:
 	virtual void OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) override;
 
-	virtual TString GetDetailsPanelName() override;
 	virtual bool PopulateDetailsPanel() override;
 
 private:

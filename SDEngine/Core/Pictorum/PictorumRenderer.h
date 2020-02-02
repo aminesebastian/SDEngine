@@ -1,8 +1,10 @@
 #pragma once
 #include "Core/DataStructures/DataStructures.h"
-#include "Engine/EngineObject.h"
 #include "Core/Input/IUserInputReciever.h"
+#include "Core/Input/InputUtilities.h"
+#include "Engine/EngineObject.h"
 #include "UserInterface/DetailsPanelProvider.h"
+
 
 class PictorumWidget;
 
@@ -27,6 +29,8 @@ public:
 	bool RemoveFromViewport(PictorumWidget* Widget);
 
 	PictorumWidget* GetMouseOverWidget();
+
+	const SArray<PictorumWidget*>& GetWidgets();
 
 	virtual TString GetDetailsPanelName() override;
 	virtual bool PopulateDetailsPanel() override;

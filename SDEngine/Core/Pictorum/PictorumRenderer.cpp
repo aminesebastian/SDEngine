@@ -1,25 +1,39 @@
 #include "Engine/Engine.h"
 #include "PictorumRenderer.h"
-#include "UserInterface/PictorumWidget.h"
+#include "Core/Pictorum/PictorumWidget.h"
 #include "Utilities/Logger.h"
+
+#include "Core/Pictorum/Widgets/SolidWidget.h"
+#include "Core/Pictorum/Widgets/LayoutWidget.h"
 
 PictorumRenderer::PictorumRenderer(TString ViewportName) : EngineObject(ViewportName) {
 	MouseOverWidget = nullptr;
 	bMouseCaptured  = false;
+
+	LayoutWidget* layout = new LayoutWidget("Layout");
+	layout->AddChild(new SolidWidget("test2"));
+	AddToViewport(layout);
 }
 PictorumRenderer::~PictorumRenderer() {
 
 }
 
 void PictorumRenderer::Tick(float DeltaTime) {
+	FRenderGeometry geometry;
+	geometry.RenderResolution = Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions();
 	for (PictorumWidget* widget : Widgets) {
-		widget->Tick(DeltaTime);
+		widget->Tick(DeltaTime, geometry);
 	}
 }
 void PictorumRenderer::Draw(float DeltaTime) {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	FRenderGeometry geometry;
+	geometry.RenderResolution = Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions();
 	for (PictorumWidget* widget : Widgets) {
-		widget->DrawContents(DeltaTime);
+		widget->DrawContents(DeltaTime, geometry);
 	}
+	glDisable(GL_BLEND);
 }
 
 void PictorumRenderer::OnKeyDown(SDL_Scancode KeyCode){ 
@@ -96,18 +110,36 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 	if (bMouseCaptured) {
 		return;
 	}
+
+	// Capture all the widgets that can be hit.
+	SArray <PictorumWidget*> children;
 	for (PictorumWidget* widget : Widgets) {
+		if (widget->GetVisibility() == EPictorumVisibilityState::VISIBLE) {
+			children.Add(widget);
+			widget->GetAllChildren(children);
+		} else if (widget->GetVisibility() == EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE) {
+			widget->GetAllChildren(children);
+		}
+	}
+
+	// Test them each for hits.
+	for (PictorumWidget* child : children) {
+		if (child->GetVisibility() != EPictorumVisibilityState::VISIBLE) {
+			continue;
+		}
 		vec2 min, max;
-		widget->CalculateBounds(Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions(), min, max);
+		child->CalculateBounds(Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions(), min, max);
 
 		if (MousePosition.x > min.x && MousePosition.x < max.x && MousePosition.y > min.y && MousePosition.y < max.y) {
-			MouseOverWidget = widget;
+			MouseOverWidget = child;
 			return;
 		}
 	}
 	MouseOverWidget = nullptr;
 }
-
+const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() {
+	return Widgets;
+}
 TString PictorumRenderer::GetDetailsPanelName() {
 	return "UI Widget";
 }

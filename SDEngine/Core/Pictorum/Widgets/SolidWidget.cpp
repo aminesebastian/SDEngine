@@ -5,7 +5,7 @@
 #include "Rendering/Shader.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
-SolidWidget::SolidWidget() {
+SolidWidget::SolidWidget(TString Name) : PictorumWidget(Name) {
 	quadVAO = 0;
 	quadVBO = 0;
 	BorderRadius = 0;
@@ -20,16 +20,19 @@ SolidWidget::~SolidWidget() {
 
 }
 
-void SolidWidget::Draw(float DeltaTime) {
+void SolidWidget::Draw(float DeltaTime, FRenderGeometry Geometry) {
 	EngineStatics::GetUIShader()->Bind();
-	vec2 screenResolution = Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions();
+	vec2 screenResolution = Geometry.RenderResolution;
 	float screenAspectRatio = screenResolution.x / screenResolution.y;
-	float shapeAspectRatio = Scale.x / Scale.y;
+
+	vec2 adjustedScale = GetAbsoluteLayoutScale();
+
+	float shapeAspectRatio = adjustedScale.x / adjustedScale.y;
 	float adjustedBorderRadius = BorderRadius * shapeAspectRatio;
 
 	EngineStatics::GetUIShader()->SetShaderMatrix4("MODEL_MATRIX", CalculateModelMatrix(screenResolution));
 	EngineStatics::GetUIShader()->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
-	EngineStatics::GetUIShader()->SetShaderVector2("SHAPE_SIZE", Scale);
+	EngineStatics::GetUIShader()->SetShaderVector2("SHAPE_SIZE", adjustedScale);
 	EngineStatics::GetUIShader()->SetShaderFloat("SCREEN_ASPECT_RATIO", screenAspectRatio);
 	EngineStatics::GetUIShader()->SetShaderFloat("SHAPE_ASPECT_RATIO", shapeAspectRatio);
 	EngineStatics::GetUIShader()->SetShaderFloat("BORDER_RADIUS", BorderRadius);
@@ -79,10 +82,6 @@ void SolidWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfac
 	if (bWasMouseDownInWidget) {
 		Location += MouseDelta;
 	}
-}
-
-TString SolidWidget::GetDetailsPanelName() {
-	return "UI Widget";
 }
 bool SolidWidget::PopulateDetailsPanel() {
 	PictorumWidget::PopulateDetailsPanel();
