@@ -1,9 +1,11 @@
 #pragma once
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 #include "Include/FMT/core.h"
 #include <iostream>
 
 #define __JUST_FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
+// This is the format used for logging decimal fields representing a number of seconds.
+#define SEC_FMT ".2F"
 
 #define SD_LOG(Outer, CategoryName, Verbosity, Format, ...) \
 	{ \

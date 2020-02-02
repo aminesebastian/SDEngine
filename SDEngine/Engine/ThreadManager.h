@@ -1,6 +1,6 @@
 #pragma once
 #include "WorkerThread.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 
 class ThreadManager {

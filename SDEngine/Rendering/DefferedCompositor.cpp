@@ -6,7 +6,7 @@
 
 DefferedCompositor::DefferedCompositor(string LightingShader) {
 	S_LightingShader = new Shader(LightingShader, false);
-	S_FinalOutputShader = (new Shader("Res/Shaders/PostProcessing/Output", false));
+	S_FinalOutputShader = (new Shader("./Res/Shaders/PostProcessing/Output", false));
 }
 DefferedCompositor::~DefferedCompositor() {}
 
@@ -17,8 +17,8 @@ void DefferedCompositor::RecompileShaders() {
 		S_PostProcessingShaders[i]->RecompileShader();
 	}
 }
-void DefferedCompositor::CompositeLighting(GBuffer* GBufferIn, RenderTarget* WriteBuffer, vector<Light*> Lights, Camera* Camera) {
-	for (GLuint i = 0; i < Lights.size(); i++) {
+void DefferedCompositor::CompositeLighting(GBuffer* GBufferIn, RenderTarget* WriteBuffer, SArray<Light*> Lights, Camera* Camera) {
+	for (int32 i = 0; i < Lights.Count(); i++) {
 		if (Lights[i]->IsVisible() && Lights[i]->CastsShadows()) {
 			Lights[i]->GenerateShadowTexture(this);
 		}

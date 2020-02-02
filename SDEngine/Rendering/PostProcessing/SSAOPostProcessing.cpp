@@ -1,6 +1,6 @@
 #include "SSAOPostProcessing.h"
 #include "Engine/Engine.h"
-#include "Utilities/Math/MathLibrary.h"
+#include "Core/Math/MathLibrary.h"
 
 SSAOPostProcessing::SSAOPostProcessing(vec2 FinalOutputDimensions) : PostProcessingLayer("Screen Space Ambient Occlusion", FinalOutputDimensions) {
 	SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO", false);
@@ -95,14 +95,14 @@ void SSAOPostProcessing::GenerateKernel() {
 		scale = MathLibrary::Lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;
 
-		SampleKernel.push_back(sample);
+		SampleKernel.Add(sample);
 	}
 }
 void SSAOPostProcessing::GenerateNoise() {
 	glDeleteTextures(1, &NoiseTexture);
 
 	for (int i = 0; i < S_NoiseSize * S_NoiseSize; ++i) {
-		Noise.push_back(vec3(
+		Noise.Add(vec3(
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
 			0.0f

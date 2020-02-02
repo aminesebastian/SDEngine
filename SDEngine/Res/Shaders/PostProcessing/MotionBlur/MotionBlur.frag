@@ -13,16 +13,12 @@ uniform float MOTION_BLUR_SCALE	= 10.0;
 
 layout (location = 0) out vec4 Result;   
 
-vec4 ApplyMotionBlur(vec2 TexOffset);
-vec4 MotionBlurTest();
+vec4 ApplyMotionBlur();
 
 void main()	{	
-	vec2 pixelSize		  = 1.0f/textureSize(Source, 0);
-	vec2 motionVector	  = texture(MotionVector, texCoord0).xy;
-	vec2 textureOffset	  = pixelSize * MOTION_BLUR_SCALE * normalize(motionVector);
-	Result				  = MotionBlurTest();
+	Result				  = ApplyMotionBlur();
 }
-vec4 MotionBlurTest() {
+vec4 ApplyMotionBlur() {
 	vec2 motionVector	= texture(MotionVector, texCoord0).xy * MOTION_BLUR_SCALE * (FPS / TARGET_FPS);
 	vec2 pixelSize		= 1.0f/textureSize(Source, 0);
 	vec2 stepSize		= pixelSize * motionVector;

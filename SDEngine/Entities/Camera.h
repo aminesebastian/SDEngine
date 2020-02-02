@@ -2,15 +2,15 @@
 #include <GLM/glm.hpp>
 #include <GLM/gtx/transform.hpp>
 #include <iostream>
-#include "Entities/Entity.h"
+#include "Entities/Actor.h"
 #include "Engine/Engine.h"
 
 using namespace glm;
 
-class Camera : public Entity {
+class Camera : public Actor {
 
 public:
-	Camera(TString Name, const Transform Transform, float FOV, vec2 Dimensions, float NearClip, float FarClip);
+	Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip);
 	virtual ~Camera();
 	float GetNearClipPlane();
 	float GetFarClipPlane();

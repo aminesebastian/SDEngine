@@ -4,14 +4,14 @@
 VariableGausianBlur::VariableGausianBlur(vec2 RenderTargetResolution) {
 	DownsampleSteps = MAX_DOWNSAMPLE;
 
-	BufferNames.push_back("Full");
-	BufferNames.push_back("Half");
-	BufferNames.push_back("Quarter");
-	BufferNames.push_back("Eighth");
+	BufferNames.Add("Full");
+	BufferNames.Add("Half");
+	BufferNames.Add("Quarter");
+	BufferNames.Add("Eighth");
 
 	for (int i = 0; i < DownsampleSteps; i++) {
 		float downsampleFactor = (float)glm::sqrt(i + 1);
-		DownSampleFactors.push_back(downsampleFactor);
+		DownSampleFactors.Add(downsampleFactor);
 
 		RenderTarget* firstBuffer = new RenderTarget(RenderTargetResolution / downsampleFactor);
 		firstBuffer->AddTextureIndex(new FRenderTargetTextureEntry("BlurAccumulation", GL_RGB32F, GL_LINEAR, GL_CLAMP, GL_RGB, GL_FLOAT, false));
@@ -21,7 +21,7 @@ VariableGausianBlur::VariableGausianBlur(vec2 RenderTargetResolution) {
 		secondBuffer->AddTextureIndex(new FRenderTargetTextureEntry("BlurAccumulation", GL_RGB32F, GL_LINEAR, GL_CLAMP, GL_RGB, GL_FLOAT, false));
 		secondBuffer->FinalizeRenderTarget();
 
-		Buffers.emplace_back(firstBuffer, secondBuffer);
+		Buffers.Emplace(firstBuffer, secondBuffer);
 	}
 
 	S_Downsampler = new Downsampler();

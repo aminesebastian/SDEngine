@@ -1,7 +1,8 @@
 #pragma once
 #include "Rendering/Shader.h"
 #include "Rendering/Texture2D.h"
-#include <string>
+#include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Assets/ISerializeableAsset.h"
 #include <vector>
 
 using namespace std;
@@ -39,7 +40,7 @@ enum EShaderModel {
 
 class Entity;
 
-class Material {
+class Material  : public ISerializeableAsset {
 
 public:
 	Material(string BaseShaderName);
@@ -57,8 +58,11 @@ public:
 
 	bool SetShaderModel(EShaderModel Model);
 	EShaderModel GetShaderModel() { return S_ShaderModel; }
-	void BindMaterial(Entity* Entity, Camera* Camera);
+	void BindMaterial(const Transform& RenderTransform, Camera* RenderCamera);
+	void BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, Camera* RenderCamera);
 
+	bool SerializeToBuffer(SerializationStream& Stream) const override;
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:
 	Shader* S_Shader;
 	EShaderModel S_ShaderModel;

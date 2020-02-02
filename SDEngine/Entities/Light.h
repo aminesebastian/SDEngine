@@ -1,9 +1,9 @@
 #pragma once
-#include "Entities/Entity.h"
+#include "Entities/Actor.h"
 #include "GLM/glm.hpp"
 #include "Rendering/RenderTarget.h"
 #include "Entities/StaticMesh.h"
-#include "Entities/EditorSprite.h"
+#include "Entities/EditorSpriteComponent.h"
 
 enum ELightType {
 	POINT,
@@ -20,7 +20,7 @@ class DefferedCompositor;
 
 using namespace glm;
 
-class Light : public Entity{
+class Light : public Actor {
 public:
 	Light(TString Name, const Transform IntialTransform, ELightType Type = POINT, float Intensity = 20, vec3 Color = vec3(1, 1, 1), float Attenuation = 25, bool CastShadows = false);
 	~Light();
@@ -29,14 +29,12 @@ public:
 	void SetLightColor(const vec3 Color) { S_LightInfo.Color = Color; }
 	void SetLightIntensity(const float Intensity) { S_LightInfo.Intensity = Intensity; }
 	void SendShaderInformation(Shader* shader, int index);
-	virtual void Draw(Camera* Camera, bool bCallerProvidesShader = false) override;
-	virtual void Tick(float DeltaTime) override;
 	void GenerateShadowTexture(DefferedCompositor* Compositor);
 
 	mat4 GetLightViewMatrix();
 	mat4 GetLightOrthogonalMatrix();
 
-	virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) override;
+	//virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) override;
 
 	bool CastsShadows() { return bCastShadows; }
 	void SetCastsShadows(bool CastsShadows) { bCastShadows = CastsShadows; }
@@ -47,8 +45,6 @@ public:
 
 private:
 	FLightInfo S_LightInfo;
-	StaticMesh* S_Probe;
-	EditorSprite* Sprite;
 
 	bool bCastShadows;
 	Material* S_DebugMaterial;

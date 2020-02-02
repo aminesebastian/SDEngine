@@ -6,7 +6,7 @@
 #include "Rendering/GBuffer.h"
 #include "Rendering/Shader.h"
 #include "Entities/Light.h"
-#include <vector>
+#include "Core/DataStructures/DataStructures.h"
 
 using namespace std;
 
@@ -15,7 +15,7 @@ public:
 	DefferedCompositor(string LightingShader);
 	~DefferedCompositor();
 
-	void CompositeLighting(GBuffer* GBufferIn, RenderTarget* OutputBuffer, vector<Light*> Lights, Camera* camera);
+	void CompositeLighting(GBuffer* GBufferIn, RenderTarget* OutputBuffer, SArray<Light*> Lights, Camera* camera);
 	void CompositePostProcesing(GBuffer* ReadBuffer, GBuffer* WriteBuffer, Camera* Camera, int PostProcessingIndex);
 	void OutputToScreen(RenderTarget* ReadBuffer);
 

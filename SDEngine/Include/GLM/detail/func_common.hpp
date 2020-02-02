@@ -191,7 +191,7 @@ namespace glm
 	/// from. For a component of <a> that is false, the
 	/// corresponding component of x is returned. For a
 	/// component of a that is true, the corresponding
-	/// component of y is returned. Components of x and y that
+	/// component of y is returned. Children of x and y that
 	/// are not selected are allowed to be invalid floating point
 	/// values and will have no effect on the results. Thus, this
 	/// provides different functionality than

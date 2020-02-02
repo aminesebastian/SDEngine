@@ -1,7 +1,7 @@
 #pragma once
 #include "PostProcessingLayer.h"
 #include "Rendering/Utilities/VariableGausianBlur.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 class SSAOPostProcessing : public PostProcessingLayer {
 public:

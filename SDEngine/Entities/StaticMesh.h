@@ -1,105 +1,115 @@
 #pragma once
 #include <GLM/glm.hpp>
 #include <GLEW/glew.h>
-#include <string>
-#include <vector>
-#include "Entities/Entity.h"
+#include "Engine/EngineObject.h"
 #include "Rendering/Material.h"
 #include "Rendering/Texture2D.h"
 #include <ASSIMP/Importer.hpp>
 #include <ASSIMP/scene.h>
 #include <ASSIMP/postprocess.h>
+#include "Core/DataStructures/DataStructures.h"
+#include "Core/Assets/ISerializeableAsset.h"
 
 using namespace glm;
 
-
-class Vertex {
-
-public:
-	Vertex(const vec3& Position, const vec2& TexCoord = vec2(0,0), const vec4& Color = vec4(1,1,1,1), const vec3& Normal = vec3(0, 0, 0)) {
-		this->Position = Position;
-		this->TexCoord = TexCoord;
-		this->Color = Color;
-		this->Normal = Normal;
-	}
-
-	inline vec3 GetPosition() { return Position; }
-	inline vec2 GetTexCoord() { return TexCoord; }
-	inline vec3 GetNormal() { return Normal; }
-	inline vec3 GetTangent() { return Tangent; }
-	inline vec4 GetColor() { return Color; }
-
-private:
-	vec3 Position;
-	vec2 TexCoord;
-	vec3 Normal;
-	vec3 Tangent;
-	vec4 Color;
+enum EVertexBufferIndex {
+	POSITION_VB,
+	TEXCOORD_VB,
+	NORMAL_VB,
+	TANGENT_VB,
+	INDEX_VB,
+	COLORS_VB,
+	MAX_BUFFERS
 };
 
-class StaticMesh : public Entity {
+struct FSubMesh {
+	SArray<vec3> Verticies;
+	SArray<vec2> TexCoords;
+	SArray<vec3> Normals;
+	SArray<vec3> Tangents;
+	SArray<vec3> VertexColors;
+	SArray<uint32> Indices;
+	SArray<GLuint> VertexArrayBuffers;
+	Material* SubMeshMaterial;
+	GLuint VertexArrayObject;
+
+	FSubMesh() {
+		SubMeshMaterial = nullptr;
+		VertexArrayObject = 0;
+	}
+
+	int32 GetVertexCount() {
+		return Verticies.Count();
+	}
+	int32 GetBufferCount() {
+		int count = 0;
+		if (!Verticies.IsEmpty()) {
+			count++;
+		}
+		if (!TexCoords.IsEmpty()) {
+			count++;
+		}
+		if (!Normals.IsEmpty()) {
+			count++;
+		}
+		if (!Tangents.IsEmpty()) {
+			count++;
+		}
+		if (!VertexColors.IsEmpty()) {
+			count++;
+		}
+		if (!Indices.IsEmpty()) {
+			count++;
+		}
+		return count;
+	}
+};
+
+class StaticMesh : public EngineObject, public ISerializeableAsset {
 
 public:
-	StaticMesh(TString Name, const Transform& SpawnTransform, Vertex* Verticies, unsigned int NumVertecies, unsigned int* Indicies, unsigned int NumIndicides);
-	StaticMesh(TString Name, const Transform& SpawnTransform, Material* Material, const std::string& ModelName);
-	StaticMesh(TString Name, const Transform& SpawnTransform, const std::string& ModelName);
-	StaticMesh(TString Name, const std::string& ModelName);
-
+	StaticMesh(const TString& Name);
+	StaticMesh(const TString& Name, const TString& FilePath);
 	virtual ~StaticMesh();
 
-	virtual void Draw(Camera* Camera, bool bCallerProvidesShader = false) override;
-	virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel = VISIBILITY) override;
+	/**
+	 * Gets all the submeshes that make up this static mesh.
+	 */
+	SArray<FSubMesh*> GetSubMeshes();
+	/**
+	* Checks to see if the data for this static mesh has already been sent to the GPU.
+	*/
+	bool SentToGPU();
+	/**
+	* Generates the OpenGL buffers for all the submeshes.
+	*/
+	void GenerateGPUBuffers();
 
-	void loadModel(const std::string& ModelName);
-	void processNode(aiNode* Node, const aiScene* Scene);
-	void populateVertecies(aiMesh* Mesh);
-
-	void RegisterTexture(Texture2D* texture) { Textures.push_back(texture); }
-
-	void SetCustomColor(vec3 Color) { S_CustomAlbedo = Color; S_UseCustomColor = true; }
-	void SetCustomRoughness(float Roughness) { S_CustomRoughness = Roughness; S_UseCustomRoughness = true; }
-	void SetMaterialID(int ID) { S_MaterialID = ID; }
-
-
-	void SetMaterial(Material* NewMaterial) { S_Material = NewMaterial; }
-	Material* GetMaterial() { return S_Material; }
-
-	SArray<vec3> GetVerticies() { return S_Verticies; }
-	SArray<uint32> GetIndecies() { return S_Indicies; }
+	bool SerializeToBuffer(SerializationStream& Stream) const override;
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
+protected:
+	/**
+	 * Begins loading model from file.
+	 * 
+	 * @param ModelName The filepath of the model to load.
+	 */
+	void LoadModel(const TString FilePath);
+	/**
+	 * Recursively traverses model tree, calling GenerateSubMesh for each node encountered.
+	 * 
+	 * @param Node The node of the submesh to parse.
+	 * @param Scene The total scene of the model.
+	 */
+	void ProcessNode(aiNode* Node, const aiScene* Scene);
+	/**
+	 * Generates a submesh object based on the provided mesh.
+	 * 
+	 * @param Mesh The assimp mesh object containing all the data about the mesh.
+	 * @return A generated submesh object containing all the information about the mesh.
+	 */
+	FSubMesh* GenerateSubMesh(aiMesh* Mesh);
 private:
-	void operator=(const StaticMesh& other) {}
-	void InitMesh();
-
-	enum {
-		POSITION_VB,
-		TEXCOORD_VB,
-		NORMAL_VB,
-		TANGENT_VB,
-		INDEX_VB,
-		COLORS_VB,
-		NUM_BUFFERS
-	};
-
-	GLuint S_VertexArrayObject;
-	GLuint S_VertexArrayBuffers[NUM_BUFFERS];
-	unsigned int S_DrawCount;
-	std::vector<Texture2D*> Textures;
-
-	std::vector<vec3> S_Verticies;
-	std::vector<vec2> S_TexCoords;
-	std::vector<vec3> S_Normals;
-	std::vector<vec3> S_Tangents;
-	std::vector<vec3> S_VertexColors;
-	std::vector<uint32> S_Indicies;
-
-	Material* S_Material;
-	bool S_UseCustomColor = false;
-	bool S_UseCustomRoughness = false;
-	bool S_UseCustomMetalness = false;
-
-	vec3 S_CustomAlbedo;
-	float S_CustomRoughness;
-	float S_CustomMetalness;
-	int	S_MaterialID;
+	SArray<FSubMesh*> SubMeshes;
+	bool bSentToGPU;
 };
 

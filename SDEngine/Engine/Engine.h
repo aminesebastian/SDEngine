@@ -4,7 +4,9 @@
 #include "RenderViewport.h"
 #include "Rendering/Material.h"
 #include "Rendering/Texture2D.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Input/InputUtilities.h"
+#include "Core/Input/IUserInputReciever.h"
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1200
@@ -20,78 +22,60 @@
 #endif
 
 class AssetManager;
+class InputSubsystem;
 class Camera;
 class Scene;
 class EngineUI;
 
-struct FInputKey {
-	bool bKeyDown;
-};
-
-class Engine {
+class Engine : public IUserInputReciever {
 
 public:
-	Display* GetDisplay();
-	RenderViewport* GetFocusedViewport();
-	UWorld* GetWorld();
-	Camera* GetCurrentCamera();
+	static Engine* GetInstance();
 	bool Initialize();
 	void StartEngine();
-	vec2 GetScreenRes();
 
+	Display* GetDisplay();
+	RenderViewport* GetFocusedViewport();
+	World* GetWorld();
+	Camera* GetCurrentCamera();
+	InputSubsystem* GetInputSubsystem();
+	AssetManager* GetAssetManager();
+
+	bool LoadScene(Scene* SceneToLoad);
+	bool RegisterInputReciever(IUserInputReciever* Reciever);
+	bool DeregisterInputReciever(IUserInputReciever* Reciever);
 
 	float GetFrameTime();
 	float GetFrameRate();
 	float GetWorldTime();
-
-	static Engine* GetInstance();
-
-	AssetManager* GetAssetManager();
-
 	bool IsInGameMode();
-
-	bool LoadScene(Scene* SceneToLoad);
-
 	Entity* GetSelectedEntity();
 	void SetSelectedEntity(Entity* Entity);
-	vec2 GetMousePosition();
-
 private:
-	Engine();
-	virtual ~Engine();
-	static Engine* S_EngineInstance;
-
-	Entity* SelectedEntity;
-
-	vec2 MousePosition;
-
-	AssetManager* S_AssetManager;
-
-	Scene* S_CurrentScene;
-
-	EngineUI* S_EngineUI;
-
-	float S_DeltaTime;
-	float S_FrameRate;
-	float S_WorldTime;
-	Uint64 S_LastFrameTime;
-	bool bIsInitialized;
-	bool bShouldLoop;
-
-
-	int lastMouseX;
-	int lastMouseY;
+	AssetManager* _AssetManager;
+	InputSubsystem* _InputSubsystem;
+	EngineUI* _EngineUI;
+	RenderViewport* _CurrentViewport;
+	Display* _Display;
+	World* _World;
+	Camera* _Camera;
+	Scene* _LoadedScene;
+	Entity* _SelectedEntity;
+	
 	float movementSpeed;
 	float lookSpeed;
 
-	FInputKey S_InputKeys[1000];
-
-	Display* S_Display;
-	RenderViewport* FocusedViewport;
-	UWorld* S_World;
-	Camera* S_Camera;
-
+	float DeltaTime;
+	float FrameRate;
+	float WorldTime;
+	Uint64 LastFrameTimecode;
+	bool bIsInitialized;
+	bool bShouldLoop;
 	bool bGameMode;
+
+	Engine();
+	virtual ~Engine();
+	static Engine* Instance;
 
 	void MainLoop();
 	void GameLoop();
@@ -99,7 +83,12 @@ private:
 	void UILoop();
 	void InputLoop();
 
-	void OnKeyDown(int KeyCode);
-	void OnKeyUp(int KeyCode);
-	void KeyAxisMapping();
+	virtual void OnKeyDown(SDL_Scancode KeyCode) override;
+	virtual void OnKeyUp(SDL_Scancode KeyCode) override;
+	virtual void OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) override;
+
+	virtual void OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) override;
+	virtual void OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) override;
+	virtual void OnMouseAxis(vec2 ScreenPosition, vec2 Delta) override;
+	virtual void OnMouseScrollAxis(float Delta) override;
 };

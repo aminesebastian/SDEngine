@@ -3,7 +3,7 @@
 #include "Downsampler.h"
 #include "Rendering/Shader.h"
 #include "Engine/Engine.h"
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
 #define MAX_DOWNSAMPLE 2
 

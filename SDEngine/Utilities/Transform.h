@@ -12,8 +12,8 @@ public:
 	@param Position
 	+Y -> Right
 	-Y -> Left
-	+X -> Towards Camera
-	-X -> Away From Camera
+	+X -> Towards _Camera
+	-X -> Away From _Camera
 	+Z -> Up
 	-Z -> Down
 	*/
@@ -90,6 +90,14 @@ public:
 	inline std::string RightVectorToString() {
 		vec3 tempForward = GetRightVector();
 		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
+	}
+
+	inline Transform operator+(Transform& OtherTransform) {
+		Transform newTrans;
+		newTrans.S_Location = GetLocation() + OtherTransform.GetLocation();
+		newTrans.S_Rotation = GetRotation() + OtherTransform.GetRotation();
+		newTrans.S_Scale = GetScale() * OtherTransform.GetScale();
+		return newTrans;
 	}
 private:
 	vec3 S_Location;

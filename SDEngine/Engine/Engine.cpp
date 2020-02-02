@@ -1,54 +1,47 @@
-#include "AssetManager.h"
+#include "Core/Assets/AssetManager.h"
 #include "Engine.h"
 #include "Scene.h"
+#include "Entities/Entity.h"
 #include "Entities/Camera.h"
 #include "Entities/Light.h"
 #include "Utilities/Logger.h"
 #include "UserInterface/EngineUI.h"
-#include "Utilities/Math/MathLibrary.h"
-
-#include "Lib/Imgui/imgui.h"
-#include "Lib/Imgui/imgui_impl_sdl.h"
-#include "Lib/Imgui/imgui_impl_opengl3.h"
+#include "UserInterface/PictorumRenderer.h"
+#include "Core/Math/MathLibrary.h"
+#include "Core/Input/InputSubsystem.h"
 
 Engine::Engine() {
-	S_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
-	S_World = new UWorld();
+	_Display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT, "SD_Engine", WINDOW_BIT_DEPTH);
+	_World = new World();
 
 	Transform cameraTransform;
 	cameraTransform.SetRotation(0, glm::radians(50.0f), glm::radians(-180.0f));
 	cameraTransform.GetLocation().x = 35;
 	cameraTransform.GetLocation().z = 35;
-	S_Camera = new Camera("Camera", cameraTransform, radians(50.0f), S_Display->GetDimensions(), 0.01f, 100000.0f);
-	S_World->RegisterEntity(S_Camera);
+	_Camera = new Camera("Camera", cameraTransform, radians(50.0f), _Display->GetDimensions(), 0.01f, 100000.0f);
+	_World->RegisterActor(_Camera);
 
-	S_AssetManager = new AssetManager();
+	_AssetManager = new AssetManager();
+	_InputSubsystem = new InputSubsystem();
 
-	for (int i = 0; i < 322; i++) {
-		S_InputKeys[i].bKeyDown = false;
-	}
+	bGameMode                = true;
+	_LoadedScene           = nullptr;
+	_SelectedEntity           = nullptr;
+	DeltaTime              = 0.0f;
+	FrameRate              = 0;
+	WorldTime              = 0.0f;
+	LastFrameTimecode          = 0;
+	bIsInitialized           = false;
+	bShouldLoop              = false;
+	movementSpeed            = 300.0f;
+	lookSpeed                = 200.0f;
 
-	bGameMode       = true;
-	S_CurrentScene  = nullptr;
-	SelectedEntity  = nullptr;
-	S_DeltaTime     = 0.0f;
-	S_FrameRate     = 0;
-	S_WorldTime     = 0.0f;
-	S_LastFrameTime = 0;
-	bIsInitialized  = false;
-	bShouldLoop     = false;
-	lastMouseX      = 0;
-	lastMouseY      = 0;
-	movementSpeed   = 300.0f;
-	lookSpeed       = 200.0f;
-	MousePosition   = vec2(0.0f, 0.0f);
-
-	FocusedViewport = new RenderViewport(S_Display->GetDimensions());
-	S_EngineUI = new EngineUI();
+	_CurrentViewport = new RenderViewport(_Display->GetDimensions());
+	_EngineUI = new EngineUI();
 }
 Engine::~Engine() {
-	delete& S_Display;
-	delete& FocusedViewport;
+	delete& _Display;
+	delete& _CurrentViewport;
 }
 
 Engine* Engine::GetInstance() {
@@ -62,22 +55,24 @@ bool Engine::Initialize() {
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	S_LastFrameTime = SDL_GetPerformanceCounter();
+	LastFrameTimecode = SDL_GetPerformanceCounter();
 
-	FocusedViewport->Initialize();
-	S_EngineUI->InitalizeUI(S_Display->GetWindow(), S_Display->GetContext());
+	_CurrentViewport->Initialize();
+	_InputSubsystem->Initialize();
+	_InputSubsystem->RegisterInputReciever(this);
+	_EngineUI->InitalizeUI(_Display->GetWindow(), _Display->GetContext());
 
 	bIsInitialized = true;
 	return true;
 }
 bool Engine::LoadScene(Scene* SceneToLoad) {
-	if (S_CurrentScene != nullptr) {
-		S_CurrentScene->SaveScene();
-		delete S_CurrentScene;
+	if (_LoadedScene != nullptr) {
+		_LoadedScene->SaveScene();
+		delete _LoadedScene;
 	}
 
 	if (SceneToLoad->LoadScene()) {
-		S_CurrentScene = SceneToLoad;
+		_LoadedScene = SceneToLoad;
 		return true;
 	} else {
 		delete SceneToLoad;
@@ -91,7 +86,7 @@ void Engine::StartEngine() {
 }
 
 void Engine::MainLoop() {
-	while (!S_Display->IsClosed()) {
+	while (!_Display->IsClosed()) {
 		Uint64 first = SDL_GetPerformanceCounter();
 
 		InputLoop();
@@ -99,195 +94,154 @@ void Engine::MainLoop() {
 		RenderingLoop();
 		UILoop();
 
-		S_DeltaTime = ((float)(first - S_LastFrameTime)) / SDL_GetPerformanceFrequency();
-		S_FrameRate = 1.0f / S_DeltaTime;
-		S_LastFrameTime = first;
-		S_WorldTime += S_DeltaTime;
-		S_Display->Update();
+		DeltaTime = ((float)(first - LastFrameTimecode)) / SDL_GetPerformanceFrequency();
+		FrameRate = 1.0f / DeltaTime;
+		LastFrameTimecode = first;
+		WorldTime += DeltaTime;
+		_Display->Update();
 	}
 }
 void Engine::GameLoop() {
-	S_World->TickWorld((float)S_DeltaTime);
-	S_EngineUI->UpdateUI(S_Display->GetWindow());
+	_World->TickWorld((float)DeltaTime);
+	_EngineUI->UpdateUI(_Display->GetWindow());
 }
 void Engine::RenderingLoop() {
-	FocusedViewport->RenderWorld(S_World, S_Camera);
+	_CurrentViewport->RenderWorld(_World, _Camera);
 }
 void Engine::UILoop() {
-	S_EngineUI->RenderUI((float)S_DeltaTime);
+	_EngineUI->RenderUI((float)DeltaTime);
 }
 void Engine::InputLoop() {
 	SDL_Event e;
-
 	while (SDL_PollEvent(&e)) {
-		ImGuiIO& io = ImGui::GetIO();
-		if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-			ImGui_ImplSDL2_ProcessEvent(&e);
-			return;
-		}
-
+		_InputSubsystem->ProcessInputEvent(e);
 		switch (e.type) {
 			case SDL_QUIT:
-				S_Display->CloseDisplay();
-				break;
-			case SDL_KEYDOWN:
-				S_InputKeys[e.key.keysym.scancode].bKeyDown = true;
-				OnKeyDown(e.key.keysym.scancode);
-				break;
-			case SDL_KEYUP:
-				S_InputKeys[e.key.keysym.scancode].bKeyDown = false;
-				OnKeyUp(e.key.keysym.scancode);
+				_Display->CloseDisplay();
 				break;
 			case SDL_WINDOWEVENT:
 				switch (e.window.event) {
 					case SDL_WINDOWEVENT_SIZE_CHANGED:
-						S_Display->WindowResized(e.window.data1, e.window.data2);
-						S_Camera->SetRenderTargetDimensions(S_Display->GetDimensions());
+						_Display->WindowResized(e.window.data1, e.window.data2);
+						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
+						break;
+					case SDL_WINDOWEVENT_RESIZED:
+						_Display->WindowResized(e.window.data1, e.window.data2);
+						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
 						break;
 				}
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				if (e.button.button == SDL_BUTTON_LMASK) {
-					FHitInfo hitInfo;
-					if (MathLibrary::LineTraceAgainstWorldFromScreen(hitInfo, vec2(MousePosition.x, MousePosition.y), S_Camera, S_World, EDITOR)) {
-						SetSelectedEntity(hitInfo.HitEntity);
-					} else {
-						SetSelectedEntity(nullptr);
-					}			
-				}
-				break;
-			case SDL_MOUSEMOTION:
-				MousePosition = vec2(e.motion.x, e.motion.y);
-				if (e.type == SDL_MOUSEMOTION) {
-					GetFocusedViewport()->OnMouseMove(MousePosition);
-					if (e.motion.state & SDL_BUTTON_RMASK) {
-						SDL_ShowCursor(0);
-						S_Camera->AddOrbit((float)(e.motion.y - lastMouseY) / lookSpeed, -(float)(e.motion.x - lastMouseX) / lookSpeed);
-						lastMouseX = e.motion.x;
-						lastMouseY = e.motion.y;
-					} else if (e.motion.state & SDL_BUTTON_MMASK) {
-						SDL_ShowCursor(0);
-						S_Camera->AddLocation(-S_Camera->GetTransform().GetRightVector() * (float)(e.motion.x - lastMouseX) / 250.0f);
-						S_Camera->AddLocation(S_Camera->GetTransform().GetUpVector() * (float)(e.motion.y - lastMouseY) / 250.0f);
-						lastMouseX = e.motion.x;
-						lastMouseY = e.motion.y;
-					} else {
-						SDL_ShowCursor(1);
-						lastMouseX = e.motion.x;
-						lastMouseY = e.motion.y;
-					}
-				}
-				break;
-			case SDL_MOUSEWHEEL:
-				movementSpeed = clamp(movementSpeed + ((float)e.wheel.y * GetFrameTime() * 1000.0f), 1.0f, 1000.0f);
 				break;
 			default:
 				break;
 		}
 	}
-	KeyAxisMapping();
+	_InputSubsystem->Tick(DeltaTime);
 }
 
-void Engine::OnKeyDown(int KeyCode) {
+bool Engine::RegisterInputReciever(IUserInputReciever* Reciever) {
+	return _InputSubsystem->RegisterInputReciever(Reciever);
+}
+bool Engine::DeregisterInputReciever(IUserInputReciever* Reciever) {
+	return _InputSubsystem->DeregisterInputReciever(Reciever);
+}
+
+void Engine::OnKeyDown(SDL_Scancode KeyCode) {
 	if (KeyCode == SDL_SCANCODE_RETURN) {
-		FocusedViewport->RecompileShaders(S_World);
+		_CurrentViewport->RecompileShaders();
 	}
-	if (KeyCode == SDL_SCANCODE_F) {
-		S_Camera->SetTransform(S_Camera->GetInitialTransform());
-	}
-	if (S_InputKeys[SDL_SCANCODE_P].bKeyDown) {
-		FocusedViewport->SetDebugEnabled(!FocusedViewport->GetDebugEnabled());
-	}
-	if (S_InputKeys[SDL_SCANCODE_G].bKeyDown) {
+	if (KeyCode == SDL_SCANCODE_G) {
 		bGameMode = !bGameMode;
 	}
-	if (S_InputKeys[SDL_SCANCODE_1].bKeyDown) {
-		if (FocusedViewport->GetDebugEnabled()) {
-			FocusedViewport->SetDebugState(WIREFRAME);
-		}
-	}
-	if (S_InputKeys[SDL_SCANCODE_2].bKeyDown) {
-		if (FocusedViewport->GetDebugEnabled()) {
-			FocusedViewport->SetDebugState(ALBEDO);
-		}
-	}
-	if (S_InputKeys[SDL_SCANCODE_3].bKeyDown) {
-		if (FocusedViewport->GetDebugEnabled()) {
-			FocusedViewport->SetDebugState(NORMAL);
-		}
-	}
-	if (S_InputKeys[SDL_SCANCODE_4].bKeyDown) {
-		if (FocusedViewport->GetDebugEnabled()) {
-			FocusedViewport->SetDebugState(WORLD_POSITION);
-		}
-	}
-	if (S_InputKeys[SDL_SCANCODE_5].bKeyDown) {
-		if (FocusedViewport->GetDebugEnabled()) {
-			FocusedViewport->SetDebugState(DETAIL_LIGHT);
-		}
-	}
 }
-void Engine::OnKeyUp(int KeyCode) {
+void Engine::OnKeyUp(SDL_Scancode KeyCode) {
 
 }
-void Engine::KeyAxisMapping() {
-	if (S_InputKeys[SDL_SCANCODE_W].bKeyDown) {
-		S_Camera->AddLocation(S_Camera->GetTransform().GetForwardVector() * movementSpeed * (float)GetFrameTime());
+void Engine::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {
+	float alpha = movementSpeed * (float)GetFrameTime();
+	SD_ENGINE_INFO("WHY: {0}.", alpha);
+	if (KeyCode == SDL_SCANCODE_W) {
+		_Camera->AddLocation(_Camera->GetTransform().GetForwardVector() * alpha);
 	}
-	if (S_InputKeys[SDL_SCANCODE_S].bKeyDown) {
-		S_Camera->AddLocation(-S_Camera->GetTransform().GetForwardVector() * movementSpeed * (float)GetFrameTime());
+	if (KeyCode == SDL_SCANCODE_S) {
+		_Camera->AddLocation(-_Camera->GetTransform().GetForwardVector() * alpha);
 	}
-	if (S_InputKeys[SDL_SCANCODE_A].bKeyDown) {
-		S_Camera->AddLocation(S_Camera->GetTransform().GetRightVector() * movementSpeed * (float)GetFrameTime());
+	if (KeyCode == SDL_SCANCODE_A) {
+		_Camera->AddLocation(_Camera->GetTransform().GetRightVector() * alpha);
 	}
-	if (S_InputKeys[SDL_SCANCODE_D].bKeyDown) {
-		S_Camera->AddLocation(-S_Camera->GetTransform().GetRightVector() * movementSpeed * (float)GetFrameTime());
+	if (KeyCode == SDL_SCANCODE_D) {
+		_Camera->AddLocation(-_Camera->GetTransform().GetRightVector() * alpha);
 	}
-	if (S_InputKeys[SDL_SCANCODE_Q].bKeyDown) {
-		S_Camera->AddLocation(-S_Camera->GetTransform().GetUpVector() * movementSpeed * (float)GetFrameTime());
+	if (KeyCode == SDL_SCANCODE_Q) {
+		_Camera->AddLocation(-_Camera->GetTransform().GetUpVector() * alpha);
 	}
-	if (S_InputKeys[SDL_SCANCODE_E].bKeyDown) {
-		S_Camera->AddLocation(S_Camera->GetTransform().GetUpVector() * movementSpeed * (float)GetFrameTime());
+	if (KeyCode == SDL_SCANCODE_E) {
+		_Camera->AddLocation(_Camera->GetTransform().GetUpVector() * alpha);
 	}
 }
 
+void Engine::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) {
+	if (Button == EMouseButton::LEFT) {
+		FHitInfo hitInfo;
+		if (MathLibrary::LineTraceAgainstWorldFromScreen(hitInfo, vec2(ScreenPosition.x, ScreenPosition.y), _Camera, _World, EDITOR)) {
+			SetSelectedEntity(hitInfo.HitEntity);
+		} else {
+			SetSelectedEntity(nullptr);
+		}
+	}
+}
+void Engine::OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) {
+
+}
+void Engine::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
+	GetFocusedViewport()->OnMouseMove(ScreenPosition);
+	if (_InputSubsystem->IsMouseButtonDown(EMouseButton::RIGHT)) {
+		SDL_ShowCursor(0);
+		_Camera->AddOrbit((float)(Delta.y) / lookSpeed, -(float)(Delta.x) / lookSpeed);
+	} else if (_InputSubsystem->IsMouseButtonDown(EMouseButton::MIDDLE)) {
+		SDL_ShowCursor(0);
+		_Camera->AddLocation(-_Camera->GetTransform().GetRightVector() * (float)(Delta.x) / 250.0f);
+		_Camera->AddLocation(_Camera->GetTransform().GetUpVector() * (float)(Delta.y) / 250.0f);
+	} else {
+		SDL_ShowCursor(1);
+	}
+}
+void Engine::OnMouseScrollAxis(float Delta) {
+	movementSpeed = glm::clamp(movementSpeed + ((float)Delta * GetFrameTime() * 1000.0f), 1.0f, 1000.0f);
+}
 
 AssetManager* Engine::GetAssetManager() {
-	return S_AssetManager;
+	return _AssetManager;
 }
 Display* Engine::GetDisplay() {
-	return S_Display;
+	return _Display;
 }
 RenderViewport* Engine::GetFocusedViewport() {
-	return FocusedViewport;
+	return _CurrentViewport;
 }
-UWorld* Engine::GetWorld() {
-	return S_World;
+World* Engine::GetWorld() {
+	return _World;
 }
 Camera* Engine::GetCurrentCamera() {
-	return S_Camera;
+	return _Camera;
 }
-vec2 Engine::GetScreenRes() {
-	return vec2(S_Display->GetDimensions().x, S_Display->GetDimensions().y);
+InputSubsystem* Engine::GetInputSubsystem() {
+	return _InputSubsystem;
 }
 float Engine::GetFrameTime() {
-	return S_DeltaTime;
+	return DeltaTime;
 }
 float Engine::GetFrameRate() {
-	return S_FrameRate;
+	return FrameRate;
 }
 float Engine::GetWorldTime() {
-	return S_WorldTime;
+	return WorldTime;
 }
 bool Engine::IsInGameMode() {
 	return bGameMode;
 }
 Entity* Engine::GetSelectedEntity() {
-	return SelectedEntity;
+	return _SelectedEntity;
 }
 void Engine::SetSelectedEntity(Entity* Entity) {
-	SelectedEntity = Entity;
-}
-vec2 Engine::GetMousePosition() {
-	return MousePosition;
+	_SelectedEntity = Entity;
 }

@@ -1,17 +1,18 @@
 #pragma once
 #include "Entities/Entity.h"
+#include "Entities/Actor.h"
 
 class Shader;
 class StaticMesh;
 class RenderViewport;
 
-class TransformGizmo : public Entity {
+class TransformGizmo : public Actor {
 public:
 	TransformGizmo(RenderViewport* RenderEngine);
 	~TransformGizmo();
 
 	virtual void OnMouseMove();
-	virtual void Draw(Camera* Camera, bool bCallerProvidesShader = false) override;
+	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
 
 	void RecompileShaders();
 

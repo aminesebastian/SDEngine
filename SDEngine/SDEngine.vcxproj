@@ -5,6 +5,14 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Graphics Debug|Win32">
+      <Configuration>Graphics Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Graphics Debug|x64">
+      <Configuration>Graphics Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -31,6 +39,12 @@
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -39,6 +53,12 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -59,10 +79,16 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -72,7 +98,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +129,22 @@
       <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>
@@ -104,13 +152,31 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstaticd.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_GDEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstaticd.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,7 +205,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,15 +214,37 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstatic.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Entities\EditorSprite.cpp" />
-    <ClCompile Include="Engine\Object.cpp" />
+    <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="LayoutWidget.cpp" />
+    <ClCompile Include="SolidWidget.cpp" />
+    <ClCompile Include="UserInterface\PictorumWidget.cpp" />
+    <ClCompile Include="UserInterface\PictorumRenderer.cpp" />
+    <ClCompile Include="UserInterface\ContentBrowser.cpp" />
+    <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
+    <ClCompile Include="Core\Assets\Asset.cpp" />
+    <ClCompile Include="Core\Assets\AssetManager.cpp" />
+    <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp" />
+    <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp" />
+    <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp" />
+    <ClCompile Include="Core\DataStructures\Array.cpp" />
+    <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
+    <ClCompile Include="Core\DataStructures\Tree.cpp" />
+    <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp" />
+    <ClCompile Include="Core\Utilities\Serialization\DeserializationStream.cpp" />
+    <ClCompile Include="Core\Utilities\Serialization\SerializationStream.cpp" />
+    <ClCompile Include="Entities\Component.cpp" />
+    <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
+    <ClCompile Include="Engine\EngineObject.cpp" />
+    <ClCompile Include="Engine\IRenderable.cpp" />
+    <ClCompile Include="Entities\Actors\HeadActor.cpp" />
+    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
     <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
     <ClCompile Include="Entities\Actor.cpp" />
-    <ClCompile Include="Engine\AssetManager.cpp" />
     <ClCompile Include="Entities\TransformGizmo.cpp" />
     <ClCompile Include="Utilities\Logger.cpp" />
     <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp" />
@@ -167,7 +256,6 @@
     <ClCompile Include="Engine\EngineStatics.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
-    <ClCompile Include="Entities\EyeActor.cpp" />
     <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp" />
     <ClCompile Include="Rendering\RenderTarget.cpp" />
     <ClCompile Include="Rendering\GBuffer.cpp" />
@@ -189,12 +277,10 @@
     <ClCompile Include="Engine\RenderViewport.cpp" />
     <ClCompile Include="Engine\Scene.cpp" />
     <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp" />
-    <ClCompile Include="UserInterface\Widgets\BaseWidget.cpp" />
     <ClCompile Include="UserInterface\Widgets\DragFloat.cpp" />
     <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
-    <ClCompile Include="Engine\SAsset.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
-    <ClCompile Include="Utilities\Math\MathLibrary.cpp" />
+    <ClCompile Include="Core\Math\MathLibrary.cpp" />
     <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp" />
     <ClCompile Include="Entities\StaticMesh.cpp" />
     <ClCompile Include="Utilities\ImageUtils.cpp" />
@@ -203,16 +289,45 @@
     <ClCompile Include="Engine\ThreadManager.cpp" />
     <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp" />
     <ClCompile Include="Utilities\Transform.cpp" />
-    <ClCompile Include="Utilities\TypeDefenitions.cpp" />
     <ClCompile Include="Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entities\EditorSprite.h" />
-    <ClInclude Include="Engine\Object.h" />
+    <ClInclude Include="Core\Input\InputUtilities.h" />
+    <ClInclude Include="Core\Input\IUserInputReciever.h" />
+    <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="LayoutWidget.h" />
+    <ClInclude Include="SolidWidget.h" />
+    <ClInclude Include="UserInterface\PictorumWidget.h" />
+    <ClInclude Include="UserInterface\PictorumRenderer.h" />
+    <ClInclude Include="UserInterface\ContentBrowser.h" />
+    <ClInclude Include="Core\Assets\AssetMetadata.h" />
+    <ClInclude Include="Core\Assets\Asset.h" />
+    <ClInclude Include="Core\Assets\AssetManager.h" />
+    <ClInclude Include="Core\Assets\Factories\MaterialAssetFactory.h" />
+    <ClInclude Include="Core\Assets\Factories\StaticMeshAssetFactory.h" />
+    <ClInclude Include="Core\Assets\Factories\Texture2DAssetFactory.h" />
+    <ClInclude Include="Core\Assets\IAssetFactory.h" />
+    <ClInclude Include="Core\Assets\ISerializeableAsset.h" />
+    <ClInclude Include="Core\DataStructures\Array.h" />
+    <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
+    <ClInclude Include="Core\DataStructures\DataStructures.h" />
+    <ClInclude Include="Core\DataStructures\Tree.h" />
+    <ClInclude Include="Core\DataTypes\TypeDefenitions.h" />
+    <ClInclude Include="Core\Utilities\DeserializationStream.h" />
+    <ClInclude Include="Core\Utilities\SerializationStream.h" />
+    <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
+    <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
+    <ClInclude Include="Entities\Component.h" />
+    <ClInclude Include="Entities\EditorSpriteComponent.h" />
+    <ClInclude Include="Engine\EngineObject.h" />
+    <ClInclude Include="Entities\Actors\HeadActor.h" />
     <ClInclude Include="Physics\CollisionChannels.h" />
+    <ClInclude Include="Engine\IRenderable.h" />
+    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
     <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
     <ClInclude Include="Entities\Actor.h" />
-    <ClInclude Include="Engine\AssetManager.h" />
     <ClInclude Include="Entities\TransformGizmo.h" />
     <ClInclude Include="Utilities\Logger.h" />
     <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h" />
@@ -225,7 +340,6 @@
     <ClInclude Include="Engine\EngineStatics.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Entities\Entity.h" />
-    <ClInclude Include="Entities\EyeActor.h" />
     <ClInclude Include="Physics\AxisAlignedBoundingBox.h" />
     <ClInclude Include="Rendering\RenderTarget.h" />
     <ClInclude Include="Rendering\GBuffer.h" />
@@ -248,12 +362,10 @@
     <ClInclude Include="Engine\Scene.h" />
     <ClInclude Include="UserInterface\UserInterface.h" />
     <ClInclude Include="UserInterface\UserInterfaceUtilities.h" />
-    <ClInclude Include="UserInterface\Widgets\BaseWidget.h" />
     <ClInclude Include="UserInterface\Widgets\DragFloat.h" />
     <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
-    <ClInclude Include="Engine\SAsset.h" />
     <ClInclude Include="Rendering\Shader.h" />
-    <ClInclude Include="Utilities\Math\MathLibrary.h" />
+    <ClInclude Include="Core\Math\MathLibrary.h" />
     <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h" />
     <ClInclude Include="Entities\StaticMesh.h" />
     <ClInclude Include="Utilities\ImageUtils.h" />
@@ -262,7 +374,6 @@
     <ClInclude Include="Engine\ThreadManager.h" />
     <ClInclude Include="Rendering\PostProcessing\ToneMapper.h" />
     <ClInclude Include="Utilities\Transform.h" />
-    <ClInclude Include="Utilities\TypeDefenitions.h" />
     <ClInclude Include="Engine\World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +429,8 @@
     <None Include="Res\Shaders\TranslucencyCompositor.vert" />
     <None Include="Res\Shaders\TranslucentShader.frag" />
     <None Include="Res\Shaders\TranslucentShader.vert" />
+    <None Include="Res\Shaders\UIShader.frag" />
+    <None Include="Res\Shaders\UIShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

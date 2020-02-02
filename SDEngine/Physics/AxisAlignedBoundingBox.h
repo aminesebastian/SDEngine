@@ -1,10 +1,12 @@
 #pragma once
 #include <GLM/glm.hpp>
 #include <GLEW/glew.h>
-#include "Utilities/TypeDefenitions.h"
+#include "Core/DataStructures/DataStructures.h"
+#include "Core/DataTypes/TypeDefenitions.h"
+#include "Utilities/Transform.h"
 
 class Camera;
-class Transform;
+class CurrentTransform;
 
 using namespace glm;
 

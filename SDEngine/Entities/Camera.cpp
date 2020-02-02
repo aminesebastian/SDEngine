@@ -1,12 +1,12 @@
 #include "Camera.h"
 
 
-Camera::Camera(TString Name, const Transform Transform, float FOV, vec2 Dimensions, float NearClip, float FarClip)
-	: Entity(Name, Transform),
+Camera::Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip) : Actor(Name),
 	S_NearClip(NearClip),
 	S_FarClip(FarClip),
 	S_FOV(FOV),
 	S_Aspect(Dimensions.x/Dimensions.y) {
+	SetTransform(CurrentTransform);
 	S_OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClip, FarClip);
 	S_ProjectionMatrix = perspective(FOV, S_Aspect, NearClip, FarClip);
 	S_UpVector = vec3(0, 0, 1);
@@ -33,10 +33,10 @@ mat4 Camera::GetOrthographicMatrix() const {
 	return S_OrthographicMatrix;
 }
 mat4 Camera::GetViewMatrix() {
-	return lookAt(S_Transform.GetLocation(), S_Transform.GetLocation() + S_Transform.GetForwardVector(), S_UpVector);
+	return lookAt(CurrentTransform.GetLocation(), CurrentTransform.GetLocation() + CurrentTransform.GetForwardVector(), S_UpVector);
 }
 mat4 Camera::GetLastFrameViewMatrix() {
-	return lookAt(S_LastFrameTransform.GetLocation(), S_LastFrameTransform.GetLocation() + S_LastFrameTransform.GetForwardVector(), S_UpVector);
+	return lookAt(LastFrameTrasnform.GetLocation(), LastFrameTrasnform.GetLocation() + LastFrameTrasnform.GetForwardVector(), S_UpVector);
 }
 float Camera::GetThetaFOV() {
 	return (float)glm::tan(S_FOV / 2.0);
@@ -60,4 +60,4 @@ void Camera::AddOrbit(float Y, float Z) {
 	}
 	AddRotation(0.0f, 0.0f, Z);
 }
-void Camera::UpdateCameraPosition(const vec3 NewPosition) { S_Transform.GetLocation() = NewPosition; }
+void Camera::UpdateCameraPosition(const vec3 NewPosition) { CurrentTransform.GetLocation() = NewPosition; }

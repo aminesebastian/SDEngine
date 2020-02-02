@@ -3,6 +3,9 @@
 #include "Entities/Camera.h"
 #include "Utilities/Logger.h"
 
+Shader::Shader() {
+	S_Program = 0;
+}
 Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) {
 	S_FragmentShaderPath = ShaderName + ".frag";
 	if(bUseDefaultGeometry) {
@@ -67,8 +70,8 @@ TString Shader::LoadShader(const TString& fileName) {
 	std::ifstream file;
 	file.open((fileName).c_str());
 
-	TString output;
-	TString line;
+	std::string output;
+	std::string line;
 
 	if (file.is_open()){
 		while (file.good()){
@@ -142,10 +145,7 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 	}
 	return success;
 }
-TString Shader::StripDirectiveName(TString RawLine) {
-	TString line = TStringUtils::Trim(RawLine);
-	return line;
-}
+
 
 void Shader::Bind() {
 	glUseProgram(S_Program);
@@ -157,26 +157,19 @@ void Shader::Bind() {
 /* Sets the FAR_CLIP
 /* Sets the CAMERA_POS
 /************************************************************************/
-void Shader::Update(const class Transform& Transform, Camera* Camera) {
-	UpdateWithDefaults(Transform, Camera);
-
-	mat4 lastFrameMVP = Camera->GetProjectionMatrix()* Camera->GetLastFrameViewMatrix() * Transform.GetModelMatrix();
-	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
+void Shader::Update(const class Transform& RenderTransform, Camera* Camera) {
+	Update(RenderTransform, RenderTransform, Camera);
 }
-void Shader::Update(const class Transform& Transform,  const class Transform& LastFrameTrasnform, Camera* Camera) {
-	UpdateWithDefaults(Transform, Camera);
-
+void Shader::Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, Camera* Camera) {
 	mat4 lastFrameMVP = Camera->GetProjectionMatrix() * Camera->GetLastFrameViewMatrix() * LastFrameTrasnform.GetModelMatrix();
-	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
-}
-void Shader::UpdateWithDefaults(const class Transform& Transform, Camera* Camera) {
-	mat4 tempMVP = Camera->GetProjectionMatrix() * Camera->GetViewMatrix() * Transform.GetModelMatrix();
+	mat4 tempMVP = Camera->GetProjectionMatrix() * Camera->GetViewMatrix() * RenderTransform.GetModelMatrix();
 
-	SetShaderMatrix3("NORMAL_MODEL_MATRIX", glm::transpose(glm::inverse(Transform.GetModelMatrix())));
-	SetShaderMatrix4("MODEL_MATRIX", Transform.GetModelMatrix());
+	SetShaderMatrix3("NORMAL_MODEL_MATRIX", glm::transpose(glm::inverse(RenderTransform.GetModelMatrix())));
+	SetShaderMatrix4("MODEL_MATRIX", RenderTransform.GetModelMatrix());
 	SetShaderMatrix4("VIEW_MATRIX", Camera->GetViewMatrix());
 	SetShaderMatrix4("PROJECTION_MATRIX", Camera->GetProjectionMatrix());
 	SetShaderMatrix4("MVP", tempMVP);
+	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
 	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
 	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());
 
@@ -205,5 +198,5 @@ void Shader::SetShaderMatrix4(TString Name, mat4 Matrix) {
 }
 void Shader::SetShaderTexture(TString Name, Texture2D* Texture, int32 Offset) {
 	//glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Sample);
-	Texture->Bind(Name, this, Offset);
+	Texture->Bind(Name.c_str(), this, Offset);
 }

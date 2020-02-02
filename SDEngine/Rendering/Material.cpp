@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Engine/Engine.h"
 #include "Entities/Light.h"
+#include "Core/Utilities/Serialization/DeserializationStream.h"
+#include "Core/Utilities/Serialization/DeserializationStream.h"
 
 Material::Material(const std::string BaseShaderName) : Material(new Shader(BaseShaderName)) {}
 Material::Material(Shader* Shader) {
@@ -94,9 +96,12 @@ bool Material::SetShaderModel(EShaderModel Model) {
 	S_ShaderModel = Model;
 	return true;
 }
-void Material::BindMaterial(Entity* Entity, Camera* Camera) {
+void Material::BindMaterial(const Transform& RenderTransform, Camera* RenderCamera) {
+	BindMaterial(RenderTransform, RenderTransform, RenderCamera);
+}
+void Material::BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, Camera* RenderCamera) {
 	S_Shader->Bind();
-	S_Shader->Update(Entity->GetTransform(), Entity->GetLastFrameTransform(), Camera);
+	S_Shader->Update(RenderTransform, LastFrameTransform, RenderCamera);
 	glEnable(GL_TEXTURE_2D);
 
 	S_Shader->SetShaderFloat("FRAME_TIME", (float)Engine::GetInstance()->GetFrameTime());
@@ -122,9 +127,16 @@ void Material::BindMaterial(Entity* Entity, Camera* Camera) {
 		S_Shader->SetShaderInteger(S_BoolParameters[i].Name, S_BoolParameters[i].Value);
 	}
 	if (S_ShaderModel == EShaderModel::TRANSLUCENT) {
-		for (int i = 0; i < Engine::GetInstance()->GetWorld()->GetWorldLights().size(); i++) {
+		for (int i = 0; i < Engine::GetInstance()->GetWorld()->GetWorldLights().Count(); i++) {
 			Engine::GetInstance()->GetWorld()->GetWorldLights()[i]->SendShaderInformation(S_Shader, 1);
 		}
 	}
 	glDisable(GL_TEXTURE_2D);
+}
+
+bool Material::SerializeToBuffer(SerializationStream& Stream) const {
+	return true;
+}
+bool Material::DeserializeFromBuffer(DeserializationStream& Stream) {
+	return true;
 }

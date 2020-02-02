@@ -8,7 +8,7 @@ DragFloat::~DragFloat() {
 	for (FDragFloatEntry* entry : Entries) {
 		delete entry;
 	}
-	Entries.clear();
+	Entries.Clear();
 }
 bool DragFloat::Draw() {
 	bool valueChanged = false;
@@ -19,7 +19,7 @@ bool DragFloat::Draw() {
 	}
 
 	// Draw entries
-	for (int i = 0; i < Entries.size(); i++) {
+	for (int i = 0; i < Entries.Count(); i++) {
 		valueChanged |= DrawDragEntry(Entries[i], i);
 	}
 
@@ -40,8 +40,8 @@ FDragFloatEntry* DragFloat::AddEntry(float* Value, TString Format, FColor Color,
 	entry->Max = Max;
 	entry->ValuePerPixel = ValuePerPixel;
 	entry->Power = Power;
-	Entries.push_back(entry);
-	InternalValues.push_back(float(*Value));
+	Entries.Add(entry);
+	InternalValues.Add(float(*Value));
 	return entry;
 }
 bool DragFloat::BeginDrawingDragEntries() {
@@ -53,7 +53,7 @@ bool DragFloat::BeginDrawingDragEntries() {
 	ImGuiContext& g = *GImGui;
 	ImGui::BeginGroup();
 	ImGui::PushID(Label.c_str());
-	ImGui::PushMultiItemsWidths(Entries.size(), ImGui::CalcItemWidth());
+	ImGui::PushMultiItemsWidths(Entries.Count(), ImGui::CalcItemWidth());
 	ImGui::TextUnformatted(Label.c_str(), ImGui::FindRenderedTextEnd(Label.c_str()));
 	return true;
 }

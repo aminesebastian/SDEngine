@@ -20,7 +20,7 @@ RenderTarget::~RenderTarget() {
 
 void RenderTarget::AddTextureIndex(FRenderTargetTextureEntry* Texture) {
 	if (TextureCount < 8) {
-		TextureEntries.push_back(Texture);
+		TextureEntries.Add(Texture);
 		TextureCount++;
 	}
 }
@@ -48,7 +48,7 @@ bool RenderTarget::FinalizeRenderTarget() {
 	}
 	SArray<GLuint> attachments;
 	for (int i = 0; i < TextureCount; i++) {
-		attachments.push_back(GL_COLOR_ATTACHMENT0 + i);
+		attachments.Add(GL_COLOR_ATTACHMENT0 + i);
 	}
 
 	glDrawBuffers(TextureCount, &attachments[0]);
@@ -87,10 +87,7 @@ bool RenderTarget::FinalizeRenderTarget() {
 
 void RenderTarget::BindTextures(Shader* Shader, int32 Offset, bool bIncludeDepth) {
 	for (int i = 0; i < GetAttachedTextureCount(); i++) {
-		glActiveTexture(GL_TEXTURE0 + i + Offset);
-		glBindTexture(GL_TEXTURE_2D, GetTexture(i));
-		glUniform1i(glGetUniformLocation(Shader->GetProgram(), GetTextureName(i).c_str()), i + Offset);
-		glBindSampler(i + Offset, GetTexture(i));
+		BindTexture(Shader, i, Offset + i);
 	}
 }
 void RenderTarget::BindTexture(Shader* Shader, int32 Index, int32 Offset, TString Name) {
@@ -98,13 +95,11 @@ void RenderTarget::BindTexture(Shader* Shader, int32 Index, int32 Offset, TStrin
 	glActiveTexture(GL_TEXTURE0 + Offset);
 	glBindTexture(GL_TEXTURE_2D, GetTexture(Index));
 	glUniform1i(glGetUniformLocation(Shader->GetProgram(), name.c_str()), Offset);
-	glBindSampler(Offset, GetTexture(Index));
 }
 void RenderTarget::BindDepthStencilTexture(Shader* Shader, int32 Offset, TString Name) {
 	glActiveTexture(GL_TEXTURE0 + Offset);
 	glBindTexture(GL_TEXTURE_2D, DepthStencilBuffer);
 	glUniform1i(glGetUniformLocation(Shader->GetProgram(), Name.c_str()), Offset);
-	glBindSampler(Offset, DepthStencilBuffer);
 }
 
 void RenderTarget::BindForWriting() {
