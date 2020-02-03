@@ -17,7 +17,8 @@ public:
 
 	void Bind(TString Name, Shader* BindShader, uint32 Unit);
 
-	GLuint& GetTexture() { return Texture; }
+	const GLuint& GetTexture() const;
+	const vec2& GetDimensions() const;
 
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
 	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
@@ -31,8 +32,7 @@ private:
 	GLuint Texture;
 	TString FileName;
 
-	int32 Width;
-	int32 Height;
+	vec2 TextureDimensions;
 	int32 NumComponents;
 	int32 ExpectedComponents;
 	GLint WrapBehaviour;

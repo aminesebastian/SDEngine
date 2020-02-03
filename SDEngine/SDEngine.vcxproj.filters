@@ -295,6 +295,21 @@
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\HorizontalBoxWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\DistanceFieldFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\StringUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\FileUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\TextQuadBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -474,6 +489,11 @@
     <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
     <ClInclude Include="Core\Pictorum\Pictorum.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\HorizontalBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Utilities\StringUtilities.h" />
+    <ClInclude Include="Core\Utilities\FileUtilities.h" />
+    <ClInclude Include="Core\Rendering\TextQuadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

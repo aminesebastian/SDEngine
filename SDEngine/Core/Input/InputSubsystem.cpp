@@ -1,5 +1,6 @@
 #include "InputSubsystem.h"
 #include "Core/Input/IUserInputReciever.h"
+#include "Engine/Engine.h"
 
 #include "SDL/SDL_scancode.h"
 #include "Lib/Imgui/imgui.h"
@@ -74,7 +75,7 @@ void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
 			ProcessMouseUpInput((EMouseButton)(Event.button.button-1)); //Subtract 1 because SDL is 1 indexed
 			break;
 		case SDL_MOUSEMOTION:
-			MousePosition = vec2(Event.motion.x, Event.motion.y);
+			MousePosition = vec2(Event.motion.x, Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions().y - Event.motion.y);
 			ProcessMouseMovement(MousePosition);
 			MouseDelta = MousePosition - LastMousePosition;
 			LastMousePosition = MousePosition;

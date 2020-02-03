@@ -49,7 +49,7 @@ const IAssetFactory* AssetManager::GetAssetFactoryForType(TString AssetType) con
 	if (it != FactoryRecords.end()) {
 		return it->second;
 	}
-	return nullptr;;
+	return nullptr;
 }
 Asset* AssetManager::GetNewAssetTemplate(TString AssetType) const {
 	SHashMap<TString, const IAssetFactory*>::const_iterator it;

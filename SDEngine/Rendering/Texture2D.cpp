@@ -22,8 +22,7 @@ Texture2D::Texture2D(const TString& TextureName, const TString& FileName, int32 
 	LoadTexture();
 }
 Texture2D::Texture2D(const TString& TextureName, int32 Width, int32 Height) : Texture2D(TextureName) {
-	this->Width = Width;
-	this->Height = Height;
+	TextureDimensions = vec2(Width, Height);
 	glGenTextures(1, &Texture);
 	glBindTexture(GL_TEXTURE_2D, Texture);
 
@@ -31,7 +30,7 @@ Texture2D::Texture2D(const TString& TextureName, int32 Width, int32 Height) : Te
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 }
 Texture2D::~Texture2D() {
 	if (bSentToGPU) {
@@ -55,15 +54,22 @@ void Texture2D::Bind(TString Name, Shader* BindShader, unsigned int Offset) {
 	glBindTexture(GL_TEXTURE_2D, Texture);
 	glUniform1i(glGetUniformLocation(BindShader->GetProgram(), Name.c_str()), Offset);
 }
+const GLuint& Texture2D::GetTexture() const {
+	return Texture; 
+}
+const vec2& Texture2D::GetDimensions() const {
+	return TextureDimensions;
+}
 
 void Texture2D::LoadTexture() {
 	// If the texture was sent to the GPU, delete it.
 	if (bSentToGPU) {
 		glDeleteTextures(1, &Texture);
 	}
+	int32 width, height;
 
 	// Load texture from file.
-	unsigned char* image = stbi_load((FileName).c_str(), &Width, &Height, &NumComponents, ExpectedComponents);
+	unsigned char* image = stbi_load((FileName).c_str(), &width, &height, &NumComponents, ExpectedComponents);
 
 	// If the load failed, log it and mark the TextureData as a nullptr.
 	if (!image) {
@@ -72,12 +78,16 @@ void Texture2D::LoadTexture() {
 	}
 
 	// Place data into texture data array.
-	TextureData.PreAllocate((Width * Height) * 4);
+	TextureData.PreAllocate((width * height) * 4);
 
-	for (int i = 0; i < (Width * Height) * 4; i++) {
+	for (int i = 0; i < (width * height) * 4; i++) {
 		TextureData.Add(image[i]);
 	}
 
+	// Capture texture dimensions.
+	TextureDimensions = vec2(width, height);
+
+	// Free the image data buffer.
 	stbi_image_free(image);
 }
 void Texture2D::SendTextureDataToGPU() {
@@ -98,7 +108,7 @@ void Texture2D::SendTextureDataToGPU() {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, FilterBehaviour);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, FilterBehaviour);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &TextureData[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (int32)TextureDimensions.x, (int32)TextureDimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, &TextureData[0]);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTextureUnit(GL_TEXTURE_2D, 0);
@@ -110,15 +120,13 @@ void Texture2D::SendTextureDataToGPU() {
 }
 
 bool Texture2D:: SerializeToBuffer(SerializationStream& Stream) const {
-	Stream.SerializeInteger32(Height);
-	Stream.SerializeInteger32(Width);
+	Stream.SerializeVec2(TextureDimensions);
 	Stream.SerializeInteger32(NumComponents);
 	Stream.SerializeUnsignedCharacterArray(TextureData);
 	return true;
 }
 bool Texture2D::DeserializeFromBuffer(DeserializationStream& Stream) {
-	Stream.DeserializeInteger32(Height);
-	Stream.DeserializeInteger32(Width);
+	Stream.DeserializeVec2(TextureDimensions);
 	Stream.DeserializeInteger32(NumComponents);
 	Stream.DeserializeUnsignedCharacterArray(TextureData);
 	return true;

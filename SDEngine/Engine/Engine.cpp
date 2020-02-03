@@ -40,7 +40,7 @@ Engine::Engine() {
 
 	_CurrentViewport = new RenderViewport(_Display->GetDimensions());
 	_IMGuiEngineUI = new EngineUI();
-	_EngineUI =  new PictorumRenderer("EditorViewport");
+	_EngineUI =  new PictorumRenderer("EditorViewport", _Display->GetDimensions());
 }
 Engine::~Engine() {
 	delete& _Display;
@@ -114,8 +114,8 @@ void Engine::RenderingLoop() {
 	_CurrentViewport->RenderWorld(_World, _Camera);
 }
 void Engine::UILoop() {
-	_IMGuiEngineUI->RenderUI((float)DeltaTime);
 	_EngineUI->Draw(DeltaTime);
+	_IMGuiEngineUI->RenderUI((float)DeltaTime);
 }
 void Engine::InputLoop() {
 	SDL_Event e;
@@ -130,10 +130,12 @@ void Engine::InputLoop() {
 					case SDL_WINDOWEVENT_SIZE_CHANGED:
 						_Display->WindowResized(e.window.data1, e.window.data2);
 						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
+						_EngineUI->OnRenderTargetResolutionChanged(_Display->GetDimensions());
 						break;
 					case SDL_WINDOWEVENT_RESIZED:
 						_Display->WindowResized(e.window.data1, e.window.data2);
 						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
+						_EngineUI->OnRenderTargetResolutionChanged(_Display->GetDimensions());
 						break;
 				}
 				break;
@@ -202,7 +204,7 @@ void Engine::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	GetFocusedViewport()->OnMouseMove(ScreenPosition);
 	if (_InputSubsystem->IsMouseButtonDown(EMouseButton::RIGHT)) {
 		SDL_ShowCursor(0);
-		_Camera->AddOrbit((float)(Delta.y) / lookSpeed, -(float)(Delta.x) / lookSpeed);
+		_Camera->AddOrbit((float)(-Delta.y) / lookSpeed, -(float)(Delta.x) / lookSpeed);
 	} else if (_InputSubsystem->IsMouseButtonDown(EMouseButton::MIDDLE)) {
 		SDL_ShowCursor(0);
 		_Camera->AddLocation(-_Camera->GetTransform().GetRightVector() * (float)(Delta.x) / 250.0f);

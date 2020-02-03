@@ -5,7 +5,9 @@ class SolidWidget : public PictorumWidget {
 public:
 	SolidWidget(TString Name);
 	~SolidWidget();
-	virtual void Draw(float DeltaTime, FRenderGeometry Geometry) override;
+	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
+
+	void SetBackgroundColor(const FColor& NewColor);
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;

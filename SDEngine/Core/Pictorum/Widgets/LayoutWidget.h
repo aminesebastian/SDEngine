@@ -6,14 +6,10 @@ public:
 	LayoutWidget(TString Name);
 	~LayoutWidget();
 
-	virtual void Tick(float DeltaTime, FRenderGeometry Geometry);
+	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) override;
 
 	virtual bool PopulateDetailsPanel() override;
-
 private:
 	FAnchors Anchors;
-
-	void UpdateScale(FRenderGeometry Geometry);
-
 };
 

@@ -3,7 +3,7 @@
 
 LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
 	Anchors.Left = 0.0f;
-	Anchors.Right = 1.0f;
+	Anchors.Right = 0.25f;
 	Anchors.Top = 1.0f;
 	Anchors.Bottom = 0.0f;
 	Anchors.bIsRelative = true;
@@ -20,23 +20,40 @@ LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
 LayoutWidget::~LayoutWidget() {
 
 }
+void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) {
+	PictorumWidget* child = Children[ChildIndex];
+	vec2 screenResolution = CurrentRenderGeometry.GetRenderResolution();
+	vec2 offset           = child->GetPivotOffset() + 0.5f;
+	vec2 location;
+	vec2 space;
 
-void LayoutWidget::Tick(float DeltaTime, FRenderGeometry Geometry) {
-	UpdateScale(Geometry);
-}
-void LayoutWidget::UpdateScale(FRenderGeometry Geometry) {
+	// Calculate anchors.
 	if (Anchors.bIsRelative) {
-		Scale.x = Geometry.RenderResolution.x * (Anchors.Right - Anchors.Left);
-		Scale.y = Geometry.RenderResolution.x * (Anchors.Top - Anchors.Bottom);
+		space.x = CurrentRenderGeometry.GetRenderResolution().x * (Anchors.Right - Anchors.Left);
+		space.y = CurrentRenderGeometry.GetRenderResolution().y * (Anchors.Top - Anchors.Bottom);
 
-		Location.x = (Geometry.RenderResolution.x * (Anchors.Right - Anchors.Left))/2.0f;
-		Location.y = (Geometry.RenderResolution.x * (Anchors.Top - Anchors.Bottom))/2.0f;
+		location.x = (CurrentRenderGeometry.GetRenderResolution().x *  Anchors.Left);
+		location.y = (CurrentRenderGeometry.GetRenderResolution().y *  Anchors.Bottom);
 	} else {
-		Scale.x = (Anchors.Right - Anchors.Left);
-		Scale.y = (Anchors.Top - Anchors.Bottom);
+		space.x = (Anchors.Right - Anchors.Left);
+		space.y = (Anchors.Top - Anchors.Bottom);
 
-		Location.x = (Anchors.Right - Anchors.Left)/2.0f;
-		Location.y = (Anchors.Top - Anchors.Bottom)/2.0f;
+		location.x = Anchors.Left;
+		location.y = Anchors.Bottom;
+	}
+
+	// Apply offsets.
+	location.x += space.x * offset.x;
+	location.y += space.y * offset.y;
+
+	// Update the location.
+	OutputGeometry.SetLocation(location);
+
+	// Set the space depending on the fill amount.
+	if (child->GetFillState() == EFillState::AUTOMATIC) {
+		OutputGeometry.SetAllocatedSpace(child->GetDesiredDrawSpace(OutputGeometry));
+	} else {
+		OutputGeometry.SetAllocatedSpace(space);
 	}
 }
 bool LayoutWidget::PopulateDetailsPanel() {
