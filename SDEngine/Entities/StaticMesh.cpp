@@ -183,7 +183,7 @@ void StaticMesh::GenerateGPUBuffers() {
 			glBufferData(GL_ARRAY_BUFFER, sizeof(subMesh->VertexColors[0]) * subMesh->VertexColors.Count(), &subMesh->VertexColors[0], GL_STATIC_DRAW);
 
 			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
 		glBindVertexArray(0);

@@ -307,7 +307,7 @@
     <ClCompile Include="Core\Utilities\FileUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Rendering\TextQuadBuffer.cpp">
+    <ClCompile Include="Core\Rendering\TextRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -493,7 +493,7 @@
     <ClInclude Include="Core\Pictorum\DistanceFieldFont.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
-    <ClInclude Include="Core\Rendering\TextQuadBuffer.h" />
+    <ClInclude Include="Core\Rendering\TextRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">
@@ -650,5 +650,7 @@
     <None Include="Res\Shaders\EditorSpriteShader.frag" />
     <None Include="Res\Shaders\UIShader.frag" />
     <None Include="Res\Shaders\UIShader.vert" />
+    <None Include="Res\Shaders\FontShader.frag" />
+    <None Include="Res\Shaders\FontShader.vert" />
   </ItemGroup>
 </Project>

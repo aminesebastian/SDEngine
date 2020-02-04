@@ -166,7 +166,6 @@ void Engine::OnKeyUp(SDL_Scancode KeyCode) {
 }
 void Engine::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {
 	float alpha = movementSpeed * (float)GetFrameTime();
-	SD_ENGINE_INFO("WHY: {0}.", alpha);
 	if (KeyCode == SDL_SCANCODE_W) {
 		_Camera->AddLocation(_Camera->GetTransform().GetForwardVector() * alpha);
 	}

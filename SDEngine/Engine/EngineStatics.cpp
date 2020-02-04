@@ -15,6 +15,7 @@ void EngineStatics::RecompileShaders() {
 	GetLineShader()->RecompileShader();
 	GetSpriteShader()->RecompileShader();
 	GetUIShader()->RecompileShader();
+	GetFontShader()->RecompileShader();
 }
 
 Shader* EngineStatics::GetLightDebugShader() {
@@ -61,6 +62,12 @@ Shader* EngineStatics::GetUIShader() {
 		UIShader = new Shader("./Res/Shaders/UIShader", false);
 	}
 	return UIShader;
+}
+Shader* EngineStatics::GetFontShader() {
+	if (FontShader == nullptr) {
+		FontShader = new Shader("./Res/Shaders/FontShader", false);
+	}
+	return FontShader;
 }
 Material* EngineStatics::GetDefaultMaterial() {
 	if(S_DefaultMaterial == nullptr) {

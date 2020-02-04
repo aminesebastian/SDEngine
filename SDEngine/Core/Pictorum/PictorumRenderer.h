@@ -8,7 +8,7 @@
 
 
 class PictorumWidget;
-class TextQuadBuffer;
+class TextRenderer;
 class DistanceFieldFont;
 
 class PictorumRenderer : public EngineObject, public IUserInputReciever, public IDetailsPanelProvider {
@@ -42,7 +42,7 @@ public:
 private:
 	SArray<PictorumWidget*> Widgets;
 	PictorumWidget* MouseOverWidget;
-	TextQuadBuffer* QuadBuffer;
+	TextRenderer* QuadBuffer;
 	DistanceFieldFont* DistanceField;
 
 	bool bMouseCaptured;

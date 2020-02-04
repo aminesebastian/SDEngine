@@ -3,13 +3,14 @@
 #include "Rendering/Texture2D.h"
 
 struct FDistanceFieldCharacter {
-	FDistanceFieldCharacter(char Character, vec2 TextureAtlasDimensions, int32 UTextureCoord, int32 VTextureCoord, int32 Width, int32 Height, int32 XOffset, int32 YOffset, int32 Advance) :
+	FDistanceFieldCharacter(char Character, vec2 TextureAtlasDimensions, float UTextureCoord, float VTextureCoord, float Width, float Height, float XOffset, float YOffset, float Advance) :
 		Character(Character),
-		TextureCoords(vec2(UTextureCoord, VTextureCoord) / TextureAtlasDimensions),
+		MinTextureCoords(vec2(UTextureCoord, VTextureCoord) / TextureAtlasDimensions),
+		MaxTextureCoord((vec2(UTextureCoord, VTextureCoord) / TextureAtlasDimensions) + vec2(Width, Height) / TextureAtlasDimensions),
 		Dimensions(vec2(Width, Height) / TextureAtlasDimensions),
 		Offsets(vec2(XOffset, YOffset) / TextureAtlasDimensions),
 		Advance((float)Advance / TextureAtlasDimensions.x),
-		AspectRatio((float)Width/Height){
+		AspectRatio((float)Width/Height) {
 	}
 
 	const char& GetCharacter() const{
@@ -24,20 +25,26 @@ struct FDistanceFieldCharacter {
 	const vec2& GetOffsets() const {
 		return Offsets;
 	}
-	const vec2& GetTextureCoords() const {
-		return TextureCoords;
+	const vec2& GetMinTextureCoords() const {
+		return MinTextureCoords;
+	}
+	const vec2& GetMaxTextureCoords() const {
+		return MaxTextureCoord;
 	}
 	const float& GetAdvance() const {
 		return Advance;
 	}
 private:
 	const char Character;
-	const vec2 TextureCoords;
+	const vec2 MinTextureCoords;
+	const vec2 MaxTextureCoord;
 	const vec2 Dimensions;
 	const vec2 Offsets;
 	const float AspectRatio;
 	const float Advance;
 };
+
+class Shader;
 
 class DistanceFieldFont {
 public:
@@ -53,16 +60,24 @@ public:
 	 * 												character.
 	 */
 	const FDistanceFieldCharacter& GetDistanceFieldCharacter(const char& Character) const;
-
-	const vec2& GetTextureAtlasDimensions();
+	const vec2& GetTextureAtlasDimensions() const;
+	void BindAtlas(Shader* ShaderIn, TString ParameterName, int32 TextureOffset) const;
+	
+	const int32& GetGeneratedFontSize() const;
 private:
 	TString FontName;
 	TString ImageFilePath;
 	TString FontFilePath;
+	
+	int32 OfflineFontSize;
+	int32 LineHeight;
+	int32 Base;
+	vec4 Padding;
 
 	SHashMap<char, const FDistanceFieldCharacter*> CharacterMap;
 	Texture2D* DistanceFieldTexture;
 
 	bool LoadAndParseFont();
+	SArray<TString> SplitLineIntoKeyValuePairs(const TString& Line);
 };
 

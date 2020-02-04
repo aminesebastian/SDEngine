@@ -7,7 +7,7 @@
 #include "Core/Pictorum/Widgets/LayoutWidget.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
-#include "Core/Rendering/TextQuadBuffer.h"
+#include "Core/Rendering/TextRenderer.h"
 
 PictorumRenderer::PictorumRenderer(TString ViewportName, vec2 RenderTargetResolution) : EngineObject(ViewportName) {
 	// Initialize member variables.
@@ -42,8 +42,8 @@ PictorumRenderer::PictorumRenderer(TString ViewportName, vec2 RenderTargetResolu
 
 
 	DistanceField = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
-	QuadBuffer = new TextQuadBuffer(16, DistanceField);
-	QuadBuffer->AddString("This is a test");
+	QuadBuffer = new TextRenderer(24, DistanceField);
+	//QuadBuffer->SetText("abcdefghijklmnopqrstuvwxyz.-=+-~!@#$%^&*()\nSecond line of text!");
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -53,14 +53,18 @@ void PictorumRenderer::Tick(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->Tick(DeltaTime, TopLevelRenderGeometry);
 	}
+	QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime));
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (PictorumWidget* widget : Widgets) {
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
-	//QuadBuffer->Draw();
+	QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution());
+	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }
 
