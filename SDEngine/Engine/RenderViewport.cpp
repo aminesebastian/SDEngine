@@ -32,6 +32,7 @@ RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimens
 	S_TranslucencyBuffer      = nullptr;
 	S_OutputBuffer1           = nullptr;
 	S_OutputBuffer2           = nullptr;
+	CurrentlyActiveShader     = nullptr;
 	SD_ENGINE_INFO("Render Viewport Created");
 }
 RenderViewport::~RenderViewport() {
@@ -163,6 +164,15 @@ PostProcessingLayer* RenderViewport::GetPostProcessingLayer(TString Layer) {
 
 void RenderViewport::FlipOutputBuffers() {
 	CurrentBuffer = ((CurrentBuffer + 1) % 2);
+}
+
+const bool RenderViewport::BindNewShader(Shader* ShaderIn) {
+	if (ShaderIn != CurrentlyActiveShader) {
+		CurrentlyActiveShader = ShaderIn;
+		CurrentlyActiveShader->Bind();
+		return true;
+	}
+	return false;
 }
 
 void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {

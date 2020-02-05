@@ -41,6 +41,8 @@ public:
 	void ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions);
 	vec2 GetRenderTargetDimensions();
 
+	const bool BindNewShader(Shader* ShaderIn);
+
 	void RenderWorld(World* RenderWorld, Camera* RenderCamera);
 	void GemoetryPass(World* RenderWorld, Camera* RenderCamera);
 	void TranslucencyPass(World* RenderWorld, Camera* RenderCamera);
@@ -77,6 +79,7 @@ protected:
 	virtual void GenerateRenderTargets();
 	virtual void RegisterPostProcessEffects();
 private:
+	Shader* CurrentlyActiveShader;
 	Shader* S_TranslucencyBlendShader;
 	Shader* SelectionOutlineShader;
 

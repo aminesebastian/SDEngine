@@ -100,6 +100,7 @@ void Material::BindMaterial(const Transform& RenderTransform, Camera* RenderCame
 	BindMaterial(RenderTransform, RenderTransform, RenderCamera);
 }
 void Material::BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, Camera* RenderCamera) {
+	//Engine::GetInstance()->GetFocusedViewport()->BindNewShader(S_Shader);
 	S_Shader->Bind();
 	S_Shader->Update(RenderTransform, LastFrameTransform, RenderCamera);
 	glEnable(GL_TEXTURE_2D);
