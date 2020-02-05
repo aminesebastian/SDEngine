@@ -54,7 +54,7 @@ bool ByteBuffer::FromCompressedFile(TString FilePath) {
 		return nullptr;
 	}
 	file.seekg(0, std::ios::end);
-	const int length = file.tellg();
+	const int length = (int)file.tellg();
 	file.seekg(0, std::ios::beg);
 	SArray<char> data(length);
 	data.Fill(0, 0, length);
@@ -73,7 +73,7 @@ bool ByteBuffer::FromFile(TString FilePath) {
 		return nullptr;
 	}
 	file.seekg(0, std::ios::end);
-	const int length = file.tellg();
+	const int length = (int)file.tellg();
 	file.seekg(0, std::ios::beg);
 	Buffer.Fill(0, length);
 	file.read(&Buffer[0], length);

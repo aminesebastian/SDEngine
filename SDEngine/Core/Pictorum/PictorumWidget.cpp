@@ -9,14 +9,16 @@
 #include "UserInterface/Widgets/DragFloat.h"
 #include "Utilities/Logger.h"
 
-PictorumWidget::PictorumWidget(TString Name) : EngineObject(Name) {
+PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
 	Parent              = nullptr;
-	Visibility          = EPictorumVisibilityState::VISIBLE;
 	HorizontalAlignment = EHorizontalAlignment::LEFT;
 	VerticalAlignment   = EVerticalAlignment::LEFT;
-	FillState           = EFillState::FILL_ALL_SPACE;
+	HorizontalFillState = EFillState::FILL_ALL_SPACE;
+	VerticalFillState   = EFillState::FILL_ALL_SPACE;
 	PivotOffset		    = vec2(0.0f, 0.0f);
+
+	SetVisibility(EPictorumVisibilityState::VISIBLE);
 
 	std::function<float(float)> toDegrees = ([](float radians) { return glm::degrees(radians); });
 	std::function<float(float)> toRadians = ([](float degrees) { return glm::radians(degrees); });
@@ -43,44 +45,60 @@ void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 
 }
-vec2 PictorumWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) {
+vec2 PictorumWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	return vec2(100.0f, 100.0f);
 }
-void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) {
+void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
-	vec2 lastScale = LastRenderedGeometry.GetAllocatedSpace(EPictorumScaleBasis::ABSOLUTE);
-	MinBounds = lastLocation - (lastScale / 2.0f);
-	MaxBounds = lastLocation + (lastScale / 2.0f);
+	vec2 lastScale = LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE);
+	MinBounds = lastLocation;
+	MaxBounds = lastLocation + lastScale;
 }
-void PictorumWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) {
+void PictorumWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	OutputGeometry = CurrentRenderGeometry;
 }
 
-bool PictorumWidget::AddChild(PictorumWidget* Widget) {
-	if (Children.AddUnique(Widget)) {
-		Widget->OnAddedToParent(this);
-		return true;
+IWidgetSlot* PictorumWidget::AddChild(PictorumWidget* Widget) {
+	return AddChildInternal(Widget);
+}
+IWidgetSlot* PictorumWidget::AddChildInternal(PictorumWidget* Widget) {
+	if (!CanAddChild()) {
+		return nullptr;
 	}
-	return false;
+	if (Children.AddUnique(Widget)) {
+		IWidgetSlot* slot = CreateSlotForWidget(Widget);
+		Widget->OnAddedToParent(this, slot);
+		return slot;
+	}
+	return nullptr;
 }
 bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	if (Children.Remove(Widget)) {
 		Widget->OnRemovedFromParent(this);
+		delete Widget->GetParentSlot();
 		return true;
 	}
 	return false;
 }
+bool PictorumWidget::CanAddChild() const {
+	return false;
+}
+IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
+	return new IWidgetSlot();
+}
 
-void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn) {
+void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
 	Parent = ParentIn;
+	ParentSlot = Slot;
 }
 void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {
 	Parent = nullptr;
+	ParentSlot = nullptr;
 }
 
 mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const {
 	vec2 relativeLocation = Geometry.GetLocation(EPictorumLocationBasis::NDC);
-	vec2 relativeScale    = Geometry.GetAllocatedSpace(EPictorumScaleBasis::RELATIVE);
+	vec2 relativeScale    = 2.0f * Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
 	float screenRotation  = GetRenderRotation();
 
 	mat4 posMatrix   = glm::translate(vec3(relativeLocation, 0.0f));
@@ -100,8 +118,7 @@ void PictorumWidget::DrawContents(float DeltaTime, FRenderGeometry Geometry) {
 
 	for (int i = 0; i < Children.Count(); i++) {
 		PictorumWidget* widget = Children[i];
-		FRenderGeometry childGeometry;
-		childGeometry.SetRenderResolution(Geometry.GetRenderResolution());
+		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
 		widget->DrawContents(DeltaTime, childGeometry);
 	}
@@ -122,6 +139,9 @@ void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const 
 PictorumWidget* PictorumWidget::GetParent() const {
 	return Parent;
 }
+IWidgetSlot* PictorumWidget::GetParentSlot() const {
+	return ParentSlot;
+}
 
 void PictorumWidget::SetHorizontalAlignment(EHorizontalAlignment Alignment) {
 	HorizontalAlignment = Alignment;
@@ -135,13 +155,18 @@ void PictorumWidget::SetVerticalAlignment(EVerticalAlignment Alignment) {
 EVerticalAlignment PictorumWidget::GetVerticalAlignment() const {
 	return VerticalAlignment;
 }
-void PictorumWidget::SetFillState(EFillState State) {
-	FillState = State;
+void PictorumWidget::SetHorizontalFillState(EFillState State) {
+	HorizontalFillState = State;
 }
-EFillState PictorumWidget::GetFillState() const {
-	return FillState;
+EFillState PictorumWidget::GetHorizontalFillState() const {
+	return HorizontalFillState;
 }
-
+void PictorumWidget::SetVerticalFillState(EFillState State) {
+	VerticalFillState = State;
+}
+EFillState PictorumWidget::GetVerticalFillState() const {
+	return VerticalFillState;
+}
 void PictorumWidget::SetMargins(FMargins NewMargins) {
 	Margins = NewMargins;
 }

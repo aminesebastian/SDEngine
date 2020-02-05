@@ -40,7 +40,7 @@ Engine::Engine() {
 
 	_CurrentViewport = new RenderViewport(_Display->GetDimensions());
 	_IMGuiEngineUI = new EngineUI();
-	_EngineUI =  new PictorumRenderer("EditorViewport", _Display->GetDimensions());
+	_EngineUI =  new PictorumRenderer("EditorViewport", _Display->GetDimensions(), _Display->GetDisplayDPI());
 }
 Engine::~Engine() {
 	delete& _Display;

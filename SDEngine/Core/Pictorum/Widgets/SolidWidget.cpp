@@ -17,10 +17,10 @@ SolidWidget::SolidWidget(TString Name) : PictorumWidget(Name) {
 	DetailsPanelWidgets.Add(borderRadiusControl);
 
 	GLfloat quadVertices[] = {
-		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 		1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 	};
 
 	glGenVertexArrays(1, &quadVAO);
@@ -40,9 +40,9 @@ SolidWidget::~SolidWidget() {
 void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	EngineStatics::GetUIShader()->Bind();
 	vec2 screenResolution      = Geometry.GetRenderResolution();
-	vec2 adjustedScale         = Geometry.GetAllocatedSpace(EPictorumScaleBasis::RELATIVE);
+	vec2 adjustedScale         = Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
 	float screenAspectRatio    = Geometry.GetRenderResolutionAspectRatio();
-	float shapeAspectRatio     = Geometry.GetSpaceAspectRatio();
+	float shapeAspectRatio     = Geometry.GetAllotedSpaceAspectRatio();
 	float adjustedBorderRadius = BorderRadius / (glm::max(screenResolution.x, screenResolution.y));
 	mat4 modelMatrix		   = CalculateModelMatrix(Geometry);
 

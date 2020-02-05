@@ -228,6 +228,8 @@
     <ClCompile Include="Core\Utilities\StringUtilities.cpp" />
     <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
     <ClCompile Include="Core\Rendering\TextRenderer.cpp" />
+    <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\LayoutWidgetSlot.cpp" />
     <ClCompile Include="UserInterface\ContentBrowser.cpp" />
     <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
     <ClCompile Include="Core\Assets\Asset.cpp" />
@@ -311,6 +313,8 @@
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Rendering\TextRenderer.h" />
+    <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\LayoutWidgetSlot.h" />
     <ClInclude Include="UserInterface\ContentBrowser.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="Core\Assets\Asset.h" />

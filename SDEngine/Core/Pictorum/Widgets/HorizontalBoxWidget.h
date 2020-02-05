@@ -4,7 +4,7 @@
 class HorizontalBoxWidget : public PictorumWidget {
 public:
 	HorizontalBoxWidget(TString Name);
-	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
-
+	virtual bool CanAddChild() const override;
+	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 };
 

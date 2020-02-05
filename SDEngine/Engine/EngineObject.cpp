@@ -1,12 +1,12 @@
 #include "EngineObject.h"
 
-EngineObject::EngineObject(const TString& Name) {
-	this->Name = Name;
+EngineObject::EngineObject(const TString& Name) : Name(Name) {
+
 }
 EngineObject::~EngineObject() {
 
 }
 
-TString EngineObject::GetName() {
+const TString& EngineObject::GetName() const {
 	return Name;
 }

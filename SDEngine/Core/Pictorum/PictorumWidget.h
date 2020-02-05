@@ -2,6 +2,7 @@
 #include "Core/DataStructures/Array.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
+#include "Core/Pictorum/IWidgetSlot.h"
 #include <GLEW/glew.h>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
@@ -12,26 +13,27 @@
 class Shader;
 class DragFloat;
 
-
 class PictorumWidget : public EngineObject, public IDetailsPanelProvider {
 public:
-	PictorumWidget(TString Name);
+	PictorumWidget(const TString& Name);
 	~PictorumWidget();
 
 	virtual void OnCreated(FRenderGeometry Geometry);
 	virtual void OnDestroyed(FRenderGeometry Geometry);
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry);
-	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry);
-	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds);
-	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex);
+	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const;
+	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const;
+	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const;
 
 	void SetHorizontalAlignment(EHorizontalAlignment Alignment);
 	EHorizontalAlignment GetHorizontalAlignment() const;
 	void SetVerticalAlignment(EVerticalAlignment Alignment);
 	EVerticalAlignment GetVerticalAlignment() const;
-	void SetFillState(EFillState State);
-	EFillState GetFillState() const;
+	void SetHorizontalFillState(EFillState State);
+	EFillState GetHorizontalFillState() const;
+	void SetVerticalFillState(EFillState State);
+	EFillState GetVerticalFillState() const;
 	void SetMargins(FMargins NewMargins);
 	void SetMargins(float Top, float Right, float Left, float Bottom);
 	FMargins GetMargins() const;
@@ -44,9 +46,11 @@ public:
 
 	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const;
 	PictorumWidget* GetParent() const;
+	virtual IWidgetSlot* GetParentSlot() const;
 
-	virtual bool AddChild(PictorumWidget* Widget);
+	virtual IWidgetSlot* AddChild(PictorumWidget* Widget);
 	virtual bool RemoveChild(PictorumWidget* Widget);
+	virtual bool CanAddChild() const;
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event);
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event);
@@ -68,11 +72,16 @@ protected:
 	 * This processes all children from the root widget.
 	 */
 	virtual void DrawContents(float DeltaTime, FRenderGeometry Geometry);
-
+	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
+	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
 	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
 
+	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
+	/** The widget this parent exists in. If null, this widget exists at the room of the widget tree. */
 	PictorumWidget* Parent;
+	/** The slot this widget occupies in its parent. The lifecyle of this object is managed by the parent. */
+	IWidgetSlot* ParentSlot;
 	SArray<DragFloat*> DetailsPanelWidgets;
 
 	/** Rotation of the widget [0-360n] */
@@ -93,15 +102,17 @@ protected:
 	EVerticalAlignment VerticalAlignment;
 	/** The horizontal alignment in it's parent container (if applicable). */
 	EHorizontalAlignment HorizontalAlignment;
-	/** The fill state in it's parent container (if applicable). */
-	EFillState FillState;
+	/** The horizontal fill state in it's parent container (if applicable). */
+	EFillState HorizontalFillState;
+	/** The horizontal fill state in it's parent container (if applicable). */
+	EFillState VerticalFillState;
 
 	/**
 	 * This method is raised when the widget is added to a parent container.
 	 *
 	 * @param [in,out]	{PictorumWidget*}	ParentIn	If non-null, the parent in.
 	 */
-	virtual void OnAddedToParent(PictorumWidget* ParentIn);
+	virtual void OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot);
 
 	/**
 	 * This method is raised when the widget is removed from it's parent container.

@@ -42,7 +42,12 @@ Display::Display(int Width, int Height, const std::string& Title, int BitDepth) 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true);
 #endif
 
-	DisplayDimensions = glm::vec2(Width, Height);
+	// Capture the display state.
+	vec2 resolution = glm::vec2(Width, Height);
+	vec3 dpi;
+	SDL_GetDisplayDPI(0, &dpi[2], &dpi[0], &dpi[1]);
+	DisplayState = new FDisplayState(resolution, vec2(dpi.x, dpi.y), dpi.z);
+
 	SDL_GL_SetSwapInterval(0);
 }
 Display::~Display() {
@@ -73,15 +78,18 @@ void Display::Update() {
 	//SDL_Event e;
 }
 void Display::WindowResized(int NewWidth, int NewHeight) {
-	if (NewWidth != DisplayDimensions.x || NewHeight != DisplayDimensions.y) {
-		DisplayDimensions = glm::vec2(NewWidth, NewHeight);
+	if (NewWidth != GetDimensions().x || NewHeight != GetDimensions().y) {
 		SDL_SetWindowSize(Window, NewWidth, NewHeight);
 		glViewport(0, 0, NewWidth, NewHeight);
+
+		vec2 resolution = glm::vec2(NewWidth, NewHeight);
+		vec3 dpi;
+		SDL_GetDisplayDPI(0, &dpi[2], &dpi[0], &dpi[1]);
+		DisplayState = new FDisplayState(resolution, vec2(dpi.x, dpi.y), dpi.z);
+
 		Engine::GetInstance()->GetFocusedViewport()->ChangeRenderTargetDimensions(GetDimensions());
 	}
 }
-
-
 
 void Display::openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 	TString actualMessage(message, length);

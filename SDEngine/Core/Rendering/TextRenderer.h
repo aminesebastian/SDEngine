@@ -3,6 +3,8 @@
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
 
+/* Defines how dots for each point in font size.*/
+#define DOTS_PER_POINT 3.0f
 
 /** The font weight to use when rendering text. */
 enum class EFontWeight : uint8 {
@@ -30,13 +32,14 @@ public:
 	virtual ~TextRenderer();
 
 	/**
-	 * Draws the text to the screen at the provided NDC position.
-	 * Automatically adjusts for the provided render target resolution.
+	 * Draws the text to the screen at the provided NDC position. Automatically adjusts for the
+	 * provided render target resolution.
 	 *
-	 * @param 	{const vec2&}	Position			  	The position in NDC coordinates.
+	 * @param 	{const vec2&}	Position			  	The position of the text in NDC coordinates.
 	 * @param 	{const vec2&}	RenderTargetResolution	The render target resolution.
+	 * @param 	{const vec2&}	DisplayDPI			  	The display DPI.
 	 */
-	void Draw(const vec2& Position, const vec2& RenderTargetResolution);
+	void Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI);
 
 	/**
 	 * Sets the text lines for this text renderer to render.
@@ -66,7 +69,7 @@ public:
 	 *
 	 * @returns	{const int32&}	The font size.
 	 */
-	const int32& GetFontSize() const;
+	const int32 GetFontSize() const;
 	/**
 	 * Sets the font color.
 	 *

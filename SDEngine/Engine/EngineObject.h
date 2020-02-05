@@ -9,8 +9,8 @@ public:
 	/**
 	 * Gets the internal name of this object.
 	 */
-	TString GetName();
+	const TString& GetName() const;
 private:
-	TString Name;
+	const TString Name;
 };
 

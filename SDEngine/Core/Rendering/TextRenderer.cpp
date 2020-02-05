@@ -2,14 +2,10 @@
 #include "Engine/EngineStatics.h"
 #include "Rendering/Shader.h"
 
-TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : FontSize(FontSize), Font(Font) {
+TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
 	CurrentIndexValue  = 0;
-	CursorPosition.x   = 0.0f;
-	CursorPosition.y   = 0.0f;
-	Leading	           = 0.0045f;
-	SpaceWidth         = 0.0005f;
-	Tracking           = -0.005f;
-	Color              = FColor(1.0f, 1.0f, 1.0f, 1.0f);
+	CursorPosition     = vec2(0.0f,0.0f);
+	SpaceWidth         = 0.003f;
 	bBoundToGPU        = false;
 	VertexArrayObject  = 0;
 
@@ -17,6 +13,10 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	VertexArrayBuffers.Add(0);
 	VertexArrayBuffers.Add(0);
 
+	SetLeading(0.008f);
+	SetTracking(-0.01f);
+	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
+	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
 }
 TextRenderer::~TextRenderer() {
@@ -47,12 +47,12 @@ void TextRenderer::SetText(const TString& Text) {
 		}
 	}
 }
-void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution) {
+void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI) {
 	if (!bBoundToGPU) {
 		BindToGPU();
 	}
 
-	vec2 scale = (FontSize / RenderTargetResolution) * 36.0f;
+	vec2 scale = (FontSize / RenderTargetResolution) * DisplayDPI;
 
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
@@ -72,10 +72,10 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 }
 
 void TextRenderer::SetFontSize(const int32& Size) {
-	FontSize = (float)Size;
+	FontSize = (float)Size / DOTS_PER_POINT;
 }
-const int32& TextRenderer::GetFontSize() const {
-	return (float)FontSize;
+const int32 TextRenderer::GetFontSize() const {
+	return (int32)(FontSize * DOTS_PER_POINT);
 }
 void TextRenderer::SetColor(FColor TextColor) {
 	Color = TextColor;
@@ -105,7 +105,7 @@ void TextRenderer::SetFontWeight(const EFontWeight& Weight) {
 		DistanceFieldEdge = 0.57f;
 	} else if (FontWeight == EFontWeight::Bold) {
 		DistanceFieldWidth = 0.54f;
-		DistanceFieldEdge = 0.645;
+		DistanceFieldEdge = 0.645f;
 	}
 }
 const EFontWeight& TextRenderer::GetFontWeight() const {
@@ -116,6 +116,10 @@ void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {
 	if (Character.GetCharacter() == ' ') {
 		CursorPosition.x += SpaceWidth * FontSize;
 		return;
+	}
+
+	if (CursorPosition.x == 0) {
+		CursorPosition.x += Character.GetDimensions().x / 4.0f;
 	}
 
 	vec2 minTexCoords = Character.GetMinTextureCoords();
@@ -183,5 +187,5 @@ void TextRenderer::Reset() {
 }
 void TextRenderer::NewLine() {
 	CursorPosition.x = 0.0f;
-	CursorPosition.y -= (float)FontSize * Leading;
+	CursorPosition.y -= FontSize * Leading;
 }

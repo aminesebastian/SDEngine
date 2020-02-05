@@ -43,7 +43,6 @@ void RenderViewport::Initialize() {
 	}
 
  	SD_ENGINE_INFO("Initializing Viewport")
-	TransformGizmoEntity = new TransformGizmo(this);
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
 	bInitialized = true;
@@ -110,7 +109,7 @@ void RenderViewport::RegisterPostProcessEffects() {
 void RenderViewport::RecompileShaders() {
 	S_DefferedCompositor->RecompileShaders();
 	S_TranslucencyBlendShader->RecompileShader();
-	TransformGizmoEntity->RecompileShaders();
+	//TransformGizmoEntity->RecompileShaders();
 
 	for (PostProcessingLayer* layerPair : S_PostProcessingLayers) {
 		layerPair->RecompileShaders();
@@ -254,18 +253,18 @@ void RenderViewport::RenderEditorElements(World* RenderWorld, Camera* RenderCame
 		glDisable(GL_STENCIL_TEST);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
-		TransformGizmoEntity->SetVisibility(true);
-		TransformGizmoEntity->SetLocation(selectedEntity->GetLocation());
-		TransformGizmoEntity->Draw(RenderCamera);
+		//TransformGizmoEntity->SetVisibility(true);
+		//TransformGizmoEntity->SetLocation(selectedEntity->GetLocation());
+		//TransformGizmoEntity->Draw(RenderCamera);
 	} else {
-		TransformGizmoEntity->SetVisibility(false);
+		//TransformGizmoEntity->SetVisibility(false);
 	}
 }
 
 void RenderViewport::OnMouseMove(vec2 MouseCoords) {
 	Entity* selectedEntity = Engine::GetInstance()->GetSelectedEntity();
 	if (selectedEntity) {
-		TransformGizmoEntity->OnMouseMove();
+		//TransformGizmoEntity->OnMouseMove();
 	}
 }
 

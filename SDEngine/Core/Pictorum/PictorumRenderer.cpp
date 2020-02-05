@@ -9,41 +9,44 @@
 #include "Core/Pictorum/DistanceFieldFont.h"
 #include "Core/Rendering/TextRenderer.h"
 
-PictorumRenderer::PictorumRenderer(TString ViewportName, vec2 RenderTargetResolution) : EngineObject(ViewportName) {
+PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI) : EngineObject(ViewportName) {
 	// Initialize member variables.
 	MouseOverWidget = nullptr;
 	bMouseCaptured = false;
 
 	// Initialize render geometry.
 	TopLevelRenderGeometry.SetRenderResolution(RenderTargetResolution);
-	TopLevelRenderGeometry.SetAllocatedSpace(RenderTargetResolution);
-	TopLevelRenderGeometry.SetLocation(RenderTargetResolution / 2.0f);
+	TopLevelRenderGeometry.SetAllotedSpace(RenderTargetResolution);
+	TopLevelRenderGeometry.SetDPI(RenderTargetDPI);
+	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 
 	// Add some test widgets.
 	LayoutWidget* layout = new LayoutWidget("Layout");
-	//HorizontalBoxWidget* hBox = new HorizontalBoxWidget("HBox");
+	HorizontalBoxWidget* hBox = new HorizontalBoxWidget("HBox");
 
 	SolidWidget* widget1 = new SolidWidget("test1");
 	widget1->SetBackgroundColor(FColor(0.25f, 0.25f, 0.25f, 0.8f));
+
+
 	SolidWidget* widget2 = new SolidWidget("test2");
-	widget2->SetBackgroundColor(FColor(0.0f, 1.0f, 0.0f, 1.0f));
+	widget2->SetBackgroundColor(FColor(1.0f, 0.0f, 0.0f, 1.0f));
 	SolidWidget* widget3 = new SolidWidget("test3");
-	widget3->SetBackgroundColor(FColor(0.0f, 0.0f, 1.0f, 1.0f));
+	widget3->SetBackgroundColor(FColor(0.0f, 1.0f, 0.0f, 1.0f));
 	SolidWidget* widget4 = new SolidWidget("test4");
+	widget4->SetBackgroundColor(FColor(0.0f, 0.0f, 1.0f, 1.0f));
 
-	layout->AddChild(widget1);
-	//layout->AddChild(widget2);
-	//layout->AddChild(widget3);
-	//layout->AddChild(widget4);
+	hBox->AddChild(widget2);
+	hBox->AddChild(widget3);
+	hBox->AddChild(widget4);
 
-	//layout->AddChild(hBox);
+	layout->AddChild(hBox);
+	layout->AddChild(widget1)->SetMargins(5, 5, 5, 5);
 
 	AddToViewport(layout);
 
 
 	DistanceField = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
 	QuadBuffer = new TextRenderer(24, DistanceField);
-	//QuadBuffer->SetText("abcdefghijklmnopqrstuvwxyz.-=+-~!@#$%^&*()\nSecond line of text!");
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -53,7 +56,7 @@ void PictorumRenderer::Tick(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->Tick(DeltaTime, TopLevelRenderGeometry);
 	}
-	QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime));
+	QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime) + "\nSecond Line Of Text");
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	glEnable(GL_BLEND);
@@ -63,7 +66,7 @@ void PictorumRenderer::Draw(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
-	QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution());
+	QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution(), TopLevelRenderGeometry.GetDPI());
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }
@@ -124,8 +127,8 @@ void PictorumRenderer::OnMouseScrollAxis(float Delta) {
 
 void PictorumRenderer::OnRenderTargetResolutionChanged(vec2 NewResolution) {
 	TopLevelRenderGeometry.SetRenderResolution(NewResolution);
-	TopLevelRenderGeometry.SetAllocatedSpace(NewResolution);
-	TopLevelRenderGeometry.SetLocation(NewResolution / 2.0f);
+	TopLevelRenderGeometry.SetAllotedSpace(NewResolution);
+	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 }
 
 PictorumWidget* PictorumRenderer::GetMouseOverWidget() {

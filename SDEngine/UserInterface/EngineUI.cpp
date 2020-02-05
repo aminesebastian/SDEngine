@@ -64,7 +64,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGui::PushItemWidth(-1);
 	if (ImGui::ListBoxHeader("##empty")) {
 		for (Entity* entity : engine->GetWorld()->GetWorldActors()) {
-			std::string& item_name = entity->GetName();
+			TString& item_name = (TString)entity->GetName();
 			if (ImGui::Selectable(item_name.c_str(), false)) {
 				engine->SetSelectedEntity(entity);
 			}
@@ -102,7 +102,7 @@ void EngineUI::UpdateUI(SDL_Window* Window) {
 	ImGui::PushItemWidth(-1);
 	if (ImGui::ListBoxHeader("##empty")) {
 		for (PictorumWidget* rootWidget : Engine::GetInstance()->GetEngineUI()->GetWidgets()) {
-			std::string& item_name = rootWidget->GetName();
+			TString& item_name = (TString)rootWidget->GetName();
 			if (ImGui::Selectable(item_name.c_str(), false)) {
 				SelectedWidget = rootWidget;
 			}

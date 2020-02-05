@@ -1,4 +1,6 @@
 #include "LayoutWidget.h"
+#include "Utilities/EngineFunctionLibrary.h"
+#include "Utilities/Logger.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
 LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
@@ -6,7 +8,6 @@ LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
 	Anchors.Right = 0.25f;
 	Anchors.Top = 1.0f;
 	Anchors.Bottom = 0.0f;
-	Anchors.bIsRelative = true;
 
 	DragFloat* anchorsControl = new DragFloat("Anchors");
 	anchorsControl->AddEntry(&Anchors.Top, "Top %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.1f, 2.0f);
@@ -20,47 +21,31 @@ LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
 LayoutWidget::~LayoutWidget() {
 
 }
-void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) {
-	PictorumWidget* child = Children[ChildIndex];
-	vec2 screenResolution = CurrentRenderGeometry.GetRenderResolution();
-	vec2 offset           = child->GetPivotOffset() + 0.5f;
-	vec2 location;
-	vec2 space;
+bool LayoutWidget::CanAddChild() const {
+	return true;
+}
+void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
+	// Apply the anchors and padding.
+	Anchors.ApplyAnchorsToGeometry(CurrentRenderGeometry, OutputGeometry);
+	Padding.ApplyPaddingToGeometry(OutputGeometry, OutputGeometry);
 
-	// Calculate anchors.
-	if (Anchors.bIsRelative) {
-		space.x = CurrentRenderGeometry.GetRenderResolution().x * (Anchors.Right - Anchors.Left);
-		space.y = CurrentRenderGeometry.GetRenderResolution().y * (Anchors.Top - Anchors.Bottom);
-
-		location.x = (CurrentRenderGeometry.GetRenderResolution().x *  Anchors.Left);
-		location.y = (CurrentRenderGeometry.GetRenderResolution().y *  Anchors.Bottom);
-	} else {
-		space.x = (Anchors.Right - Anchors.Left);
-		space.y = (Anchors.Top - Anchors.Bottom);
-
-		location.x = Anchors.Left;
-		location.y = Anchors.Bottom;
+	PictorumWidget* child  = Children[ChildIndex];
+	LayoutWidgetSlot* slot = Cast<LayoutWidgetSlot>(child->GetParentSlot());
+	if (!slot) {
+		SD_ENGINE_ERROR("Encountered an null slot for widget: {0} in widget: {1} that should have one!", child->GetName(), GetName());
+		return;
 	}
-
-	// Apply offsets.
-	location.x += space.x * offset.x;
-	location.y += space.y * offset.y;
-
-	// Update the location.
-	OutputGeometry.SetLocation(location);
-
-	// Set the space depending on the fill amount.
-	if (child->GetFillState() == EFillState::AUTOMATIC) {
-		OutputGeometry.SetAllocatedSpace(child->GetDesiredDrawSpace(OutputGeometry));
-	} else {
-		OutputGeometry.SetAllocatedSpace(space);
-	}
+	slot->GetOffsets().ApplyAnchorsToGeometry(OutputGeometry, OutputGeometry);
+	slot->GetMargins().ApplyMarginsToGeometry(OutputGeometry, OutputGeometry);
+}
+LayoutWidgetSlot* LayoutWidget::AddChild(PictorumWidget* Widget) {
+	return Cast<LayoutWidgetSlot>(AddChildInternal(Widget));
+}
+LayoutWidgetSlot* LayoutWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
+	return new LayoutWidgetSlot();
 }
 bool LayoutWidget::PopulateDetailsPanel() {
 	PictorumWidget::PopulateDetailsPanel();
-
-	ImGui::Text("Anchors Relative");
-	ImGui::Checkbox("AnchorsRelative", &Anchors.bIsRelative);
 
 	return true;
 }

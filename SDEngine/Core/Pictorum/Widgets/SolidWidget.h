@@ -22,7 +22,7 @@ private:
 	FColor BackgroundColor;
 	bool bWasMouseDownInWidget;
 
-	GLuint quadVAO = 0;
+	GLuint quadVAO;
 	GLuint quadVBO;
 };
 

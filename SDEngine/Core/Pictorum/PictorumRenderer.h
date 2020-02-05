@@ -13,7 +13,7 @@ class DistanceFieldFont;
 
 class PictorumRenderer : public EngineObject, public IUserInputReciever, public IDetailsPanelProvider {
 public:
-	PictorumRenderer(TString ViewportName, vec2 RenderTargetResolution);
+	PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI);
 	~PictorumRenderer();
 
 	void Tick(float DeltaTime);
