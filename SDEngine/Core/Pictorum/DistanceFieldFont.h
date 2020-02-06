@@ -3,21 +3,16 @@
 #include "Rendering/Texture2D.h"
 
 struct FDistanceFieldCharacter {
-	FDistanceFieldCharacter(char Character, vec2 TextureAtlasDimensions, float UTextureCoord, float VTextureCoord, float Width, float Height, float XOffset, float YOffset, float Advance) :
+	FDistanceFieldCharacter(char Character, vec2 MinTexCoords, vec2 MaxTexCoords, vec2 Dimensions, vec2 Offsets, float Advance) :
 		Character(Character),
-		MinTextureCoords(vec2(UTextureCoord, VTextureCoord) / TextureAtlasDimensions),
-		MaxTextureCoord((vec2(UTextureCoord, VTextureCoord) / TextureAtlasDimensions) + vec2(Width, Height) / TextureAtlasDimensions),
-		Dimensions(vec2(Width, Height) / TextureAtlasDimensions),
-		Offsets(vec2(XOffset, YOffset) / TextureAtlasDimensions),
-		Advance((float)Advance / TextureAtlasDimensions.x),
-		AspectRatio((float)Width/Height) {
-	}
+		MinTextureCoords(MinTexCoords),
+		MaxTextureCoord(MaxTexCoords),
+		Dimensions(Dimensions),
+		Offsets(Offsets),
+		Advance(Advance) {}
 
-	const char& GetCharacter() const{
+	const char& GetCharacter() const {
 		return Character;
-	}
-	const float& GetAspectRatio() const {
-		return AspectRatio;
 	}
 	const vec2& GetDimensions() const {
 		return Dimensions;
@@ -40,7 +35,6 @@ private:
 	const vec2 MaxTextureCoord;
 	const vec2 Dimensions;
 	const vec2 Offsets;
-	const float AspectRatio;
 	const float Advance;
 };
 
@@ -62,13 +56,13 @@ public:
 	const FDistanceFieldCharacter& GetDistanceFieldCharacter(const char& Character) const;
 	const vec2& GetTextureAtlasDimensions() const;
 	void BindAtlas(Shader* ShaderIn, TString ParameterName, int32 TextureOffset) const;
-	
+
 	const int32& GetGeneratedFontSize() const;
 private:
 	TString FontName;
 	TString ImageFilePath;
 	TString FontFilePath;
-	
+
 	int32 OfflineFontSize;
 	int32 LineHeight;
 	int32 Base;

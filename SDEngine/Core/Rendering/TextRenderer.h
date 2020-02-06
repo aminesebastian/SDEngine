@@ -4,7 +4,7 @@
 #include "Core/Pictorum/DistanceFieldFont.h"
 
 /* Defines how dots for each point in font size.*/
-#define DOTS_PER_POINT 3.0f
+#define DOTS_PER_POINT 5.0f
 
 /** The font weight to use when rendering text. */
 enum class EFontWeight : uint8 {
@@ -118,7 +118,12 @@ public:
 	 * @returns	{const EFontWeight&}	The font weight.
 	 */
 	const EFontWeight& GetFontWeight() const;
-
+	/**
+	 * Gets maximum horizontal position in absolute screen space starting from the top left corner of the text.
+	 *
+	 * @returns	{const float&}	The maximum horizontal position.
+	 */
+	const float GetMaxHorizontalPosition();
 protected:
 	virtual void AddGlyph(const FDistanceFieldCharacter& Character);
 	virtual void BindToGPU();
@@ -143,6 +148,7 @@ private:
 	/*****************/
 	const DistanceFieldFont* Font;
 	vec2 CursorPosition;
+	float MaxHorizontalPosition;
 
 	/*****************/
 	/*Render Properties*/

@@ -3,7 +3,7 @@
 #include "Utilities/Logger.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
-LayoutWidget::LayoutWidget(TString Name) : PictorumWidget(Name) {
+LayoutWidget::LayoutWidget(const TString& Name) : PictorumWidget(Name) {
 	Anchors.Left = 0.0f;
 	Anchors.Right = 0.25f;
 	Anchors.Top = 1.0f;

@@ -316,7 +316,7 @@
     <ClCompile Include="Core\Pictorum\Slots\LayoutWidgetSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LAYOUTWIDGETSLOT.CPP">
+    <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -505,6 +505,7 @@
     <ClInclude Include="Core\Rendering\TextRenderer.h" />
     <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\LayoutWidgetSlot.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\DefferedLighting.vert">

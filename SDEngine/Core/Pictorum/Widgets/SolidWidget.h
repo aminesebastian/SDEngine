@@ -3,8 +3,8 @@
 
 class SolidWidget : public PictorumWidget {
 public:
-	SolidWidget(TString Name);
-	~SolidWidget();
+	SolidWidget(const TString& Name);
+	virtual  ~SolidWidget();
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 
 	void SetBackgroundColor(const FColor& NewColor);

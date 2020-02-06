@@ -36,9 +36,6 @@ void Scene::LoadPlane() {
 void Scene::LoadHead() {
 	Transform headTransform;
 	headTransform.GetLocation().z = 7;
-	//SAsset* headAsset = Engine::GetInstance()->GetAssetManager()->GetAsset("./Res/Assets/Head.sasset");
-	//StaticMesh* head = headAsset->GetAsStaticMesh("Head");
-	//head->SetTransform(headTransform);
 	HeadActor* head = new HeadActor("TestHead");
 	head->SetTransform(headTransform);
 	Engine::GetInstance()->GetWorld()->RegisterActor(head);

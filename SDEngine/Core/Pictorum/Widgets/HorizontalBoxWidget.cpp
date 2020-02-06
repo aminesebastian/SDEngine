@@ -1,6 +1,6 @@
 #include "HorizontalBoxWidget.h"
 
-HorizontalBoxWidget::HorizontalBoxWidget(TString Name) : PictorumWidget(Name) {
+HorizontalBoxWidget::HorizontalBoxWidget(const TString& Name) : PictorumWidget(Name) {
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 bool HorizontalBoxWidget::CanAddChild() const {

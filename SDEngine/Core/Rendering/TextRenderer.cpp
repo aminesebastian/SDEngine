@@ -5,7 +5,7 @@
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
 	CurrentIndexValue  = 0;
 	CursorPosition     = vec2(0.0f,0.0f);
-	SpaceWidth         = 0.003f;
+	SpaceWidth         = 0.05f;
 	bBoundToGPU        = false;
 	VertexArrayObject  = 0;
 
@@ -13,8 +13,8 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	VertexArrayBuffers.Add(0);
 	VertexArrayBuffers.Add(0);
 
-	SetLeading(0.008f);
-	SetTracking(-0.01f);
+	SetLeading(0.125f);
+	SetTracking(-0.15f);
 	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
 	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
@@ -52,7 +52,7 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 		BindToGPU();
 	}
 
-	vec2 scale = (FontSize / RenderTargetResolution) * DisplayDPI;
+	vec2 scale = (FontSize / RenderTargetResolution) * (DisplayDPI/DOTS_PER_POINT);
 
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
@@ -111,41 +111,50 @@ void TextRenderer::SetFontWeight(const EFontWeight& Weight) {
 const EFontWeight& TextRenderer::GetFontWeight() const {
 	return FontWeight;
 }
+const float TextRenderer::GetMaxHorizontalPosition() {
+	return MaxHorizontalPosition;
+}
 
 void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {
-	if (Character.GetCharacter() == ' ') {
-		CursorPosition.x += SpaceWidth * FontSize;
-		return;
-	}
-
 	if (CursorPosition.x == 0) {
 		CursorPosition.x += Character.GetDimensions().x / 4.0f;
 	}
 
-	vec2 minTexCoords = Character.GetMinTextureCoords();
-	vec2 maxTexCoords = Character.GetMaxTextureCoords();
-	vec2 glyphSize    = Character.GetDimensions();
-	vec2 topLeftVert  = CursorPosition + vec2(Character.GetOffsets().x, -Character.GetOffsets().y);
+	// Only add a quad if the character is not a space, otherwise just advance the cursor position.
+	if (Character.GetCharacter() != ' ') {
+		vec2 minTexCoords = Character.GetMinTextureCoords();
+		vec2 maxTexCoords = Character.GetMaxTextureCoords();
+		vec2 glyphSize = Character.GetDimensions();
+		vec2 topLeftVert = CursorPosition + vec2(Character.GetOffsets().x, -Character.GetOffsets().y);
 
-	TexCoords.Add(vec2(minTexCoords.x, maxTexCoords.y));
-	TexCoords.Add(minTexCoords);
-	TexCoords.Add(vec2(maxTexCoords.x, minTexCoords.y));
-	TexCoords.Add(vec2(maxTexCoords.x, maxTexCoords.y));
+		TexCoords.Add(vec2(minTexCoords.x, maxTexCoords.y));
+		TexCoords.Add(minTexCoords);
+		TexCoords.Add(vec2(maxTexCoords.x, minTexCoords.y));
+		TexCoords.Add(maxTexCoords);
 
-	Verticies.Add(topLeftVert + vec2(0.0, -glyphSize.y));
-	Verticies.Add(topLeftVert);
-	Verticies.Add(topLeftVert + vec2(glyphSize.x, 0.0f));
-	Verticies.Add(topLeftVert + vec2(glyphSize.x, -glyphSize.y));
+		Verticies.Add(topLeftVert + vec2(0.0, -glyphSize.y));
+		Verticies.Add(topLeftVert);
+		Verticies.Add(topLeftVert + vec2(glyphSize.x, 0.0f));
+		Verticies.Add(topLeftVert + vec2(glyphSize.x, -glyphSize.y));
 
-	Indices.Add(CurrentIndexValue);
-	Indices.Add(CurrentIndexValue + 1);
-	Indices.Add(CurrentIndexValue + 2);
-	Indices.Add(CurrentIndexValue);
-	Indices.Add(CurrentIndexValue + 2);
-	Indices.Add(CurrentIndexValue + 3);
+		Indices.Add(CurrentIndexValue);
+		Indices.Add(CurrentIndexValue + 1);
+		Indices.Add(CurrentIndexValue + 2);
+		Indices.Add(CurrentIndexValue);
+		Indices.Add(CurrentIndexValue + 2);
+		Indices.Add(CurrentIndexValue + 3);
 
-	CurrentIndexValue += 4;
+		CurrentIndexValue += 4;
+	}
+
 	CursorPosition.x  += (Character.GetAdvance() + Tracking);
+
+	// Cache max horizontal position
+	if (CursorPosition.x > MaxHorizontalPosition) {
+		MaxHorizontalPosition = CursorPosition.x;
+	}
+
+	// Mark this buffer as needing update.
 	bBoundToGPU        = false;
 }
 void TextRenderer::BindToGPU() {
@@ -180,10 +189,11 @@ void TextRenderer::Reset() {
 	Verticies.Clear();
 	TexCoords.Clear();
 	Indices.Clear();
-	CursorPosition.x  = 0.0f;
-	CursorPosition.y  = 0.0f;
-	CurrentIndexValue = 0;
-	bBoundToGPU       = false;
+	CursorPosition.x      = 0.0f;
+	CursorPosition.y      = 0.0f;
+	MaxHorizontalPosition = 0.0f;
+	CurrentIndexValue     = 0;
+	bBoundToGPU           = false;
 }
 void TextRenderer::NewLine() {
 	CursorPosition.x = 0.0f;

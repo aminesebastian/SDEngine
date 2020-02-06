@@ -5,7 +5,7 @@
 #include "Rendering/Shader.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
-SolidWidget::SolidWidget(TString Name) : PictorumWidget(Name) {
+SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
 	quadVAO = 0;
 	quadVBO = 0;
 	BorderRadius = 0;

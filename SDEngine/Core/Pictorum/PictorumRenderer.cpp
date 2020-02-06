@@ -6,6 +6,7 @@
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/LayoutWidget.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
+#include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
 #include "Core/Rendering/TextRenderer.h"
 
@@ -24,6 +25,8 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 	LayoutWidget* layout = new LayoutWidget("Layout");
 	HorizontalBoxWidget* hBox = new HorizontalBoxWidget("HBox");
 
+	TextWidget* textWidget = new TextWidget("Text");
+	textWidget->SetText("Hello this is a \n test of the system");
 	SolidWidget* widget1 = new SolidWidget("test1");
 	widget1->SetBackgroundColor(FColor(0.25f, 0.25f, 0.25f, 0.8f));
 
@@ -39,14 +42,18 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 	hBox->AddChild(widget3);
 	hBox->AddChild(widget4);
 
-	layout->AddChild(hBox);
-	layout->AddChild(widget1)->SetMargins(5, 5, 5, 5);
+	layout->AddChild(textWidget)->SetOffsets(1.0f, 1.0f, 0.9f, 0.0f);
+	layout->AddChild(hBox)->SetOffsets(0.9f, 1.0f, 0.0f, 0.0f);
+
+	LayoutWidgetSlot* slot = layout->AddChild(widget1);
+	slot->SetOffsets(0.9f, 1.0f, 0.0f, 0.0f);
+	slot->SetMargins(5, 5, 5, 5);
 
 	AddToViewport(layout);
 
 
-	DistanceField = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
-	QuadBuffer = new TextRenderer(24, DistanceField);
+	//DistanceField = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
+	//QuadBuffer = new TextRenderer(24, DistanceField);
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -56,7 +63,7 @@ void PictorumRenderer::Tick(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->Tick(DeltaTime, TopLevelRenderGeometry);
 	}
-	QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime) + "\nSecond Line Of Text");
+	//QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime) + "\nSecond Line Of Text");
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	glEnable(GL_BLEND);
@@ -66,7 +73,7 @@ void PictorumRenderer::Draw(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
-	QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution(), TopLevelRenderGeometry.GetDPI());
+	//QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution(), TopLevelRenderGeometry.GetDPI());
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }

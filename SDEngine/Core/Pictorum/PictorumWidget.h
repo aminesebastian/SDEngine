@@ -16,7 +16,7 @@ class DragFloat;
 class PictorumWidget : public EngineObject, public IDetailsPanelProvider {
 public:
 	PictorumWidget(const TString& Name);
-	~PictorumWidget();
+	virtual ~PictorumWidget();
 
 	virtual void OnCreated(FRenderGeometry Geometry);
 	virtual void OnDestroyed(FRenderGeometry Geometry);

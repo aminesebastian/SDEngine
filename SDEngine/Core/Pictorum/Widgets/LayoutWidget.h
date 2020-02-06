@@ -4,8 +4,8 @@
 
 class LayoutWidget : public PictorumWidget {
 public:
-	LayoutWidget(TString Name);
-	~LayoutWidget();
+	LayoutWidget(const TString& Name);
+	virtual ~LayoutWidget();
 
 	virtual bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
