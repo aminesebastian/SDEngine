@@ -1,14 +1,15 @@
-#include "Engine/Engine.h"
 #include "PictorumRenderer.h"
-#include "Core/Pictorum/PictorumWidget.h"
-#include "Utilities/Logger.h"
 
-#include "Core/Pictorum/Widgets/SolidWidget.h"
-#include "Core/Pictorum/Widgets/LayoutWidget.h"
-#include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
-#include "Core/Pictorum/Widgets/TextWidget.h"
+#include "Core/Engine/Engine.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
-#include "Core/Rendering/TextRenderer.h"
+#include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Pictorum/TextRenderer.h"
+#include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
+#include "Core/Pictorum/Widgets/LayoutWidget.h"
+#include "Core/Pictorum/Widgets/SolidWidget.h"
+#include "Core/Pictorum/Widgets/TextWidget.h"
+#include "Core/Pictorum/EngineUI/TitleBar.h"
+#include "Core/Utilities/Logger.h"
 
 PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI) : EngineObject(ViewportName) {
 	// Initialize member variables.
@@ -25,8 +26,8 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 	LayoutWidget* layout = new LayoutWidget("Layout");
 	HorizontalBoxWidget* hBox = new HorizontalBoxWidget("HBox");
 
-	TextWidget* textWidget = new TextWidget("Text");
-	textWidget->SetText("Hello this is a \n test of the system");
+	//TextWidget* textWidget = new TextWidget("Text");
+	//textWidget->SetText("Hello this is a \n test of the system");
 	SolidWidget* widget1 = new SolidWidget("test1");
 	widget1->SetBackgroundColor(FColor(0.25f, 0.25f, 0.25f, 0.8f));
 
@@ -42,7 +43,10 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 	hBox->AddChild(widget3);
 	hBox->AddChild(widget4);
 
-	layout->AddChild(textWidget)->SetOffsets(1.0f, 1.0f, 0.9f, 0.0f);
+	TitleBar* mainTitleBar = new TitleBar("MainTitleBar");
+	layout->AddChild(mainTitleBar);
+
+	//layout->AddChild(textWidget)->SetOffsets(1.0f, 1.0f, 0.9f, 0.0f);
 	layout->AddChild(hBox)->SetOffsets(0.9f, 1.0f, 0.0f, 0.0f);
 
 	LayoutWidgetSlot* slot = layout->AddChild(widget1);

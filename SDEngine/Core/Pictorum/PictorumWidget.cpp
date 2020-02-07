@@ -1,13 +1,13 @@
 #include "PictorumWidget.h"
-#include "Engine/EngineStatics.h"
-#include "Engine/Engine.h"
-#include "Engine/RenderViewport.h"
-#include "Rendering/DefferedCompositor.h"
-#include "Rendering/Shader.h"
+#include "Core/Engine/EngineStatics.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Rendering/RenderViewport.h"
+#include "Core/Rendering/DefferedCompositor.h"
+#include "Core/Objects/CoreTypes/Shader.h"
 #include "UserInterface/UserInterface.h"
 #include "UserInterface/UserInterfaceUtilities.h"
 #include "UserInterface/Widgets/DragFloat.h"
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
@@ -46,7 +46,7 @@ void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 
 }
 vec2 PictorumWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
-	return vec2(100.0f, 100.0f);
+	return Geometry.GetRenderResolution();
 }
 void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
@@ -171,10 +171,10 @@ void PictorumWidget::SetMargins(FMargins NewMargins) {
 	Margins = NewMargins;
 }
 void PictorumWidget::SetMargins(float Top, float Right, float Left, float Bottom) {
-	Margins.Top = Top;
-	Margins.Right = Right;
-	Margins.Bottom = Bottom;
-	Margins.Left = Left;
+	Margins.SetTop(Top);
+	Margins.SetRight(Right);
+	Margins.SetBottom(Bottom);
+	Margins.SetLeft(Left);
 }
 FMargins PictorumWidget::GetMargins() const {
 	return Margins;
@@ -183,10 +183,10 @@ void PictorumWidget::SetPadding(FPadding NewPadding) {
 	Padding = NewPadding;
 }
 void PictorumWidget::SetPadding(float Top, float Right, float Left, float Bottom) {
-	Padding.Top = Top;
-	Padding.Right = Right;
-	Padding.Bottom = Bottom;
-	Padding.Left = Left;
+	Padding.SetTop(Top);
+	Padding.SetRight(Right);
+	Padding.SetBottom(Bottom);
+	Padding.SetLeft(Left);
 }
 FPadding PictorumWidget::GetPadding() const {
 	return Padding;

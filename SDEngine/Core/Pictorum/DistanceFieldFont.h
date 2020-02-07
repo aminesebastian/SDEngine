@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Rendering/Texture2D.h"
+#include "Core/Objects/CoreTypes/Texture2D.h"
 
 struct FDistanceFieldCharacter {
 	FDistanceFieldCharacter(char Character, vec2 MinTexCoords, vec2 MaxTexCoords, vec2 Dimensions, vec2 Offsets, float Advance) :

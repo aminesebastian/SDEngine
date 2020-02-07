@@ -1,7 +1,10 @@
 #pragma once
+#include "Core/Pictorum/PictorumDataTypes.h"
+
 class IWidgetSlot {
 public:
 	IWidgetSlot() = default;
-	virtual ~IWidgetSlot() = default; //Required to mark this class as polymorphic.
+	virtual ~IWidgetSlot() = default; 
+	virtual void ModifyGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry);
 };
 

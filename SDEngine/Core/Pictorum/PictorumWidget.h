@@ -6,9 +6,9 @@
 #include <GLEW/glew.h>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
-#include "Utilities/Transform.h"
+#include "Core/Utilities/Math/Transform.h"
 #include "UserInterface/DetailsPanelProvider.h"
-#include "Engine/EngineObject.h"
+#include "Core/Objects/EngineObject.h"
 
 class Shader;
 class DragFloat;

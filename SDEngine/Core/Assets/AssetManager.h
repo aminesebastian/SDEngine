@@ -1,10 +1,10 @@
 #pragma once
-#include "Engine/Engine.h"
+#include "Core/Engine/Engine.h"
 #include "Core/Assets/Asset.h"
 #include "Core/Assets/ISerializeableAsset.h"
 #include "Core/Assets/IAssetFactory.h"
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 
 
 class AssetManager {

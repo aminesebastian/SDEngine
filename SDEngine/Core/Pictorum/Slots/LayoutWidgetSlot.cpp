@@ -5,22 +5,22 @@ LayoutWidgetSlot::LayoutWidgetSlot() {
 }
 
 void LayoutWidgetSlot::SetTopOffset(const float& TopOffset) {
-	Offsets.Top = TopOffset;
+	Offsets.SetTop(TopOffset);
 }
 void LayoutWidgetSlot::SetRightOffset(const float& RightOffset) {
-	Offsets.Right = RightOffset;
+	Offsets.SetRight(RightOffset);
 }
 void LayoutWidgetSlot::SetBottomOffset(const float& BottomOffset) {
-	Offsets.Bottom = BottomOffset;
+	Offsets.SetBottom(BottomOffset);
 }
 void LayoutWidgetSlot::SetLeftOffset(const float& LeftOffset) {
-	Offsets.Left = LeftOffset;
+	Offsets.SetLeft(LeftOffset);
 }
 void LayoutWidgetSlot::SetOffsets(const float& Top, const float& Right, const float& Bottom, const float& Left) {
-	Offsets.Top = Top;
-	Offsets.Right = Right;
-	Offsets.Bottom = Bottom;
-	Offsets.Left = Left;
+	Offsets.SetTop(Top);
+	Offsets.SetRight(Right);
+	Offsets.SetBottom(Bottom);
+	Offsets.SetLeft(Left);
 }
 const FAnchors& LayoutWidgetSlot::GetOffsets() {
 	return Offsets;
@@ -33,22 +33,22 @@ const bool& LayoutWidgetSlot::GetOffsetsRelative() const {
 }
 
 void LayoutWidgetSlot::SetTopMargin(const float& TopMargin) {
-	Margins.Top = TopMargin;
+	Margins.SetTop(TopMargin);
 }
 void LayoutWidgetSlot::SetRightMargin(const float& RightMargin) {
-	Margins.Right = RightMargin;
+	Margins.SetRight(RightMargin);
 }
 void LayoutWidgetSlot::SetBottomMargin(const float& BottomMargin) {
-	Margins.Bottom = BottomMargin;
+	Margins.SetBottom(BottomMargin);
 }
 void LayoutWidgetSlot::SetLeftMargin(const float& LeftMargin) {
-	Margins.Left = LeftMargin;
+	Margins.SetLeft(LeftMargin);
 }
 void LayoutWidgetSlot::SetMargins(const float& Top, const float& Right, const float& Bottom, const float& Left) {
-	Margins.Top = Top;
-	Margins.Right = Right;
-	Margins.Bottom = Bottom;
-	Margins.Left = Left;
+	Margins.SetTop(Top);
+	Margins.SetRight(Right);
+	Margins.SetBottom(Bottom);
+	Margins.SetLeft(Left);
 }
 const FMargins& LayoutWidgetSlot::GetMargins() {
 	return Margins;

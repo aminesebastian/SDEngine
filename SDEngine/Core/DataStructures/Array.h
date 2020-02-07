@@ -19,7 +19,7 @@ public:
 
 	}
 	template <typename Type>
-	void Add(Type Data) {
+	void Add(const Type& Data) {
 		push_back(Data);
 	}	
 	template <typename Type, size_t size>

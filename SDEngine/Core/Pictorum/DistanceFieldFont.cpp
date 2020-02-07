@@ -1,8 +1,8 @@
 #include "DistanceFieldFont.h"
 #include "Core/Utilities/StringUtilities.h"
 #include "Core/Utilities/FileUtilities.h"
-#include "Rendering/Shader.h"
-#include "Utilities/Logger.h"
+#include "Core/Objects/CoreTypes/Shader.h"
+#include "Core/Utilities/Logger.h"
 #include <fstream>
 
 

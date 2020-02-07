@@ -3,7 +3,7 @@
 #include "Core/Input/IUserInputReciever.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
-#include "Engine/EngineObject.h"
+#include "Core/Objects/EngineObject.h"
 #include "UserInterface/DetailsPanelProvider.h"
 
 

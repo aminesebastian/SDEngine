@@ -1,10 +1,10 @@
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/PictorumWidget.h"
 #include "EngineUI.h"
-#include "Engine/Engine.h"
-#include "Utilities/Logger.h"
-#include "Utilities/EngineFunctionLibrary.h"
-#include "Rendering/PostProcessing/PostProcessingLayer.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Utilities/Logger.h"
+#include "Core/Utilities/EngineFunctionLibrary.h"
+#include "Core/Rendering/PostProcessing/PostProcessingLayer.h"
 
 EngineUI::EngineUI() {
 	MaxFrameTimeCache = 50;

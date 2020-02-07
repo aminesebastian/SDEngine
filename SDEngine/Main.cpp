@@ -1,12 +1,12 @@
-#include "Engine/Engine.h"
-#include "Engine/Scene.h"
-#include "Utilities/Logger.h"
-#include "Entities/StaticMesh.h"
 #include "Core/Assets/AssetManager.h"
-#include "Core/Assets/Factories/StaticMeshAssetFactory.h"
-#include "Core/Assets/Factories/MaterialAssetFactory.h"
-#include "Core/Assets/Factories/Texture2DAssetFactory.h"
 #include "Core/Assets/AssetMetadata.h"
+#include "Core/Assets/Factories/MaterialAssetFactory.h"
+#include "Core/Assets/Factories/StaticMeshAssetFactory.h"
+#include "Core/Assets/Factories/Texture2DAssetFactory.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Objects/CoreTypes/Scene.h"
+#include "Core/Objects/CoreTypes/StaticMesh.h"
+#include "Core/Utilities/Logger.h"
 
 #undef main
 using namespace glm;

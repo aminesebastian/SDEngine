@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 
 enum class EVerticalAlignment : uint8 {
 	LEFT,
@@ -31,6 +31,12 @@ enum class EPictorumLocationBasis : uint8 {
 enum class EPictorumScaleBasis : uint8 {
 	ABSOLUTE,
 	RELATIVE
+};
+enum class EPictorumSide : uint8 {
+	TOP,
+	RIGHT,
+	BOTTOM,
+	LEFT
 };
 struct FUserInterfaceEvent {
 	FUserInterfaceEvent() {
@@ -158,96 +164,126 @@ private:
 	/** The location this space exists at (int absolute pixel space). */
 	vec2 Location;
 };
-struct FPadding {
-	float Top;
-	float Right;
-	float Bottom;
-	float Left;
-
-	FPadding() {
-		Top = 0.0f;
-		Right = 0.0f;
-		Bottom = 0.0f;
-		Left = 0.0f;
-	}
-	void ApplyPaddingToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		OutRenderGeometry.AddLocation(Left, Bottom);
-		OutRenderGeometry.AddAllotedSpace(-Right * 2, -Top * 2);
-	}
-	float& operator[](const int32 Index) {
-		return (*this)[Index];
-	}
-};
 struct FAnchors {
-	float Top;
-	float Right;
-	float Bottom;
-	float Left;
-	bool bIsRelative;
-
 	FAnchors() {
-		Top = 1.0f;
-		Right = 1.0f;
-		Bottom = 0.0f;
-		Left = 0.0f;
-		bIsRelative = true;
+		Sides[0] = 1.0f;
+		Sides[1] = 1.0f;
+		Sides[2] = 0.0f;
+		Sides[3] = 0.0f;
+		memset(&Relative[0], 1, 4);
 	}
-	void SetRelative() {
-		bIsRelative = true;
+	void SetRelative(const EPictorumSide& Side) {
+		Relative[(uint8)Side] = true;
 	}
-	void SetAbsolute() {
-		bIsRelative = false;
+	void SetAbsolute(const EPictorumSide& Side) {
+		Relative[(uint8)Side] = false;
 	}
+	const bool& IsSideRelative(const EPictorumSide& Side) const {
+		return Relative[(uint8)Side];
+	}
+	const bool& IsSideAbsolute(const EPictorumSide& Side) const {
+		return !Relative[(uint8)Side];
+	}
+	const float& GetTop() const {
+		return Sides[0];
+	}
+	FAnchors& SetTop(const float& Value) {
+		Sides[0] = Value;
+		return *this;
+	}
+	const float& GetRight() const {
+		return Sides[2];
+	}
+	FAnchors& SetRight(const float& Value) {
+		Sides[1] = Value;
+		return *this;
+	}
+	const float& GetBottom() const {
+		return Sides[3];
+	}
+	FAnchors& SetBottom(const float& Value) {
+		Sides[2] = Value;
+		return *this;
+	}
+	const float& GetLeft() const {
+		return Sides[3];
+	}
+	FAnchors& SetLeft(const float& Value) {
+		Sides[3] = Value;
+		return *this;
+	}
+	virtual void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
+		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
-	void ApplyAnchorsToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		if (Left >= Right) {
+		if (relativeLeft >= relativeRight) {
 			SD_ENGINE_WARN("An anchor's Left value is greater than or equal to its Right value. This will result in negative allocated X space.");
 			return;
 		}
-		if (Bottom >= Top) {
+		if (relativeBottom >= relativeTop) {
 			SD_ENGINE_WARN("An anchor's Bottom value is greater than or equal to its Top value. This will result in negative allocated Y space.");
 			return;
 		}
 
 		vec2 newLocation;
 		vec2 newSpace;
-		if (bIsRelative) {
-			newLocation.x = OriginalRenderGeometry.GetLocation().x + (OriginalRenderGeometry.GetAllotedSpace().x * Left);
-			newLocation.y = OriginalRenderGeometry.GetLocation().y + (OriginalRenderGeometry.GetAllotedSpace().y * Bottom);
 
-			newSpace.x = (Right - Left) * OriginalRenderGeometry.GetAllotedSpace().x;
-			newSpace.y = (Top - Bottom) * OriginalRenderGeometry.GetAllotedSpace().y;
-		} else {
-			newLocation.x = OriginalRenderGeometry.GetLocation().x + Left;
-			newLocation.y = OriginalRenderGeometry.GetLocation().x + Bottom;
+		newLocation.x = OriginalRenderGeometry.GetLocation().x + (OriginalRenderGeometry.GetAllotedSpace().x * relativeLeft);
+		newLocation.y = OriginalRenderGeometry.GetLocation().y + (OriginalRenderGeometry.GetAllotedSpace().y * relativeBottom);
 
-			newSpace.x = ((Right - Left) / OriginalRenderGeometry.GetRenderResolution().x) * OriginalRenderGeometry.GetAllotedSpace().x;
-			newSpace.y = ((Top - Bottom) / OriginalRenderGeometry.GetRenderResolution().y) * OriginalRenderGeometry.GetAllotedSpace().y;
-		}
+		newSpace.x = (relativeRight - relativeLeft) * OriginalRenderGeometry.GetAllotedSpace().x;
+		newSpace.y = (relativeTop - relativeBottom) * OriginalRenderGeometry.GetAllotedSpace().y;
+
 		OutRenderGeometry.SetLocation(newLocation);
 		OutRenderGeometry.SetAllotedSpace(newSpace);
 	}
 	float& operator[](const int32 Index) {
-		return (*this)[Index];
+		return Sides[Index];
+	}
+protected:
+	float Sides[4];
+	bool Relative[4] = { true };
+
+	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
+		if (Relative[(uint8)Side]) {
+			return Sides[(uint8)Side];
+		} else {
+			if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
+				return Sides[(uint8)Side] / RenderResolution.y;
+			} else {
+				return Sides[(uint8)Side] / RenderResolution.x;
+			}
+		}
+		return 0.0f;
 	}
 };
-struct FMargins {
-	float Top;
-	float Right;
-	float Bottom;
-	float Left;
+struct FPadding : public FAnchors{
+	FPadding() : FAnchors() {
+		memset(&Sides[0], 0, 4);
+	}
+	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
+		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
-	FMargins() {
-		Top = 0.0f;
-		Right = 0.0f;
-		Bottom = 0.0f;
-		Left = 0.0f;
+		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom);
+		OutRenderGeometry.AddAllotedSpace(-relativeRight * 2, -relativeTop * 2);
 	}
-	void ApplyMarginsToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		OutRenderGeometry.AddLocation(Left, Bottom);
-		OutRenderGeometry.AddAllotedSpace(-Right * 2, -Top * 2);
+};
+struct FMargins : public FAnchors{
+	FMargins() : FAnchors() {
+		memset(&Sides[0], 0, 4);
 	}
-	float& operator[](const int32 Index) {
-		return (*this)[Index];
+	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
+		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+
+		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom);
+		OutRenderGeometry.AddAllotedSpace(-relativeRight * 2, -relativeTop * 2);
 	}
 };

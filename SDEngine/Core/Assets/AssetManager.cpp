@@ -1,5 +1,5 @@
 #include "AssetManager.h"
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 #include "Core/Assets/AssetMetadata.h"
 
 AssetManager::AssetManager() {

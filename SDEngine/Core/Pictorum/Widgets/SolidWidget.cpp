@@ -1,8 +1,8 @@
 #include "SolidWidget.h"
 #include "Core/Input/InputSubsystem.h"
-#include "Engine/Engine.h"
-#include "Engine/EngineStatics.h"
-#include "Rendering/Shader.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Engine/EngineStatics.h"
+#include "Core/Objects/CoreTypes/Shader.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
 SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
