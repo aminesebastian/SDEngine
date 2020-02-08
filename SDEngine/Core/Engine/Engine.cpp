@@ -39,7 +39,6 @@ Engine::Engine() {
 
 	_CurrentViewport = new RenderViewport(_Display->GetDimensions());
 	_IMGuiEngineUI = new EngineUI();
-	_EngineUI =  new PictorumRenderer("EditorViewport", _Display->GetDimensions(), _Display->GetDisplayDPI());
 }
 Engine::~Engine() {
 	delete& _Display;
@@ -58,6 +57,8 @@ bool Engine::Initialize() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	LastFrameTimecode = SDL_GetPerformanceCounter();
+
+	_EngineUI =  new PictorumRenderer("EditorViewport", _Display->GetDimensions(), _Display->GetDisplayDPI());
 
 	_CurrentViewport->Initialize();
 	_InputSubsystem->Initialize();

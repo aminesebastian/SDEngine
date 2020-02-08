@@ -15,19 +15,23 @@ Engine* S_Engine;
 
 void serializeTexture(TString TextureName,TString TexturePath, TString AssetPath, AssetManager* Manager);
 void serializeStaticMesh(TString MeshName, TString MeshPath, TString AssetPath, AssetManager* Manager);
+void serializeAllTextures(AssetManager* Manager);
 
 int main(int argc, char* argv[]) {
 	S_Engine = Engine::GetInstance();
-	if (!S_Engine->Initialize()) {		
-		return 0;
-	}
+
 	AssetManager* manager = Engine::GetInstance()->GetAssetManager();
 	manager->RegisterNewFactory("StaticMesh", new StaticMeshAssetFactory());
 	manager->RegisterNewFactory("Material", new MaterialAssetFactory());
 	manager->RegisterNewFactory("Texture2D", new Texture2DAssetFactory());
 
-	//serializeTexture("light_texture", "./Res/Textures/Editor/Sprites/PointLightSprite.png", "./Res/Assets/Textures/PointLightSprite.sasset", manager);
+	if (!S_Engine->Initialize()) {		
+		return 0;
+	}
+
+
 	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
+	serializeAllTextures(manager);
 
 	SD_ENGINE_INFO("Engine Launched!");
 
@@ -38,7 +42,13 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
-
+void serializeAllTextures(AssetManager* Manager) {
+	serializeTexture("light_texture", "./Res/Textures/Editor/Sprites/PointLightSprite.png", "./Res/Assets/Editor/Textures/PointLightSprite.sasset", Manager);
+	serializeTexture("close_icon", "./Res/Textures/Editor/UI/CloseIcon.png", "./Res/Assets/Editor/Textures/UI/CloseIcon.sasset", Manager);
+	serializeTexture("restore_icon", "./Res/Textures/Editor/UI/RestoreIcon.png", "./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset", Manager);
+	serializeTexture("minimize_icon", "./Res/Textures/Editor/UI/MinimizeIcon.png", "./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset", Manager);
+	serializeTexture("maximize_icon", "./Res/Textures/Editor/UI/MaximizeIcon.png", "./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset", Manager);
+}
 void serializeTexture(TString TextureName, TString TexturePath, TString AssetPath, AssetManager* Manager) {
 	ByteBuffer buffer;
 	SerializationStream stream(buffer);

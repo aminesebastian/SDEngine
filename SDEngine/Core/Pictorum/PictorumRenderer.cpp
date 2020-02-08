@@ -24,40 +24,10 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 
 	// Add some test widgets.
 	LayoutWidget* layout = new LayoutWidget("Layout");
-	HorizontalBoxWidget* hBox = new HorizontalBoxWidget("HBox");
-
-	//TextWidget* textWidget = new TextWidget("Text");
-	//textWidget->SetText("Hello this is a \n test of the system");
-	SolidWidget* widget1 = new SolidWidget("test1");
-	widget1->SetBackgroundColor(FColor(0.25f, 0.25f, 0.25f, 0.8f));
-
-
-	SolidWidget* widget2 = new SolidWidget("test2");
-	widget2->SetBackgroundColor(FColor(1.0f, 0.0f, 0.0f, 1.0f));
-	SolidWidget* widget3 = new SolidWidget("test3");
-	widget3->SetBackgroundColor(FColor(0.0f, 1.0f, 0.0f, 1.0f));
-	SolidWidget* widget4 = new SolidWidget("test4");
-	widget4->SetBackgroundColor(FColor(0.0f, 0.0f, 1.0f, 1.0f));
-
-	hBox->AddChild(widget2);
-	hBox->AddChild(widget3);
-	hBox->AddChild(widget4);
-
 	TitleBar* mainTitleBar = new TitleBar("MainTitleBar");
 	layout->AddChild(mainTitleBar);
 
-	//layout->AddChild(textWidget)->SetOffsets(1.0f, 1.0f, 0.9f, 0.0f);
-	layout->AddChild(hBox)->SetOffsets(0.9f, 1.0f, 0.0f, 0.0f);
-
-	LayoutWidgetSlot* slot = layout->AddChild(widget1);
-	slot->SetOffsets(0.9f, 1.0f, 0.0f, 0.0f);
-	slot->SetMargins(5, 5, 5, 5);
-
 	AddToViewport(layout);
-
-
-	//DistanceField = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
-	//QuadBuffer = new TextRenderer(24, DistanceField);
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -67,7 +37,6 @@ void PictorumRenderer::Tick(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->Tick(DeltaTime, TopLevelRenderGeometry);
 	}
-	//QuadBuffer->SetText("The current Delta Time is: " + std::to_string(DeltaTime) + "\nSecond Line Of Text");
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	glEnable(GL_BLEND);
@@ -77,7 +46,6 @@ void PictorumRenderer::Draw(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
-	//QuadBuffer->Draw(vec2(-0.5, 0.0), TopLevelRenderGeometry.GetRenderResolution(), TopLevelRenderGeometry.GetDPI());
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 }
@@ -174,6 +142,8 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 		}
 	}
 
+	bool hit = false;
+
 	// Test them each for hits.
 	for (PictorumWidget* child : children) {
 		if (child->GetVisibility() != EPictorumVisibilityState::VISIBLE) {
@@ -182,12 +152,15 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 		vec2 min, max;
 		child->CalculateBounds(Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions(), min, max);
 
+		// Keep looping, the later the overlap, the closer the widget is to the top of the stack.
 		if (MousePosition.x > min.x && MousePosition.x < max.x && MousePosition.y > min.y && MousePosition.y < max.y) {
+			hit = true;
 			MouseOverWidget = child;
-			return;
 		}
 	}
-	MouseOverWidget = nullptr;
+	if (!hit) {
+		MouseOverWidget = nullptr;
+	}
 }
 const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() {
 	return Widgets;

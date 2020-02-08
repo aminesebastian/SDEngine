@@ -5,16 +5,18 @@
 enum class EVerticalAlignment : uint8 {
 	LEFT,
 	CENTER,
-	RIGHT
+	RIGHT,
+	STRETCH
 };
 enum class EHorizontalAlignment : uint8 {
 	LEFT,
 	CENTER,
-	RIGHT
+	RIGHT,
+	STRETCH
 };
-enum class EFillState : uint8 {
+enum class EFillRule : uint8 {
 	AUTOMATIC,
-	FILL_ALL_SPACE
+	FILL
 };
 enum class EPictorumVisibilityState : uint8 {
 	COLLAPSED,
@@ -38,6 +40,12 @@ enum class EPictorumSide : uint8 {
 	BOTTOM,
 	LEFT
 };
+enum class ETextAlignment : uint8 {
+	LEFT,
+	CENTER,
+	RIGHT,
+	JUSTIFIED
+};
 struct FUserInterfaceEvent {
 	FUserInterfaceEvent() {
 		bHandled = false;
@@ -53,6 +61,34 @@ struct FUserInterfaceEvent {
 private:
 	bool bHandled;
 	bool bCaptureMouse;
+};
+struct FFillRule {
+	FFillRule() {
+		Ratio = 1.0f;
+		Rule = EFillRule::AUTOMATIC;
+	}
+	void SetFillAllSpace(const float& FillRatio) {
+		if (FillRatio > 0.0f) {
+			Ratio = FillRatio;
+		} else {
+			Ratio = 0.0000001f;
+			SD_ENGINE_ERROR("There was an attempt to set the fill ratio of a fill rule to 0.");
+		}
+		Rule = EFillRule::FILL;
+	}
+	void SetUseWidgetDesiredSpace() {
+		Ratio = 0.0f;
+		Rule = EFillRule::AUTOMATIC;
+	}
+	const float& GetFillRatio() const {
+		return Ratio;
+	}
+	const EFillRule& GetFillRule() const {
+		return Rule;
+	}
+private:
+	float Ratio;
+	EFillRule Rule;
 };
 struct FRenderGeometry {
 	FRenderGeometry() {
@@ -213,10 +249,10 @@ struct FAnchors {
 		return *this;
 	}
 	virtual void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
 		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		if (relativeLeft >= relativeRight) {
 			SD_ENGINE_WARN("An anchor's Left value is greater than or equal to its Right value. This will result in negative allocated X space.");
@@ -259,29 +295,29 @@ protected:
 		return 0.0f;
 	}
 };
-struct FPadding : public FAnchors{
+struct FPadding : public FAnchors {
 	FPadding() : FAnchors() {
 		memset(&Sides[0], 0, 4);
 	}
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
 		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom);
 		OutRenderGeometry.AddAllotedSpace(-relativeRight * 2, -relativeTop * 2);
 	}
 };
-struct FMargins : public FAnchors{
+struct FMargins : public FAnchors {
 	FMargins() : FAnchors() {
 		memset(&Sides[0], 0, 4);
 	}
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
 		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom);
 		OutRenderGeometry.AddAllotedSpace(-relativeRight * 2, -relativeTop * 2);

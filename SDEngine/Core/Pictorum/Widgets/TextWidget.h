@@ -22,6 +22,7 @@ public:
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
+
 protected:
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;

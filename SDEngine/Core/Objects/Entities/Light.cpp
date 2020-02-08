@@ -21,7 +21,7 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 
 	bCastShadows = CastShadows;
 
-	RegisterComponent(new EditorSpriteComponent("PointLightSprite", Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Textures/PointLightSprite.sasset"), Color));
+	RegisterComponent(new EditorSpriteComponent("PointLightSprite", Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), Color));
 
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 

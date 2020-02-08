@@ -12,7 +12,6 @@ public:
 	virtual LayoutWidgetSlot* AddChild(PictorumWidget* Widget) override;
 	virtual LayoutWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const override;
 	virtual bool PopulateDetailsPanel() override;
-
 private:
 	FAnchors Anchors;
 	FPadding Padding;

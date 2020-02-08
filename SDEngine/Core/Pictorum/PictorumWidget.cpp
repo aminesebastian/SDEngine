@@ -12,10 +12,6 @@
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
 	Parent              = nullptr;
-	HorizontalAlignment = EHorizontalAlignment::LEFT;
-	VerticalAlignment   = EVerticalAlignment::LEFT;
-	HorizontalFillState = EFillState::FILL_ALL_SPACE;
-	VerticalFillState   = EFillState::FILL_ALL_SPACE;
 	PivotOffset		    = vec2(0.0f, 0.0f);
 
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
@@ -75,13 +71,16 @@ IWidgetSlot* PictorumWidget::AddChildInternal(PictorumWidget* Widget) {
 bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	if (Children.Remove(Widget)) {
 		Widget->OnRemovedFromParent(this);
-		delete Widget->GetParentSlot();
+		delete Widget->GetParentSlot<IWidgetSlot>();
 		return true;
 	}
 	return false;
 }
 bool PictorumWidget::CanAddChild() const {
 	return false;
+}
+PictorumWidget* PictorumWidget::GetChildAtIndex(int32 Index) const {
+	return Children[Index];
 }
 IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new IWidgetSlot();
@@ -111,7 +110,7 @@ mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const
 
 	return posMatrix * scaleMatrix * combinedRotMatrix;
 }
-void PictorumWidget::DrawContents(float DeltaTime, FRenderGeometry Geometry) {
+void PictorumWidget::DrawContents(float DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;
 
 	Draw(DeltaTime, Geometry);
@@ -139,58 +138,7 @@ void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const 
 PictorumWidget* PictorumWidget::GetParent() const {
 	return Parent;
 }
-IWidgetSlot* PictorumWidget::GetParentSlot() const {
-	return ParentSlot;
-}
 
-void PictorumWidget::SetHorizontalAlignment(EHorizontalAlignment Alignment) {
-	HorizontalAlignment = Alignment;
-}
-EHorizontalAlignment PictorumWidget::GetHorizontalAlignment() const {
-	return HorizontalAlignment;
-}
-void PictorumWidget::SetVerticalAlignment(EVerticalAlignment Alignment) {
-	VerticalAlignment = Alignment;
-}
-EVerticalAlignment PictorumWidget::GetVerticalAlignment() const {
-	return VerticalAlignment;
-}
-void PictorumWidget::SetHorizontalFillState(EFillState State) {
-	HorizontalFillState = State;
-}
-EFillState PictorumWidget::GetHorizontalFillState() const {
-	return HorizontalFillState;
-}
-void PictorumWidget::SetVerticalFillState(EFillState State) {
-	VerticalFillState = State;
-}
-EFillState PictorumWidget::GetVerticalFillState() const {
-	return VerticalFillState;
-}
-void PictorumWidget::SetMargins(FMargins NewMargins) {
-	Margins = NewMargins;
-}
-void PictorumWidget::SetMargins(float Top, float Right, float Left, float Bottom) {
-	Margins.SetTop(Top);
-	Margins.SetRight(Right);
-	Margins.SetBottom(Bottom);
-	Margins.SetLeft(Left);
-}
-FMargins PictorumWidget::GetMargins() const {
-	return Margins;
-}
-void PictorumWidget::SetPadding(FPadding NewPadding) {
-	Padding = NewPadding;
-}
-void PictorumWidget::SetPadding(float Top, float Right, float Left, float Bottom) {
-	Padding.SetTop(Top);
-	Padding.SetRight(Right);
-	Padding.SetBottom(Bottom);
-	Padding.SetLeft(Left);
-}
-FPadding PictorumWidget::GetPadding() const {
-	return Padding;
-}
 void PictorumWidget::SetVisibility(EPictorumVisibilityState NewVisibility) {
 	Visibility = NewVisibility;
 }

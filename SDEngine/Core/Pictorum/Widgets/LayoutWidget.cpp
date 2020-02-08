@@ -19,10 +19,9 @@ void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRe
 	Anchors.ApplyToGeometry(CurrentRenderGeometry, OutputGeometry);
 	Padding.ApplyToGeometry(OutputGeometry, OutputGeometry);
 
-	PictorumWidget* child  = Children[ChildIndex];
-	LayoutWidgetSlot* slot = Cast<LayoutWidgetSlot>(child->GetParentSlot());
+	LayoutWidgetSlot* slot = GetChildSlotAtIndex<LayoutWidgetSlot>(ChildIndex);
 	if (!slot) {
-		SD_ENGINE_ERROR("Encountered an null slot for widget: {0} in widget: {1} that should have one!", child->GetName(), GetName());
+		SD_ENGINE_ERROR("Encountered an null slot for widget: {0} in widget: {1} that should have one!", Children[ChildIndex]->GetName(), GetName());
 		return;
 	}
 	slot->GetOffsets().ApplyToGeometry(OutputGeometry, OutputGeometry);

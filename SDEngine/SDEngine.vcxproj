@@ -219,6 +219,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\ConstraintBoxWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\LayoutWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
@@ -261,6 +264,7 @@
     <ClCompile Include="Core\Rendering\Utilities\Downsampler.cpp" />
     <ClCompile Include="Core\Engine\EngineStatics.cpp" />
     <ClCompile Include="Core\Pictorum\EngineUI\TitleBar.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -301,6 +305,9 @@
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\LayoutWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
     <ClInclude Include="Core\Pictorum\Pictorum.h" />
@@ -353,6 +360,7 @@
     <ClInclude Include="Core\Engine\Engine.h" />
     <ClInclude Include="Core\Engine\EngineStatics.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\TitleBar.h" />
+    <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
     <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />
@@ -389,6 +397,12 @@
     <ClInclude Include="Core\Rendering\PostProcessing\ToneMapper.h" />
     <ClInclude Include="Core\Utilities\Math\Transform.h" />
     <ClInclude Include="Core\Engine\World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\Shaders\UI\UIImageShader.frag" />
+    <None Include="Res\Shaders\UI\UIImageShader.vert" />
+    <None Include="Res\Shaders\UI\UISolidShader.frag" />
+    <None Include="Res\Shaders\UI\UISolidShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

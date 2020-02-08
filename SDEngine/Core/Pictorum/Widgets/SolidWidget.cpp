@@ -38,7 +38,9 @@ SolidWidget::~SolidWidget() {
 }
 
 void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	EngineStatics::GetUIShader()->Bind();
+	Shader* shader = EngineStatics::GetUISolidShader();
+	shader->Bind();
+
 	vec2 screenResolution      = Geometry.GetRenderResolution();
 	vec2 adjustedScale         = Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
 	float screenAspectRatio    = Geometry.GetRenderResolutionAspectRatio();
@@ -46,15 +48,15 @@ void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	float adjustedBorderRadius = BorderRadius / (glm::max(screenResolution.x, screenResolution.y));
 	mat4 modelMatrix		   = CalculateModelMatrix(Geometry);
 
-	EngineStatics::GetUIShader()->SetShaderMatrix4("MODEL_MATRIX", modelMatrix);
-	EngineStatics::GetUIShader()->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
-	EngineStatics::GetUIShader()->SetShaderVector2("SHAPE_SIZE", adjustedScale);
-	EngineStatics::GetUIShader()->SetShaderFloat("SCREEN_ASPECT_RATIO", screenAspectRatio);
-	EngineStatics::GetUIShader()->SetShaderFloat("SHAPE_ASPECT_RATIO", shapeAspectRatio);
-	EngineStatics::GetUIShader()->SetShaderFloat("BORDER_RADIUS", adjustedBorderRadius);
-	EngineStatics::GetUIShader()->SetShaderFloat("X_BORDER_RADIUS", adjustedBorderRadius / screenResolution.x);
-	EngineStatics::GetUIShader()->SetShaderFloat("Y_BORDER_RADIUS", adjustedBorderRadius / screenResolution.y);
-	EngineStatics::GetUIShader()->SetShaderVector4("COLOR", BackgroundColor);
+	shader->SetShaderMatrix4("MODEL_MATRIX", modelMatrix);
+	shader->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
+	shader->SetShaderVector2("SHAPE_SIZE", adjustedScale);
+	shader->SetShaderFloat("SCREEN_ASPECT_RATIO", screenAspectRatio);
+	shader->SetShaderFloat("SHAPE_ASPECT_RATIO", shapeAspectRatio);
+	shader->SetShaderFloat("BORDER_RADIUS", adjustedBorderRadius);
+	shader->SetShaderFloat("X_BORDER_RADIUS", adjustedBorderRadius / screenResolution.x);
+	shader->SetShaderFloat("Y_BORDER_RADIUS", adjustedBorderRadius / screenResolution.y);
+	shader->SetShaderVector4("COLOR", BackgroundColor);
 
 	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(quadVAO);

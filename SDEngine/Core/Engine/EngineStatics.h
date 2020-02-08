@@ -13,8 +13,10 @@ static Shader* S_ShadowShader;
 static Shader* S_LineShader;
 static Shader* SpriteShader;
 static Shader* S_GausBlur7x1Shader;
-static Shader* UIShader;
+static Shader* UISolidShader;
+static Shader* UIImageShader;
 static Shader* FontShader;
+
 
 static GLuint SpriteVertexArrayBuffer = 0;
 static GLuint quadVBO;
@@ -37,7 +39,8 @@ public:
 	static Shader* GetLineShader();
 	static Shader* GetSpriteShader();
 	static Shader* GetGausBlur7x1Shader();
-	static Shader* GetUIShader();
+	static Shader* GetUISolidShader();
+	static Shader* GetUIImageShader();
 	static Shader* GetFontShader();
 };
 

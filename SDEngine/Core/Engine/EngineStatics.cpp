@@ -14,7 +14,8 @@ void EngineStatics::RecompileShaders() {
 	GetShadowShader()->RecompileShader();
 	GetLineShader()->RecompileShader();
 	GetSpriteShader()->RecompileShader();
-	GetUIShader()->RecompileShader();
+	GetUISolidShader()->RecompileShader();
+	GetUIImageShader()->RecompileShader();
 	GetFontShader()->RecompileShader();
 }
 
@@ -57,11 +58,17 @@ Shader* EngineStatics::GetSpriteShader() {
 	}
 	return SpriteShader;
 }
-Shader* EngineStatics::GetUIShader() {
-	if (UIShader == nullptr) {
-		UIShader = new Shader("./Res/Shaders/UIShader", false);
+Shader* EngineStatics::GetUISolidShader() {
+	if (UISolidShader == nullptr) {
+		UISolidShader = new Shader("./Res/Shaders/UI/UISolidShader", false);
 	}
-	return UIShader;
+	return UISolidShader;
+}
+Shader* EngineStatics::GetUIImageShader() {
+	if (UIImageShader == nullptr) {
+		UIImageShader = new Shader("./Res/Shaders/UI/UIimageShader", false);
+	}
+	return UIImageShader;
 }
 Shader* EngineStatics::GetFontShader() {
 	if (FontShader == nullptr) {
