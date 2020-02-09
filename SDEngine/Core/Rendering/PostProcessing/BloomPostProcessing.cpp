@@ -3,16 +3,16 @@
 #include "Core/Engine/Engine.h"
 
 
-BloomPostProcessing::BloomPostProcessing(vec2 FinalOutputDimensions) : PostProcessingLayer("Bloom", FinalOutputDimensions) {
+BloomPostProcessing::BloomPostProcessing(RenderViewport* OwningViewport) : PostProcessingLayer("Bloom", OwningViewport) {
 	S_ClipHDRShader = new Shader("Res/Shaders/PostProcessing/Bloom/ClipHDR", false);
 	S_BlendBloom = new Shader("Res/Shaders/PostProcessing/Bloom/BlendBloom", false);
-	S_GausBlur = new VariableGausianBlur(FinalOutputDimensions);
+	S_GausBlur = new VariableGausianBlur(OwningViewport->GetOwningWindow()->GetDimensions());
 
-	ClippedHDRBuffer = new RenderTarget(FinalOutputDimensions);
+	ClippedHDRBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
 	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
 	ClippedHDRBuffer->FinalizeRenderTarget();
 
-	BloomOutputBuffer = new RenderTarget(FinalOutputDimensions);
+	BloomOutputBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
 	BloomOutputBuffer->AddTextureIndex(new FRenderTargetTextureEntry("Bloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT, GL_RGBA, GL_FLOAT));
 	BloomOutputBuffer->FinalizeRenderTarget();
 
@@ -26,13 +26,13 @@ BloomPostProcessing::~BloomPostProcessing() {
 	delete BloomOutputBuffer;
 }
 
-void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
-	ClipHDR(Compositor, CurrentLitFrame, ClippedHDRBuffer);
+void BloomPostProcessing::RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) {
+	ClipHDR(Compositor, PreviousOutput, ClippedHDRBuffer);
 	S_GausBlur->GausianBlur(Compositor, BlurPasses, ClippedHDRBuffer, BloomOutputBuffer);
-	BlendOutput(Compositor, BloomOutputBuffer, CurrentLitFrame, OutputBuffer);
+	BlendOutput(Compositor, BloomOutputBuffer, PreviousOutput, OutputBuffer);
 }
 
-void BloomPostProcessing::ClipHDR(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* ClipBuffer) {
+void BloomPostProcessing::ClipHDR(const DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* ClipBuffer) {
 	ReadBuffer->BindForReading();
 	ClipBuffer->BindForWriting();
 
@@ -44,7 +44,7 @@ void BloomPostProcessing::ClipHDR(DefferedCompositor* Compositor, RenderTarget* 
 
 	Compositor->DrawScreenQuad();
 }
-void BloomPostProcessing::BlendOutput(DefferedCompositor* Compositor, RenderTarget* BloomBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer) {
+void BloomPostProcessing::BlendOutput(const DefferedCompositor* Compositor, RenderTarget* BloomBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer) {
 	OutputBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

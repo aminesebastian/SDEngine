@@ -20,7 +20,7 @@ EditorSpriteComponent::EditorSpriteComponent(const TString& Name) : Component(Na
 		0.0f, -1.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, -1.0f, -1.0f, 0.0f, 1.0f,
 		0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, -1.0f, 1.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &SpriteVertexArray);
@@ -40,7 +40,7 @@ EditorSpriteComponent::~EditorSpriteComponent() {
 
 }
 
-void EditorSpriteComponent::DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) {
+void EditorSpriteComponent::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
 	if (Sprite == nullptr) {
 		return;
 	}

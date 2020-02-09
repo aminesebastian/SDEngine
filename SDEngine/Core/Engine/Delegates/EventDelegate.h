@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <memory>
+#include "Core/Utilities/Logger.h"
 
 template<typename T>
 class EventDelegate;

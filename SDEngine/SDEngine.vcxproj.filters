@@ -193,9 +193,6 @@
     <ClCompile Include="Core\Utilities\Math\MathLibrary.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Engine\Display.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Engine\Engine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -224,9 +221,6 @@
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Core\Rendering\PostProcessing\BloomPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Rendering\PostProcessing\DOFPostProcessing.cpp">
       <Filter>Source Files\Rendering\PostProcessing</Filter>
     </ClCompile>
     <ClCompile Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.cpp">
@@ -334,6 +328,15 @@
     <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Engine\Window.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -417,9 +420,6 @@
     <ClInclude Include="Core\Utilities\Math\MathLibrary.h">
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Engine\Display.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Engine\Engine.h">
       <Filter>Headers\Engine</Filter>
     </ClInclude>
@@ -445,9 +445,6 @@
       <Filter>Headers\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\PostProcessing\BloomPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Rendering\PostProcessing\DOFPostProcessing.h">
       <Filter>Headers\Rendering\PostProcessingLayer</Filter>
     </ClInclude>
     <ClInclude Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.h">
@@ -524,6 +521,12 @@
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
+    <ClInclude Include="Core\Engine\Window.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
+    <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
+    <ClInclude Include="Core\Engine\WindowDataTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

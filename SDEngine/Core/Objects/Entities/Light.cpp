@@ -85,8 +85,8 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 	S_ShadowBuffer->BindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	SArray<Actor*> entityList = Engine::GetInstance()->GetWorld()->GetWorldActors();
-	for (Actor* actor : Engine::GetInstance()->GetWorld()->GetWorldActors()) {
+	SArray<Actor*> entityList = GetWorld()->GetWorldActors();
+	for (Actor* actor : GetWorld()->GetWorldActors()) {
 		if (actor->ShouldBeDrawn(SHADOW_MAP_RENDER)) {
 			EngineStatics::GetShadowShader()->Bind();
 			mat4 mvp;

@@ -3,10 +3,9 @@
 #include "Core/Utilities/Logger.h"
 
 
-PostProcessingLayer::PostProcessingLayer(TString Name, vec2 FinalOutputDimensions) {
+PostProcessingLayer::PostProcessingLayer(const TString& Name, RenderViewport* OwningViewport) : OwningViewport(OwningViewport){
 	LayerName = Name;
 	bEnabled = true;
-	RenderTargetDimensions = FinalOutputDimensions;
 }
 PostProcessingLayer::~PostProcessingLayer() {
 
@@ -38,12 +37,12 @@ void PostProcessingLayer::ToggleEnabled() {
 		Enable();
 	}
 }
-bool PostProcessingLayer::IsEnabled() {
+const bool& PostProcessingLayer::IsEnabled() const {
 	return bEnabled;
 }
-TString PostProcessingLayer::GetPostProcessingLayerName() {
+const TString& PostProcessingLayer::GetPostProcessingLayerName() const {
 	return LayerName;
 }
-vec2 PostProcessingLayer::GetRenderTargetDimensions() {
-	return RenderTargetDimensions;
+const RenderViewport* PostProcessingLayer::GetOwningViewport() const {
+	return OwningViewport;
 }

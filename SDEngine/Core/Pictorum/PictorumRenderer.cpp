@@ -1,6 +1,7 @@
 #include "PictorumRenderer.h"
 
 #include "Core/Engine/Engine.h"
+#include "Core/Engine/Window.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Pictorum/TextRenderer.h"
@@ -11,20 +12,18 @@
 #include "Core/Pictorum/EngineUI/EngineUIContainer.h"
 #include "Core/Utilities/Logger.h"
 
-PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI) : EngineObject(ViewportName) {
+PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWindow) : EngineObject(ViewportName), OwningWindow(OwningWindow) {
 	// Initialize member variables.
 	MouseOverWidget = nullptr;
 	bMouseCaptured = false;
 
 	// Initialize render geometry.
-	TopLevelRenderGeometry.SetRenderResolution(RenderTargetResolution);
-	TopLevelRenderGeometry.SetAllotedSpace(RenderTargetResolution);
-	TopLevelRenderGeometry.SetDPI(RenderTargetDPI);
+	TopLevelRenderGeometry.SetRenderResolution(OwningWindow->GetDimensions());
+	TopLevelRenderGeometry.SetAllotedSpace(OwningWindow->GetDimensions());
+	TopLevelRenderGeometry.SetDPI(OwningWindow->GetDisplayDPI());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 
-	// Add some test widgets.
-	EngineUIContainer* engineUI = new EngineUIContainer("EngineUI");
-	AddToViewport(engineUI);
+	OwningWindow->OnWindowResized.Add<PictorumRenderer, & PictorumRenderer::OnWindowResized>(this);
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -32,7 +31,7 @@ PictorumRenderer::~PictorumRenderer() {
 
 void PictorumRenderer::Tick(float DeltaTime) {
 	for (PictorumWidget* widget : Widgets) {
-		widget->Tick(DeltaTime, TopLevelRenderGeometry);
+		widget->TickContents(DeltaTime, TopLevelRenderGeometry);
 	}
 }
 void PictorumRenderer::Draw(float DeltaTime) {
@@ -101,12 +100,6 @@ void PictorumRenderer::OnMouseScrollAxis(float Delta) {
 
 }
 
-void PictorumRenderer::OnRenderTargetResolutionChanged(vec2 NewResolution) {
-	TopLevelRenderGeometry.SetRenderResolution(NewResolution);
-	TopLevelRenderGeometry.SetAllotedSpace(NewResolution);
-	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
-}
-
 PictorumWidget* PictorumRenderer::GetMouseOverWidget() {
 	return MouseOverWidget;
 }
@@ -115,13 +108,21 @@ bool PictorumRenderer::AddToViewport(PictorumWidget* Widget) {
 	if (!Widget) {
 		return false;
 	}
-	return Widgets.AddUnique(Widget);
+	if (Widgets.AddUnique(Widget)) {
+		Widget->OnAddedToViewport(this);
+		return true;
+	}
+	return false;
 }
 bool PictorumRenderer::RemoveFromViewport(PictorumWidget* Widget) {
 	if (!Widget) {
 		return false;
 	}
-	return Widgets.Remove(Widget);
+	if (Widgets.Remove(Widget)) {
+		Widget->OnRemovedFromViewport();
+		return true;
+	}
+	return false;
 }
 void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 	if (bMouseCaptured) {
@@ -147,7 +148,7 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 			continue;
 		}
 		vec2 min, max;
-		child->CalculateBounds(Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions(), min, max);
+		child->CalculateBounds(OwningWindow->GetDimensions(), min, max);
 
 		// Keep looping, the later the overlap, the closer the widget is to the top of the stack.
 		if (MousePosition.x >= min.x && MousePosition.x <= max.x && MousePosition.y >= min.y && MousePosition.y <= max.y) {
@@ -159,9 +160,18 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 		MouseOverWidget = nullptr;
 	}
 }
-const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() {
+const Window* PictorumRenderer::GetOwningWindow() const {
+	return OwningWindow;
+}
+const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() const {
 	return Widgets;
 }
+void PictorumRenderer::OnWindowResized(const FDisplayState& State) {
+	TopLevelRenderGeometry.SetRenderResolution(State.GetResolution());
+	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
+	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
+}
+
 TString PictorumRenderer::GetDetailsPanelName() {
 	return "UI Widget";
 }

@@ -8,7 +8,7 @@
 
 Actor::Actor(const TString& Name) : Entity(Name) {
 	RootComponent = nullptr;
-	DragFloat* location = new DragFloat("Location");
+	/*DragFloat* location = new DragFloat("Location");
 	location->AddEntry(&CurrentTransform.GetLocation().x, "X %.3f", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.01f, 2.0f);
 	location->AddEntry(&CurrentTransform.GetLocation().y, "Y %.3f", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.01f, 2.0f);
 	location->AddEntry(&CurrentTransform.GetLocation().z, "Z %.3f", FColor(0.0f, 0.0f, 1.0f), 0.0f, 0.0f, 0.01f, 2.0f);
@@ -36,7 +36,7 @@ Actor::Actor(const TString& Name) : Entity(Name) {
 	scale->AddEntry(&CurrentTransform.GetScale().x, "X %.3f", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.01f, 2.0f);
 	scale->AddEntry(&CurrentTransform.GetScale().y, "Y %.3f", FColor(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.01f, 2.0f);
 	scale->AddEntry(&CurrentTransform.GetScale().z, "Z %.3f", FColor(0.0f, 0.0f, 1.0f), 0.0f, 0.0f, 0.01f, 2.0f);
-	DetailsPanelWidgets.Add(scale);
+	DetailsPanelWidgets.Add(scale);*/
 
 }
 Actor::~Actor() {}
@@ -73,7 +73,7 @@ void Actor::PostFrameRendered() {
 		component->PostFrameRendered();
 	}
 }
-void Actor::DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) {
+void Actor::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
 	for (Component* component : Children) {
 		if (component->ShouldBeDrawn(DrawType)) {
 			component->DrawAdvanced(RenderCamera, DrawType);
@@ -98,10 +98,11 @@ Transform Actor::GetLastFrameWorldTransform() {
 }
 
 void Actor::RegisterComponent(Component* Component) {
-	if (Children.size() == 0) {
+	if (Children.empty()) {
 		RootComponent = Component;
 	}
 	Children.push_back(Component);
+	Component->SetOwner(this);
 	Component->OnRegisteredToActor(this);
 }
 bool Actor::DeregisterComponent(Component* Component) {
@@ -109,6 +110,7 @@ bool Actor::DeregisterComponent(Component* Component) {
 		if (Children[i] == Component) {
 			Children.erase(Children.begin() + i);
 			Component->OnDeregisteredFromActor();
+			Component->SetOwner(nullptr);
 			return true;
 		}
 	}

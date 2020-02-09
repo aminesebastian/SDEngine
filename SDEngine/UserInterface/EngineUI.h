@@ -11,9 +11,9 @@ public:
 	EngineUI();
 	~EngineUI();
 
-	bool InitalizeUI(SDL_Window* Window, SDL_GLContext Context);
-	void UpdateUI(SDL_Window* Window);
-	void RenderUI(float DeltaTime);
+	bool InitalizeUI(SDL_Window& Window, const SDL_GLContext& Context);
+	void UpdateUI(SDL_Window& Window);
+	void RenderUI(const float& DeltaTime);
 	bool DestroyUI();
 
 	SArray<float> FrameTimeCache;

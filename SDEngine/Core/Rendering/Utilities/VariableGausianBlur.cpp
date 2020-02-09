@@ -40,7 +40,7 @@ VariableGausianBlur::~VariableGausianBlur() {
 		delete pair.second;
 	}
 }
-void VariableGausianBlur::GausianBlur(DefferedCompositor* Compositor, int32 Passes, RenderTarget* HDRBuffer, RenderTarget* OutputFBO) {
+void VariableGausianBlur::GausianBlur(const DefferedCompositor* Compositor, int32 Passes, RenderTarget* HDRBuffer, RenderTarget* OutputFBO) {
 	// Downsample the frame into the second buffer for each pair.
 	// The blur will the proceed as second->first and then first->second.
 	for (int i = 0; i < DownsampleSteps; i++) {
@@ -59,7 +59,7 @@ void VariableGausianBlur::GausianBlur(DefferedCompositor* Compositor, int32 Pass
 
 	BlendBlurs(Compositor, OutputFBO);
 }
-void VariableGausianBlur::GausianBlurX(DefferedCompositor* Compositor, RenderTarget* InputFBO, RenderTarget* OutputFBO, float DownsampleFactor, int Pass) {
+void VariableGausianBlur::GausianBlurX(const DefferedCompositor* Compositor, RenderTarget* InputFBO, RenderTarget* OutputFBO, float DownsampleFactor, int Pass) {
 	InputFBO->BindForReading();
 	OutputFBO->BindForWriting();
 
@@ -72,7 +72,7 @@ void VariableGausianBlur::GausianBlurX(DefferedCompositor* Compositor, RenderTar
 	InputFBO->BindTextures(S_GBlur5x1);
 	Compositor->DrawScreenQuad();
 }
-void VariableGausianBlur::GausianBlurY(DefferedCompositor* Compositor, RenderTarget* InputFBO, RenderTarget* OutputFBO, float DownsampleFactor, int Pass) {
+void VariableGausianBlur::GausianBlurY(const DefferedCompositor* Compositor, RenderTarget* InputFBO, RenderTarget* OutputFBO, float DownsampleFactor, int Pass) {
 	InputFBO->BindForReading();
 	OutputFBO->BindForWriting();
 
@@ -85,7 +85,7 @@ void VariableGausianBlur::GausianBlurY(DefferedCompositor* Compositor, RenderTar
 	InputFBO->BindTexture(S_GBlur5x1);
 	Compositor->DrawScreenQuad();
 }
-void VariableGausianBlur::BlendBlurs(DefferedCompositor* Compositor, RenderTarget* OutputFBO) {
+void VariableGausianBlur::BlendBlurs(const DefferedCompositor* Compositor, RenderTarget* OutputFBO) {
 	OutputFBO->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -107,5 +107,4 @@ float VariableGausianBlur::GetBlurSize() {
 void VariableGausianBlur::RecompileShaders() {
 	S_GBlur5x1->RecompileShader();
 	S_BlurBlend->RecompileShader();
-	S_Downsampler->RecompileShaders();
 }

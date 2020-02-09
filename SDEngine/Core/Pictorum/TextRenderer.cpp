@@ -110,7 +110,7 @@ const vec2& TextRenderer::GetCursorLocation() const {
 	return CursorPosition;
 }
 const vec2& TextRenderer::GetTextBoundingBoxDimensions() const {
-	return LastBoundingBoxDimensions;
+	return LastBoundingBoxDimensions / 2.0f;
 }
 
 void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {
@@ -137,12 +137,12 @@ void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {
 		Verticies.Add(topLeftVert + vec2(glyphSize.x, 0.0f));
 		Verticies.Add(bottomRightVert);
 
-		Indices.Add(CurrentIndexValue);
+		Indices.Add(CurrentIndexValue + 2);
 		Indices.Add(CurrentIndexValue + 1);
+		Indices.Add(CurrentIndexValue);
+		Indices.Add(CurrentIndexValue + 3);
 		Indices.Add(CurrentIndexValue + 2);
 		Indices.Add(CurrentIndexValue);
-		Indices.Add(CurrentIndexValue + 2);
-		Indices.Add(CurrentIndexValue + 3);
 
 		CurrentIndexValue += 4;
 

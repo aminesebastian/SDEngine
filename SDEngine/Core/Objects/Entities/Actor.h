@@ -43,7 +43,7 @@ public:
 	//////////
 	virtual void PreFrameRendered() override;
 	virtual void PostFrameRendered() override;
-	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
+	virtual void DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) override;
 
 	//////////////////
 	//USER INTERFACE//

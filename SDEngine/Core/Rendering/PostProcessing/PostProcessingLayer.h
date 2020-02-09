@@ -1,17 +1,21 @@
 #pragma once
+#include "Core/Engine/Window.h"
 #include "Core/Objects/CoreTypes/RenderTarget.h"
 #include "Core/Objects/Entities/Camera.h"
 #include "Core/Rendering/DefferedCompositor.h"
 #include "Core/Rendering/GBuffer.h"
+#include "Core/Rendering/RenderViewport.h"
 #include "UserInterface/DetailsPanelProvider.h"
 #include "UserInterface/UserInterface.h"
 
+class RenderViewport;
+
 class PostProcessingLayer : public IDetailsPanelProvider {
 public:
-	PostProcessingLayer(TString Name, vec2 RenderTargetDimensions);
+	PostProcessingLayer(const TString& Name, RenderViewport* OwningViewport);
 	~PostProcessingLayer();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) = 0;
+	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) = 0;
 	virtual void RecompileShaders() {}
 
 	virtual bool PopulateDetailsPanel() override;
@@ -21,13 +25,13 @@ public:
 	void Enable();
 	void Disable();
 	void ToggleEnabled();
-	bool IsEnabled();
-	TString GetPostProcessingLayerName();
-	vec2 GetRenderTargetDimensions();
+	const bool& IsEnabled() const;
+	const TString& GetPostProcessingLayerName() const;
+	const RenderViewport* GetOwningViewport() const;
 
 private:
 	TString LayerName;
 	bool bEnabled;
-	vec2 RenderTargetDimensions;
+	RenderViewport* OwningViewport;
 };
 

@@ -8,29 +8,59 @@
 #include <limits>
 
 
-World::World() {}
+World::World() {
+	WorldTime      = 0.0f;
+	LastFrameTime  = 0.0f;
+	bGameMode      = true;
+	SelectedEntity = nullptr;
+}
 World::~World() {}
 
-SArray<Actor*> World::GetWorldActors() { return ActorList; }
-SArray<Light*> World::GetWorldLights() { return LightList; }
-void World::TickWorld(float DeltaTime) {
+void World::TickWorld(const float& DeltaTime) {
 	for (int i = 0; i < ActorList.Count(); i++) {
 		ActorList[i]->Tick(DeltaTime);
 	}
 }
-
+void World::UpdateFrameTime(const float& DeltaTime) {
+	WorldTime += DeltaTime;
+	LastFrameTime = DeltaTime;
+}
 void World::RegisterActor(Actor* ActorToRegister) {
 	ActorList.Add(ActorToRegister);
 	if (IsA<Light>(ActorToRegister)) {
 		LightList.Add(Cast<Light>(ActorToRegister));
 	}
+	ActorToRegister->OnAddedToWorld(this);
 }
 bool World::DestroyActor(Actor* ActorToDestroy) {
 	if (ActorList.Remove(ActorToDestroy)) {
 		if (IsA<Light>(ActorToDestroy)) {
 			LightList.Remove(Cast<Light>(ActorToDestroy));
 		}
+		ActorToDestroy->OnRemovedFromWorld();
 		return true;
 	}
 	return false;
+}
+
+SArray<Actor*> World::GetWorldActors() const {
+	return ActorList;
+}
+SArray<Light*> World::GetWorldLights() const {
+	return LightList;
+}
+const float& World::GetWorldTime() const {
+	return WorldTime;
+}
+const float& World::GetLastFrameTime() const {
+	return LastFrameTime;
+}
+const bool& World::IsInGameMode() const {
+	return bGameMode;
+}
+void World::SetGameMode(const bool& GameMode) {
+	bGameMode = GameMode;
+}
+Entity* World::GetSelectedEntity() const {
+	return SelectedEntity;
 }

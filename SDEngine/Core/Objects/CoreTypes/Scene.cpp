@@ -12,19 +12,20 @@ Scene::Scene() {
 Scene::~Scene() {
 
 }
-bool Scene::LoadScene() {
-	Engine* engine = Engine::GetInstance();
+bool Scene::LoadScene(World* WorldIn) {
+	LoadPlane(WorldIn);
+	LoadHead(WorldIn);
+	LoadLights(WorldIn);
 
-	LoadPlane();
-	LoadHead();
-	LoadLights();
-
+	return true;
+}
+bool Scene::UnloadScene(World* WorldIn) {
 	return true;
 }
 bool Scene::SaveScene() {
 	return true;
 }
-void Scene::LoadPlane() {
+void Scene::LoadPlane(World* WorldIn) {
 	//CurrentTransform planeTransform;
 	//Material* planeMat = EngineStatics::GetDefaultMaterial();
 	//StaticMesh* plane = new StaticMesh("Plane", planeTransform, planeMat, "./res/Plane.fbx");
@@ -32,16 +33,16 @@ void Scene::LoadPlane() {
 
 	//SD_ENGINE_INFO("Plane Loaded!");
 }
-void Scene::LoadHead() {
+void Scene::LoadHead(World* WorldIn) {
 	Transform headTransform;
-	headTransform.GetLocation().z = 7;
+	headTransform.SetLocation(vec3(0.0f, 0.0f, 7.0f));
 	HeadActor* head = new HeadActor("TestHead");
 	head->SetTransform(headTransform);
-	Engine::GetInstance()->GetWorld()->RegisterActor(head);
+	WorldIn->RegisterActor(head);
 
 	SD_ENGINE_INFO("Head Loaded!");
 }
-void Scene::LoadLights() {
+void Scene::LoadLights(World* WorldIn) {
 	int count = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -50,13 +51,12 @@ void Scene::LoadLights() {
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				tempTransform.GetLocation().x = (float)j * 5.5f - 5.5f;
-				tempTransform.GetLocation().y = (float)i * 5.5f - 5.5f;
-				tempTransform.GetLocation().z = 9 + (float)k * 6.5f;
+				vec3 location = vec3((float)j * 5.5f - 5.5f, (float)i * 5.5f - 5.5f, 9 + (float)k * 6.5f);
+				tempTransform.SetLocation(location);
 				vec3 tempColor = vec3(r, g, b);
 				float atten = (((float)(rand()) / (float)(RAND_MAX)) + 1) * 20;
 				Light* tempLight = new Light("Light " + std::to_string(count), tempTransform, POINT, 25, tempColor, atten);
-				Engine::GetInstance()->GetWorld()->RegisterActor(tempLight);
+				WorldIn->RegisterActor(tempLight);
 				count++;
 			}
 		}
@@ -64,8 +64,8 @@ void Scene::LoadLights() {
 
 	Transform fillLightTransform;
 	fillLightTransform.SetRotation(0, glm::radians(100.0f), 0);
-	fillLightTransform.GetLocation().z = 30;
+	fillLightTransform.SetLocation(vec3(0.0f, 0.0f, 30.0f));
 	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, vec3(0.75, 0.9, 0.8));
 	fillLight->SetCastsShadows(true);
-	Engine::GetInstance()->GetWorld()->RegisterActor(fillLight);
+	WorldIn->RegisterActor(fillLight);
 }

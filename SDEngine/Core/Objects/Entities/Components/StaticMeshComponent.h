@@ -8,7 +8,7 @@ public:
 	StaticMeshComponent(const TString& Name);
 	~StaticMeshComponent();
 
-	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
+	virtual void DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) override;
 
 	void SetStaticMesh(StaticMesh* Mesh);
 	StaticMesh* GetStaticMesh();

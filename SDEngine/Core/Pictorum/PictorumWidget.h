@@ -23,8 +23,18 @@ public:
 	PictorumWidget(const TString& Name);
 	virtual ~PictorumWidget();
 
-	virtual void OnCreated(FRenderGeometry Geometry);
-	virtual void OnDestroyed(FRenderGeometry Geometry);
+	/**
+	 * This method is raised either when this widget is added to the viewport (if this is a top
+	 * level widget) or when it is added to a parent After this point, it is safe to reference all
+	 * widget fields (parent, owning window, etc).
+	 */
+	virtual void OnCreated();
+	/**
+	 * This method is raised either when this widget is removed from the viewport (if this is a top
+	 * level widget) or when it is removed from its parent. After this point, it is no longer safe
+	 * to reference any widget fields (parent, owning window, etc).
+	 */
+	virtual void OnDestroyed();
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const;
@@ -53,18 +63,19 @@ public:
 		return Cast<T>(ParentSlot);
 	}
 
-	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event);
-	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event);
-	virtual void OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event);
-	virtual void OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event);
-	virtual void OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event);
+	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& EventIn);
 
 	virtual TString GetDetailsPanelName() override;
 	virtual bool PopulateDetailsPanel() override;
 
-	float GetRenderRotation() const;
-	float GetRotation() const;
-	float GetParentRotation() const;
+	const float GetRenderRotation() const;
+	const float GetRotation() const;
+	const float GetParentRotation() const;
+	const PictorumRenderer* GetOwningRenderer() const;
 
 	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseDownDelegate;
 	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseUpDelegate;
@@ -78,7 +89,8 @@ protected:
 	 * This first calls the Draw method of the current widget, then calls DrawContents() on each child.
 	 * This processes all children from the root widget.
 	 */
-	virtual void DrawContents(float DeltaTime, const FRenderGeometry& Geometry);
+	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void TickContents(const float& DeltaTime, const FRenderGeometry& Geometry);
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
 	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
@@ -89,6 +101,9 @@ protected:
 	PictorumWidget* Parent;
 	/** The slot this widget occupies in its parent. The lifecyle of this object is managed by the parent. */
 	IWidgetSlot* ParentSlot;
+	/** The owning renderer viewport of this widget. */
+	PictorumRenderer* OwningRenderer;
+
 	SArray<DragFloat*> DetailsPanelWidgets;
 
 	/** Rotation of the widget [0-360n] */
@@ -115,6 +130,16 @@ protected:
 	 */
 	virtual void OnRemovedFromParent(PictorumWidget* ParentIn);
 
+	/**
+	 *
+	 * This method is raised when a widget is added to a renderer at the root level.
+	 *
+	 * @param [in,out]	{PictorumRenderer*}	Owner	The owning renderer.
+	 */
+	void OnAddedToViewport(PictorumRenderer* Owner);
+
+	/** This method is raised when this widget is removed from the renderer at the root level. */
+	void OnRemovedFromViewport();
 private:
 	friend class PictorumRenderer;
 	bool bWasMouseDownInside;

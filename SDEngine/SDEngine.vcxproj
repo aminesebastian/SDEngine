@@ -154,6 +154,7 @@
       <PreprocessorDefinitions>_GDEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -259,8 +260,7 @@
     <ClCompile Include="Core\Rendering\PostProcessing\BloomPostProcessing.cpp" />
     <ClCompile Include="Core\Objects\Entities\Camera.cpp" />
     <ClCompile Include="Core\Rendering\DefferedCompositor.cpp" />
-    <ClCompile Include="Core\Rendering\PostProcessing\DOFPostProcessing.cpp" />
-    <ClCompile Include="Core\Engine\Display.cpp" />
+    <ClCompile Include="Core\Engine\Window.cpp" />
     <ClCompile Include="Core\Rendering\Utilities\Downsampler.cpp" />
     <ClCompile Include="Core\Engine\EngineStatics.cpp" />
     <ClCompile Include="Core\Pictorum\EngineUI\TitleBar.cpp" />
@@ -268,6 +268,8 @@
     <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp" />
     <ClCompile Include="Core\Engine\Delegates\Event.cpp" />
     <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp" />
+    <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp" />
+    <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -305,6 +307,7 @@
     <ClCompile Include="Core\Engine\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Engine\WindowDataTypes.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
@@ -357,8 +360,7 @@
     <ClInclude Include="Core\Rendering\PostProcessing\BloomPostProcessing.h" />
     <ClInclude Include="Core\Objects\Entities\Camera.h" />
     <ClInclude Include="Core\Rendering\DefferedCompositor.h" />
-    <ClInclude Include="Core\Rendering\PostProcessing\DOFPostProcessing.h" />
-    <ClInclude Include="Core\Engine\Display.h" />
+    <ClInclude Include="Core\Engine\Window.h" />
     <ClInclude Include="Core\Rendering\Utilities\Downsampler.h" />
     <ClInclude Include="Core\Engine\Engine.h" />
     <ClInclude Include="Core\Engine\EngineStatics.h" />
@@ -367,6 +369,8 @@
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
+    <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
+    <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
     <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />

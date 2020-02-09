@@ -1,18 +1,19 @@
 #pragma once
-#include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/DataStructures/DataStructures.h"
+#include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Engine/WindowDataTypes.h"
 
 class World;
 class Shader;
 class Camera;
 class GBuffer;
-class Display;
 class DefferedCompositor;
 class PostProcessingLayer;
 class VariableGausianBlur;
 class RenderTarget;
 class Entity;
 class TransformGizmo;
+class Window;
 
 enum ERenderingStage {
 	GEOMETRY,
@@ -22,45 +23,23 @@ enum ERenderingStage {
 	EDITOR_ELEMENTS,
 	OUTPUT
 };
-enum EDebugState {
-	ALBEDO,
-	NORMAL,
-	WORLD_POSITION,
-	RMAO,
-	WIREFRAME,
-	DETAIL_LIGHT
-};
-
 class RenderViewport {
 public:
-	RenderViewport(vec2 RenderTargetDimensions);
+	RenderViewport(const World* RenderWorld, const Window* OwningWindow);
 	~RenderViewport();
 
 	void Initialize();
 
 	void ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions);
-	vec2 GetRenderTargetDimensions();
 
 	const bool BindNewShader(Shader* ShaderIn);
 
-	void RenderWorld(World* RenderWorld, Camera* RenderCamera);
-	void GemoetryPass(World* RenderWorld, Camera* RenderCamera);
-	void TranslucencyPass(World* RenderWorld, Camera* RenderCamera);
-	void BlendTransparencyPass(World* RenderWorld, Camera* RenderCamera);
-	void RenderPostProcessing(World* RenderWorld, Camera* RenderCamera);
-	void RenderEditorElements(World* RenderWorld, Camera* RenderCamera);
+	void Render(const Camera* RenderCamera);
 
 	void RecompileShaders();
-	int GetTranslucentObjectCount(World* RenderWorld);
+	ERenderingStage GetRenderingStage() { return CurrentRenderStage; }
 
-	ERenderingStage GetRenderingStage() { return S_CurrentStage; }
-	bool GetDebugEnabled();
-	void SetDebugEnabled(bool bEnabled);
-
-	EDebugState GetDebugState();
-	void SetDebugState(EDebugState NewState);
-
-	DefferedCompositor* GetDefferedCompositor() { return S_DefferedCompositor; }
+	DefferedCompositor* GetDefferedCompositor() { return Compositor; }
 
 	void FlipOutputBuffers();
 	RenderTarget* GetCurrentOutputBuffer();
@@ -74,36 +53,42 @@ public:
 
 	PostProcessingLayer* GetPostProcessingLayer(TString Layer);
 
-	void OnMouseMove(vec2 MouseCoords);
+	const Window* GetOwningWindow() const;
+	const World* GetWorld() const;
+	const float& GetRenderFrameTime() const;
+	const float& GetRenderFrameRate() const;
+
 protected:
 	virtual void GenerateRenderTargets();
 	virtual void RegisterPostProcessEffects();
+
+	void GemoetryPass(const Camera* RenderCamera);
+	void RenderPostProcessing(const Camera* RenderCamera);
+	void RenderEditorElements(const Camera* RenderCamera);
+
 private:
 	Shader* CurrentlyActiveShader;
-	Shader* S_TranslucencyBlendShader;
 	Shader* SelectionOutlineShader;
+	const Window* OwningWindow;
+	const World* RenderWorld;
 
-	TransformGizmo* TransformGizmoEntity;
-
-	GBuffer* S_GBuffer;
+	float RenderDeltaTime;
+	float RenderFrameRate;
+	uint64 LastFrameRenderTime;
 
 	int32 CurrentBuffer;
-	RenderTarget* S_OutputBuffer1;
-	RenderTarget* S_OutputBuffer2;
-
-	RenderTarget* S_TranslucencyBuffer;
+	GBuffer* MainGBuffer;
+	RenderTarget* OutputBuffer1;
+	RenderTarget* OutputBuffer2;
 
 	SArray<PostProcessingLayer*> S_PostProcessingLayers;
 
-	vec2 RenderTargetDimensions;
-	DefferedCompositor* S_DefferedCompositor;
-	ERenderingStage S_CurrentStage;
+	DefferedCompositor* Compositor;
+	ERenderingStage CurrentRenderStage;
 
 	bool bDebugMode;
 	bool bInitialized;
-	EDebugState S_DebugState;
 
-	void WindowSizeChanged(const struct FDisplayState& State);
-
+	void OnWindowResized(const FDisplayState& State);
 };
 

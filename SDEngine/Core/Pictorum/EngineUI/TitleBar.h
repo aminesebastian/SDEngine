@@ -1,14 +1,17 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
+#include <Include\SDL\SDL_syswm.h>
 
 class Texture2D;
 class ImageWidget;
+class TextWidget;
 
 class TitleBar : public PictorumWidget {
 public:
 	TitleBar(const TString& Name);
 	virtual ~TitleBar();
-
+	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
+	virtual void OnCreated() override;
 	virtual const bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 
@@ -22,6 +25,8 @@ private:
 	ImageWidget* MaximizeButton;
 	ImageWidget* CloseButton;
 
+	TextWidget* WindowTitleWidget;
+
 	bool bMouseDownOnTitleBar;
 
 	float TitleBarHeight;
@@ -34,11 +39,6 @@ private:
 	void OnTitleBarMouseUp(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
 	void OnTitleBarMouseMove(const vec2& MousePosition, const vec2& Delta, FUserInterfaceEvent& UIEvent);
 
-	static SDL_HitTestResult MouseHitTestCallback(SDL_Window* Window, const SDL_Point* MouseLocation, void* Data) {
-		if (MouseLocation->y < 25.0f && MouseLocation->x < Engine::GetInstance()->GetDisplay()->GetDimensions().x - 75.0f) {
-			return SDL_HITTEST_DRAGGABLE;
-		}
-		return SDL_HITTEST_NORMAL;
-	}
+	static SDL_HitTestResult MouseHitTestCallback(SDL_Window* Window, const SDL_Point* MouseLocation, void* Data);
 };
 

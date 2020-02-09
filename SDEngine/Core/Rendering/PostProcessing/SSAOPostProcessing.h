@@ -5,35 +5,35 @@
 
 class SSAOPostProcessing : public PostProcessingLayer {
 public:
-	SSAOPostProcessing(vec2 FinalOutputDimensions);
+	SSAOPostProcessing(RenderViewport* OwningViewport);
 	~SSAOPostProcessing();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
-	virtual void RecompileShaders();
+	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
+	virtual void RecompileShaders() override;
 	virtual bool PopulatePostProcessingDetailsPanel() override;
 
-	void RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* OutputBuffer);
-	void Blur(DefferedCompositor* Compositor, Camera* Camera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
+	void RenderOcclusion(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* GBufferIn, RenderTarget* OutputBuffer);
+	void Blur(const DefferedCompositor* Compositor, const Camera* RenderCamera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
 	void GenerateKernel();
 	void GenerateNoise();
 
-	void SetBias(float Bias);
-	float GetBias();
+	void SetBias(const float& Bias);
+	const float& GetBias() const;
 
-	void SetPower(float Power);
-	float GetPower();
+	void SetPower(const float& Power);
+	const float& GetPower() const;
 
-	void SetRadius(float Radius);
-	float GetRadius();
+	void SetRadius(const float& Radius);
+	const float& GetRadius() const;
 
-	void SetSampleCount(int Samples);
-	int GetSampleCount();
+	void SetSampleCount(const int& Samples);
+	const int& GetSampleCount() const;
 
-	void SetNoiseSize(int Size);
-	int GetNoiseSize();
+	void SetNoiseSize(const int& Size);
+	const int& GetNoiseSize() const;
 
-	void SetBlurRadius(int Radius);
-	int GetBlurRadius();
+	void SetBlurRadius(const int& Radius);
+	const int& GetBlurRadius() const;
 
 private:
 	Shader* SSAOShader;
@@ -42,9 +42,9 @@ private:
 	float Bias;
 	float Power;
 	float Radius;
-	int S_NoiseSize;
-	int S_KernelSize;
-	int BlurRadius;
+	int32 NoiseSize;
+	int32 KernelSize;
+	int32 BlurRadius;
 	vec2 NoiseScale;
 	GLuint NoiseTexture;
 	SArray<vec3> Noise;

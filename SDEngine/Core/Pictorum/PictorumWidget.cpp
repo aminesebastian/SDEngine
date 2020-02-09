@@ -9,6 +9,7 @@
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
 	Parent              = nullptr;
+	OwningRenderer      = nullptr;
 	PivotOffset		    = vec2(0.0f, 0.0f);
 	bWasMouseDownInside = false;
 	bDidMouseEnter      = false;
@@ -18,10 +19,10 @@ PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 PictorumWidget::~PictorumWidget() {
 
 }
-void PictorumWidget::OnCreated(FRenderGeometry Geometry) {
+void PictorumWidget::OnCreated() {
 
 }
-void PictorumWidget::OnDestroyed(FRenderGeometry Geometry) {
+void PictorumWidget::OnDestroyed() {
 
 }
 void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
@@ -79,10 +80,12 @@ IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) 
 void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
 	Parent = ParentIn;
 	ParentSlot = Slot;
+	OnCreated();
 }
 void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {
 	Parent = nullptr;
 	ParentSlot = nullptr;
+	OnDestroyed();
 }
 
 mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const {
@@ -100,7 +103,7 @@ mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const
 
 	return posMatrix * scaleMatrix * combinedRotMatrix;
 }
-void PictorumWidget::DrawContents(float DeltaTime, const FRenderGeometry& Geometry) {
+void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;
 
 	Draw(DeltaTime, Geometry);
@@ -112,7 +115,18 @@ void PictorumWidget::DrawContents(float DeltaTime, const FRenderGeometry& Geomet
 		widget->DrawContents(DeltaTime, childGeometry);
 	}
 }
+void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
+	LastRenderedGeometry = Geometry;
 
+	Tick(DeltaTime, Geometry);
+
+	for (int i = 0; i < Children.Count(); i++) {
+		PictorumWidget* widget = Children[i];
+		FRenderGeometry childGeometry(Geometry);
+		CalculateChildRenderGeometry(Geometry, childGeometry, i);
+		widget->TickContents(DeltaTime, childGeometry);
+	}
+}
 void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
 	OnHoveredDelegate.Broadcast(MousePosition, Event);
 	bDidMouseEnter = true;
@@ -157,19 +171,36 @@ vec2 PictorumWidget::GetPivotOffset() const {
 	return PivotOffset;
 }
 
-float PictorumWidget::GetRenderRotation() const {
+const float PictorumWidget::GetRenderRotation() const {
 	return GetRotation() + GetParentRotation();
 }
-float PictorumWidget::GetRotation() const {
+const float PictorumWidget::GetRotation() const {
 	return Rotation;
 }
-float PictorumWidget::GetParentRotation() const {
+const float PictorumWidget::GetParentRotation() const {
 	if (!Parent) {
 		return 0.0f;
 	}
 	return Parent->GetRotation();
 }
-
+const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
+	if (OwningRenderer) {
+		return OwningRenderer;
+	}else if (Parent) {
+		return Parent->GetOwningRenderer();
+	} else {
+		SD_ENGINE_ERROR("Pictorum widget: {0} made a request for its owning renderer and was unable to find one up the parent chain!", GetName());
+		return nullptr;
+	}
+}
+void PictorumWidget::OnAddedToViewport(PictorumRenderer* Owner) {
+	OwningRenderer = Owner;
+	OnCreated();
+}
+void PictorumWidget::OnRemovedFromViewport() {
+	OwningRenderer = nullptr;
+	OnDestroyed();
+}
 TString PictorumWidget::GetDetailsPanelName() {
 	return GetName();
 }

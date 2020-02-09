@@ -1,38 +1,41 @@
-#include "Core/Rendering/RenderViewport.h"
-#include "Core/Objects/CoreTypes/Shader.h"
+#include "Core/Engine/EngineStatics.h"
+#include "Core/Engine/Window.h"
 #include "Core/Engine/World.h"
-#include "Core/Rendering/GBuffer.h"
+#include "Core/Objects/CoreTypes/RenderTarget.h"
+#include "Core/Objects/CoreTypes/Shader.h"
 #include "Core/Objects/Entities/Actor.h"
 #include "Core/Objects/Entities/Light.h"
-#include "Core/Engine/Display.h"
+#include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Rendering/DefferedCompositor.h"
-#include <GLEW/glew.h>
-#include "Core/Engine/EngineStatics.h"
-#include "Core/Rendering/RenderTypeDefenitions.h"
-#include "Core/Rendering/PostProcessing/ToneMapper.h"
+#include "Core/Rendering/GBuffer.h"
 #include "Core/Rendering/PostProcessing/BloomPostProcessing.h"
-#include "Core/Rendering/PostProcessing/SSAOPostProcessing.h"
 #include "Core/Rendering/PostProcessing/MotionBlurPostProcessing.h"
 #include "Core/Rendering/PostProcessing/PostProcessingLayer.h"
-#include "Core/Rendering/PostProcessing/DOFPostProcessing.h"
+#include "Core/Rendering/PostProcessing/SSAOPostProcessing.h"
+#include "Core/Rendering/PostProcessing/ToneMapper.h"
+#include "Core/Rendering/RenderTypeDefenitions.h"
+#include "Core/Rendering/RenderViewport.h"
 #include "Core/Rendering/Utilities/VariableGausianBlur.h"
-#include "Core/Objects/CoreTypes/RenderTarget.h"
 #include "Core/Utilities/Logger.h"
-#include "Core/Pictorum/PictorumRenderer.h"
+#include <GLEW/glew.h>
 
-RenderViewport::RenderViewport(vec2 RenderTargetDimensions) : RenderTargetDimensions(RenderTargetDimensions) {
-	CurrentBuffer             = 0;
-	bDebugMode                = false;
-	bInitialized              = false;
-	S_DefferedCompositor      = new DefferedCompositor("Res/Shaders/DefferedLighting");
-	S_TranslucencyBlendShader = new Shader("./Res/Shaders/TranslucencyCompositor", false);
-	SelectionOutlineShader    = new Shader("./Res/Shaders/SelectionOutlineShader", false);
-	S_GBuffer                 = nullptr;
-	S_TranslucencyBuffer      = nullptr;
-	S_OutputBuffer1           = nullptr;
-	S_OutputBuffer2           = nullptr;
-	CurrentlyActiveShader     = nullptr;
-	SD_ENGINE_INFO("Render Viewport Created");
+RenderViewport::RenderViewport(const World* RenderWorld, const Window* OwningWindow) : RenderWorld(RenderWorld), OwningWindow(OwningWindow) {
+	CurrentBuffer                  = 0;
+	bDebugMode                     = false;
+	bInitialized                   = false;
+	Compositor                     = new DefferedCompositor(this);
+	SelectionOutlineShader         = new Shader("./Res/Shaders/SelectionOutlineShader", false);
+	MainGBuffer                    = nullptr;
+	OutputBuffer1                  = nullptr;
+	OutputBuffer2                  = nullptr;
+	CurrentlyActiveShader          = nullptr;
+	CurrentRenderStage             = GEOMETRY;
+
+	LastFrameRenderTime = 0;
+	RenderDeltaTime     = 0.0f;
+	RenderFrameRate     = 0.0f;
+
+	SD_ENGINE_INFO("Render viewport created for window: {0}.", OwningWindow->GetTitle());
 }
 RenderViewport::~RenderViewport() {
 
@@ -45,10 +48,10 @@ void RenderViewport::Initialize() {
  	SD_ENGINE_INFO("Initializing Viewport")
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
+	OwningWindow->OnWindowResized.Add<RenderViewport, &RenderViewport::OnWindowResized>(this);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glEnable(GL_CULL_FACE);
 	bInitialized = true;
-
-	//Engine::GetInstance()->GetDisplay()->
-
 	SD_ENGINE_INFO("Viewport Initialized")
 }
 void RenderViewport::GenerateRenderTargets() {
@@ -58,34 +61,28 @@ void RenderViewport::GenerateRenderTargets() {
 		SD_ENGINE_INFO("Regenerating Viewport Render Targets")
 	}
 
-	if (S_GBuffer != nullptr) {
-		delete S_GBuffer;
+	if (MainGBuffer != nullptr) {
+		delete MainGBuffer;
 	}
-	if (S_TranslucencyBuffer != nullptr) {
-		delete S_TranslucencyBuffer;
+	if (OutputBuffer1 != nullptr) {
+		delete OutputBuffer1;
 	}
-	if (S_OutputBuffer1 != nullptr) {
-		delete S_OutputBuffer1;
-	}
-	if (S_OutputBuffer2 != nullptr) {
-		delete S_OutputBuffer2;
+	if (OutputBuffer2 != nullptr) {
+		delete OutputBuffer2;
 	}
 
-	S_GBuffer = new GBuffer(RenderTargetDimensions);
-	S_GBuffer->FinalizeRenderTarget();
+	MainGBuffer = new GBuffer(OwningWindow->GetDimensions());
+	MainGBuffer->FinalizeRenderTarget();
 
-	S_TranslucencyBuffer = new GBuffer(RenderTargetDimensions);
-	S_TranslucencyBuffer->FinalizeRenderTarget();
+	OutputBuffer1 = new RenderTarget(OwningWindow->GetDimensions());
+	OutputBuffer1->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OutputBuffer1->AddDepthStencilBuffer();
+	OutputBuffer1->FinalizeRenderTarget();
 
-	S_OutputBuffer1 = new RenderTarget(RenderTargetDimensions);
-	S_OutputBuffer1->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
-	S_OutputBuffer1->AddDepthStencilBuffer();
-	S_OutputBuffer1->FinalizeRenderTarget();
-
-	S_OutputBuffer2 = new RenderTarget(RenderTargetDimensions);
-	S_OutputBuffer2->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
-	S_OutputBuffer2->AddDepthStencilBuffer();
-	S_OutputBuffer2->FinalizeRenderTarget();
+	OutputBuffer2 = new RenderTarget(OwningWindow->GetDimensions());
+	OutputBuffer2->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OutputBuffer2->AddDepthStencilBuffer();
+	OutputBuffer2->FinalizeRenderTarget();
 }
 void RenderViewport::RegisterPostProcessEffects() {
 	if (!bInitialized) {
@@ -100,16 +97,14 @@ void RenderViewport::RegisterPostProcessEffects() {
 		}
 	}
 	S_PostProcessingLayers.Clear();
-	S_PostProcessingLayers.Add(new SSAOPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.Add(new BloomPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.Add(new MotionBlurPostProcessing(RenderTargetDimensions));
-	S_PostProcessingLayers.Add(new ToneMapper(RenderTargetDimensions));
+	S_PostProcessingLayers.Add(new SSAOPostProcessing(this));
+	S_PostProcessingLayers.Add(new BloomPostProcessing(this));
+	//S_PostProcessingLayers.Add(new MotionBlurPostProcessing(this));
+	S_PostProcessingLayers.Add(new ToneMapper(this));
 }
 
 void RenderViewport::RecompileShaders() {
-	S_DefferedCompositor->RecompileShaders();
-	S_TranslucencyBlendShader->RecompileShader();
-	//TransformGizmoEntity->RecompileShaders();
+	Compositor->RecompileShaders();
 
 	for (PostProcessingLayer* layerPair : S_PostProcessingLayers) {
 		layerPair->RecompileShaders();
@@ -174,34 +169,34 @@ const bool RenderViewport::BindNewShader(Shader* ShaderIn) {
 	return false;
 }
 
-void RenderViewport::RenderWorld(World* RenderWorld, Camera* RenderCamera) {
+void RenderViewport::Render(const Camera* RenderCamera) {
 	CurrentBuffer = 0;
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PreFrameRendered();
 	}
 
-	S_CurrentStage = ERenderingStage::GEOMETRY;
-	GemoetryPass(RenderWorld, RenderCamera);
+	CurrentRenderStage = ERenderingStage::GEOMETRY;
+	GemoetryPass(RenderCamera);
 
-	S_CurrentStage = ERenderingStage::LIGHTING;
-	S_DefferedCompositor->CompositeLighting(S_GBuffer, GetCurrentOutputBuffer(), RenderWorld->GetWorldLights(), RenderCamera);
+	CurrentRenderStage = ERenderingStage::LIGHTING;
+	Compositor->CompositeLighting(MainGBuffer, GetCurrentOutputBuffer(), RenderWorld->GetWorldLights(), RenderCamera);
 
-	S_CurrentStage = ERenderingStage::POST_PROCESSING;
-	RenderPostProcessing(RenderWorld, RenderCamera);
+	CurrentRenderStage = ERenderingStage::POST_PROCESSING;
+	RenderPostProcessing(RenderCamera);
 	
-	S_CurrentStage = EDITOR_ELEMENTS;
-	RenderEditorElements(RenderWorld, RenderCamera);
+	CurrentRenderStage = EDITOR_ELEMENTS;
+	RenderEditorElements(RenderCamera);
 
-	S_CurrentStage = ERenderingStage::OUTPUT;
-	S_DefferedCompositor->OutputToScreen(GetCurrentOutputBuffer());
+	CurrentRenderStage = ERenderingStage::OUTPUT;
+	Compositor->OutputToScreen(GetCurrentOutputBuffer());
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		actor->PostFrameRendered();
 	}
 }
-void RenderViewport::GemoetryPass(World* RenderWorld, Camera* RenderCamera) {
-	S_GBuffer->BindForWriting();
+void RenderViewport::GemoetryPass(const Camera* RenderCamera) {
+	MainGBuffer->BindForWriting();
 
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -209,21 +204,19 @@ void RenderViewport::GemoetryPass(World* RenderWorld, Camera* RenderCamera) {
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		if (actor->ShouldBeDrawn(EDrawType::SCENE_RENDER)) {
-			if (Engine::GetInstance()->GetSelectedEntity() == actor) {
+			if (RenderWorld->GetSelectedEntity() == actor) {
 				glEnable(GL_STENCIL_TEST);
 				glStencilFunc(GL_ALWAYS, 1, -1);
 				glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 			}
 			actor->Draw(RenderCamera);
-			if (Engine::GetInstance()->GetSelectedEntity() == actor) {
+			if (RenderWorld->GetSelectedEntity() == actor) {
 				glDisable(GL_STENCIL_TEST);
 			}
 		}
 	}
 }
-void RenderViewport::TranslucencyPass(World* RenderWorld, Camera* RenderCamera) { }
-void RenderViewport::BlendTransparencyPass(World* RenderWorld, Camera* Camera) { }
-void RenderViewport::RenderPostProcessing(World* RenderWorld, Camera* Camera) {
+void RenderViewport::RenderPostProcessing(const Camera* RenderCamera) {
 	for (PostProcessingLayer* layerPair : S_PostProcessingLayers) {
 		// Skip any layers that are disabled.
 		if (!layerPair->IsEnabled()) {
@@ -231,16 +224,16 @@ void RenderViewport::RenderPostProcessing(World* RenderWorld, Camera* Camera) {
 		}
 
 		FlipOutputBuffers();
-		layerPair->RenderLayer(S_DefferedCompositor, Camera, S_GBuffer, GetPreviousOutputBuffer(), GetCurrentOutputBuffer());
+		layerPair->RenderLayer(Compositor, RenderCamera, MainGBuffer, GetPreviousOutputBuffer(), GetCurrentOutputBuffer());
 	}
 }
-void RenderViewport::RenderEditorElements(World* RenderWorld, Camera* RenderCamera) {
+void RenderViewport::RenderEditorElements(const Camera* RenderCamera) {
 	// Draw selection outline if exists.
-	Entity* selectedEntity = Engine::GetInstance()->GetSelectedEntity();
+	Entity* selectedEntity = RenderWorld->GetSelectedEntity();
 	if (selectedEntity) {
 		vec2 resolution = GetCurrentOutputBuffer()->GetRenderTargetResolution();
 
-		S_GBuffer->BindForReading();
+		MainGBuffer->BindForReading();
 		GetCurrentOutputBuffer()->BindForWriting();
 		glBlitFramebuffer(0, 0, (GLint)resolution.x, (GLint)resolution.y, 0, 0, (GLint)resolution.x, (GLint)resolution.y, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 
@@ -262,52 +255,32 @@ void RenderViewport::RenderEditorElements(World* RenderWorld, Camera* RenderCame
 		glDisable(GL_STENCIL_TEST);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
-		//TransformGizmoEntity->SetVisibility(true);
-		//TransformGizmoEntity->SetLocation(selectedEntity->GetLocation());
-		//TransformGizmoEntity->Draw(RenderCamera);
-	} else {
-		//TransformGizmoEntity->SetVisibility(false);
 	}
 }
-
-void RenderViewport::OnMouseMove(vec2 MouseCoords) {
-	Entity* selectedEntity = Engine::GetInstance()->GetSelectedEntity();
-	if (selectedEntity) {
-		//TransformGizmoEntity->OnMouseMove();
-	}
-}
-
 RenderTarget* RenderViewport::GetCurrentOutputBuffer() {
-	return CurrentBuffer == 0 ? S_OutputBuffer1 : S_OutputBuffer2;
+	return CurrentBuffer == 0 ? OutputBuffer1 : OutputBuffer2;
 }
 RenderTarget* RenderViewport::GetPreviousOutputBuffer() {
-	return CurrentBuffer == 0 ? S_OutputBuffer2 : S_OutputBuffer1;
-}
-bool RenderViewport::GetDebugEnabled() {
-	return bDebugMode;
-}
-void RenderViewport::SetDebugEnabled(bool bEnabled) {
-	bDebugMode = bEnabled;
-}
-EDebugState RenderViewport::GetDebugState() {
-	return S_DebugState;
-}
-void RenderViewport::SetDebugState(EDebugState NewState) {
-	S_DebugState = NewState;
-}
-int RenderViewport::GetTranslucentObjectCount(World* World) {
-	return 0;
+	return CurrentBuffer == 0 ? OutputBuffer2 : OutputBuffer1;
 }
 void RenderViewport::ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions) {
-	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} X {1} to {2} x {3}", (int)RenderTargetDimensions.x, (int)RenderTargetDimensions.y, (int)NewRenderTargetDimensions.x, (int)NewRenderTargetDimensions.y);
-	RenderTargetDimensions = NewRenderTargetDimensions;
+	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} x {1}", (int)NewRenderTargetDimensions.x, (int)NewRenderTargetDimensions.y);
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
 }
-vec2 RenderViewport::GetRenderTargetDimensions() {
-	return RenderTargetDimensions;
+void RenderViewport::OnWindowResized(const FDisplayState& State) {
+	ChangeRenderTargetDimensions(State.GetResolution());
 }
 
-void RenderViewport::WindowSizeChanged(const FDisplayState& State) {
-	ChangeRenderTargetDimensions(State.GetResolution());
+const World* RenderViewport::GetWorld() const {
+	return RenderWorld;
+}
+const Window* RenderViewport::GetOwningWindow() const {
+	return OwningWindow;
+}
+const float& RenderViewport::GetRenderFrameTime() const {
+	return RenderDeltaTime;
+}
+const float& RenderViewport::GetRenderFrameRate() const {
+	return RenderFrameRate;
 }

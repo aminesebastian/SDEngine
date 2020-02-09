@@ -35,9 +35,6 @@ int main(int argc, char* argv[]) {
 
 	SD_ENGINE_INFO("Engine Launched!");
 
-	Scene* scene = new Scene();
-	S_Engine->LoadScene(scene);
-
 	S_Engine->StartEngine();
 
 	return 0;

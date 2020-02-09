@@ -2,18 +2,18 @@
 #include "Core/Engine/Engine.h"
 #include "Core/Utilities/Math/MathLibrary.h"
 
-SSAOPostProcessing::SSAOPostProcessing(vec2 FinalOutputDimensions) : PostProcessingLayer("Screen Space Ambient Occlusion", FinalOutputDimensions) {
+SSAOPostProcessing::SSAOPostProcessing(RenderViewport* OwningViewport) : PostProcessingLayer("Screen Space Ambient Occlusion", OwningViewport) {
 	SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO", false);
 
-	OcclusionBuffer = new RenderTarget(FinalOutputDimensions);
+	OcclusionBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
 	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RG8, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RG, GL_FLOAT));
 	OcclusionBuffer->FinalizeRenderTarget();
 
 	Power        = 5.0f;
 	Bias         = 0.015f;
 	Radius       = 5.0f;
-	S_NoiseSize  = 4;
-	S_KernelSize = 16;
+	NoiseSize  = 4;
+	KernelSize = 16;
 	BlurRadius   = 2;
 
 	GenerateNoise();
@@ -24,11 +24,11 @@ SSAOPostProcessing::~SSAOPostProcessing() {
 	glDeleteTextures(1, &NoiseTexture);
 }
 
-void SSAOPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
-	RenderOcclusion(Compositor, Camera, GBufferIn, OcclusionBuffer);
-	Blur(Compositor, Camera, CurrentLitFrame, OutputBuffer);
+void SSAOPostProcessing::RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) {
+	RenderOcclusion(Compositor, RenderCamera, ReadBuffer, OcclusionBuffer);
+	Blur(Compositor, RenderCamera, PreviousOutput, OutputBuffer);
 }
-void SSAOPostProcessing::RenderOcclusion(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* OutputBuffer) {
+void SSAOPostProcessing::RenderOcclusion(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* GBufferIn, RenderTarget* OutputBuffer) {
 	GBufferIn->BindForReading();
 	OutputBuffer->BindForWriting();
 
@@ -44,11 +44,11 @@ void SSAOPostProcessing::RenderOcclusion(DefferedCompositor* Compositor, Camera*
 	glBindTexture(GL_TEXTURE_2D, NoiseTexture);
 	glUniform1i(glGetUniformLocation(SSAOShader->GetProgram(), "noiseTexture"), 3);
 
-	for (int i = 0; i < S_KernelSize; i++) {
+	for (int i = 0; i < KernelSize; i++) {
 		SSAOShader->SetShaderVector3("Samples[" + std::to_string(i) + "]", SampleKernel[i]);
 	}
-	mat4 projection = Camera->GetProjectionMatrix();
-	mat4 viewMatrix = Camera->GetViewMatrix();
+	mat4 projection = RenderCamera->GetProjectionMatrix();
+	mat4 viewMatrix = RenderCamera->GetViewMatrix();
 
 	SSAOShader->SetShaderMatrix4("PROJECTION_MATRIX", projection);
 
@@ -57,7 +57,7 @@ void SSAOPostProcessing::RenderOcclusion(DefferedCompositor* Compositor, Camera*
 
 	SSAOShader->SetShaderInteger("PASS", 0);
 
-	SSAOShader->SetShaderInteger("SAMPLE_COUNT", S_KernelSize);
+	SSAOShader->SetShaderInteger("SAMPLE_COUNT", KernelSize);
 	SSAOShader->SetShaderVector2("NOISE_SCALE", NoiseScale);
 
 	SSAOShader->SetShaderInteger("BLUR_RADIUS", BlurRadius);
@@ -68,7 +68,7 @@ void SSAOPostProcessing::RenderOcclusion(DefferedCompositor* Compositor, Camera*
 
 	Compositor->DrawScreenQuad();
 }
-void SSAOPostProcessing::Blur(DefferedCompositor* Compositor, Camera* Camera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer) {
+void SSAOPostProcessing::Blur(const DefferedCompositor* Compositor, const Camera* RenderCamera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer) {
 	ReadBuffer->BindForReading();
 	OcclusionBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
@@ -86,7 +86,7 @@ Compositor->DrawScreenQuad();
 
 void SSAOPostProcessing::GenerateKernel() {
 	float scale = 0.0f;
-	for (int i = 0; i < S_KernelSize; i++) {
+	for (int i = 0; i < KernelSize; i++) {
 		glm::vec3 sample(
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
@@ -94,7 +94,7 @@ void SSAOPostProcessing::GenerateKernel() {
 		);
 		sample = glm::normalize(sample);
 		sample *= MathLibrary::RandRange(0.0f, 1.0f);
-		scale = (float)(i / S_KernelSize);
+		scale = (float)(i / KernelSize);
 		scale = MathLibrary::Lerp(0.1f, 1.0f, scale * scale);
 		sample *= scale;
 
@@ -104,7 +104,7 @@ void SSAOPostProcessing::GenerateKernel() {
 void SSAOPostProcessing::GenerateNoise() {
 	glDeleteTextures(1, &NoiseTexture);
 
-	for (int i = 0; i < S_NoiseSize * S_NoiseSize; ++i) {
+	for (int i = 0; i < NoiseSize * NoiseSize; ++i) {
 		Noise.Add(vec3(
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
 			MathLibrary::RandRange<float>(-1.0f, 1.0f),
@@ -112,11 +112,11 @@ void SSAOPostProcessing::GenerateNoise() {
 		));
 	}
 
-	NoiseScale = vec2(GetRenderTargetDimensions().x / S_NoiseSize, GetRenderTargetDimensions().y / S_NoiseSize);
+	NoiseScale = vec2(GetOwningViewport()->GetOwningWindow()->GetDimensions().x / NoiseSize, GetOwningViewport()->GetOwningWindow()->GetDimensions().y / NoiseSize);
 
 	glGenTextures(1, &NoiseTexture);
 	glBindTexture(GL_TEXTURE_2D, NoiseTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, S_NoiseSize, S_NoiseSize, 0, GL_RGB, GL_FLOAT, &Noise[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, NoiseSize, NoiseSize, 0, GL_RGB, GL_FLOAT, &Noise[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -126,48 +126,48 @@ void SSAOPostProcessing::RecompileShaders() {
 	SSAOShader->RecompileShader();
 }
 
-void SSAOPostProcessing::SetBias(float Bias) {
+void SSAOPostProcessing::SetBias(const float& Bias) {
 	this->Bias = Bias;
 }
-float SSAOPostProcessing::GetBias() {
+const float& SSAOPostProcessing::GetBias() const {
 	return Bias;
 }
 
-void SSAOPostProcessing::SetPower(float Power) {
+void SSAOPostProcessing::SetPower(const float& Power) {
 	this->Power = Power;
 }
-float SSAOPostProcessing::GetPower() {
+const float& SSAOPostProcessing::GetPower() const {
 	return Power;
 }
 
-void SSAOPostProcessing::SetRadius(float Radius) {
+void SSAOPostProcessing::SetRadius(const float& Radius) {
 	this->Radius = Radius;
 }
-float SSAOPostProcessing::GetRadius() {
+const float& SSAOPostProcessing::GetRadius() const {
 	return Radius;
 }
-void SSAOPostProcessing::SetSampleCount(int Samples) {
-	if (Samples != S_KernelSize) {
-		S_KernelSize = Samples;
+void SSAOPostProcessing::SetSampleCount(const int& Samples) {
+	if (Samples != KernelSize) {
+		KernelSize = Samples;
 		GenerateKernel();
 	}
 }
-int SSAOPostProcessing::GetSampleCount() {
-	return S_KernelSize;
+const int& SSAOPostProcessing::GetSampleCount() const {
+	return KernelSize;
 }
-void SSAOPostProcessing::SetNoiseSize(int Size) {
-	if (Size != S_NoiseSize) {
-		S_NoiseSize = Size;
+void SSAOPostProcessing::SetNoiseSize(const int& Size) {
+	if (Size != NoiseSize) {
+		NoiseSize = Size;
 		GenerateNoise();
 	}
 }
-int SSAOPostProcessing::GetNoiseSize() {
-	return S_NoiseSize;
+const int& SSAOPostProcessing::GetNoiseSize() const {
+	return NoiseSize;
 }
-void SSAOPostProcessing::SetBlurRadius(int Radius) {
+void SSAOPostProcessing::SetBlurRadius(const int& Radius) {
 	BlurRadius = Radius;
 }
-int SSAOPostProcessing::GetBlurRadius() {
+const int& SSAOPostProcessing::GetBlurRadius() const {
 	return BlurRadius;
 }
 

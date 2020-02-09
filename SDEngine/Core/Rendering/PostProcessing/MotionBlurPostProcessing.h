@@ -3,10 +3,10 @@
 
 class MotionBlurPostProcessing : public PostProcessingLayer {
 public:
-	MotionBlurPostProcessing(vec2 FinalOutputDimensions);
+	MotionBlurPostProcessing(RenderViewport* OwningViewport);
 	~MotionBlurPostProcessing();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
+	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders() override;
 	virtual bool PopulatePostProcessingDetailsPanel() override;
 
@@ -17,7 +17,7 @@ public:
 	void SetMotionBlurSamples(int Samples);
 
 private:
-	void ApplyMotionBlur(DefferedCompositor* Compositor, GBuffer* ReadBuffer, RenderTarget* InputBuffer, RenderTarget* OutputBuffer);
+	void ApplyMotionBlur(const DefferedCompositor* Compositor, GBuffer* ReadBuffer, RenderTarget* InputBuffer, RenderTarget* OutputBuffer);
 
 	float Amount;
 	int Samples;

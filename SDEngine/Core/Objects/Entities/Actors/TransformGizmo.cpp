@@ -53,7 +53,7 @@ void TransformGizmo::OnMouseMove() {
 	//	SelectedAxis = NONE;
 	//}
 }
-void TransformGizmo::DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) {
+void TransformGizmo::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
 	//// These values have to be set in the draw because this entity does NOT tick.
 	//ZArrow->SetLocation(GetLocation());
 	//YArrow->SetLocation(GetLocation());

@@ -10,9 +10,9 @@ const bool HorizontalBoxWidget::CanAddChild() const
 void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	HorizontalBoxSlot* slot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
 	OutputGeometry.SetLocation(vec2(lastXPosition, OutputGeometry.GetLocation().y));
+	vec2 desiredSpace   = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 
 	if (slot->GetFillRule() == EFillRule::AUTOMATIC) {
-		vec2 desiredSpace   = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 		OutputGeometry.SetAllotedSpace(desiredSpace);
 	} else {
 		float ratio   = GetFillRatioForChild(ChildIndex);
@@ -20,6 +20,12 @@ void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 		space.x      -= GetNonFillSpaceRequirements(CurrentRenderGeometry);
 		space.x      /= ratio;
 		OutputGeometry.SetAllotedSpace(space);
+	}
+
+	if (slot->GetVerticalAlignment() == EVerticalAlignment::CENTER) {
+		vec2 location = OutputGeometry.GetLocation();
+		location.y -= OutputGeometry.GetAllotedSpace().y / 4.0f;
+		OutputGeometry.SetLocation(location);
 	}
 
 	// Breaking const to capture temporary variable.
@@ -62,7 +68,7 @@ float HorizontalBoxWidget::GetNonFillSpaceRequirements(const FRenderGeometry& Cu
 	return widthRequirement;
 }
 
-void HorizontalBoxWidget::DrawContents(float DeltaTime, const FRenderGeometry& Geometry) {
+void HorizontalBoxWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	lastXPosition = Geometry.GetLocation().x;
 	PictorumWidget::DrawContents(DeltaTime, Geometry);
 }

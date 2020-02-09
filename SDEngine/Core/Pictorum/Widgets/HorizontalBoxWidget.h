@@ -12,7 +12,7 @@ public:
 protected:
 	float GetFillRatioForChild(int32 ChildIndex) const;
 	float GetNonFillSpaceRequirements(const FRenderGeometry& CurrentRenderGeometry) const;
-	virtual void DrawContents(float DeltaTime, const FRenderGeometry& Geometry) override;
+	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) override;
 	float lastXPosition;
 };
 

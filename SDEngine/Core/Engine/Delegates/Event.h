@@ -1,10 +1,17 @@
+#pragma once
+
 #include "Core/Engine/Delegates/EventDelegate.h"
 #include "Core/DataStructures/Array.h"
 
 template<typename T>
 class Event;
 
-#define EVENT(EventName, Signature, TargetType, MethodAddress, Instance) Event<Signature> EventName;
+#define EVENT(EventName, Signature) Event<Signature> EventName;
+
+template <typename T, typename L = typename std::decay<T>::type>
+L lambda_delegate(T && t) {
+	return L(forward<T>(t));
+}
 
 template<typename Ret, typename ...Args>
 class Event<Ret(Args...)> {
@@ -17,30 +24,30 @@ public:
 	}
 
 	template<Ret(*FunctionPointer)(Args...)>
-	bool Add() {
-		return Add(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
+	bool Add() const {
+		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
 	}
 	template<Ret(*FunctionPointer)(Args...)>
-	bool Remove() {
-		return Remove(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
+	bool Remove() const {
+		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
 	}
 
 	template<typename T, Ret(T::* FunctionPointer)(Args...)>
-	bool Add(T* Instance) {
-		return Add(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
+	bool Add(T* Instance) const {
+		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
 	}
 	template<typename T, Ret(T::* FunctionPointer)(Args...)>
-	bool Remove(T* Instance) {
-		return Remove(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
+	bool Remove(T* Instance) const {
+		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
 	}
 
 	template<typename T>
-	bool Add(T* Functor) {
-		return Add(EventDelegate<Ret(Args...)>::Create(Functor));
+	bool Add(T* Functor) const {
+		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create(Functor));
 	}
 	template<typename T>
-	bool Remove(T* Functor) {
-		return Remove(EventDelegate<Ret(Args...)>::Create(Functor));
+	bool Remove(T* Functor) const {
+		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create(Functor));
 	}
 
 	/**

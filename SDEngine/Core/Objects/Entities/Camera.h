@@ -12,19 +12,19 @@ class Camera : public Actor {
 public:
 	Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip);
 	virtual ~Camera();
-	float GetNearClipPlane();
-	float GetFarClipPlane();
+	const float& GetNearClipPlane() const;
+	const float& GetFarClipPlane() const;
 
 	void SetRenderTargetDimensions(vec2 Dimensions);
-	vec2 GetRenderTargetDimensions();
+	vec2 GetRenderTargetDimensions() const;
 
 	mat4 GetProjectionMatrix() const;
 	mat4 GetOrthographicMatrix() const;
-	mat4 GetViewMatrix();
-	mat4 GetLastFrameViewMatrix();
-	float GetThetaFOV();
-	float GetFOV();
-	float GetAspect();
+	mat4 GetViewMatrix() const;
+	mat4 GetLastFrameViewMatrix() const;
+	float GetThetaFOV() const;
+	float GetFOV() const;
+	float GetAspect() const;
 	void AddOrbit(float Y, float Z);
 	void UpdateCameraPosition(const vec3 NewPosition);
 

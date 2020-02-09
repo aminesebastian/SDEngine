@@ -12,7 +12,7 @@ public:
 	~TransformGizmo();
 
 	virtual void OnMouseMove();
-	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) override;
+	virtual void DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) override;
 
 	void RecompileShaders();
 

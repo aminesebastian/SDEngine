@@ -55,11 +55,11 @@ bool InputSubsystem::DeregisterInputReciever(IUserInputReciever* Reciever) {
 }
 
 void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-		ImGui_ImplSDL2_ProcessEvent(&Event);
-		return;
-	}
+	//ImGuiIO& io = ImGui::GetIO();
+	//if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+	//	ImGui_ImplSDL2_ProcessEvent(&Event);
+	//	return;
+	//}
 
 	switch (Event.type) {
 		case SDL_KEYDOWN:
@@ -75,7 +75,9 @@ void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
 			ProcessMouseUpInput((EMouseButton)(Event.button.button-1)); //Subtract 1 because SDL is 1 indexed
 			break;
 		case SDL_MOUSEMOTION:
-			MousePosition = vec2(Event.motion.x, Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions().y - Event.motion.y);
+			int32 x, y;
+			SDL_GetWindowSize(SDL_GetWindowFromID(Event.motion.windowID), &x, &y);
+			MousePosition = vec2(Event.motion.x, y - Event.motion.y);
 			ProcessMouseMovement(MousePosition);
 			MouseDelta = MousePosition - LastMousePosition;
 			LastMousePosition = MousePosition;

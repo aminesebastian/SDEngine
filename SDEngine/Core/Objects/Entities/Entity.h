@@ -1,17 +1,18 @@
 #pragma once
-#include "Core/Objects/EngineObject.h"
-#include "Core/Physics/AxisAlignedBoundingBox.h"
-#include "Core/Physics/CollisionChannels.h"
+#include "Core/Engine/World.h"
 #include "Core/Objects/CoreTypes/Shader.h"
+#include "Core/Objects/EngineObject.h"
+#include "Core/Physics/CollisionChannels.h"
+#include "Core/Rendering/RenderTypeDefenitions.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/Transform.h"
-#include "Core/Rendering/RenderTypeDefenitions.h"
 
 class Camera;
+class World;
 
 /**
  * An entity is any object that can be placed in a scene.
- * It contains all the definitions necessary to encapsulate a transformation.
+ * It contains all the definitions necessary to encapsulate transformation.
  * It does not contain nor does it receive gameplay events or functions.
  */
 class Entity : public EngineObject {
@@ -20,24 +21,22 @@ public:
 	Entity(TString Name);
 	virtual ~Entity();
 
-	bool IsVisible();
+	bool IsVisible() const;
 	void SetVisibility(bool Show);
 	void ToggleVisibility();
 
-	bool IsHiddenInGame();
+	bool IsHiddenInGame() const;
 	void SetHiddenInGame(bool Hidden);
 
-	bool ShouldCastShadows();
+	bool ShouldCastShadows() const;
 	void SetCastShadows(bool CastShadows);
 
-	bool ShouldBeDrawn(EDrawType DrawType);
+	const vec3& GetLocation() const;
+	const vec3& GetRotation() const;
+	const vec3& GetScale() const;
 
-	vec3 GetLocation();
-	vec3 GetRotation();
-	vec3 GetScale();
-
-	vec3 GetLinearVelocity();
-	vec3 GetAngularVelocity();
+	vec3 GetLinearVelocity() const;
+	vec3 GetAngularVelocity() const;
 
 	void AddLocation(vec3 Offset);
 	void AddLocation(float X, float Y, float Z);
@@ -55,10 +54,13 @@ public:
 	void SetScale(float X, float Y, float Z);
 	void SetUniformScale(float Scale);
 
-	Transform GetTransform();
-	void SetTransform(Transform NewTransform);
-	Transform GetLastFrameTransform();
-	void SetLastFrameTransform(Transform OldTransform);
+	const Transform& GetTransform() const;
+	void SetTransform(const Transform& NewTransform);
+	const Transform& GetLastFrameTransform() const;
+	void SetLastFrameTransform(const Transform& OldTransform);
+
+	void SetOwner(Entity* OwnerIn);
+	Entity* GetOwner();
 
 	//////////
 	//RENDER//
@@ -67,12 +69,16 @@ public:
 	* Draws the mesh. This method should never be overridden.
 	* It makes a call to DrawAdvanced with DrawType SCENE_RENDER.
 	*/
-	void Draw(Camera* RenderCamera);
-	virtual void DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) = 0;
+	void Draw(const Camera* RenderCamera);
+	virtual void DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) = 0;
+	bool ShouldBeDrawn(EDrawType DrawType);
 	virtual void PreFrameRendered();
 	virtual void PostFrameRendered();
 
+	const class World* GetWorld() const;
 protected:
+	friend class World;
+
 	Transform CurrentTransform;
 	Transform LastFrameTrasnform;
 	bool bVisible;
@@ -80,5 +86,13 @@ protected:
 	bool bNeedsTick;
 	bool bNeedsBeginPlay;
 	bool bCastShadows;
+
+private:
+	void OnAddedToWorld(World* WorldIn);
+	void OnRemovedFromWorld();
+
+	/** NEVER attempt to access this alone. Use the getter to that the call goes up the stack to the parent if needed. */
+	World* OwningWorld;
+	Entity* Owner;
 };
 

@@ -10,7 +10,7 @@ StaticMeshComponent::StaticMeshComponent(const TString& Name) : Component(Name) 
 StaticMeshComponent::~StaticMeshComponent() {
 
 }
-void StaticMeshComponent::DrawAdvanced(Camera* RenderCamera, EDrawType DrawType) {
+void StaticMeshComponent::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
 	if (!Mesh) {
 		return;
 	}

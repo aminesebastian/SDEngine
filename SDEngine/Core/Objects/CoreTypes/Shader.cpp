@@ -1,7 +1,8 @@
 #include "Shader.h"
-#include <fstream>
+#include "Core/Objects/CoreTypes/Texture2D.h"
 #include "Core/Objects/Entities/Camera.h"
 #include "Core/Utilities/Logger.h"
+#include <fstream>
 
 Shader::Shader() {
 	S_Program = 0;
@@ -157,23 +158,23 @@ void Shader::Bind() {
 /* Sets the FAR_CLIP
 /* Sets the CAMERA_POS
 /************************************************************************/
-void Shader::Update(const class Transform& RenderTransform, Camera* Camera) {
-	Update(RenderTransform, RenderTransform, Camera);
+void Shader::Update(const class Transform& RenderTransform, const Camera* RenderCamera) {
+	Update(RenderTransform, RenderTransform, RenderCamera);
 }
-void Shader::Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, Camera* Camera) {
-	mat4 lastFrameMVP = Camera->GetProjectionMatrix() * Camera->GetLastFrameViewMatrix() * LastFrameTrasnform.GetModelMatrix();
-	mat4 tempMVP = Camera->GetProjectionMatrix() * Camera->GetViewMatrix() * RenderTransform.GetModelMatrix();
+void Shader::Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, const Camera* RenderCamera) {
+	mat4 lastFrameMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetLastFrameViewMatrix() * LastFrameTrasnform.GetModelMatrix();
+	mat4 tempMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetViewMatrix() * RenderTransform.GetModelMatrix();
 
 	SetShaderMatrix3("NORMAL_MODEL_MATRIX", glm::transpose(glm::inverse(RenderTransform.GetModelMatrix())));
 	SetShaderMatrix4("MODEL_MATRIX", RenderTransform.GetModelMatrix());
-	SetShaderMatrix4("VIEW_MATRIX", Camera->GetViewMatrix());
-	SetShaderMatrix4("PROJECTION_MATRIX", Camera->GetProjectionMatrix());
+	SetShaderMatrix4("VIEW_MATRIX", RenderCamera->GetViewMatrix());
+	SetShaderMatrix4("PROJECTION_MATRIX", RenderCamera->GetProjectionMatrix());
 	SetShaderMatrix4("MVP", tempMVP);
 	SetShaderMatrix4("LAST_MVP", lastFrameMVP);
-	SetShaderFloat("NEAR_CLIP", Camera->GetNearClipPlane());
-	SetShaderFloat("FAR_CLIP", Camera->GetFarClipPlane());
+	SetShaderFloat("NEAR_CLIP", RenderCamera->GetNearClipPlane());
+	SetShaderFloat("FAR_CLIP", RenderCamera->GetFarClipPlane());
 
-	SetShaderVector3("CAMERA_POS", Camera->GetTransform().GetLocation());
+	SetShaderVector3("CAMERA_POS", RenderCamera->GetTransform().GetLocation());
 }
 void Shader::SetShaderInteger(TString Name, int Value) {
 	glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Value);

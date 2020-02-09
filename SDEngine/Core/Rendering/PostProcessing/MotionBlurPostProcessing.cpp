@@ -3,17 +3,17 @@
 #include "Core/Rendering/GBuffer.h"
 
 
-MotionBlurPostProcessing::MotionBlurPostProcessing(vec2 FinalOutputDimensions) : PostProcessingLayer("Motion Blur", FinalOutputDimensions) {
+MotionBlurPostProcessing::MotionBlurPostProcessing(RenderViewport* OwningViewport) : PostProcessingLayer("Motion Blur", OwningViewport) {
 	S_MotionBlurShader = new Shader("Res/Shaders/PostProcessing/MotionBlur/MotionBlur", false);
 	Amount = 10.0f;
 	Samples = 20;
 }
 MotionBlurPostProcessing::~MotionBlurPostProcessing() {}
 
-void MotionBlurPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
-	ApplyMotionBlur(Compositor, ReadBuffer, CurrentLitFrame, OutputBuffer);
+void MotionBlurPostProcessing::RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) {
+	ApplyMotionBlur(Compositor, ReadBuffer, PreviousOutput, OutputBuffer);
 }
-void MotionBlurPostProcessing::ApplyMotionBlur(DefferedCompositor* Compositor, GBuffer* ReadBuffer, RenderTarget* InputBuffer, RenderTarget* OutputBuffer) {
+void MotionBlurPostProcessing::ApplyMotionBlur(const DefferedCompositor* Compositor, GBuffer* ReadBuffer, RenderTarget* InputBuffer, RenderTarget* OutputBuffer) {
 	InputBuffer->BindForReading();
 	OutputBuffer->BindForWriting();
 
@@ -21,7 +21,7 @@ void MotionBlurPostProcessing::ApplyMotionBlur(DefferedCompositor* Compositor, G
 
 	S_MotionBlurShader->Bind();
 	S_MotionBlurShader->SetShaderFloat("MOTION_BLUR_SCALE", Amount);
-	S_MotionBlurShader->SetShaderFloat("FPS", (float)Engine::GetInstance()->GetFrameRate());
+	S_MotionBlurShader->SetShaderFloat("FPS", 1.0f / GetOwningViewport()->GetWorld()->GetLastFrameTime());
 	S_MotionBlurShader->SetShaderInteger("SAMPLES", Samples);
 
 	// Bind the motion vector texture as well.

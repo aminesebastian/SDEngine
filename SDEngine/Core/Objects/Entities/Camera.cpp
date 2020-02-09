@@ -2,10 +2,10 @@
 
 
 Camera::Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip) : Actor(Name),
-	S_NearClip(NearClip),
-	S_FarClip(FarClip),
-	S_FOV(FOV),
-	S_Aspect(Dimensions.x/Dimensions.y) {
+S_NearClip(NearClip),
+S_FarClip(FarClip),
+S_FOV(FOV),
+S_Aspect(Dimensions.x / Dimensions.y) {
 	SetTransform(CurrentTransform);
 	S_OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClip, FarClip);
 	S_ProjectionMatrix = perspective(FOV, S_Aspect, NearClip, FarClip);
@@ -14,8 +14,12 @@ Camera::Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 D
 }
 Camera::~Camera() {}
 
-float Camera::GetNearClipPlane() { return S_NearClip; }
-float Camera::GetFarClipPlane() { return S_FarClip; }
+const float& Camera::GetNearClipPlane() const {
+	return S_NearClip;
+}
+const float&  Camera::GetFarClipPlane() const {
+	return S_FarClip;
+}
 
 void Camera::SetRenderTargetDimensions(vec2 Dimensions) {
 	S_Aspect = Dimensions.x / Dimensions.y;
@@ -23,7 +27,7 @@ void Camera::SetRenderTargetDimensions(vec2 Dimensions) {
 	S_ProjectionMatrix = perspective(S_FOV, S_Aspect, S_NearClip, S_FarClip);
 	RenderTargetDimensions = Dimensions;
 }
-vec2 Camera::GetRenderTargetDimensions() {
+vec2 Camera::GetRenderTargetDimensions() const {
 	return RenderTargetDimensions;
 }
 mat4 Camera::GetProjectionMatrix() const {
@@ -32,19 +36,19 @@ mat4 Camera::GetProjectionMatrix() const {
 mat4 Camera::GetOrthographicMatrix() const {
 	return S_OrthographicMatrix;
 }
-mat4 Camera::GetViewMatrix() {
+mat4 Camera::GetViewMatrix() const {
 	return lookAt(CurrentTransform.GetLocation(), CurrentTransform.GetLocation() + CurrentTransform.GetForwardVector(), S_UpVector);
 }
-mat4 Camera::GetLastFrameViewMatrix() {
+mat4 Camera::GetLastFrameViewMatrix() const {
 	return lookAt(LastFrameTrasnform.GetLocation(), LastFrameTrasnform.GetLocation() + LastFrameTrasnform.GetForwardVector(), S_UpVector);
 }
-float Camera::GetThetaFOV() {
+float Camera::GetThetaFOV() const {
 	return (float)glm::tan(S_FOV / 2.0);
 }
-float Camera::GetFOV() {
+float Camera::GetFOV() const {
 	return S_FOV;
 }
-float Camera::GetAspect() {
+float Camera::GetAspect() const {
 	return S_Aspect;
 }
 void Camera::AddOrbit(float Y, float Z) {
@@ -60,4 +64,4 @@ void Camera::AddOrbit(float Y, float Z) {
 	}
 	AddRotation(0.0f, 0.0f, Z);
 }
-void Camera::UpdateCameraPosition(const vec3 NewPosition) { CurrentTransform.GetLocation() = NewPosition; }
+void Camera::UpdateCameraPosition(const vec3 NewPosition) { CurrentTransform.SetLocation(NewPosition); }

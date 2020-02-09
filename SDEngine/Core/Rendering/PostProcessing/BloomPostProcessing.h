@@ -5,11 +5,11 @@ class VariableGausianBlur;
 
 class BloomPostProcessing : public PostProcessingLayer {
 public:
-	BloomPostProcessing(vec2 FinalOutputDimensions);
+	BloomPostProcessing(RenderViewport* OwningViewport);
 	~BloomPostProcessing();
 
-	virtual void RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
-	virtual void RecompileShaders();
+	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
+	virtual void RecompileShaders() override;
 	virtual bool PopulatePostProcessingDetailsPanel() override;
 
 	void SetBloomThreshold(float Threshold);
@@ -23,8 +23,8 @@ public:
 
 private:
 
-	void ClipHDR(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
-	void BlendOutput(DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer);
+	void ClipHDR(const DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
+	void BlendOutput(const DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer);
 
 	float BloomThreshold;
 	float BloomWeight;

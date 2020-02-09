@@ -1,10 +1,12 @@
 #include "TitleBar.h"
-#include "Core/Utilities/EngineFunctionLibrary.h"
-#include "Core/Pictorum/Widgets/SolidWidget.h"
-#include "Core/Pictorum/Widgets/ImageWidget.h"
+#include "Core/Engine/Window.h"
+#include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
+#include "Core/Pictorum/Widgets/ImageWidget.h"
+#include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
-#include <Include\SDL\SDL_syswm.h>
+#include "Core/Utilities/EngineFunctionLibrary.h"
+
 
 TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	TitleBarHeight = 30.0f;
@@ -25,11 +27,11 @@ TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");
 	AddChild(buttonContainer);
 
-	TextWidget* windowTitle = new TextWidget("WindowTitle");
-	windowTitle->SetText("SD Engine");
-	windowTitle->SetTextColor(FColor(0.9f, 0.9f, 0.9f));
-	windowTitle->SetFontSize(11);
-	buttonContainer->AddChild(windowTitle)->SetFillAvilableSpace(1.0f);
+	WindowTitleWidget = new TextWidget("WindowTitle");
+	WindowTitleWidget->SetText("SD Engine");
+	WindowTitleWidget->SetTextColor(FColor(0.9f, 0.9f, 0.9f));
+	WindowTitleWidget->SetFontSize(11);
+	buttonContainer->AddChild(WindowTitleWidget)->SetFillAvilableSpace(1.0f).SetVerticalAlignment(EVerticalAlignment::CENTER);
 
 	MinimizeButton = new ImageWidget("Minimize");
 	MinimizeButton->SetImage(MinimizeTexture);
@@ -48,11 +50,16 @@ TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	CloseButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
 	CloseButton->OnMouseUpDelegate.Add<TitleBar, &TitleBar::OnCloseButtonClicked>(this);
 	buttonContainer->AddChild(CloseButton);
-
-	SDL_SetWindowHitTest(Engine::GetInstance()->GetDisplay()->GetWindow(), &MouseHitTestCallback, this);
 }
 TitleBar::~TitleBar() {
 
+}
+void TitleBar::OnCreated() {
+	SDL_SetWindowHitTest(GetOwningRenderer()->GetOwningWindow()->GetWindow(), &MouseHitTestCallback, this);
+}
+void TitleBar::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
+	PictorumWidget::Tick(DeltaTime, Geometry);
+	WindowTitleWidget->SetText("SD Engine " + to_string(1.0f / DeltaTime));
 }
 const bool TitleBar::CanAddChild() const {
 	return true;
@@ -67,16 +74,16 @@ void TitleBar::OnCloseButtonClicked(const vec2& MousePosition, FUserInterfaceEve
 	SDL_PushEvent(&sdlevent);
 }
 void TitleBar::OnMinimizeButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
-	SDL_MinimizeWindow(Engine::GetInstance()->GetDisplay()->GetWindow());
+	SDL_MinimizeWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 }
 void TitleBar::OnMaximizeClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
-	uint32 flags = SDL_GetWindowFlags(Engine::GetInstance()->GetDisplay()->GetWindow());
+	uint32 flags = SDL_GetWindowFlags(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 	if (flags & SDL_WINDOW_MAXIMIZED) {
-		SDL_RestoreWindow(Engine::GetInstance()->GetDisplay()->GetWindow());
+		SDL_RestoreWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 		MaximizeButton->SetImage(MaximizeTexture);
 		MaximizeButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
 	} else {
-		SDL_MaximizeWindow(Engine::GetInstance()->GetDisplay()->GetWindow());
+		SDL_MaximizeWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 		MaximizeButton->SetImage(RestoreTexture);
 		MaximizeButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
 	}
@@ -92,3 +99,10 @@ void TitleBar::OnTitleBarMouseMove(const vec2& MousePosition, const vec2& Delta,
 
 }
 
+SDL_HitTestResult TitleBar::MouseHitTestCallback(SDL_Window* Window, const SDL_Point* MouseLocation, void* Data) {
+	TitleBar* titleBar = (TitleBar*)Data;
+	if (MouseLocation->y < titleBar->TitleBarHeight && MouseLocation->x < titleBar->GetOwningRenderer()->GetOwningWindow()->GetDimensions().x - (titleBar->TitleBarHeight * 3)) {
+		return SDL_HITTEST_DRAGGABLE;
+	}
+	return SDL_HITTEST_NORMAL;
+}

@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include <SDL/SDL.h>
 #include "Core/Utilities/Logger.h"
 #include "Core/Assets/AssetMetadata.h"
 

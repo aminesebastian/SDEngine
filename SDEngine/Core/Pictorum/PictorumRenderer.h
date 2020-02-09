@@ -1,19 +1,20 @@
 #pragma once
 #include "Core/DataStructures/DataStructures.h"
-#include "Core/Input/IUserInputReciever.h"
+#include "Core/Engine/WindowDataTypes.h"
 #include "Core/Input/InputUtilities.h"
-#include "Core/Pictorum/PictorumDataTypes.h"
+#include "Core/Input/IUserInputReciever.h"
 #include "Core/Objects/EngineObject.h"
+#include "Core/Pictorum/PictorumDataTypes.h"
 #include "UserInterface/DetailsPanelProvider.h"
-
 
 class PictorumWidget;
 class TextRenderer;
 class DistanceFieldFont;
+class Window;
 
 class PictorumRenderer : public EngineObject, public IUserInputReciever, public IDetailsPanelProvider {
 public:
-	PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI);
+	PictorumRenderer(const TString& ViewportName, Window* OwningWindow);
 	virtual ~PictorumRenderer();
 
 	void Tick(float DeltaTime);
@@ -31,23 +32,21 @@ public:
 	bool AddToViewport(PictorumWidget* Widget);
 	bool RemoveFromViewport(PictorumWidget* Widget);
 
-	void OnRenderTargetResolutionChanged(vec2 NewResolution);
-
 	PictorumWidget* GetMouseOverWidget();
-
-	const SArray<PictorumWidget*>& GetWidgets();
+	const Window* GetOwningWindow() const;
+	const SArray<PictorumWidget*>& GetWidgets() const;
 
 	virtual TString GetDetailsPanelName() override;
 	virtual bool PopulateDetailsPanel() override;
 private:
 	SArray<PictorumWidget*> Widgets;
 	PictorumWidget* MouseOverWidget;
-	TextRenderer* QuadBuffer;
-	DistanceFieldFont* DistanceField;
+	Window* OwningWindow;
 
 	bool bMouseCaptured;
 	FRenderGeometry TopLevelRenderGeometry;
 
 	void CacheMouseOverWidget(vec2 MousePosition);
+	void OnWindowResized(const FDisplayState& State);
 };
 

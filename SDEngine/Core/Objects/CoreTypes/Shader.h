@@ -19,8 +19,8 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const class Transform& RenderTransform, Camera* Camera);
-	void Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, Camera* Camera);
+	void Update(const class Transform& RenderTransform, const Camera* RenderCamera);
+	void Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, const Camera* RenderCamera);
 	void RecompileShader();
 
 	void SetShaderInteger(TString Name, int Value);
