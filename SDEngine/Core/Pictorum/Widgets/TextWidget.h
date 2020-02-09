@@ -18,7 +18,7 @@ public:
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const override;
-	virtual bool CanAddChild() const override;
+	virtual const bool CanAddChild() const override;
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;

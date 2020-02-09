@@ -325,6 +325,15 @@
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Delegates\Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -512,6 +521,9 @@
     <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
+    <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
+    <ClInclude Include="Core\Engine\Delegates\Event.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

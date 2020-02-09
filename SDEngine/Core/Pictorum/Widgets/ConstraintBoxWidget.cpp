@@ -5,7 +5,8 @@ ConstraintBoxWidget::ConstraintBoxWidget(const TString& Name) : PictorumWidget(N
 	SetSize(vec2(64, 64));
 	SetMaintainAspectRatio(false);
 }
-bool ConstraintBoxWidget::CanAddChild() const {
+const bool ConstraintBoxWidget::CanAddChild() const
+{
 	return Children.Count() == 0;
 }
 void ConstraintBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {

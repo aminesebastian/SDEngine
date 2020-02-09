@@ -54,6 +54,7 @@ public:
 	bool IsInGameMode();
 	Entity* GetSelectedEntity();
 	void SetSelectedEntity(Entity* Entity);
+
 private:
 	AssetManager* _AssetManager;
 	InputSubsystem* _InputSubsystem;

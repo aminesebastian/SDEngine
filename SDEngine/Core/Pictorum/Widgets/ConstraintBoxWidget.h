@@ -5,7 +5,7 @@
 class ConstraintBoxWidget : public PictorumWidget {
 public:
 	ConstraintBoxWidget(const TString& Name);
-	virtual bool CanAddChild() const override;
+	virtual const bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual ConstraintBoxSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const override;
 	virtual ConstraintBoxSlot* AddChild(PictorumWidget* Widget) override;

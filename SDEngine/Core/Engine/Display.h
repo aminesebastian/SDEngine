@@ -9,13 +9,13 @@ using namespace glm;
 struct FDisplayState {
 	FDisplayState(const vec2& Resolution, const vec2& DotsPerInch, const float& DiagonalDotsPerInch) : Resolution(Resolution), DotsPerInch(DotsPerInch), DiagonalDotsPerInch(DiagonalDotsPerInch) {}
 
-	const vec2& GetResolution() {
+	const vec2& GetResolution() const {
 		return Resolution;
 	}
-	const vec2& GetDotsPerInch() {
+	const vec2& GetDotsPerInch() const {
 		return DotsPerInch;
 	}
-	const float& GetDiagonalDotsPerInch() {
+	const float& GetDiagonalDotsPerInch() const {
 		return DiagonalDotsPerInch;
 	}
 private:
@@ -28,11 +28,9 @@ class Display {
 
 public:
 	Display(int Width, int Height, const std::string& Title, int BitDepth);
-	Display() : Display(1280, 720, "SD_ENGINE", 32) {}
 	virtual ~Display();
 
 	void Update();
-	void Clear(float R, float G, float B, float A);
 	bool IsClosed();
 	void WindowResized(int NewWidth, int NewHeight);
 	void CloseDisplay();
@@ -64,16 +62,16 @@ public:
 	inline const float GetAspectRatio() const {
 		return ((float)DisplayState->GetResolution().x) / ((float)DisplayState->GetResolution().y);
 	}
+
 private:
-	Display(const Display& other) {}
-	void operator=(const Display& other) {}
+	Display(const Display& other) = delete;
+	void operator=(const Display& other) = delete;
 
 	SDL_Window* Window;
 	SDL_GLContext GLContext;
 	bool bIsClosed;
-
 	FDisplayState* DisplayState;
 
-	static void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+	static void OpenglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 };
 

@@ -4,27 +4,16 @@
 #include "Core/Rendering/RenderViewport.h"
 #include "Core/Rendering/DefferedCompositor.h"
 #include "Core/Objects/CoreTypes/Shader.h"
-#include "UserInterface/UserInterface.h"
-#include "UserInterface/UserInterfaceUtilities.h"
-#include "UserInterface/Widgets/DragFloat.h"
 #include "Core/Utilities/Logger.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
 	Parent              = nullptr;
 	PivotOffset		    = vec2(0.0f, 0.0f);
+	bWasMouseDownInside = false;
+	bDidMouseEnter      = false;
 
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
-
-	std::function<float(float)> toDegrees = ([](float radians) { return glm::degrees(radians); });
-	std::function<float(float)> toRadians = ([](float degrees) { return glm::radians(degrees); });
-
-	DragFloat* rotation = new DragFloat("Angle");
-	FDragFloatEntry* z = rotation->AddEntry(&Rotation, "%.3f", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
-	z->OnFormatForViewFunction = toDegrees;
-	z->OnFormatFromView = toRadians;
-
-	DetailsPanelWidgets.Add(rotation);
 }
 PictorumWidget::~PictorumWidget() {
 
@@ -76,7 +65,8 @@ bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	}
 	return false;
 }
-bool PictorumWidget::CanAddChild() const {
+const bool PictorumWidget::CanAddChild() const
+{
 	return false;
 }
 PictorumWidget* PictorumWidget::GetChildAtIndex(int32 Index) const {
@@ -123,11 +113,29 @@ void PictorumWidget::DrawContents(float DeltaTime, const FRenderGeometry& Geomet
 	}
 }
 
-void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {}
-void PictorumWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {}
-void PictorumWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {}
-void PictorumWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {}
-void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	OnHoveredDelegate.Broadcast(MousePosition, Event);
+	bDidMouseEnter = true;
+}
+void PictorumWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	if (bDidMouseEnter) {
+		OnUnhoveredDelegate.Broadcast(MousePosition, Event);
+		bDidMouseEnter = false;
+	}
+}
+void PictorumWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
+	OnMouseMoveDelegate.Broadcast(MousePosition, MouseDelta, Event);
+}
+void PictorumWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	OnMouseDownDelegate.Broadcast(MousePosition, Event);
+	bWasMouseDownInside = true;
+}
+void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	if (bWasMouseDownInside) {
+		OnMouseUpDelegate.Broadcast(MousePosition, Event);
+		bWasMouseDownInside = false;
+	}
+}
 
 void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const {
 	ChildrenOut.AddAll(Children);
@@ -166,12 +174,5 @@ TString PictorumWidget::GetDetailsPanelName() {
 	return GetName();
 }
 bool PictorumWidget::PopulateDetailsPanel() {
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
-	if (ImGui::CollapsingHeader("Transform", flags)) {
-		for (DragFloat* widget : DetailsPanelWidgets) {
-			widget->Draw();
-		}
-	}
-
 	return true;
 }

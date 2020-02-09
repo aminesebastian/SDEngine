@@ -95,7 +95,7 @@ public:
 protected:
 	GLuint FrameBuffer;
 	GLuint DepthStencilBuffer;
-	GLuint TextureAttachments[8];
+	SArray<GLuint> TextureAttachments;
 
 	bool bGenerateDepthBuffer;
 

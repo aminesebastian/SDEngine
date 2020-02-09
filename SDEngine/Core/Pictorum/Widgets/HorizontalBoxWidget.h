@@ -5,7 +5,7 @@
 class HorizontalBoxWidget : public PictorumWidget {
 public:
 	HorizontalBoxWidget(const TString& Name);
-	virtual bool CanAddChild() const override;
+	virtual const bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual HorizontalBoxSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const override;
 	virtual HorizontalBoxSlot* AddChild(PictorumWidget* Widget) override;

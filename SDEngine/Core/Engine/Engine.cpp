@@ -126,17 +126,10 @@ void Engine::InputLoop() {
 				_Display->CloseDisplay();
 				break;
 			case SDL_WINDOWEVENT:
-				switch (e.window.event) {
-					case SDL_WINDOWEVENT_SIZE_CHANGED:
-						_Display->WindowResized(e.window.data1, e.window.data2);
-						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
-						_EngineUI->OnRenderTargetResolutionChanged(_Display->GetDimensions());
-						break;
-					case SDL_WINDOWEVENT_RESIZED:
-						_Display->WindowResized(e.window.data1, e.window.data2);
-						_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
-						_EngineUI->OnRenderTargetResolutionChanged(_Display->GetDimensions());
-						break;
+				if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED || e.window.event == SDL_WINDOWEVENT_RESIZED) {
+					_Display->WindowResized(e.window.data1, e.window.data2);
+					_Camera->SetRenderTargetDimensions(_Display->GetDimensions());
+					_EngineUI->OnRenderTargetResolutionChanged(_Display->GetDimensions());
 				}
 				break;
 			default:

@@ -103,6 +103,7 @@ private:
 	bool bInitialized;
 	EDebugState S_DebugState;
 
+	void WindowSizeChanged(const struct FDisplayState& State);
 
 };
 

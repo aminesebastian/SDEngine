@@ -1,12 +1,14 @@
 #pragma once
 #include "Core/Assets/AssetManager.h"
 #include "Core/DataStructures/Array.h"
+#include "Core/Engine/Delegates/Event.h"
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/IWidgetSlot.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
+#include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/Transform.h"
 #include "UserInterface/DetailsPanelProvider.h"
 #include <GLEW/glew.h>
@@ -38,7 +40,7 @@ public:
 
 	virtual IWidgetSlot* AddChild(PictorumWidget* Widget);
 	virtual bool RemoveChild(PictorumWidget* Widget);
-	virtual bool CanAddChild() const;
+	virtual const bool CanAddChild() const;
 	PictorumWidget* GetChildAtIndex(int32 Slot) const;
 	template<typename T>
 	T* GetChildSlotAtIndex(const int32& Index) const {
@@ -63,6 +65,12 @@ public:
 	float GetRenderRotation() const;
 	float GetRotation() const;
 	float GetParentRotation() const;
+
+	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseDownDelegate;
+	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseUpDelegate;
+	Event<void(const vec2&, FUserInterfaceEvent&)> OnHoveredDelegate;
+	Event<void(const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
+	Event<void(const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
 
 protected:
 	/**
@@ -106,7 +114,9 @@ protected:
 	 * @param [in,out]	{PictorumWidget*}	ParentIn	If non-null, the parent in.
 	 */
 	virtual void OnRemovedFromParent(PictorumWidget* ParentIn);
+
 private:
 	friend class PictorumRenderer;
-
+	bool bWasMouseDownInside;
+	bool bDidMouseEnter;
 };

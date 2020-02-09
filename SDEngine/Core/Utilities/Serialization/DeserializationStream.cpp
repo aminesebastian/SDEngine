@@ -1,5 +1,5 @@
 #include "DeserializationStream.h"
-#include "Core/Math/MathLibrary.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 
 DeserializationStream::DeserializationStream(const ByteBuffer& BufferIn) : Buffer((ByteBuffer&)BufferIn) {
 	CurrentIndex = 0;

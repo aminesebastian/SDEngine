@@ -21,7 +21,10 @@ BloomPostProcessing::BloomPostProcessing(vec2 FinalOutputDimensions) : PostProce
 	BloomWeight = 1.0f;
 	SetBloomSize(3.0f);
 }
-BloomPostProcessing::~BloomPostProcessing() {}
+BloomPostProcessing::~BloomPostProcessing() {
+	delete ClippedHDRBuffer;
+	delete BloomOutputBuffer;
+}
 
 void BloomPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* ReadBuffer, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
 	ClipHDR(Compositor, CurrentLitFrame, ClippedHDRBuffer);

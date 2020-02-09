@@ -11,7 +11,8 @@ LayoutWidget::LayoutWidget(const TString& Name) : PictorumWidget(Name) {
 LayoutWidget::~LayoutWidget() {
 
 }
-bool LayoutWidget::CanAddChild() const {
+const bool LayoutWidget::CanAddChild() const
+{
 	return true;
 }
 void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {

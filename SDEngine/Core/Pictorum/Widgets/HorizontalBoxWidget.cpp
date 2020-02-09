@@ -3,7 +3,8 @@
 HorizontalBoxWidget::HorizontalBoxWidget(const TString& Name) : PictorumWidget(Name) {
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
-bool HorizontalBoxWidget::CanAddChild() const {
+const bool HorizontalBoxWidget::CanAddChild() const
+{
 	return true;
 }
 void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {

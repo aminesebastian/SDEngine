@@ -8,7 +8,7 @@
 #include "Core/Pictorum/Widgets/LayoutWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
-#include "Core/Pictorum/EngineUI/TitleBar.h"
+#include "Core/Pictorum/EngineUI/EngineUIContainer.h"
 #include "Core/Utilities/Logger.h"
 
 PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& RenderTargetResolution, const vec2& RenderTargetDPI) : EngineObject(ViewportName) {
@@ -23,11 +23,8 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, const vec2& Rend
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 
 	// Add some test widgets.
-	LayoutWidget* layout = new LayoutWidget("Layout");
-	TitleBar* mainTitleBar = new TitleBar("MainTitleBar");
-	layout->AddChild(mainTitleBar);
-
-	AddToViewport(layout);
+	EngineUIContainer* engineUI = new EngineUIContainer("EngineUI");
+	AddToViewport(engineUI);
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -153,7 +150,7 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 		child->CalculateBounds(Engine::GetInstance()->GetFocusedViewport()->GetRenderTargetDimensions(), min, max);
 
 		// Keep looping, the later the overlap, the closer the widget is to the top of the stack.
-		if (MousePosition.x > min.x && MousePosition.x < max.x && MousePosition.y > min.y && MousePosition.y < max.y) {
+		if (MousePosition.x >= min.x && MousePosition.x <= max.x && MousePosition.y >= min.y && MousePosition.y <= max.y) {
 			hit = true;
 			MouseOverWidget = child;
 		}

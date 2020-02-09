@@ -70,22 +70,24 @@ void SolidWidget::SetBackgroundColor(const FColor& NewColor) {
 }
 
 void SolidWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	PictorumWidget::OnMouseEnter(MousePosition, Event);
 	BackgroundColor += FColor(0.1f, 0.1f, 0.1f);
 }
 void SolidWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
+	PictorumWidget::OnMouseExit(MousePosition, Event);
 	BackgroundColor -= FColor(0.1f, 0.1f, 0.1f);
 }
 void SolidWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	PictorumWidget::OnMouseDown(MousePosition, Button, Event);
 	Event.CaptureMouse();
 	bWasMouseDownInWidget = true;
 }
 void SolidWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
+	PictorumWidget::OnMouseUp(MousePosition, Button, Event);
 	bWasMouseDownInWidget = false;
 }
 void SolidWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
-	if (bWasMouseDownInWidget) {
-	//	Location += (MouseDelta / LastRenderedGeometry.RenderResolution);
-	}
+	PictorumWidget::OnMouseMove(MousePosition, MouseDelta, Event);
 }
 bool SolidWidget::PopulateDetailsPanel() {
 	PictorumWidget::PopulateDetailsPanel();

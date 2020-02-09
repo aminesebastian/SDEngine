@@ -265,6 +265,9 @@
     <ClCompile Include="Core\Engine\EngineStatics.cpp" />
     <ClCompile Include="Core\Pictorum\EngineUI\TitleBar.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
+    <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp" />
+    <ClCompile Include="Core\Engine\Delegates\Event.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -361,6 +364,9 @@
     <ClInclude Include="Core\Engine\EngineStatics.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\TitleBar.h" />
     <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
+    <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
+    <ClInclude Include="Core\Engine\Delegates\Event.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
     <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />

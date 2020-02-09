@@ -49,7 +49,8 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	MaxBounds.y        += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
 	MaxBounds.x        += Renderer->GetTextBoundingBoxDimensions().x/2;
 }
-bool TextWidget::CanAddChild() const {
+const bool TextWidget::CanAddChild() const
+{
 	return false;
 }
 void TextWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {

@@ -21,6 +21,7 @@ RenderTarget::~RenderTarget() {
 void RenderTarget::AddTextureIndex(FRenderTargetTextureEntry* Texture) {
 	if (TextureCount < 8) {
 		TextureEntries.Add(Texture);
+		TextureAttachments.Add(0);
 		TextureCount++;
 	}
 }

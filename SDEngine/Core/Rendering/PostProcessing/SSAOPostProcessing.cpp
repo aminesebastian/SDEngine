@@ -6,7 +6,7 @@ SSAOPostProcessing::SSAOPostProcessing(vec2 FinalOutputDimensions) : PostProcess
 	SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO", false);
 
 	OcclusionBuffer = new RenderTarget(FinalOutputDimensions);
-	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RGBA32F, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RG8, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RG, GL_FLOAT));
 	OcclusionBuffer->FinalizeRenderTarget();
 
 	Power        = 5.0f;
@@ -19,7 +19,10 @@ SSAOPostProcessing::SSAOPostProcessing(vec2 FinalOutputDimensions) : PostProcess
 	GenerateNoise();
 	GenerateKernel();
 }
-SSAOPostProcessing::~SSAOPostProcessing() {}
+SSAOPostProcessing::~SSAOPostProcessing() {
+	delete OcclusionBuffer;
+	glDeleteTextures(1, &NoiseTexture);
+}
 
 void SSAOPostProcessing::RenderLayer(DefferedCompositor* Compositor, Camera* Camera, GBuffer* GBufferIn, RenderTarget* CurrentLitFrame, RenderTarget* OutputBuffer) {
 	RenderOcclusion(Compositor, Camera, GBufferIn, OcclusionBuffer);

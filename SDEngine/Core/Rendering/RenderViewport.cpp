@@ -47,7 +47,7 @@ void RenderViewport::Initialize() {
 	RegisterPostProcessEffects();
 	bInitialized = true;
 
-
+	//Engine::GetInstance()->GetDisplay()->
 
 	SD_ENGINE_INFO("Viewport Initialized")
 }
@@ -306,4 +306,8 @@ void RenderViewport::ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions
 }
 vec2 RenderViewport::GetRenderTargetDimensions() {
 	return RenderTargetDimensions;
+}
+
+void RenderViewport::WindowSizeChanged(const FDisplayState& State) {
+	ChangeRenderTargetDimensions(State.GetResolution());
 }
