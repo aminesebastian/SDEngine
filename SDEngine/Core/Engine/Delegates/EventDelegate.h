@@ -6,6 +6,16 @@
 template<typename T>
 class EventDelegate;
 
+/**
+ * An event delegate handler. These should never be made manually, and should instead be created
+ * by adding a method/function to an event.
+ *
+ * @author	Amine
+ * @date	2/9/2020
+ *
+ * @tparam	ReturnType	The return type of the event.
+ * @tparam	...Args   	The types of the arguments provided by the event.
+ */
 template<typename ReturnType, typename ...Args>
 class EventDelegate<ReturnType(Args...)> {
 	using FunctionPointerType = ReturnType(*)(void*, Args...);
@@ -58,7 +68,7 @@ public:
 	/**
 	 * Fires the callback
 	 *
-	 * @param 	{Args...}	Arguments	args	Variable arguments providing the arguments.
+	 * @param 	{Args...}	Arguments	Arguments	args	Variable arguments providing the arguments.
 	 *
 	 * @returns	{ReturnType}	The return value of the callback.
 	 */

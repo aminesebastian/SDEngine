@@ -10,6 +10,7 @@ public:
 
 	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders() override;
+	virtual void OnScreenResolutionChanged() override;
 	virtual bool PopulatePostProcessingDetailsPanel() override;
 
 	void SetBloomThreshold(float Threshold);
@@ -22,7 +23,6 @@ public:
 	float GetBloomWeight();
 
 private:
-
 	void ClipHDR(const DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
 	void BlendOutput(const DefferedCompositor* Compositor, RenderTarget* ReadBuffer, RenderTarget* LitBuffer, RenderTarget* OutputBuffer);
 
@@ -30,11 +30,11 @@ private:
 	float BloomWeight;
 	int BlurPasses;
 
-	Shader* S_ClipHDRShader;
-	Shader* S_BlendBloom;
+	Shader* ClipHDRShader;
+	Shader* BloomBlendShader;
 
 	RenderTarget* ClippedHDRBuffer;
 	RenderTarget* BloomOutputBuffer;
-	VariableGausianBlur* S_GausBlur;
+	VariableGausianBlur* GausBlurUtilitiy;
 };
 

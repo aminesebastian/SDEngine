@@ -2,14 +2,20 @@
 
 HorizontalBoxWidget::HorizontalBoxWidget(const TString& Name) : PictorumWidget(Name) {
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
+	///< An enum constant representing the last X coordinate position option
+	LastXPosition = 0.0f;
 }
 const bool HorizontalBoxWidget::CanAddChild() const
 {
 	return true;
 }
 void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
+	if (ChildIndex == 0) {
+		const_cast<HorizontalBoxWidget*>(this)->LastXPosition = 0.0f;
+	}
+
 	HorizontalBoxSlot* slot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
-	OutputGeometry.SetLocation(vec2(lastXPosition, OutputGeometry.GetLocation().y));
+	OutputGeometry.SetLocation(vec2(LastXPosition, OutputGeometry.GetLocation().y));
 	vec2 desiredSpace   = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 
 	if (slot->GetFillRule() == EFillRule::AUTOMATIC) {
@@ -22,14 +28,27 @@ void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 		OutputGeometry.SetAllotedSpace(space);
 	}
 
-	if (slot->GetVerticalAlignment() == EVerticalAlignment::CENTER) {
-		vec2 location = OutputGeometry.GetLocation();
-		location.y -= OutputGeometry.GetAllotedSpace().y / 4.0f;
-		OutputGeometry.SetLocation(location);
+	vec2 location = OutputGeometry.GetLocation();
+	switch (slot->GetVerticalAlignment()) {
+		case EVerticalAlignment::TOP:
+			location.y = (CurrentRenderGeometry.GetLocation().y + CurrentRenderGeometry.GetAllotedSpace().y) - desiredSpace.y;
+			break;
+		case EVerticalAlignment::CENTER:
+			location.y = OutputGeometry.GetLocation().y - desiredSpace.y / 2.0f;
+			break;
+		case EVerticalAlignment::BOTTOM:
+			break;
+		case EVerticalAlignment::STRETCH:
+			break;
 	}
 
+	OutputGeometry.SetLocation(location);
+
+	// Apply the padding.
+	slot->GetPadding().ApplyToGeometry(OutputGeometry, OutputGeometry);
+
 	// Breaking const to capture temporary variable.
-	const_cast<HorizontalBoxWidget*>(this)->lastXPosition += OutputGeometry.GetAllotedSpace().x;
+	const_cast<HorizontalBoxWidget*>(this)->LastXPosition += OutputGeometry.GetAllotedSpace().x;
 }
 HorizontalBoxSlot* HorizontalBoxWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new HorizontalBoxSlot();
@@ -66,9 +85,4 @@ float HorizontalBoxWidget::GetNonFillSpaceRequirements(const FRenderGeometry& Cu
 	}
 
 	return widthRequirement;
-}
-
-void HorizontalBoxWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
-	lastXPosition = Geometry.GetLocation().x;
-	PictorumWidget::DrawContents(DeltaTime, Geometry);
 }

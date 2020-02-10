@@ -12,11 +12,14 @@ public:
 	const EHorizontalAlignment& GetHorizontalAlignment() const;
 
 	HorizontalBoxSlot& SetUseWidgetDesiredSpace();
-	HorizontalBoxSlot& SetFillAvilableSpace(float Ratio);
-	HorizontalBoxSlot& SetHorizontalAlignment(EHorizontalAlignment Alignment);
-	HorizontalBoxSlot& SetVerticalAlignment(EVerticalAlignment Alignment);
+	HorizontalBoxSlot& SetFillAvilableSpace(const float& Ratio);
+	HorizontalBoxSlot& SetHorizontalAlignment(const EHorizontalAlignment& Alignment);
+	HorizontalBoxSlot& SetVerticalAlignment(const EVerticalAlignment& Alignment);
+
+	FPadding& GetPadding();
 private:
 	FFillRule FillRule;
+	FPadding Padding;
 	EHorizontalAlignment HorizontalAlignment;
 	EVerticalAlignment VerticalAlignment;
 };

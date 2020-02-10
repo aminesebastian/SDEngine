@@ -78,14 +78,26 @@ void Window::UpdateInternal(const float& DeltaTime) {
 
 }
 void Window::Close() {
+	OnWindowClosed.Broadcast(WindowId);
 	Closed = true;
 }
+
 void Window::WindowResized(const int32& NewWidth, const int32& NewHeight) {
 	SDL_SetWindowSize(_Window, NewWidth, NewHeight);
 	glViewport(0, 0, NewWidth, NewHeight);
 	UpdateDisplayState(NewWidth, NewHeight);
-	OnWindowResized.Broadcast(*DisplayState);
+	OnWindowResized.Broadcast(WindowId, *DisplayState);
 }
+void Window::WindowMaximized(const int32& NewWidth, const int32& NewHeight) {
+	OnWindowMaximized.Broadcast(WindowId, *DisplayState);
+}
+void Window::WindowRestored(const int32& NewWidth, const int32& NewHeight) {
+	OnWindowRestored.Broadcast(WindowId, *DisplayState);
+}
+void Window::WindowMinimized() {
+	OnWindowMinimized.Broadcast(WindowId);
+}
+
 void Window::UpdateDisplayState(const int32& Width, const int32& Height) {
 	vec3 dpi;
 	SDL_GetDisplayDPI(0, &dpi[2], &dpi[0], &dpi[1]);

@@ -1,10 +1,12 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Engine/WindowDataTypes.h"
 #include <Include\SDL\SDL_syswm.h>
 
 class Texture2D;
 class ImageWidget;
 class TextWidget;
+class LayoutWidget;
 
 class TitleBar : public PictorumWidget {
 public:
@@ -13,7 +15,6 @@ public:
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void OnCreated() override;
 	virtual const bool CanAddChild() const override;
-	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 
 private:
 	Texture2D* CloseTexture;
@@ -25,6 +26,7 @@ private:
 	ImageWidget* MaximizeButton;
 	ImageWidget* CloseButton;
 
+	LayoutWidget* MasterContainer;
 	TextWidget* WindowTitleWidget;
 
 	bool bMouseDownOnTitleBar;
@@ -35,9 +37,8 @@ private:
 	void OnMinimizeButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
 	void OnMaximizeClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
 
-	void OnTitleBarMouseDown(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
-	void OnTitleBarMouseUp(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
-	void OnTitleBarMouseMove(const vec2& MousePosition, const vec2& Delta, FUserInterfaceEvent& UIEvent);
+	void OnWindowMaximized(const int32& WindowId, const FDisplayState& State);
+	void OnWindowRestored(const int32& WindowId, const FDisplayState& State);
 
 	static SDL_HitTestResult MouseHitTestCallback(SDL_Window* Window, const SDL_Point* MouseLocation, void* Data);
 };

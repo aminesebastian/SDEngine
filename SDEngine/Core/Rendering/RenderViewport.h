@@ -30,8 +30,6 @@ public:
 
 	void Initialize();
 
-	void ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions);
-
 	const bool BindNewShader(Shader* ShaderIn);
 
 	void Render(const Camera* RenderCamera);
@@ -89,6 +87,6 @@ private:
 	bool bDebugMode;
 	bool bInitialized;
 
-	void OnWindowResized(const FDisplayState& State);
+	void OnWindowResized(const int32& WindowId, const FDisplayState& State);
 };
 

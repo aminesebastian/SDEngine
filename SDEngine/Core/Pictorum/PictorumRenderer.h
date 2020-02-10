@@ -47,6 +47,6 @@ private:
 	FRenderGeometry TopLevelRenderGeometry;
 
 	void CacheMouseOverWidget(vec2 MousePosition);
-	void OnWindowResized(const FDisplayState& State);
+	void OnWindowResized(const int32& WindowId, const FDisplayState& State);
 };
 

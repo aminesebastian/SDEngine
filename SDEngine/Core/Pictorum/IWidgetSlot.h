@@ -5,6 +5,5 @@ class IWidgetSlot {
 public:
 	IWidgetSlot() = default;
 	virtual ~IWidgetSlot() = default; 
-	virtual void ModifyGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry);
 };
 

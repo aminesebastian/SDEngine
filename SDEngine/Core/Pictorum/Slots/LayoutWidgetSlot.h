@@ -6,26 +6,15 @@ class LayoutWidgetSlot : public IWidgetSlot {
 public:
 	LayoutWidgetSlot();
 
-	void SetTopOffset(const float& TopOffset);
-	void SetRightOffset(const float& RightOffset);
-	void SetBottomOffset(const float& BottomOffset);
-	void SetLeftOffset(const float& LeftOffset);
-	void SetOffsets(const float& Top, const float& Right, const float& Bottom, const float& Left);
+	const FAnchors& GetOffsets() const;
+	LayoutWidgetSlot* SetOffset(const EPictorumSide& Side, const float& Offset);
+	LayoutWidgetSlot* SetOffsetRelative(const EPictorumSide& Side);
+	LayoutWidgetSlot* SetOffsetAbsolute(const EPictorumSide& Side);
 
-	const FAnchors& GetOffsets();
-	void SetOffsetRelative(bool Relative);
-	const bool& GetOffsetsRelative() const;
-
-	void SetTopMargin(const float& TopMargin);
-	void SetRightMargin(const float& RightMargin);
-	void SetBottomMargin(const float& BottomMargin);
-	void SetLeftMargin(const float& LeftMargin);
-	void SetMargins(const float& Top, const float& Right, const float& Bottom, const float& Left);
-
-	const FMargins& GetMargins();
+	const FMargins& GetMargins() const;
+	LayoutWidgetSlot* SetMargin(const EPictorumSide& Side, const float& Margin);
 private:
 	FAnchors Offsets;
 	FMargins Margins;
-	bool bIsRelative;
 };
 

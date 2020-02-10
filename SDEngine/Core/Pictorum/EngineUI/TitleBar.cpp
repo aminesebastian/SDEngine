@@ -3,10 +3,11 @@
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
+#include "Core/Pictorum/Widgets/LayoutWidget.h"
+#include "Core/Pictorum/Widgets/OverlayWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
-
 
 TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	TitleBarHeight = 30.0f;
@@ -15,23 +16,47 @@ TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	MinimizeTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset");
 	RestoreTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset");
 	MaximizeTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset");
+}
+TitleBar::~TitleBar() {
+
+}
+
+void TitleBar::OnCreated() {
+	SDL_SetWindowHitTest(GetOwningRenderer()->GetOwningWindow()->GetWindow(), &MouseHitTestCallback, this);
+
+	/*
+	* MasterContainer (LayoutWidget)				  -> Limits draw geometry to TitleBarHeight worth of pixels from the top.
+	* OverlayContainer (OverlayWidget)				  -> Ensures all following geometry follow that constraint.
+	*		TitleBarBackground (SolidWidget)		  -> Provides the background color for the title bar.
+	*		ButtonContainer (HorizontalBoxWidget)	  -> Contains the window title text and the buttons.
+	*				WindowTitle (TextWidget)		  -> The title of the window.
+	*				MimizeButton (ImageWidget)		  -> The minimize button.
+	*				MaximizeButton (ImageWidget)	  -> The maximize button.
+	*				CloseButton (ImageWidget)		  -> The close button.
+	*	 
+	*/
+
+	MasterContainer = new LayoutWidget("MasterContainer");
+	AddChild(MasterContainer);
+
+	OverlayWidget* overlay = new OverlayWidget("OverlayContainer");
+	MasterContainer->AddChild(overlay)->SetOffset(EPictorumSide::BOTTOM, -TitleBarHeight)->SetOffsetAbsolute(EPictorumSide::BOTTOM);
 
 	SolidWidget* bg = new SolidWidget("TitleBarBackground");
 	bg->SetBackgroundColor(FColor(0.2f, 0.2f, 0.3f));
-	bg->OnMouseDownDelegate.Add<TitleBar, &TitleBar::OnTitleBarMouseDown>(this);
-	bg->OnMouseUpDelegate.Add<TitleBar, &TitleBar::OnTitleBarMouseUp>(this);
-	bg->OnMouseMoveDelegate.Add<TitleBar, &TitleBar::OnTitleBarMouseMove>(this);
 	bMouseDownOnTitleBar = false;
-	AddChild(bg);
+	overlay->AddChild(bg);
 
 	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");
-	AddChild(buttonContainer);
+	overlay->AddChild(buttonContainer);
 
 	WindowTitleWidget = new TextWidget("WindowTitle");
 	WindowTitleWidget->SetText("SD Engine");
 	WindowTitleWidget->SetTextColor(FColor(0.9f, 0.9f, 0.9f));
 	WindowTitleWidget->SetFontSize(11);
 	buttonContainer->AddChild(WindowTitleWidget)->SetFillAvilableSpace(1.0f).SetVerticalAlignment(EVerticalAlignment::CENTER);
+
+	WindowTitleWidget->GetParentSlot<HorizontalBoxSlot>()->GetPadding().SetLeft(10.0f).SetTop(1.0f);
 
 	MinimizeButton = new ImageWidget("Minimize");
 	MinimizeButton->SetImage(MinimizeTexture);
@@ -51,23 +76,13 @@ TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	CloseButton->OnMouseUpDelegate.Add<TitleBar, &TitleBar::OnCloseButtonClicked>(this);
 	buttonContainer->AddChild(CloseButton);
 }
-TitleBar::~TitleBar() {
-
-}
-void TitleBar::OnCreated() {
-	SDL_SetWindowHitTest(GetOwningRenderer()->GetOwningWindow()->GetWindow(), &MouseHitTestCallback, this);
-}
 void TitleBar::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);
-	WindowTitleWidget->SetText("SD Engine " + to_string(1.0f / DeltaTime));
 }
 const bool TitleBar::CanAddChild() const {
 	return true;
 }
-void TitleBar::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
-	OutputGeometry.SetLocation(vec2(0.0f, CurrentRenderGeometry.GetRenderResolution().y - TitleBarHeight));
-	OutputGeometry.SetAllotedSpace(vec2(CurrentRenderGeometry.GetRenderResolution().x, TitleBarHeight));
-}
+
 void TitleBar::OnCloseButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
 	SDL_Event sdlevent;
 	sdlevent.type = SDL_QUIT;
@@ -81,22 +96,17 @@ void TitleBar::OnMaximizeClicked(const vec2& MousePosition, FUserInterfaceEvent&
 	if (flags & SDL_WINDOW_MAXIMIZED) {
 		SDL_RestoreWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 		MaximizeButton->SetImage(MaximizeTexture);
-		MaximizeButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
 	} else {
 		SDL_MaximizeWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 		MaximizeButton->SetImage(RestoreTexture);
-		MaximizeButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
 	}
 }
-void TitleBar::OnTitleBarMouseDown(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
-	bMouseDownOnTitleBar = true;
-	UIEvent.CaptureMouse();
-}
-void TitleBar::OnTitleBarMouseUp(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
-	bMouseDownOnTitleBar = false;
-}
-void TitleBar::OnTitleBarMouseMove(const vec2& MousePosition, const vec2& Delta, FUserInterfaceEvent& UIEvent) {
 
+void TitleBar::OnWindowMaximized(const int32& WindowId, const FDisplayState& State) {
+	MaximizeButton->SetImage(RestoreTexture);
+}
+void TitleBar::OnWindowRestored(const int32& WindowId, const FDisplayState& State) {
+	MaximizeButton->SetImage(MaximizeTexture);
 }
 
 SDL_HitTestResult TitleBar::MouseHitTestCallback(SDL_Window* Window, const SDL_Point* MouseLocation, void* Data) {

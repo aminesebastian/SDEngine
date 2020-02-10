@@ -1,13 +1,12 @@
 #include "HorizontalBoxSlot.h"
 
 HorizontalBoxSlot::HorizontalBoxSlot() {
-	VerticalAlignment = EVerticalAlignment::LEFT;
+	VerticalAlignment   = EVerticalAlignment::TOP;
 	HorizontalAlignment = EHorizontalAlignment::LEFT;
 }
 HorizontalBoxSlot::~HorizontalBoxSlot() {
 
 }
-
 const EFillRule& HorizontalBoxSlot::GetFillRule() const{ 
 	return FillRule.GetFillRule();
 }
@@ -20,20 +19,22 @@ const EVerticalAlignment& HorizontalBoxSlot::GetVerticalAlignment() const {
 const EHorizontalAlignment& HorizontalBoxSlot::GetHorizontalAlignment() const{ 
 	return HorizontalAlignment;
 }
-
+FPadding& HorizontalBoxSlot::GetPadding() {
+	return Padding;
+}
 HorizontalBoxSlot& HorizontalBoxSlot::SetUseWidgetDesiredSpace() {
 	FillRule.SetUseWidgetDesiredSpace();
 	return *this;
 }
-HorizontalBoxSlot& HorizontalBoxSlot::SetFillAvilableSpace(float Ratio) {
+HorizontalBoxSlot& HorizontalBoxSlot::SetFillAvilableSpace(const float& Ratio) {
 	FillRule.SetFillAllSpace(Ratio);
 	return *this;
 }
-HorizontalBoxSlot& HorizontalBoxSlot::SetHorizontalAlignment(EHorizontalAlignment Alignment){ 
+HorizontalBoxSlot& HorizontalBoxSlot::SetHorizontalAlignment(const EHorizontalAlignment& Alignment){ 
 	HorizontalAlignment = Alignment;
 	return *this;
 }
-HorizontalBoxSlot& HorizontalBoxSlot::SetVerticalAlignment(EVerticalAlignment Alignment) {
+HorizontalBoxSlot& HorizontalBoxSlot::SetVerticalAlignment(const EVerticalAlignment& Alignment) {
 	VerticalAlignment = Alignment;
 	return *this;
 }

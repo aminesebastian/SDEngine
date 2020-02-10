@@ -69,9 +69,11 @@ void ImageWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 vec2 ImageWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	return Size;
 }
-void ImageWidget::SetImage(Texture2D* ImageIn) {
+void ImageWidget::SetImage(Texture2D* ImageIn, const bool& MaintainSize) {
 	Image = ImageIn;
-	Size  = Image->GetDimensions();
+	if (!MaintainSize) {
+		Size  = Image->GetDimensions();
+	}
 }
 void ImageWidget::SetTint(const FColor& NewTint) {
 	Tint = NewTint;

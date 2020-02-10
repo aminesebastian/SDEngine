@@ -2,6 +2,7 @@
 #include "Core/Pictorum/PictorumWidget.h"
 
 class TitleBar;
+class FrameStatisticsWidget;
 class LayoutWidget;
 
 class EngineUIContainer : public PictorumWidget {
@@ -14,5 +15,6 @@ public:
 private:
 	LayoutWidget* MainContainer;
 	TitleBar* WindowTitleBar;
+	FrameStatisticsWidget* FrameStatistics;
 };
 

@@ -20,9 +20,6 @@ public:
 	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const override;
 	virtual const bool CanAddChild() const override;
 
-	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
-
 protected:
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;

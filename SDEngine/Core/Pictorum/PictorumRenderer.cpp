@@ -166,7 +166,7 @@ const Window* PictorumRenderer::GetOwningWindow() const {
 const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() const {
 	return Widgets;
 }
-void PictorumRenderer::OnWindowResized(const FDisplayState& State) {
+void PictorumRenderer::OnWindowResized(const int32& WindowId, const FDisplayState& State) {
 	TopLevelRenderGeometry.SetRenderResolution(State.GetResolution());
 	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));

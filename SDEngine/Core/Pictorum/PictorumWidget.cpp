@@ -66,9 +66,8 @@ bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	}
 	return false;
 }
-const bool PictorumWidget::CanAddChild() const
-{
-	return false;
+const bool PictorumWidget::CanAddChild() const {
+	return true;
 }
 PictorumWidget* PictorumWidget::GetChildAtIndex(int32 Index) const {
 	return Children[Index];

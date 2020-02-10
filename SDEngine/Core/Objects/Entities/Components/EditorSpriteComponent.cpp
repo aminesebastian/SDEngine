@@ -20,7 +20,11 @@ EditorSpriteComponent::EditorSpriteComponent(const TString& Name) : Component(Na
 		0.0f, -1.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, -1.0f, -1.0f, 0.0f, 1.0f,
 		0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, -1.0f, 1.0f, 1.0f
+		0.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+		0.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, -1.0f, 0.0f, 1.0f
 	};
 
 	glGenVertexArrays(1, &SpriteVertexArray);
@@ -57,7 +61,7 @@ void EditorSpriteComponent::DrawAdvanced(const Camera* RenderCamera, const EDraw
 	}
 
 	glBindVertexArray(SpriteVertexArray);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 	glBindVertexArray(0);
 }
 bool EditorSpriteComponent::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) {

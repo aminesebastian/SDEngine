@@ -4,9 +4,9 @@
 
 
 BloomPostProcessing::BloomPostProcessing(RenderViewport* OwningViewport) : PostProcessingLayer("Bloom", OwningViewport) {
-	S_ClipHDRShader = new Shader("Res/Shaders/PostProcessing/Bloom/ClipHDR", false);
-	S_BlendBloom = new Shader("Res/Shaders/PostProcessing/Bloom/BlendBloom", false);
-	S_GausBlur = new VariableGausianBlur(OwningViewport->GetOwningWindow()->GetDimensions());
+	ClipHDRShader = new Shader("Res/Shaders/PostProcessing/Bloom/ClipHDR", false);
+	BloomBlendShader = new Shader("Res/Shaders/PostProcessing/Bloom/BlendBloom", false);
+	GausBlurUtilitiy = new VariableGausianBlur(OwningViewport->GetOwningWindow()->GetDimensions());
 
 	ClippedHDRBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
 	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
@@ -28,7 +28,7 @@ BloomPostProcessing::~BloomPostProcessing() {
 
 void BloomPostProcessing::RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) {
 	ClipHDR(Compositor, PreviousOutput, ClippedHDRBuffer);
-	S_GausBlur->GausianBlur(Compositor, BlurPasses, ClippedHDRBuffer, BloomOutputBuffer);
+	GausBlurUtilitiy->GausianBlur(Compositor, BlurPasses, ClippedHDRBuffer, BloomOutputBuffer);
 	BlendOutput(Compositor, BloomOutputBuffer, PreviousOutput, OutputBuffer);
 }
 
@@ -37,10 +37,10 @@ void BloomPostProcessing::ClipHDR(const DefferedCompositor* Compositor, RenderTa
 	ClipBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_ClipHDRShader->Bind();
-	S_ClipHDRShader->SetShaderFloat("THRESHOLD", BloomThreshold);
+	ClipHDRShader->Bind();
+	ClipHDRShader->SetShaderFloat("THRESHOLD", BloomThreshold);
 
-	ReadBuffer->BindTexture(S_ClipHDRShader, 0, 0, "Input");
+	ReadBuffer->BindTexture(ClipHDRShader, 0, 0, "Input");
 
 	Compositor->DrawScreenQuad();
 }
@@ -48,22 +48,36 @@ void BloomPostProcessing::BlendOutput(const DefferedCompositor* Compositor, Rend
 	OutputBuffer->BindForWriting();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	S_BlendBloom->Bind();
-	S_BlendBloom->SetShaderFloat("BLOOM_WEIGHT", BloomWeight);
+	BloomBlendShader->Bind();
+	BloomBlendShader->SetShaderFloat("BLOOM_WEIGHT", BloomWeight);
 
 	BloomBuffer->BindForReading();
-	BloomBuffer->BindTexture(S_BlendBloom, 0, 0, "Bloom");
+	BloomBuffer->BindTexture(BloomBlendShader, 0, 0, "Bloom");
 	LitBuffer->BindForReading();
-	LitBuffer->BindTexture(S_BlendBloom, 0, 1, "Input");
+	LitBuffer->BindTexture(BloomBlendShader, 0, 1, "Input");
 
 	Compositor->DrawScreenQuad();
 }
 void BloomPostProcessing::RecompileShaders() {
-	S_ClipHDRShader->RecompileShader();
-	S_BlendBloom->RecompileShader();
-	S_GausBlur->RecompileShaders();
+	ClipHDRShader->RecompileShader();
+	BloomBlendShader->RecompileShader();
+	GausBlurUtilitiy->RecompileShaders();
 }
+void BloomPostProcessing::OnScreenResolutionChanged() {
+	delete ClippedHDRBuffer;
+	delete BloomOutputBuffer;
+	delete GausBlurUtilitiy;
+	
+	ClippedHDRBuffer = new RenderTarget(GetOwningViewport()->GetOwningWindow()->GetDimensions());
+	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
+	ClippedHDRBuffer->FinalizeRenderTarget();
 
+	BloomOutputBuffer = new RenderTarget(GetOwningViewport()->GetOwningWindow()->GetDimensions());
+	BloomOutputBuffer->AddTextureIndex(new FRenderTargetTextureEntry("Bloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT, GL_RGBA, GL_FLOAT));
+	BloomOutputBuffer->FinalizeRenderTarget();
+
+	GausBlurUtilitiy = new VariableGausianBlur(GetOwningViewport()->GetOwningWindow()->GetDimensions());
+}
 void BloomPostProcessing::SetBloomThreshold(float Threshold) {
 	BloomThreshold = Threshold;
 }
@@ -72,10 +86,10 @@ float BloomPostProcessing::GetBloomThreshold() {
 }
 
 void BloomPostProcessing::SetBloomSize(float Size) {
-	S_GausBlur->SetBlurSize(Size);
+	GausBlurUtilitiy->SetBlurSize(Size);
 }
 float BloomPostProcessing::GetBloomSize() {
-	return S_GausBlur->GetBlurSize();
+	return GausBlurUtilitiy->GetBlurSize();
 }
 
 void BloomPostProcessing::SetBloomWeight(float Weight) {

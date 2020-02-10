@@ -68,7 +68,7 @@ bool DistanceFieldFont::LoadAndParseFont() {
 		SArray<TString> keyValuePairs = SplitLineIntoKeyValuePairs(line);
 		int32 currentWidth = stoi(keyValuePairs[8]);
 		if (currentWidth > maxWidth) {
-			maxWidth = currentWidth;
+			maxWidth = (float)currentWidth;
 			maxWidthChar = (char)stoi(keyValuePairs[2]);
 		}
 	}

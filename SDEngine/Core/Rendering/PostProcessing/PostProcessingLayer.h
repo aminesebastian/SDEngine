@@ -17,6 +17,7 @@ public:
 
 	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) = 0;
 	virtual void RecompileShaders() {}
+	virtual void OnScreenResolutionChanged() {}
 
 	virtual bool PopulateDetailsPanel() override;
 	virtual bool PopulatePostProcessingDetailsPanel();

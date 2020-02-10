@@ -4,15 +4,12 @@
 #include "UserInterface/Widgets/DragFloat.h"
 
 LayoutWidget::LayoutWidget(const TString& Name) : PictorumWidget(Name) {
-	Anchors.SetRight(100);
-	Anchors.SetAbsolute(EPictorumSide::RIGHT);
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 LayoutWidget::~LayoutWidget() {
 
 }
-const bool LayoutWidget::CanAddChild() const
-{
+const bool LayoutWidget::CanAddChild() const {
 	return true;
 }
 void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {

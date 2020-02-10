@@ -10,6 +10,9 @@ public:
 
 	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) override;
 	virtual void RecompileShaders() override;
+	virtual void OnScreenResolutionChanged() override;
+
+
 	virtual bool PopulatePostProcessingDetailsPanel() override;
 
 	void RenderOcclusion(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* GBufferIn, RenderTarget* OutputBuffer);

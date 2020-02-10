@@ -337,6 +337,12 @@
     <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -527,6 +533,8 @@
     <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
     <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
     <ClInclude Include="Core\Engine\WindowDataTypes.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

@@ -32,10 +32,18 @@ public:
 	const FDisplayState& GetDisplayState() const;
 	const bool& IsClosed();
 
-	Event<void(const FDisplayState&)> OnWindowResized;
+	Event<void(const int32&, const FDisplayState&)> OnWindowResized;
+	Event<void(const int32&, const FDisplayState&)> OnWindowMaximized;
+	Event<void(const int32&, const FDisplayState&)> OnWindowRestored;
+	Event<void(const int32&)> OnWindowMinimized;
+	Event<void(const int32&)> OnWindowClosed;
+
 protected:
 	virtual void UpdateInternal(const float& DeltaTime);
 	virtual void WindowResized(const int32& NewWidth, const int32& NewHeight);
+	virtual void WindowMaximized(const int32& NewWidth, const int32& NewHeight);
+	virtual void WindowRestored(const int32& NewWidth, const int32& NewHeight);
+	virtual void WindowMinimized();
 
 	void UpdateDisplayState(const int32& Width, const int32& Height);
 
@@ -43,6 +51,7 @@ protected:
 
 	Window(const Window& other) = delete;
 	void operator=(const Window& other) = delete;
+
 private:
 	friend class Engine;
 

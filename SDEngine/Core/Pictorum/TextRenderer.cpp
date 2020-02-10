@@ -5,7 +5,7 @@
 
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
 	SpaceWidth = 0.05f;
-	SetLeading(0.125f);
+	SetLeading(0.25f);
 	SetTracking(-0.15f);
 	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
 	SetFontSize(FontSize);
@@ -110,7 +110,7 @@ const vec2& TextRenderer::GetCursorLocation() const {
 	return CursorPosition;
 }
 const vec2& TextRenderer::GetTextBoundingBoxDimensions() const {
-	return LastBoundingBoxDimensions / 2.0f;
+	return LastBoundingBoxDimensions;
 }
 
 void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {

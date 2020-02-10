@@ -6,14 +6,14 @@ SSAOPostProcessing::SSAOPostProcessing(RenderViewport* OwningViewport) : PostPro
 	SSAOShader = new Shader("Res/Shaders/PostProcessing/SSAO", false);
 
 	OcclusionBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
-	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RG8, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RG, GL_FLOAT));
+	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RGBA32F, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	OcclusionBuffer->FinalizeRenderTarget();
 
 	Power        = 5.0f;
 	Bias         = 0.015f;
 	Radius       = 5.0f;
-	NoiseSize  = 4;
-	KernelSize = 16;
+	NoiseSize    = 4;
+	KernelSize   = 16;
 	BlurRadius   = 2;
 
 	GenerateNoise();
@@ -124,6 +124,15 @@ void SSAOPostProcessing::GenerateNoise() {
 }
 void SSAOPostProcessing::RecompileShaders() {
 	SSAOShader->RecompileShader();
+}
+void SSAOPostProcessing::OnScreenResolutionChanged() {
+	delete OcclusionBuffer;
+	OcclusionBuffer = new RenderTarget(GetOwningViewport()->GetOwningWindow()->GetDimensions());
+	OcclusionBuffer->AddTextureIndex(new FRenderTargetTextureEntry("SSAO", GL_RGBA32F, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OcclusionBuffer->FinalizeRenderTarget();
+
+	// This depends on the screen resolution so it also must be regenerated.
+	GenerateNoise();
 }
 
 void SSAOPostProcessing::SetBias(const float& Bias) {

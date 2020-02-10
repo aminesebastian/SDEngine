@@ -85,17 +85,8 @@ void RenderViewport::GenerateRenderTargets() {
 	OutputBuffer2->FinalizeRenderTarget();
 }
 void RenderViewport::RegisterPostProcessEffects() {
-	if (!bInitialized) {
-		SD_ENGINE_INFO("Creating Post Process Stack")
-	} else {
-		SD_ENGINE_INFO("Recreating Post Process Stack")
-	}
+	SD_ENGINE_INFO("Creating Post Process Stack")
 
-	for (PostProcessingLayer* layer : S_PostProcessingLayers) {
-		if (layer) {
-			delete layer;
-		}
-	}
 	S_PostProcessingLayers.Clear();
 	S_PostProcessingLayers.Add(new SSAOPostProcessing(this));
 	S_PostProcessingLayers.Add(new BloomPostProcessing(this));
@@ -263,13 +254,13 @@ RenderTarget* RenderViewport::GetCurrentOutputBuffer() {
 RenderTarget* RenderViewport::GetPreviousOutputBuffer() {
 	return CurrentBuffer == 0 ? OutputBuffer2 : OutputBuffer1;
 }
-void RenderViewport::ChangeRenderTargetDimensions(vec2 NewRenderTargetDimensions) {
-	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} x {1}", (int)NewRenderTargetDimensions.x, (int)NewRenderTargetDimensions.y);
+void RenderViewport::OnWindowResized(const int32& WindowId, const FDisplayState& State) {
+	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} x {1}", (int)State.GetResolution().x, (int)State.GetResolution().y);
 	GenerateRenderTargets();
-	RegisterPostProcessEffects();
-}
-void RenderViewport::OnWindowResized(const FDisplayState& State) {
-	ChangeRenderTargetDimensions(State.GetResolution());
+
+	for (PostProcessingLayer* layer : S_PostProcessingLayers) {
+		layer->OnScreenResolutionChanged();
+	}
 }
 
 const World* RenderViewport::GetWorld() const {

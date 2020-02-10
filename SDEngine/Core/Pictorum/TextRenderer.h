@@ -12,6 +12,12 @@ enum class EFontWeight : uint8 {
 	Normal,
 	Bold
 };
+enum class EFontAlignment : uint8 {
+	Left,
+	Center,
+	Right,
+	Justified
+};
 
 /**
  * Class responsible for rendering text to the screen.

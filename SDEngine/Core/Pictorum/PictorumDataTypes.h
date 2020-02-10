@@ -3,9 +3,9 @@
 #include "Core/Utilities/Logger.h"
 
 enum class EVerticalAlignment : uint8 {
-	LEFT,
+	TOP,
 	CENTER,
-	RIGHT,
+	BOTTOM,
 	STRETCH
 };
 enum class EHorizontalAlignment : uint8 {
@@ -206,7 +206,7 @@ struct FAnchors {
 		Sides[1] = 1.0f;
 		Sides[2] = 0.0f;
 		Sides[3] = 0.0f;
-		memset(&Relative[0], 1, 4);
+		memset(&Relative[0], 1, sizeof(bool) * 4);
 	}
 	void SetRelative(const EPictorumSide& Side) {
 		Relative[(uint8)Side] = true;
@@ -220,6 +220,10 @@ struct FAnchors {
 	const bool& IsSideAbsolute(const EPictorumSide& Side) const {
 		return !Relative[(uint8)Side];
 	}
+	FAnchors& SetSide( const EPictorumSide& Side, const float& Value) {
+		Sides[(uint8)Side] = Value;
+		return *this;
+	}
 	const float& GetTop() const {
 		return Sides[0];
 	}
@@ -228,14 +232,14 @@ struct FAnchors {
 		return *this;
 	}
 	const float& GetRight() const {
-		return Sides[2];
+		return Sides[1];
 	}
 	FAnchors& SetRight(const float& Value) {
 		Sides[1] = Value;
 		return *this;
 	}
 	const float& GetBottom() const {
-		return Sides[3];
+		return Sides[2];
 	}
 	FAnchors& SetBottom(const float& Value) {
 		Sides[2] = Value;
@@ -283,13 +287,22 @@ protected:
 	bool Relative[4] = { true };
 
 	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
+		float value = Sides[(uint8)Side];
 		if (Relative[(uint8)Side]) {
-			return Sides[(uint8)Side];
+			return value;
 		} else {
 			if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
-				return Sides[(uint8)Side] / RenderResolution.y;
+				if (value < 0) {
+					return (RenderResolution.y + Sides[(uint8)Side]) / RenderResolution.y;
+				} else {
+					return Sides[(uint8)Side] / RenderResolution.y;
+				}
 			} else {
-				return Sides[(uint8)Side] / RenderResolution.x;
+				if (value < 0) {
+					return (RenderResolution.x + Sides[(uint8)Side]) / RenderResolution.x;
+				} else {
+					return Sides[(uint8)Side] / RenderResolution.x;
+				}
 			}
 		}
 		return 0.0f;
@@ -297,8 +310,30 @@ protected:
 };
 struct FPadding : public FAnchors {
 	FPadding() : FAnchors() {
-		memset(&Sides[0], 0, 4);
+		memset(&Sides[0], 0, sizeof(float)*4);
 	}
+
+	void SetRelative(const EPictorumSide& Side) = delete;
+	void SetAbsolute(const EPictorumSide& Side) = delete;
+
+	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+
+		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom);
+		OutRenderGeometry.AddAllotedSpace(-relativeRight, -relativeTop);
+	}
+};
+struct FMargins : public FAnchors {
+	FMargins() : FAnchors() {
+		memset(&Sides[0], 0, sizeof(float)*4);
+	}
+
+	void SetRelative(const EPictorumSide& Side) = delete;
+	void SetAbsolute(const EPictorumSide& Side) = delete;
+
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
 		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
 		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
@@ -309,10 +344,14 @@ struct FPadding : public FAnchors {
 		OutRenderGeometry.AddAllotedSpace(-relativeRight * 2, -relativeTop * 2);
 	}
 };
-struct FMargins : public FAnchors {
-	FMargins() : FAnchors() {
-		memset(&Sides[0], 0, 4);
+struct FOffsets : public FAnchors {
+	FOffsets() : FAnchors() {
+		memset(&Sides[0], 0, sizeof(float) * 4);
 	}
+
+	const bool& IsSideRelative(const EPictorumSide& Side) = delete;
+	const bool& IsSideAbsolute(const EPictorumSide& Side) = delete;
+
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
 		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
 		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
