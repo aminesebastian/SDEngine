@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 
 	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
-	serializeAllTextures(manager);
+	//serializeAllTextures(manager);
 
 	SD_ENGINE_INFO("Engine Launched!");
 

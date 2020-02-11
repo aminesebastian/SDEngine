@@ -27,6 +27,7 @@ protected:
 	float CameraMovementSpeed;
 	float CameraLookSpeed;
 
+	virtual PictorumWidget* CreateEditorWindowUI() override;
 	virtual void WindowResized(const int32& Width, const int32& Height) override;
 };
 

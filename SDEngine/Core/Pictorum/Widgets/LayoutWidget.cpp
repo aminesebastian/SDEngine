@@ -13,17 +13,17 @@ const bool LayoutWidget::CanAddChild() const {
 	return true;
 }
 void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
-	// Apply the anchors and padding.
-	Anchors.ApplyToGeometry(CurrentRenderGeometry, OutputGeometry);
-	Padding.ApplyToGeometry(OutputGeometry, OutputGeometry);
-
 	LayoutWidgetSlot* slot = GetChildSlotAtIndex<LayoutWidgetSlot>(ChildIndex);
 	if (!slot) {
 		SD_ENGINE_ERROR("Encountered an null slot for widget: {0} in widget: {1} that should have one!", Children[ChildIndex]->GetName(), GetName());
 		return;
 	}
+	Anchors.ApplyToGeometry(CurrentRenderGeometry, OutputGeometry);
 	slot->GetOffsets().ApplyToGeometry(OutputGeometry, OutputGeometry);
-	slot->GetMargins().ApplyToGeometry(OutputGeometry, OutputGeometry);
+}
+LayoutWidget* LayoutWidget::SetAnchor(const EPictorumSide& Side, const float& AnchorPosition) {
+	Anchors.SetSide(Side, AnchorPosition);
+	return this;
 }
 LayoutWidgetSlot* LayoutWidget::AddChild(PictorumWidget* Widget) {
 	return Cast<LayoutWidgetSlot>(AddChildInternal(Widget));

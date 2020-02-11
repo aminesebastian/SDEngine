@@ -9,7 +9,32 @@ struct FDistanceFieldCharacter {
 		MaxTextureCoord(MaxTexCoords),
 		Dimensions(Dimensions),
 		Offsets(Offsets),
-		Advance(Advance) {}
+		Advance(Advance) {
+	
+		vec2 minTexCoords = GetMinTextureCoords();
+		vec2 maxTexCoords = GetMaxTextureCoords();
+		vec2 glyphSize = GetDimensions();
+		vec2 offsets = GetOffsets();
+		vec2 topLeftVert = vec2(offsets.x, -offsets.y);
+		vec2 bottomRightVert = topLeftVert + vec2(glyphSize.x, -glyphSize.y);
+
+		TextureCoordinates.Add(vec2(minTexCoords.x, maxTexCoords.y));
+		TextureCoordinates.Add(minTexCoords);
+		TextureCoordinates.Add(vec2(maxTexCoords.x, minTexCoords.y));
+		TextureCoordinates.Add(maxTexCoords);
+
+		Verticies.Add(topLeftVert + vec2(0.0, -glyphSize.y));
+		Verticies.Add(topLeftVert);
+		Verticies.Add(topLeftVert + vec2(glyphSize.x, 0.0f));
+		Verticies.Add(bottomRightVert);
+
+		Indices.Add(2);
+		Indices.Add(1);
+		Indices.Add(0);
+		Indices.Add(3);
+		Indices.Add(2);
+		Indices.Add(0);
+	}
 
 	const char& GetCharacter() const {
 		return Character;
@@ -29,6 +54,18 @@ struct FDistanceFieldCharacter {
 	const float& GetAdvance() const {
 		return Advance;
 	}
+	const vec2 GetTotalRequiredSpace() const {
+		return Offsets + Dimensions + vec2(Advance, 0.0f);
+	}
+	const SArray<vec2>& GetVerticies() const {
+		return Verticies;
+	}
+	const SArray<vec2>& GetTextureCoordinates() const {
+		return TextureCoordinates;
+	}
+	const SArray<int32>& GetIndices() const {
+		return Indices;
+	}
 private:
 	const char Character;
 	const vec2 MinTextureCoords;
@@ -36,6 +73,9 @@ private:
 	const vec2 Dimensions;
 	const vec2 Offsets;
 	const float Advance;
+	SArray<vec2> Verticies;
+	SArray<vec2> TextureCoordinates;
+	SArray<int32> Indices;
 };
 
 class Shader;

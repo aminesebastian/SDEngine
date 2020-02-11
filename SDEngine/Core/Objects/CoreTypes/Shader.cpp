@@ -5,9 +5,9 @@
 #include <fstream>
 
 Shader::Shader() {
-	S_Program = 0;
+	bCompiled    = false;
 }
-Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) {
+Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) : Shader() {
 	S_FragmentShaderPath = ShaderName + ".frag";
 	if(bUseDefaultGeometry) {
 		S_VertexShaderPath = "./Res/Shaders/DefaultGeometryPassShader.vert";
@@ -25,11 +25,14 @@ Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) {
 }
 
 void Shader::RecompileShader() {
-	glDeleteProgram(S_Program);
-	S_Program = glCreateProgram();
+	// Check if this shader was previously compiled.
+	if (bCompiled) {
+		glDeleteProgram(S_Program);
+		glDeleteProgram(S_Shaders[0]);
+		glDeleteProgram(S_Shaders[1]);
+	}
 
-	glDeleteShader(S_Shaders[0]);
-	glDeleteShader(S_Shaders[1]);
+	S_Program = glCreateProgram();
 	S_Shaders[0] = CreateShader(LoadShader(S_VertexShaderPath), GL_VERTEX_SHADER);
 	S_Shaders[1] = CreateShader(LoadShader(S_FragmentShaderPath), GL_FRAGMENT_SHADER);
 
@@ -55,6 +58,7 @@ void Shader::RecompileShader() {
 	if (!success) {
 		return;
 	}
+	bCompiled = true;
 	SD_ENGINE_INFO("Shader Compilation Success: {0}", S_ShaderName)
 }
 Shader::~Shader() {
@@ -78,25 +82,6 @@ TString Shader::LoadShader(const TString& fileName) {
 		while (file.good()){
 			getline(file, line);
 			output.append(line + "\n");
-			//TString trimmedLine = TStringUtils::Trim(line);
-			////Add or remove directive from stack.
-			//if (trimmedLine[0] == '#' && trimmedLine.length() > 1) {
-			//	if (trimmedLine[1] == 'i') {
-			//		precompilerStack.push(trimmedLine);
-			//	}else if (trimmedLine[1] == 'e') {
-			//		precompilerStack.pop();
-			//	}
-			//	continue;
-			//}
-
-			////Add line to shader lines.
-			//if (precompilerStack.size() > 0) {
-			//	if (S_Flags->find(precompilerStack.top()) != S_Flags->end()) {
-			//		output.append(line + "\n");
-			//	}
-			//} else {
-			//	output.append(line + "\n");
-			//}
 		}
 		file.close();
 	}else{

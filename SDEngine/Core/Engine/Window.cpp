@@ -25,7 +25,7 @@ Window::Window(const TString& Title, const vec2& Dimensions, const int& BitDepth
 	SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
 
 	// Create the window and OpenGL context. Cache the window Id.
-	_Window = SDL_CreateWindow(Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int32)Dimensions.x, (int32)Dimensions.y, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS);
+	_Window = SDL_CreateWindow(Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int32)Dimensions.x, (int32)Dimensions.y, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN);
 	_Context = SDL_GL_CreateContext(_Window);
 	WindowId = SDL_GetWindowID(_Window);
 
@@ -50,6 +50,8 @@ Window::Window(const TString& Title, const vec2& Dimensions, const int& BitDepth
 	DeltaTime     = 0.0f;
 	LastFrameTime = SDL_GetPerformanceCounter();
 
+	SDL_HideWindow(_Window);
+
 	// Mark this display as open.
 	Closed = false;
 }
@@ -62,7 +64,7 @@ Window::~Window() {
 	SDL_Quit();
 }
 void Window::Initialize() {
-
+	SDL_ShowWindow(_Window);
 }
 void Window::Update() {
 	Uint64 frameStartTime = SDL_GetPerformanceCounter();

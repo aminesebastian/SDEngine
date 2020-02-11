@@ -37,10 +37,11 @@ void TitleBar::OnCreated() {
 	*/
 
 	MasterContainer = new LayoutWidget("MasterContainer");
+	MasterContainer->SetAnchor(EPictorumSide::BOTTOM, 1.0f);
 	AddChild(MasterContainer);
 
 	OverlayWidget* overlay = new OverlayWidget("OverlayContainer");
-	MasterContainer->AddChild(overlay)->SetOffset(EPictorumSide::BOTTOM, -TitleBarHeight)->SetOffsetAbsolute(EPictorumSide::BOTTOM);
+	MasterContainer->AddChild(overlay)->SetOffset(EPictorumSide::BOTTOM, -TitleBarHeight);
 
 	SolidWidget* bg = new SolidWidget("TitleBarBackground");
 	bg->SetBackgroundColor(FColor(0.2f, 0.2f, 0.3f));

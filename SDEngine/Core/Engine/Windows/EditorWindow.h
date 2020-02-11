@@ -15,6 +15,6 @@ protected:
 	PictorumRenderer* _EditorWindowUIRenderer;
 	PictorumWidget* _EditorUI;
 
-	virtual PictorumWidget* CreateEditorWindowUI() const;
+	virtual PictorumWidget* CreateEditorWindowUI() = 0;
 };
 

@@ -4,14 +4,15 @@
 #include "Core/Pictorum/Widgets/LayoutWidget.h"
 
 EngineUIContainer::EngineUIContainer(const TString& Name) : PictorumWidget(Name) {
-	MainContainer = nullptr;
-	WindowTitleBar = nullptr;
+	MainContainer   = nullptr;
+	WindowTitleBar  = nullptr;
+	FrameStatistics = nullptr;
 }
 EngineUIContainer::~EngineUIContainer() {
 
 }
 void EngineUIContainer::OnCreated() {
-	MainContainer = new LayoutWidget("MainContainer");
+	MainContainer = new LayoutWidget("EngineUIContainer");
 	AddChild(MainContainer);
 
 	WindowTitleBar = new TitleBar("TitleBar");

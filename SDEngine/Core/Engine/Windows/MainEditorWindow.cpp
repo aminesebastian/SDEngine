@@ -24,14 +24,12 @@ MainEditorWindow::~MainEditorWindow() {
 
 }
 void MainEditorWindow::Initialize() {
-	EditorWindow::Initialize();
 	_RenderViewport->Initialize();
-
-	EngineUIContainer* engineUI = new EngineUIContainer("EngineUI");
-	_EditorWindowUIRenderer->AddToViewport(engineUI);
 
 	Scene* scene = new Scene();
 	LoadScene(scene);
+
+	EditorWindow::Initialize();
 }
 void MainEditorWindow::UpdateInternal(const float& DeltaTime) {
 	_World->TickWorld(DeltaTime);
@@ -48,7 +46,9 @@ void MainEditorWindow::LoadScene(Scene* SceneIn) {
 		_CurrentScene = SceneIn;
 	}
 }
-
+PictorumWidget* MainEditorWindow::CreateEditorWindowUI() {
+	return new EngineUIContainer("EngineUI");
+}
 void MainEditorWindow::WindowResized(const int32& Width, const int32& Height) {
 	EditorWindow::WindowResized(Width, Height);
 	_Camera->SetRenderTargetDimensions(GetDisplayState().GetResolution());

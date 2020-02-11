@@ -12,12 +12,16 @@ FrameStatisticsWidget::~FrameStatisticsWidget() {
 }
 void FrameStatisticsWidget::OnCreated() {
 	LayoutWidget* mainLayout = new LayoutWidget("MainContainer");
+	mainLayout->SetAnchor(EPictorumSide::LEFT, 1.0f);
+	mainLayout->SetAnchor(EPictorumSide::TOP, 0.9f);
+	mainLayout->SetAnchor(EPictorumSide::RIGHT, 1.0f);
 	AddChild(mainLayout);
 
 	FrameTimeWidget = new TextWidget("FrameTime");
 	FrameTimeWidget->SetTextColor(FColor(0.0f, 1.0f, 0.1f));
 	FrameTimeWidget->SetFontSize(12);
-	mainLayout->AddChild(FrameTimeWidget)->SetOffset(EPictorumSide::TOP, 0.9f)->SetOffset(EPictorumSide::LEFT, -100)->SetOffsetAbsolute(EPictorumSide::LEFT);
+	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
+	mainLayout->AddChild(FrameTimeWidget)->SetOffset(EPictorumSide::LEFT, -600);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);
@@ -31,7 +35,7 @@ void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometr
 	TString deltaTime = StringUtilities::ToStringWithPrecision(smootedFrameTime * 1000.0f, 2);
 	TString frameRate = StringUtilities::ToStringWithPrecision(1.0f / smootedFrameTime, 2);
 
-	FrameTimeWidget->SetText(deltaTime + " ms\n" + frameRate + " fps");
+	FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms" + "\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.");
 }
 float FrameStatisticsWidget::GetSmoothedFrameTime() {
 	float total = 0.0f;

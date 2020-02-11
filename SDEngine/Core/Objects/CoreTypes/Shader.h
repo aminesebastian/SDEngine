@@ -59,6 +59,7 @@ private:
 	GLuint CreateShader(const TString& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const TString& errorMessage);
 
+	bool bCompiled;
 	GLuint S_Program;
 	GLuint S_Shaders[NUM_SHADERS];
 };

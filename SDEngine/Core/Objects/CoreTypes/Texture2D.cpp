@@ -49,7 +49,7 @@ void Texture2D::Bind(TString Name, Shader* BindShader, unsigned int Offset) {
 	}
 
 	assert(Offset <= 31);
-	glEnable(GL_TEXTURE_2D);
+	//CHANGED FOR PERF glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0 + Offset);
 	glBindTexture(GL_TEXTURE_2D, Texture);
 	glUniform1i(glGetUniformLocation(BindShader->GetProgram(), Name.c_str()), Offset);
@@ -110,10 +110,6 @@ void Texture2D::SendTextureDataToGPU() {
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (int32)TextureDimensions.x, (int32)TextureDimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, &TextureData[0]);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTextureUnit(GL_TEXTURE_2D, 0);
-	glActiveTexture(GL_TEXTURE0);
-	glDisable(GL_TEXTURE0);
 
 	bSentToGPU = true;
 	SD_ENGINE_INFO("Sent texture: {0} to GPU", GetName());

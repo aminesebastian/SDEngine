@@ -2,21 +2,157 @@
 #include "Core/DataStructures/Array.h"
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Pictorum/DistanceFieldFont.h"
+#include "Core/Pictorum/PictorumDataTypes.h"
+#include "Core/Utilities/Logger.h"
+#include <limits>
 
 /* Defines how dots for each point in font size.*/
 #define DOTS_PER_POINT 5.0f
 
-/** The font weight to use when rendering text. */
-enum class EFontWeight : uint8 {
-	Light, 
-	Normal,
-	Bold
+struct FTextLine {
+private:
+	friend class TextRenderer;
+	friend struct FTextBlock;
+	FTextLine(const float& Tracking) : Tracking(Tracking) {
+		CursorPosition = 0.0f;
+		CurrentIndex = 0;
+		MaxYBaselineOffset = 0.0f;
+	}
+	~FTextLine() {
+		Verticies.Clear();
+		Verticies.ShrinkToFit();
+		TexCoords.Clear();
+		TexCoords.ShrinkToFit();
+		Indices.Clear();
+		Indices.ShrinkToFit();
+	}
+	void AddCharacter(const FDistanceFieldCharacter& Character) {
+		if (Character.GetCharacter() != ' ') {
+			Characters.Add(Character.GetCharacter());
+			TexCoords.AddAll(Character.GetTextureCoordinates());
+			for (const int32& index : Character.GetIndices()) {
+				Indices.Add(index + CurrentIndex);
+			}
+			for (const vec2& vert : Character.GetVerticies()) {
+				Verticies.Add(vec2(vert.x + CursorPosition, vert.y));
+			}
+			CurrentIndex += 4;
+			if (Character.GetOffsets().y < MaxYBaselineOffset) {
+				MaxYBaselineOffset = Character.GetOffsets().y;
+			}
+		}
+		CursorPosition += Character.GetAdvance() + Tracking;
+	}
+	const float Tracking;
+	int32 CurrentIndex;
+	float CursorPosition;
+	float MaxYBaselineOffset;
+	SArray<char> Characters;
+	SArray<vec2> Verticies;
+	SArray<vec2> TexCoords;
+	SArray<int32> Indices;
 };
-enum class EFontAlignment : uint8 {
-	Left,
-	Center,
-	Right,
-	Justified
+struct FTextBlock {
+private:
+	friend class TextRenderer;
+	FTextBlock(const float& Leading, const float& Tracking, const ETextAlignment& Alignment) : Leading(Leading), Tracking(Tracking), Alignment(Alignment) {
+		CurrentYPosition = 0.0f;
+		CurrentIndex     = 0;
+		CurrentLine      = new FTextLine(Tracking);
+	}
+	~FTextBlock() {
+		Verticies.Clear();
+		TexCoords.Clear();
+		Indices.Clear();
+	}
+	FTextLine* GetCurrentLine() {
+		return CurrentLine;
+	}
+	void CompleteLine() {
+		CurrentLine = new FTextLine(Tracking);
+		Lines.Add(CurrentLine);
+	}
+	void Finalize() {
+		float maxLength = 0.0f;
+		for (FTextLine* line : Lines) {
+			if (line->CursorPosition > maxLength) {
+				maxLength = line->CursorPosition;
+			}
+		}
+		for (FTextLine* line : Lines) {
+			float alignmentOffset = maxLength - line->CursorPosition;
+			int32 maxIndex = 0;
+			TexCoords.AddAll(line->TexCoords);
+			for (const int32& index : line->Indices) {
+				Indices.Add(index + CurrentIndex);
+				if (index > maxIndex) {
+					maxIndex = index;
+				}
+			}
+
+			for (const vec2& vert : line->Verticies) {
+				if (Alignment == ETextAlignment::LEFT) {
+					Verticies.Add(vec2(vert.x, vert.y + CurrentYPosition));
+				}else if (Alignment == ETextAlignment::RIGHT) {
+					Verticies.Add(vec2(vert.x + alignmentOffset, vert.y + CurrentYPosition));
+				} else if (Alignment == ETextAlignment::CENTER) {
+					Verticies.Add(vec2(vert.x + (alignmentOffset / 2.0f), vert.y + CurrentYPosition));
+				}
+
+				vec2& addedVert = Verticies[Verticies.LastIndex()];
+
+				if (vert.x > MaxPosition.x) {
+					MaxPosition.x = vert.x;
+				}
+				if (addedVert.y < MaxPosition.y) {
+					MaxPosition.y = addedVert.y;
+				}
+
+				if (vert.x < MinPosition.x) {
+					MinPosition.x = vert.x;
+				}
+				if (addedVert.y < MinPosition.y) {
+					MinPosition.y = addedVert.y;
+				}
+			}
+			CurrentYPosition -= Leading;
+			CurrentYPosition -= line->MaxYBaselineOffset;
+			CurrentIndex += (maxIndex + 1);
+		}	
+		MaxPosition.y *= -1;
+		MaxPosition.y /= 2.0f;
+	}
+	void Reset() {
+		MaxPosition = vec2(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max());
+		MinPosition  = vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+		CurrentYPosition = 0.0f;
+		CurrentIndex     = 0;
+		Verticies.Clear();
+		TexCoords.Clear();
+		Indices.Clear();
+		for (FTextLine* line : Lines) {
+			delete line;
+		}
+		Lines.Clear();
+		CurrentLine = new FTextLine(Tracking);
+		Lines.Add(CurrentLine);
+	}
+	ETextAlignment Alignment;
+	float Leading;
+	float Tracking;
+
+	SArray<FTextLine*> Lines;
+	FTextLine* CurrentLine;
+
+	vec2 MaxPosition;
+	vec2 MinPosition;
+
+	SArray<vec2> Verticies;
+	SArray<vec2> TexCoords;
+	SArray<int32> Indices;
+
+	float CurrentYPosition;
+	int32 CurrentIndex;
 };
 
 /**
@@ -124,52 +260,57 @@ public:
 	 * @returns	{const EFontWeight&}	The font weight.
 	 */
 	const EFontWeight& GetFontWeight() const;
-	/**
-	 * Gets maximum horizontal position in absolute screen space starting from the top left corner of the text.
-	 *
-	 * @returns	{const float&}	The maximum horizontal position.
-	 */
-	const float GetMaxHorizontalPosition();
 
-	const vec2& GetCursorLocation() const;
+	/**
+	 * Sets the text alignment
+	 *
+	 * @param 	{const ETextAlignment&}	AlignmentIn	The alignment.
+	 */
+	void SetTextAlignment(const ETextAlignment& AlignmentIn);
+
+	/**
+	 * Gets the text alignment
+	 *
+	 * @returns	{const ETextAlignment&}	The alignment.
+	 */
+	const ETextAlignment& GetTextAlignment() const;
+
+	/**
+	 * Gets text bounding box dimensions.
+	 *
+	 * @returns	{const vec2&}	The text bounding box dimensions.
+	 */
 	const vec2& GetTextBoundingBoxDimensions() const;
 protected:
 	virtual void AddGlyph(const FDistanceFieldCharacter& Character);
 	virtual void BindToGPU();
 	virtual void NewLine();
 	virtual void Reset();
-
 private:
 	/*****************/
 	/*Text Properties*/
 	/*****************/
 	float FontSize;
 	EFontWeight FontWeight;
+	ETextAlignment Alignment;
 	FColor Color;
 	float DistanceFieldWidth;
 	float DistanceFieldEdge;
 	float Tracking;
 	float Leading;
-	float SpaceWidth;
 
 	/*****************/
 	/*State Properties*/
 	/*****************/
 	const DistanceFieldFont* Font;
-	vec2 CursorPosition;
 	vec2 LastBoundingBoxDimensions;
-	vec2 MinPosition;
-	vec2 MaxPosition;
 
 	/*****************/
 	/*Render Properties*/
 	/*****************/
 	bool bBoundToGPU;
-	SArray<vec2> Verticies;
-	SArray<vec2> TexCoords;
-	SArray<uint32> Indices;
-	int32 CurrentIndexValue;
 	SArray<GLuint> VertexArrayBuffers;
 	GLuint VertexArrayObject;
+	FTextBlock* TextBlockCache;
 };
 

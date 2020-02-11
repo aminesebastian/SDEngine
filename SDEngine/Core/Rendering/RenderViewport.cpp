@@ -75,12 +75,12 @@ void RenderViewport::GenerateRenderTargets() {
 	MainGBuffer->FinalizeRenderTarget();
 
 	OutputBuffer1 = new RenderTarget(OwningWindow->GetDimensions());
-	OutputBuffer1->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OutputBuffer1->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	OutputBuffer1->AddDepthStencilBuffer();
 	OutputBuffer1->FinalizeRenderTarget();
 
 	OutputBuffer2 = new RenderTarget(OwningWindow->GetDimensions());
-	OutputBuffer2->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
+	OutputBuffer2->AddTextureIndex(new FRenderTargetTextureEntry("Output", GL_RGBA32F, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_RGBA, GL_FLOAT));
 	OutputBuffer2->AddDepthStencilBuffer();
 	OutputBuffer2->FinalizeRenderTarget();
 }
@@ -189,9 +189,7 @@ void RenderViewport::Render(const Camera* RenderCamera) {
 void RenderViewport::GemoetryPass(const Camera* RenderCamera) {
 	MainGBuffer->BindForWriting();
 
-	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
 
 	for (Actor* actor : RenderWorld->GetWorldActors()) {
 		if (actor->ShouldBeDrawn(EDrawType::SCENE_RENDER)) {

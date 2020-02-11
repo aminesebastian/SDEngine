@@ -16,14 +16,20 @@ void TextWidget::SetText(const TString& Text) {
 void TextWidget::SetTextColor(const FColor& Color) {
 	Renderer->SetColor(Color);
 }
-const FColor& TextWidget::GetTextColor() {
+const FColor& TextWidget::GetTextColor() const {
 	return Renderer->GetColor();
 }
 void TextWidget::SetFontSize(const int32& FontSize) {
 	Renderer->SetFontSize(FontSize);
 }
-const int32 TextWidget::GetFontSize() {
+const int32& TextWidget::GetFontSize()  const {
 	return Renderer->GetFontSize();
+}
+void TextWidget::SetTextAlignment(const ETextAlignment& Alignment) {
+	Renderer->SetTextAlignment(Alignment);
+}
+const ETextAlignment& TextWidget::GetAlignment() const {
+	return Renderer->GetTextAlignment();
 }
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	vec2 location = Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
@@ -44,11 +50,18 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	vec2 lastLocation   = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
 	MinBounds           = lastLocation;
 	MinBounds.y        += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MinBounds.y        -= Renderer->GetTextBoundingBoxDimensions().y/2;
+	MinBounds.y        -= Renderer->GetTextBoundingBoxDimensions().y;
 	MaxBounds           = lastLocation;
 	MaxBounds.y        += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MaxBounds.x        += Renderer->GetTextBoundingBoxDimensions().x/2;
+	MaxBounds.x        += Renderer->GetTextBoundingBoxDimensions().x;
 }
 const bool TextWidget::CanAddChild() const {
 	return false;
+}
+
+void TextWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& EventIn) {
+	Renderer->SetColor(FColor(1.0f, 0.0f, 0.0f));
+}
+void TextWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& EventIn) {
+	Renderer->SetColor(FColor(1.0f, 1.0f, 1.0f));
 }

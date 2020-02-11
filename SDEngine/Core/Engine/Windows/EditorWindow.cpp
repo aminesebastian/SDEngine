@@ -16,14 +16,13 @@ void EditorWindow::Initialize() {
 	} else {
 		SD_ENGINE_ERROR("No editor window UI provided for window: {0}. Window must override method GetEditorWindowUI().", GetTitle());
 	}
+
+	Window::Initialize();
 }
 
 void EditorWindow::UpdateInternal(const float& DeltaTime) {
 	_EditorWindowUIRenderer->Tick(DeltaTime);
 	_EditorWindowUIRenderer->Draw(DeltaTime);
-}
-PictorumWidget* EditorWindow::CreateEditorWindowUI() const {
-	return nullptr;
 }
 PictorumWidget* EditorWindow::GetEditorWindowUI() const {
 	return _EditorUI;

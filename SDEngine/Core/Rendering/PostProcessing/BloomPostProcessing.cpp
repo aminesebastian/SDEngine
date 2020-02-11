@@ -9,11 +9,11 @@ BloomPostProcessing::BloomPostProcessing(RenderViewport* OwningViewport) : PostP
 	GausBlurUtilitiy = new VariableGausianBlur(OwningViewport->GetOwningWindow()->GetDimensions());
 
 	ClippedHDRBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
-	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
+	ClippedHDRBuffer->AddTextureIndex(new FRenderTargetTextureEntry("HDR", GL_RGBA32F, GL_LINEAR, GL_CLAMP, GL_RGBA, GL_FLOAT, false));
 	ClippedHDRBuffer->FinalizeRenderTarget();
 
 	BloomOutputBuffer = new RenderTarget(OwningViewport->GetOwningWindow()->GetDimensions());
-	BloomOutputBuffer->AddTextureIndex(new FRenderTargetTextureEntry("Bloom", GL_RGBA32F, GL_LINEAR_MIPMAP_LINEAR, GL_REPEAT, GL_RGBA, GL_FLOAT));
+	BloomOutputBuffer->AddTextureIndex(new FRenderTargetTextureEntry("Bloom", GL_RGBA32F, GL_LINEAR, GL_REPEAT, GL_RGBA, GL_FLOAT));
 	BloomOutputBuffer->FinalizeRenderTarget();
 
 	BlurPasses = 2;

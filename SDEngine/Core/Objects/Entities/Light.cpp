@@ -99,11 +99,6 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 
 	S_ShadowBufferTemp->BindForWriting();
 
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	EngineStatics::GetGausBlur7x1Shader()->Bind();
-	EngineStatics::GetGausBlur7x1Shader()->SetShaderVector2("SCALE", vec2(1.0f, 0.0f));
-
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, S_ShadowBuffer->GetTexture(0));
@@ -113,9 +108,6 @@ void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {
 
 	S_ShadowBuffer->BindForWriting();
 
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	EngineStatics::GetGausBlur7x1Shader()->SetShaderVector2("SCALE", vec2(0.0f, 1.0f));
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);

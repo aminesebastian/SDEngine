@@ -91,6 +91,9 @@ public:
 	void Clear() {
 		clear();
 	}
+	void ShrinkToFit() {
+		shrink_to_fit();
+	}
 	void PreAllocate(int32 Size) {
 		reserve(Size);
 	}
