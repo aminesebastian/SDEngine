@@ -343,6 +343,12 @@
     <ClCompile Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -535,6 +541,8 @@
     <ClInclude Include="Core\Engine\WindowDataTypes.h" />
     <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

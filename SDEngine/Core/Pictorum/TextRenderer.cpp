@@ -12,10 +12,23 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
 	SetTextAlignment(ETextAlignment::LEFT);
+
+	// Make sure there are three buffers for vertex positions, texture coordinates, and indices.
+	while (VertexArrayBuffers.Count() < 3) {
+		VertexArrayBuffers.Add(0);
+	}
+
+
+	TestBuffers.Add(new GPUVertexBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw));
+	TestBuffers.Add(new GPUVertexBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw));
+	TestBuffers.Add(new GPUVertexBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw));
+
 	Reset();
 }
 TextRenderer::~TextRenderer() {
+	glDeleteBuffers(3, &VertexArrayBuffers[0]);
 	glDeleteVertexArrays(1, &VertexArrayObject);
+	delete TextBlockCache;
 }
 
 void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI) {
@@ -44,28 +57,18 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	LastBoundingBoxDimensions = scale * (TextBlockCache->MaxPosition - TextBlockCache->MinPosition) * RenderTargetResolution;
 }
 
-void TextRenderer::SetText(const SArray<TString>& TextArray, bool bNewLinePerEntry) {
-	Reset();
-	for (const TString& line : TextArray) {
-		for (char character : line) {
-			if (character == '\n') {
-				NewLine();
-			} else {
-				AddGlyph(Font->GetDistanceFieldCharacter(character));
-			}
-		}
-		if (bNewLinePerEntry) {
-			NewLine();
-		}
-	}
-}
 void TextRenderer::SetText(const TString& Text) {
 	Reset();
-	for (char character : Text) {
+	AddLine(Text);
+}
+void TextRenderer::AddLine(const TString& Line) {
+	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
+	for (char character : Line) {
 		if (character == '\n') {
-			NewLine();
+			TextBlockCache->CompleteLine();
 		} else {
-			AddGlyph(Font->GetDistanceFieldCharacter(character));
+			const FDistanceFieldCharacter& dfChar = Font->GetDistanceFieldCharacter(character);
+			TextBlockCache->GetCurrentLine()->AddCharacter(dfChar);
 		}
 	}
 }
@@ -123,10 +126,6 @@ const vec2& TextRenderer::GetTextBoundingBoxDimensions() const {
 	return LastBoundingBoxDimensions;
 }
 
-void TextRenderer::AddGlyph(const FDistanceFieldCharacter& Character) {
-	TextBlockCache->GetCurrentLine()->AddCharacter(Character);
-	bBoundToGPU = false;
-}
 void TextRenderer::BindToGPU() {
 	TextBlockCache->Finalize();
 
@@ -138,39 +137,28 @@ void TextRenderer::BindToGPU() {
 
 	glGenVertexArrays(1, &VertexArrayObject);
 	glBindVertexArray(VertexArrayObject);
-
-	// Make sure there are three buffers
-	while (VertexArrayBuffers.Count() < 3) {
-		VertexArrayBuffers.Add(0);
-	}
-
-	glGenBuffers(3, &VertexArrayBuffers[0]);
+	//glGenBuffers(3, &VertexArrayBuffers[0]);
 
 	// Bind vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VertexArrayBuffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TextBlockCache->Verticies[0]) * TextBlockCache->Verticies.Count(), &TextBlockCache->Verticies[0], GL_STATIC_DRAW);
+	VertexArrayBuffers[0] = TestBuffers[0]->Generate(TextBlockCache->Verticies);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	// Bind texture coordinates
-	glBindBuffer(GL_ARRAY_BUFFER, VertexArrayBuffers[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TextBlockCache->TexCoords[0]) * TextBlockCache->TexCoords.Count(), &TextBlockCache->TexCoords[0], GL_STATIC_DRAW);
+	VertexArrayBuffers[1] = TestBuffers[1]->Generate(TextBlockCache->TexCoords);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	// Bind indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VertexArrayBuffers[2]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(TextBlockCache->Indices[0]) * TextBlockCache->Indices.Count(), &TextBlockCache->Indices[0], GL_STATIC_DRAW);
+	VertexArrayBuffers[2] = TestBuffers[2]->Generate(TextBlockCache->Indices);
 
 	glBindVertexArray(0);
 
 	bBoundToGPU = true;
 }
 void TextRenderer::Reset() {
+	glDeleteBuffers(3, &VertexArrayBuffers[0]);
 	glDeleteVertexArrays(1, &VertexArrayObject);
 	TextBlockCache->Reset();
 	bBoundToGPU = false;
-}
-void TextRenderer::NewLine() {
-	TextBlockCache->CompleteLine();
 }

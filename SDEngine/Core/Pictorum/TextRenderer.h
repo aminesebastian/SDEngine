@@ -4,6 +4,7 @@
 #include "Core/Pictorum/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
 #include "Core/Utilities/Logger.h"
+#include "Core/Rendering/OpenGL/GPUVertexBuffer.h"
 #include <limits>
 
 /* Defines how dots for each point in font size.*/
@@ -14,17 +15,21 @@ private:
 	friend class TextRenderer;
 	friend struct FTextBlock;
 	FTextLine(const float& Tracking) : Tracking(Tracking) {
-		CursorPosition = 0.0f;
-		CurrentIndex = 0;
+		CursorPosition     = 0.0f;
+		CurrentIndex       = 0;
 		MaxYBaselineOffset = 0.0f;
 	}
 	~FTextLine() {
+		Characters.Clear();
 		Verticies.Clear();
-		Verticies.ShrinkToFit();
 		TexCoords.Clear();
-		TexCoords.ShrinkToFit();
 		Indices.Clear();
-		Indices.ShrinkToFit();
+	}
+	void SetLineSize(const int32& Size) {
+		Characters.PreAllocate(Size);
+		Verticies.PreAllocate(Size * 4);
+		Verticies.PreAllocate(Size * 4);
+		Indices.PreAllocate(Size * 6);
 	}
 	void AddCharacter(const FDistanceFieldCharacter& Character) {
 		if (Character.GetCharacter() != ' ') {
@@ -73,12 +78,21 @@ private:
 		Lines.Add(CurrentLine);
 	}
 	void Finalize() {
+		// Capture the max line length and capture the total count of characters.
 		float maxLength = 0.0f;
+		int32 characterCount = 0;
 		for (FTextLine* line : Lines) {
 			if (line->CursorPosition > maxLength) {
 				maxLength = line->CursorPosition;
+				characterCount += line->Characters.Count();
 			}
 		}
+
+		// Preallocate the required amount of memory.
+		Verticies.PreAllocate(characterCount * 4);
+		TexCoords.PreAllocate(characterCount * 4);
+		Indices.PreAllocate(characterCount * 6);
+
 		for (FTextLine* line : Lines) {
 			float alignmentOffset = maxLength - line->CursorPosition;
 			int32 maxIndex = 0;
@@ -190,15 +204,6 @@ public:
 	 * @param 	{const TString&}	Text	The text to render.
 	 */
 	void SetText(const TString& Text);
-	/**
-	 * Sets the text lines for this text renderer to render.
-	 * Lines can be split by including a \n new line character in the Text.
-	 * Lines can also be split by setting bNewLinePerEntry to true, in which case each array entry will be a new line.
-	 *
-	 * @param 	{const SArray{TString}&}	TextArray	The array of text to render.
-	 * @param 	{bool}	bNewLinePerEntry			 	True to new line per entry.
-	 */
-	void SetText(const SArray<TString>& TextArray, bool bNewLinePerEntry);
 
 	/**
 	 * Sets the font size.
@@ -282,10 +287,9 @@ public:
 	 */
 	const vec2& GetTextBoundingBoxDimensions() const;
 protected:
-	virtual void AddGlyph(const FDistanceFieldCharacter& Character);
 	virtual void BindToGPU();
-	virtual void NewLine();
 	virtual void Reset();
+	virtual void AddLine(const TString& Line);
 private:
 	/*****************/
 	/*Text Properties*/
@@ -312,5 +316,7 @@ private:
 	SArray<GLuint> VertexArrayBuffers;
 	GLuint VertexArrayObject;
 	FTextBlock* TextBlockCache;
+
+	SArray<GPUVertexBuffer*> TestBuffers;
 };
 

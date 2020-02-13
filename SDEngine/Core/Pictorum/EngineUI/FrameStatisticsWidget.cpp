@@ -4,7 +4,7 @@
 #include "Core/Utilities/StringUtilities.h"
 
 FrameStatisticsWidget::FrameStatisticsWidget(const TString& Name) : PictorumWidget(Name) {
-	FrameTimeWidget   = nullptr;
+	FrameTimeWidget = nullptr;
 	MaxFrameTimeCache = 100;
 }
 FrameStatisticsWidget::~FrameStatisticsWidget() {
@@ -35,7 +35,8 @@ void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometr
 	TString deltaTime = StringUtilities::ToStringWithPrecision(smootedFrameTime * 1000.0f, 2);
 	TString frameRate = StringUtilities::ToStringWithPrecision(1.0f / smootedFrameTime, 2);
 
-	FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms" + "\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.");
+	FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms" + "\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.");
+	//FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms");
 }
 float FrameStatisticsWidget::GetSmoothedFrameTime() {
 	float total = 0.0f;

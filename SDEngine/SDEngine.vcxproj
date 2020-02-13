@@ -272,6 +272,8 @@
     <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp" />
     <ClCompile Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.cpp" />
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp" />
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -375,6 +377,8 @@
     <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
     <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
     <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />

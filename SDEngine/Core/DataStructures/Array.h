@@ -24,25 +24,31 @@ public:
 	}	
 	template <typename Type, size_t size>
 	void AddAll(const Type (&Data)[size]) {
-		for (Type oth : Data) {
-			Add(oth);
+		if (size == 0) {
+			return;
 		}
+		int32 initialCount = Count();
+		Resize(initialCount + size);
+		memcpy(&(*this)[0] + initialCount, &Data[0], sizeof(Type) * size);
 	}
 
 	template <typename Type>
 	void AddAll(const SArray<Type>& Other) {
-		for (Type oth : Other) {
-			Add(oth);
+		if (Other.Count() == 0) {
+			return;
 		}
+		int32 initialCount = Count();
+		Resize(initialCount + Other.Count());
+		memcpy(&(*this)[0] + initialCount, &Other[0], sizeof(Type) * Other.Count());
 	}
 	template <typename Type>
 	void AddAll(const Type* Other, int32 Count) {
-		Type* curr = Other;
-		int i = 0;
-		while (i < Count) {
-			Add(curr);
-			i++;
+		if (Count == 0) {
+			return;
 		}
+		int32 initialCount = Count();
+		Resize(initialCount + Count);
+		memcpy(&(*this)[0] + initialCount, &Other[0], sizeof(Type) * Count);
 	}
 	template <typename Type>
 	bool AddUnique(Type Data) {
@@ -96,6 +102,13 @@ public:
 	}
 	void PreAllocate(int32 Size) {
 		reserve(Size);
+	}
+	void Resize(int32 Size) {
+		resize(Size);
+	}
+	template <typename Type>
+	void Resize(int32 Size, Type Content = 0) {
+		resize(Size, Content);
 	}
 	template <typename Type>
 	void Fill(Type Value, int32 Start = 0) {
