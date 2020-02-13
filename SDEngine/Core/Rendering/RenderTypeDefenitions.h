@@ -13,7 +13,8 @@ enum class EGPUBufferType : uint8 {
 enum class EGPUBufferDataType : uint8 {
 	Float,
 	HalfPrecision,
-	DoublePrecision
+	DoublePrecision,
+	Index
 };
 enum class EGPUBufferUsage : uint8 {
 	StreamDraw,

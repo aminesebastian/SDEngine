@@ -4,7 +4,7 @@
 #include "Core/Pictorum/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
 #include "Core/Utilities/Logger.h"
-#include "Core/Rendering/OpenGL/GPUVertexBuffer.h"
+#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
 #include <limits>
 
 /* Defines how dots for each point in font size.*/
@@ -313,10 +313,7 @@ private:
 	/*Render Properties*/
 	/*****************/
 	bool bBoundToGPU;
-	SArray<GLuint> VertexArrayBuffers;
-	GLuint VertexArrayObject;
 	FTextBlock* TextBlockCache;
-
-	SArray<GPUVertexBuffer*> TestBuffers;
+	GPUVertexBufferArray* TestBuffer;
 };
 

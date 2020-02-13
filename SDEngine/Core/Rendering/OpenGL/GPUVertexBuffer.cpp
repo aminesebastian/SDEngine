@@ -7,16 +7,24 @@ GPUVertexBuffer::GPUVertexBuffer(const TString& Name, const EGPUBufferType& Buff
 }
 
 GPUVertexBuffer::~GPUVertexBuffer() {
+	if (bSentToGPU) {
+		glDeleteBuffers(1, &VertexBufferPointer);
+	}
+
 	Clear();
 }
 void GPUVertexBuffer::Clear() {
+	if (bSentToGPU) {
+		glDeleteBuffers(1, &VertexBufferPointer);
+	}
+
 	VertexBufferPointer = 0;
 	bSentToGPU          = false;
 	CurrentBufferSize   = 0;
 	DataPointer         = nullptr;
 	SizeOfData          = 0;
 	DataLength          = 0;
-	ComponentCount = 0;
+	ComponentCount      = 0;
 }
 const GLuint& GPUVertexBuffer::Generate() {
 	if (DataLength == 0) {

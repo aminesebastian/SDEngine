@@ -10,12 +10,26 @@ public:
 	GPUVertexBufferArray();
 	~GPUVertexBufferArray();
 
-	const GLuint& Generate();
+	void Bind();
+	void Unbind();
+	void Update();
+	void DrawTriangleElements(const uint8& ElementsBufferIndex, const uint32& ElementCount);
+
+	void AddBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride = 0, const bool& Normalized = false);
+	template<typename T>
+	void SetBufferData(const uint8& BufferIndex, const SArray<T>& Data) {
+		VertexArrayBuffers[BufferIndex]->SetData(Data);
+	}
+	void Clear();
+
+	const GLuint& GetVertexArrayPointer();
+	const GLuint& GetVertexBufferPointer(const uint8& BufferIndex);
 private:
-	SArray<SPair<void*, uint32>> Data;
+	const GLuint& Generate();
+
 	SArray<GPUVertexBuffer*> VertexArrayBuffers;
 	SArray<GLuint> VertexArrayBufferPointers;
-	GLuint VertexArrayObject;
+	GLuint VertexArrayObjectPointer;
 	bool bSentToGPU;
 };
 

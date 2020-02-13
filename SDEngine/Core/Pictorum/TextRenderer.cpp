@@ -13,21 +13,14 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	SetFontWeight(EFontWeight::Normal);
 	SetTextAlignment(ETextAlignment::LEFT);
 
-	// Make sure there are three buffers for vertex positions, texture coordinates, and indices.
-	while (VertexArrayBuffers.Count() < 3) {
-		VertexArrayBuffers.Add(0);
-	}
-
-
-	TestBuffers.Add(new GPUVertexBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw));
-	TestBuffers.Add(new GPUVertexBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw));
-	TestBuffers.Add(new GPUVertexBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw));
-
+	TestBuffer = new GPUVertexBufferArray();
+	TestBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	TestBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	TestBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
 	Reset();
 }
 TextRenderer::~TextRenderer() {
-	glDeleteBuffers(3, &VertexArrayBuffers[0]);
-	glDeleteVertexArrays(1, &VertexArrayObject);
+	delete TestBuffer;
 	delete TextBlockCache;
 }
 
@@ -49,10 +42,7 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	fontShader->SetShaderFloat("WIDTH", DistanceFieldWidth);
 	fontShader->SetShaderFloat("EDGE", DistanceFieldEdge);
 
-	glBindVertexArray(VertexArrayObject);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VertexArrayBuffers[2]);
-	glDrawElements(GL_TRIANGLES, TextBlockCache->Indices.Count(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	TestBuffer->DrawTriangleElements(2, TextBlockCache->Indices.Count());
 
 	LastBoundingBoxDimensions = scale * (TextBlockCache->MaxPosition - TextBlockCache->MinPosition) * RenderTargetResolution;
 }
@@ -135,30 +125,14 @@ void TextRenderer::BindToGPU() {
 		return;
 	}
 
-	glGenVertexArrays(1, &VertexArrayObject);
-	glBindVertexArray(VertexArrayObject);
-	//glGenBuffers(3, &VertexArrayBuffers[0]);
+	TestBuffer->SetBufferData(0, TextBlockCache->Verticies);
+	TestBuffer->SetBufferData(1, TextBlockCache->TexCoords);
+	TestBuffer->SetBufferData(2, TextBlockCache->Indices);
 
-	// Bind vertices
-	VertexArrayBuffers[0] = TestBuffers[0]->Generate(TextBlockCache->Verticies);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-	// Bind texture coordinates
-	VertexArrayBuffers[1] = TestBuffers[1]->Generate(TextBlockCache->TexCoords);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-	// Bind indices
-	VertexArrayBuffers[2] = TestBuffers[2]->Generate(TextBlockCache->Indices);
-
-	glBindVertexArray(0);
-
+	TestBuffer->Update();
 	bBoundToGPU = true;
 }
 void TextRenderer::Reset() {
-	glDeleteBuffers(3, &VertexArrayBuffers[0]);
-	glDeleteVertexArrays(1, &VertexArrayObject);
 	TextBlockCache->Reset();
 	bBoundToGPU = false;
 }

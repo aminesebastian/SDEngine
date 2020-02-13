@@ -20,17 +20,19 @@ struct FGPUBufferAttribute {
 
 
 class GPUVertexBuffer {
-public:
-	GPUVertexBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride = 0, const bool& Normalized = false);
-	virtual ~GPUVertexBuffer();
-	
+public:	
 	template<typename T>
 	void SetData(const SArray<T>& Data) {
 		if (!Data.IsEmpty()) {
-			DataPointer    = &Data[0];
-			SizeOfData     = sizeof(Data[0]);
-			ComponentCount = SizeOfData / RenderDataTypeUtilities::GetGLDataTypeSize(DataType);
-			DataLength     = Data.Count();
+			if (bSentToGPU) {
+				glBindBuffer(RenderDataTypeUtilities::GetGLBufferType(BufferType), VertexBufferPointer);
+				glBufferSubData(RenderDataTypeUtilities::GetGLBufferType(BufferType), 0, SizeOfData * DataLength, DataPointer);
+			} else {
+				DataPointer = (void*)& Data[0];
+				SizeOfData = sizeof(Data[0]);
+				ComponentCount = SizeOfData / RenderDataTypeUtilities::GetGLDataTypeSize(DataType);
+				DataLength = Data.Count();
+			}
 		} else {
 			DataPointer    = nullptr;
 			SizeOfData     = 0;
@@ -38,9 +40,6 @@ public:
 			ComponentCount = 0;
 		}
 	}
-	void Clear();
-	const GLuint& Generate();
-
 
 	const TString& GetName();
 	const EGPUBufferType& GetBufferType();
@@ -52,6 +51,13 @@ public:
 	const uint8& GetStride();
 	const uint8& GetComponentCount();
 private:
+	friend class GPUVertexBufferArray;
+
+	GPUVertexBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride = 0, const bool& Normalized = false);
+	virtual ~GPUVertexBuffer();
+	const GLuint& Generate();
+	void Clear();
+
 	const TString Name;
 	const EGPUBufferType BufferType;
 	const EGPUBufferUsage BufferUsage;
@@ -60,6 +66,7 @@ private:
 	const uint8 Stride;
 
 	GLuint VertexBufferPointer;
+
 
 	bool bSentToGPU;
 	uint32 CurrentBufferSize;
