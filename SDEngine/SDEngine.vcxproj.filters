@@ -543,11 +543,18 @@
     <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
     <None Include="Res\Shaders\UI\UIImageShader.vert" />
     <None Include="Res\Shaders\UI\UISolidShader.frag" />
     <None Include="Res\Shaders\UI\UISolidShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SDEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
   </ItemGroup>
 </Project>

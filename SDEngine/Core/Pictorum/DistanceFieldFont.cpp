@@ -19,7 +19,7 @@ DistanceFieldFont::~DistanceFieldFont() {
 	}
 }
 const FDistanceFieldCharacter& DistanceFieldFont::GetDistanceFieldCharacter(const char& Character) const {
-	return *CharacterMap.at(Character);
+	return *CharacterCache[Character];
 }
 const vec2& DistanceFieldFont::GetTextureAtlasDimensions() const {
 	if (DistanceFieldTexture) {
@@ -34,7 +34,11 @@ const int32& DistanceFieldFont::GetGeneratedFontSize() const {
 	return OfflineFontSize;
 }
 bool DistanceFieldFont::LoadAndParseFont() {
+	// Create and get the texture.
 	DistanceFieldTexture = new Texture2D(FontName + "AtlasTexture", ImageFilePath);
+
+	// Preallocate the character cache to cover entirety of ascii extended.
+	CharacterCache.Resize(256, nullptr);
 
 	// Split file into array of lines.
 	SArray<TString> fileContents;
@@ -98,7 +102,10 @@ bool DistanceFieldFont::LoadAndParseFont() {
 			vec2(xOffset - Padding.x, yOffset - Padding.y) / maxWidth,
 			(xAdvance - Padding.x)/maxWidth
 		);
-		CharacterMap.emplace(character, characterEntry);
+
+		if (character >= 0 && character <= 255) {
+			CharacterCache[character] = characterEntry;
+		}
 	}
 	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, FontFilePath, maxWidth, maxWidthChar)
 		return true;

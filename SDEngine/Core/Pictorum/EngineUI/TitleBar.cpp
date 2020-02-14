@@ -57,7 +57,7 @@ void TitleBar::OnCreated() {
 	WindowTitleWidget->SetFontSize(11);
 	buttonContainer->AddChild(WindowTitleWidget)->SetFillAvilableSpace(1.0f).SetVerticalAlignment(EVerticalAlignment::CENTER);
 
-	WindowTitleWidget->GetParentSlot<HorizontalBoxSlot>()->GetPadding().SetLeft(10.0f).SetTop(1.0f);
+	WindowTitleWidget->GetParentSlot<HorizontalBoxSlot>()->GetPadding().SetLeft(14.0f);
 
 	MinimizeButton = new ImageWidget("Minimize");
 	MinimizeButton->SetImage(MinimizeTexture);

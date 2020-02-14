@@ -15,155 +15,288 @@ private:
 	friend class TextRenderer;
 	friend struct FTextBlock;
 	FTextLine(const float& Tracking) : Tracking(Tracking) {
-		CursorPosition     = 0.0f;
-		CurrentIndex       = 0;
-		MaxYBaselineOffset = 0.0f;
+		// First flush the line to ensure all values are set to their base state. Then, allocate 64 characters worth of space.
+		Flush();
+		ExtendAllocation(64);
 	}
 	~FTextLine() {
-		Characters.Clear();
-		Verticies.Clear();
-		TexCoords.Clear();
-		Indices.Clear();
+		Flush();
 	}
 	void SetLineSize(const int32& Size) {
-		Characters.PreAllocate(Size);
-		Verticies.PreAllocate(Size * 4);
-		Verticies.PreAllocate(Size * 4);
-		Indices.PreAllocate(Size * 6);
+		if (Size > Characters.Count()) {
+			ExtendAllocation(Size);
+		}
 	}
 	void AddCharacter(const FDistanceFieldCharacter& Character) {
+		// If the character is a space, skip it and just advance.
 		if (Character.GetCharacter() != ' ') {
-			Characters.Add(Character.GetCharacter());
-			TexCoords.AddAll(Character.GetTextureCoordinates());
-			for (const int32& index : Character.GetIndices()) {
-				Indices.Add(index + CurrentIndex);
+
+			// Extend allocation if needed.
+			if (CharacterCount > Characters.LastIndex()) {
+				ExtendAllocation(5);
 			}
-			for (const vec2& vert : Character.GetVerticies()) {
-				Verticies.Add(vec2(vert.x + CursorPosition, vert.y));
+
+			// Only generate new geometry if the character in that index has changed.
+			if (Character.GetCharacter() != Characters[CharacterCount]) {
+				// Capture the indices of the first and last changed character.
+				if (FirstChangedIndex == 0) {
+					FirstChangedIndex = CharacterCount;
+				}
+				LastChangedIndex = CharacterCount;
+
+				// Set the character.
+				Characters[CharacterCount] = Character.GetCharacter();
+
+				// Set the texture coordinates.
+				for (int32 i = 0; i < Character.GetTextureCoordinates().Count(); i++) {
+					TexCoords[TexCoordCount + i] = Character.GetTextureCoordinates()[i];
+				}
+
+				// Set the indices.
+				for (int32 i = 0; i < Character.GetIndices().Count(); i++) {
+					Indices[IndexCount + i] = Character.GetIndices()[i] + CurrentIndex;
+				}
+
+				// Set the vertices.
+				for (int32 i = 0; i < Character.GetVerticies().Count(); i++) {
+					const vec2& vert = Character.GetVerticies()[i];
+					Verticies[VertexCount + i] = vec2(vert.x + CursorPosition, vert.y);
+				}
+				bChanged = true;
 			}
-			CurrentIndex += 4;
+
+			// Increment the counts for all state tracking values.
+			IncrementCounts();
+
+			// Capture the max offset.
 			if (Character.GetOffsets().y < MaxYBaselineOffset) {
 				MaxYBaselineOffset = Character.GetOffsets().y;
 			}
 		}
+
+		// Advance the cursor.
 		CursorPosition += Character.GetAdvance() + Tracking;
 	}
-	const float Tracking;
+	void Flush() {
+		CursorPosition     = 0.0f;
+		MaxYBaselineOffset = 0.0f;
+		CurrentIndex       = 0;
+		CharacterCount     = 0;
+		VertexCount        = 0;
+		IndexCount         = 0;
+		TexCoordCount      = 0;
+		FirstChangedIndex  = -1;
+		LastChangedIndex   = -1;
+		bChanged           = false;
+	}
+	bool HasChanged() {
+		return FirstChangedIndex >= 0;
+	}
+
+private:
+	void ExtendAllocation(int32 CharactersToAllocate) {
+		const int32 allocationAmount = CharactersToAllocate;
+		Characters.Resize(Characters.Count() + allocationAmount);
+		Verticies.Resize(Verticies.Count() + allocationAmount * 4);
+		TexCoords.Resize(TexCoords.Count() + allocationAmount * 4);
+		Indices.Resize(Indices.Count() + allocationAmount * 6);
+	}
+	void IncrementCounts() {
+		CurrentIndex += 4;
+		CharacterCount += 1;
+		VertexCount += 4;
+		TexCoordCount += 4;
+		IndexCount += 6;
+	}
+	float Tracking;
 	int32 CurrentIndex;
 	float CursorPosition;
 	float MaxYBaselineOffset;
+	int32 FirstChangedIndex;
+	int32 LastChangedIndex;
+	int32 CharacterCount;
 	SArray<char> Characters;
+	int32 VertexCount;
 	SArray<vec2> Verticies;
+	int32 TexCoordCount;
 	SArray<vec2> TexCoords;
+	int32 IndexCount;
 	SArray<int32> Indices;
+	bool bChanged;
 };
+
 struct FTextBlock {
 private:
 	friend class TextRenderer;
 	FTextBlock(const float& Leading, const float& Tracking, const ETextAlignment& Alignment) : Leading(Leading), Tracking(Tracking), Alignment(Alignment) {
-		CurrentYPosition = 0.0f;
-		CurrentIndex     = 0;
-		CurrentLine      = new FTextLine(Tracking);
+		Flush();
+		Lines.Add(new FTextLine(Tracking));
+		ExtendAllocation(64);
+		AllocatedCharacterSpace = 0;
 	}
 	~FTextBlock() {
-		Verticies.Clear();
-		TexCoords.Clear();
-		Indices.Clear();
+		Flush();
 	}
+
 	FTextLine* GetCurrentLine() {
-		return CurrentLine;
+		return Lines[UsedLines];
 	}
 	void CompleteLine() {
-		CurrentLine = new FTextLine(Tracking);
-		Lines.Add(CurrentLine);
+		UsedLines++;
+		if (UsedLines > Lines.LastIndex()) {
+			Lines.Add(new FTextLine(Tracking));
+		}
 	}
 	void Finalize() {
-		// Capture the max line length and capture the total count of characters.
+		// Capture the max line length for use when calculating the alignment offset.
 		float maxLength = 0.0f;
-		int32 characterCount = 0;
-		for (FTextLine* line : Lines) {
+		for (int32 i = 0; i <= UsedLines; i++) {
+			FTextLine* line = Lines[i];
+			if (line->CharacterCount == 0) {
+				continue;
+			}
 			if (line->CursorPosition > maxLength) {
 				maxLength = line->CursorPosition;
-				characterCount += line->Characters.Count();
 			}
 		}
 
-		// Preallocate the required amount of memory.
-		Verticies.PreAllocate(characterCount * 4);
-		TexCoords.PreAllocate(characterCount * 4);
-		Indices.PreAllocate(characterCount * 6);
+		// Iterate through all the used lines and add them to the buffer.
+		for (int32 i = 0; i <= UsedLines; i++) {
+			FTextLine* line = Lines[i];
+			if (line->CharacterCount == 0) {
+				continue;
+			}
 
-		for (FTextLine* line : Lines) {
+			// Determine if we need to extend the buffer allocation.
+			int32 remainingCharSpace = AllocatedCharacterSpace - CurrentlyUsedCharacterSpace;
+			if (line->CharacterCount > remainingCharSpace) {
+				ExtendAllocation(line->CharacterCount - remainingCharSpace);
+			}
+
+			// Calculate the alignment offset.
 			float alignmentOffset = maxLength - line->CursorPosition;
+	
+			// Add texture coordinates.
+			for (int32 i = 0; i < line->TexCoordCount; i++) {
+				TexCoords[TexCoordCount + i] = line->TexCoords[i];
+			}
+
+			// Add Indices and capture the max index.
 			int32 maxIndex = 0;
-			TexCoords.AddAll(line->TexCoords);
-			for (const int32& index : line->Indices) {
-				Indices.Add(index + CurrentIndex);
+			for (int32 i = 0; i < line->IndexCount; i++) {
+				int32& index = line->Indices[i];
+				Indices[IndexCount + i] = index + CurrentIndex;
 				if (index > maxIndex) {
 					maxIndex = index;
 				}
 			}
 
-			for (const vec2& vert : line->Verticies) {
+			// Add vertices and offset for the alignment.
+			for (int32 i = 0; i < line->VertexCount; i++) {
+				const vec2& vert = line->Verticies[i];
+				vec2& blockVert  = Verticies[VertexCount + i];
+
 				if (Alignment == ETextAlignment::LEFT) {
-					Verticies.Add(vec2(vert.x, vert.y + CurrentYPosition));
-				}else if (Alignment == ETextAlignment::RIGHT) {
-					Verticies.Add(vec2(vert.x + alignmentOffset, vert.y + CurrentYPosition));
+					blockVert.x = vert.x;
+					blockVert.y = vert.y + CurrentYPosition;
+				} else if (Alignment == ETextAlignment::RIGHT) {
+					blockVert.x = vert.x + alignmentOffset;
+					blockVert.y = vert.y + CurrentYPosition;
 				} else if (Alignment == ETextAlignment::CENTER) {
-					Verticies.Add(vec2(vert.x + (alignmentOffset / 2.0f), vert.y + CurrentYPosition));
+					blockVert.x = vert.x + (alignmentOffset / 2.0f);
+					blockVert.y = vert.y + CurrentYPosition;
 				}
 
-				vec2& addedVert = Verticies[Verticies.LastIndex()];
-
-				if (vert.x > MaxPosition.x) {
-					MaxPosition.x = vert.x;
+				// Cache the max and min positions of this whole block by evaluating the latest vertex.	
+				if (blockVert.x > MaxPosition.x) {
+					MaxPosition.x = blockVert.x;
 				}
-				if (addedVert.y < MaxPosition.y) {
-					MaxPosition.y = addedVert.y;
+				if (-blockVert.y > MaxPosition.y) {
+					MaxPosition.y = -blockVert.y;
 				}
-
-				if (vert.x < MinPosition.x) {
-					MinPosition.x = vert.x;
+				if (blockVert.x < MinPosition.x) {
+					MinPosition.x = blockVert.x;
 				}
-				if (addedVert.y < MinPosition.y) {
-					MinPosition.y = addedVert.y;
+				if (-blockVert.y < MinPosition.y) {
+					MinPosition.y = -blockVert.y;
 				}
 			}
+
+			// Offset the cursor to the next line.
 			CurrentYPosition -= Leading;
 			CurrentYPosition -= line->MaxYBaselineOffset;
-			CurrentIndex += (maxIndex + 1);
-		}	
-		MaxPosition.y *= -1;
-		MaxPosition.y /= 2.0f;
-	}
-	void Reset() {
-		MaxPosition = vec2(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::max());
-		MinPosition  = vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
-		CurrentYPosition = 0.0f;
-		CurrentIndex     = 0;
-		Verticies.Clear();
-		TexCoords.Clear();
-		Indices.Clear();
-		for (FTextLine* line : Lines) {
-			delete line;
+
+			// Increment state keeping values.
+			CurrentIndex                += (maxIndex + 1);
+			VertexCount                 += line->VertexCount;
+			TexCoordCount               += line->TexCoordCount;
+			IndexCount                  += line->IndexCount;
+			CurrentlyUsedCharacterSpace += line->CharacterCount;
 		}
-		Lines.Clear();
-		CurrentLine = new FTextLine(Tracking);
-		Lines.Add(CurrentLine);
+		MaxPosition /= 2.0f;
+	}
+	void Flush() {
+		UsedLines = 0;
+		MaxPosition = vec2(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
+		MinPosition = vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+		CurrentYPosition = 0.0f;
+		CurrentIndex = 0;
+		VertexCount = 0;
+		TexCoordCount = 0;
+		IndexCount = 0;
+		FirstChangedIndex = 0;
+		LastChangedIndex = 0;
+		CurrentlyUsedCharacterSpace = 0;
+
+		for (FTextLine* line : Lines) {
+			line->Flush();
+		}
+	}
+	void SetTracking(const float& TrackingIn) {
+		Tracking = TrackingIn;
+		for (FTextLine* line : Lines) {
+			line->Tracking = TrackingIn;
+		}
+	}
+	void GetChangedIndices(int32& FirstChanged, int32& LastChanged) {
+		FirstChanged = FirstChangedIndex;
+		LastChanged = LastChangedIndex;
+	}
+	bool HasChanged() {
+		return FirstChangedIndex >= 0;
+	}
+
+private:
+	void ExtendAllocation(const int32& CharacterCount) {
+		const int32 allocationAmount = CharacterCount * 2;
+
+		AllocatedCharacterSpace += allocationAmount;
+		Verticies.Resize(Verticies.Count() + allocationAmount * 4);
+		TexCoords.Resize(TexCoords.Count() + allocationAmount * 4);
+		Indices.Resize(Indices.Count() + allocationAmount * 6);
 	}
 	ETextAlignment Alignment;
 	float Leading;
 	float Tracking;
 
 	SArray<FTextLine*> Lines;
-	FTextLine* CurrentLine;
+	int32 UsedLines;
 
 	vec2 MaxPosition;
 	vec2 MinPosition;
 
+	int32 AllocatedCharacterSpace;
+	int32 CurrentlyUsedCharacterSpace;
+
+	int32 VertexCount;
 	SArray<vec2> Verticies;
+	int32 TexCoordCount;
 	SArray<vec2> TexCoords;
+	int32 IndexCount;
 	SArray<int32> Indices;
+
+	int32 FirstChangedIndex;
+	int32 LastChangedIndex;
 
 	float CurrentYPosition;
 	int32 CurrentIndex;
@@ -288,7 +421,7 @@ public:
 	const vec2& GetTextBoundingBoxDimensions() const;
 protected:
 	virtual void BindToGPU();
-	virtual void Reset();
+	virtual void Flush();
 	virtual void AddLine(const TString& Line);
 private:
 	/*****************/

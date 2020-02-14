@@ -20,13 +20,13 @@ struct FGPUBufferAttribute {
 
 
 class GPUVertexBuffer {
-public:	
+public:
 	template<typename T>
-	void SetData(const SArray<T>& Data) {
+	void SetData(const SArray<T>& Data, const uint32& StartIndex, const int32& DataElements) {
 		if (!Data.IsEmpty()) {
 			if (bSentToGPU) {
 				glBindBuffer(RenderDataTypeUtilities::GetGLBufferType(BufferType), VertexBufferPointer);
-				glBufferSubData(RenderDataTypeUtilities::GetGLBufferType(BufferType), 0, SizeOfData * DataLength, DataPointer);
+				glBufferSubData(RenderDataTypeUtilities::GetGLBufferType(BufferType), StartIndex, SizeOfData * DataElements, DataPointer);
 			} else {
 				DataPointer = (void*)& Data[0];
 				SizeOfData = sizeof(Data[0]);
@@ -34,9 +34,9 @@ public:
 				DataLength = Data.Count();
 			}
 		} else {
-			DataPointer    = nullptr;
-			SizeOfData     = 0;
-			DataLength     = 0;
+			DataPointer = nullptr;
+			SizeOfData = 0;
+			DataLength = 0;
 			ComponentCount = 0;
 		}
 	}
@@ -76,4 +76,3 @@ private:
 	uint8 ComponentCount;
 	uint32 DataLength;
 };
-

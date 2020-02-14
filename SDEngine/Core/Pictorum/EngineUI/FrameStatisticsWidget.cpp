@@ -21,7 +21,7 @@ void FrameStatisticsWidget::OnCreated() {
 	FrameTimeWidget->SetTextColor(FColor(0.0f, 1.0f, 0.1f));
 	FrameTimeWidget->SetFontSize(12);
 	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
-	mainLayout->AddChild(FrameTimeWidget)->SetOffset(EPictorumSide::LEFT, -600);
+	mainLayout->AddChild(FrameTimeWidget)->SetOffset(EPictorumSide::LEFT, -100);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);
@@ -35,8 +35,7 @@ void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometr
 	TString deltaTime = StringUtilities::ToStringWithPrecision(smootedFrameTime * 1000.0f, 2);
 	TString frameRate = StringUtilities::ToStringWithPrecision(1.0f / smootedFrameTime, 2);
 
-	FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms" + "\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.\nLorem ipsum dolor sit amet, consectetur\n adipiscing elit, sed do eiusmod tempor incididunt\nut labore et dolore magna aliqua. Ut enim ad minim veniam,\n quis nostrud exercitation ullamco laboris nisi ut \naliquip ex ea commodo consequat.");
-	//FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms");
+	FrameTimeWidget->SetText(frameRate + " fps\n" + deltaTime + " ms");
 }
 float FrameStatisticsWidget::GetSmoothedFrameTime() {
 	float total = 0.0f;

@@ -47,13 +47,13 @@ vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	return Renderer->GetTextBoundingBoxDimensions();
 }
 void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
-	vec2 lastLocation   = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
-	MinBounds           = lastLocation;
-	MinBounds.y        += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MinBounds.y        -= Renderer->GetTextBoundingBoxDimensions().y;
-	MaxBounds           = lastLocation;
-	MaxBounds.y        += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MaxBounds.x        += Renderer->GetTextBoundingBoxDimensions().x;
+	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
+	MinBounds         = lastLocation;
+	MinBounds.y      += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
+	MinBounds.y      -= Renderer->GetTextBoundingBoxDimensions().y;
+	MaxBounds         = MinBounds;
+	MaxBounds.x      += Renderer->GetTextBoundingBoxDimensions().x;
+	MaxBounds.y       = LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
 }
 const bool TextWidget::CanAddChild() const {
 	return false;

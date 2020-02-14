@@ -379,6 +379,7 @@
     <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
     <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />
@@ -421,6 +422,12 @@
     <None Include="Res\Shaders\UI\UIImageShader.vert" />
     <None Include="Res\Shaders\UI\UISolidShader.frag" />
     <None Include="Res\Shaders\UI\UISolidShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SDEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

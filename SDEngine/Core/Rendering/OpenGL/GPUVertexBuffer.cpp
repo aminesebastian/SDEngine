@@ -19,12 +19,12 @@ void GPUVertexBuffer::Clear() {
 	}
 
 	VertexBufferPointer = 0;
-	bSentToGPU          = false;
-	CurrentBufferSize   = 0;
-	DataPointer         = nullptr;
-	SizeOfData          = 0;
-	DataLength          = 0;
-	ComponentCount      = 0;
+	bSentToGPU = false;
+	CurrentBufferSize = 0;
+	DataPointer = nullptr;
+	SizeOfData = 0;
+	DataLength = 0;
+	ComponentCount = 0;
 }
 const GLuint& GPUVertexBuffer::Generate() {
 	if (DataLength == 0) {
@@ -37,7 +37,7 @@ const GLuint& GPUVertexBuffer::Generate() {
 	glBufferData(RenderDataTypeUtilities::GetGLBufferType(BufferType), SizeOfData * DataLength, DataPointer, RenderDataTypeUtilities::GetGLBufferUsage(BufferUsage));
 
 	CurrentBufferSize = DataLength;
-	bSentToGPU        = true;
+	bSentToGPU = true;
 
 	return VertexBufferPointer;
 }

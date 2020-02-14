@@ -2,7 +2,7 @@
 #include "Core/Utilities/Logger.h"
 
 GPUVertexBufferArray::GPUVertexBufferArray() {
-	bSentToGPU               = false;
+	bSentToGPU = false;
 	VertexArrayObjectPointer = 0;
 }
 GPUVertexBufferArray::~GPUVertexBufferArray() {
@@ -15,7 +15,7 @@ GPUVertexBufferArray::~GPUVertexBufferArray() {
 
 	// Clear the array for good measure.
 	VertexArrayBuffers.Clear();
-}	
+}
 void GPUVertexBufferArray::Bind() {
 	if (!bSentToGPU) {
 		SD_ENGINE_ERROR("Attempting to bind Vertex Array before sending to GPU.");

@@ -6,8 +6,8 @@
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
 	TextBlockCache = new FTextBlock(Leading, Tracking, Alignment);
 
-	SetLeading(0.75f);
-	SetTracking(-0.15f);
+	SetLeading(0.85f);
+	SetTracking(-0.16f);
 	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
 	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
@@ -17,7 +17,7 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	TestBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
 	TestBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
 	TestBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
-	Reset();
+	Flush();
 }
 TextRenderer::~TextRenderer() {
 	delete TestBuffer;
@@ -42,18 +42,19 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	fontShader->SetShaderFloat("WIDTH", DistanceFieldWidth);
 	fontShader->SetShaderFloat("EDGE", DistanceFieldEdge);
 
-	TestBuffer->DrawTriangleElements(2, TextBlockCache->Indices.Count());
+	TestBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
 
-	LastBoundingBoxDimensions = scale * (TextBlockCache->MaxPosition - TextBlockCache->MinPosition) * RenderTargetResolution;
+	LastBoundingBoxDimensions = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
 }
 
 void TextRenderer::SetText(const TString& Text) {
-	Reset();
+	Flush();
 	AddLine(Text);
 }
 void TextRenderer::AddLine(const TString& Line) {
 	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
-	for (char character : Line) {
+	for (int32 i = 0; i < Line.length(); i++) {
+		const char& character = Line[i];
 		if (character == '\n') {
 			TextBlockCache->CompleteLine();
 		} else {
@@ -77,7 +78,7 @@ const FColor& TextRenderer::GetColor() const {
 }
 void TextRenderer::SetTracking(const float& TextTracking) {
 	Tracking = TextTracking;
-	TextBlockCache->Tracking = TextTracking;
+	TextBlockCache->SetTracking(TextTracking);
 }
 const float& TextRenderer::GetTracking() const {
 	return Tracking;
@@ -125,14 +126,14 @@ void TextRenderer::BindToGPU() {
 		return;
 	}
 
-	TestBuffer->SetBufferData(0, TextBlockCache->Verticies);
-	TestBuffer->SetBufferData(1, TextBlockCache->TexCoords);
-	TestBuffer->SetBufferData(2, TextBlockCache->Indices);
-
+	TestBuffer->SetBufferData(0, TextBlockCache->Verticies, TextBlockCache->VertexCount);
+	TestBuffer->SetBufferData(1, TextBlockCache->TexCoords, TextBlockCache->TexCoordCount);
+	TestBuffer->SetBufferData(2, TextBlockCache->Indices, TextBlockCache->IndexCount);
 	TestBuffer->Update();
+
 	bBoundToGPU = true;
 }
-void TextRenderer::Reset() {
-	TextBlockCache->Reset();
+void TextRenderer::Flush() {
+	TextBlockCache->Flush();
 	bBoundToGPU = false;
 }

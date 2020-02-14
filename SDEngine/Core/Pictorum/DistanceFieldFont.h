@@ -108,7 +108,7 @@ private:
 	int32 Base;
 	vec4 Padding;
 
-	SHashMap<char, const FDistanceFieldCharacter*> CharacterMap;
+	SArray<const FDistanceFieldCharacter*> CharacterCache;
 	Texture2D* DistanceFieldTexture;
 
 	bool LoadAndParseFont();
