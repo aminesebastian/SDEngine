@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -24,7 +24,7 @@
  *
  *  This is a simple file to encapsulate the EGL API headers.
  */
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && !defined(__ANDROID__)
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
@@ -132,7 +132,7 @@
 *-------------------------------------------------------------------------
 * This precedes the return type of the function in the function prototype.
 */
-#if defined(_WIN32) && !defined(__SCITECH_SNAP__)
+#if defined(_WIN32) && !defined(__SCITECH_SNAP__) && !defined(SDL_VIDEO_STATIC_ANGLE)
 #   define KHRONOS_APICALL __declspec(dllimport)
 #elif defined (__SYMBIAN32__)
 #   define KHRONOS_APICALL IMPORT_C
@@ -375,7 +375,7 @@ typedef enum {
 #define EGLAPIENTRYP EGLAPIENTRY*
 
 /* The types NativeDisplayType, NativeWindowType, and NativePixmapType
-* are aliases of window-system-dependent types, such as X _Display * or
+* are aliases of window-system-dependent types, such as X Display * or
 * Windows Device Context. They must be defined in platform-specific
 * code below. The EGL-prefixed versions of Native*Type are the same
 * types, renamed in EGL 1.3 so all types in the API start with "EGL".

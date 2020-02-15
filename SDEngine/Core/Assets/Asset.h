@@ -2,10 +2,10 @@
 #include "Core/Assets/ISerializeableAsset.h"
 #include "Core/DataStructures/DataStructures.h"
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Engine/Engine.h"
-#include "Engine/EngineStatics.h"
-#include "Utilities/EngineFunctionLibrary.h"
-#include "Utilities/Logger.h"
+#include "Core/Engine/Engine.h"
+#include "Core/Engine/EngineStatics.h"
+#include "Core/Utilities/EngineFunctionLibrary.h"
+#include "Core/Utilities/Logger.h"
 
 class AssetMetadata;
 

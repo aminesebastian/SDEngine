@@ -1,5 +1,5 @@
 #include "MaterialAssetFactory.h"
-#include "Rendering/Material.h"
+#include "Core/Objects/CoreTypes/Material.h"
 
 MaterialAssetFactory::MaterialAssetFactory() {
 

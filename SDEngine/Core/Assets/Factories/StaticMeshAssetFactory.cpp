@@ -1,5 +1,5 @@
 #include "StaticMeshAssetFactory.h"
-#include "Entities/StaticMesh.h"
+#include "Core/Objects/CoreTypes/StaticMesh.h"
 
 StaticMeshAssetFactory::StaticMeshAssetFactory() {
 

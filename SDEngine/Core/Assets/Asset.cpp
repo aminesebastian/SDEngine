@@ -1,10 +1,10 @@
 #include "Asset.h"
 #include "Core/Assets/AssetManager.h"
 #include "Core/Assets/AssetMetadata.h"
-#include "Engine/EngineStatics.h"
+#include "Core/Engine/EngineStatics.h"
 #include <iostream>
 #include <fstream>
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 
 Asset::Asset(TString AssetType, ISerializeableAsset* AssetPointer) : AssetType(AssetType), AssetPointer(AssetPointer), bInitialized(false) {
 	Metadata = nullptr;

@@ -1,5 +1,5 @@
 #include "SerializationStream.h"
-#include "Core/Math/MathLibrary.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 
 SerializationStream::SerializationStream(ByteBuffer& BufferIn) : Buffer(BufferIn) {
 

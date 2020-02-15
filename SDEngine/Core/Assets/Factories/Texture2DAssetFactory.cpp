@@ -1,5 +1,5 @@
 #include "Texture2DAssetFactory.h"
-#include "Rendering/Texture2D.h"
+#include "Core/Objects/CoreTypes/Texture2D.h"
 
 Texture2DAssetFactory::Texture2DAssetFactory() {
 
