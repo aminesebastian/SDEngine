@@ -57,7 +57,9 @@ struct FUserInterfaceEvent {
 		bHandled = false;
 		bCaptureMouse = false;
 	}
-
+	bool ShouldContinuePropragating() {
+		return !bHandled && !bCaptureMouse;
+	}
 	bool GetHandled() { return bHandled; }
 	void SetHandled() { bHandled = true; }
 	void SetUnhandled() { bHandled = false; }
@@ -270,7 +272,7 @@ struct FOffsets {
 		float relativeLeft    = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		vec2 newLocation = originalLocation + vec2(relativeLeft, relativeBottom);
-		vec2 newSpace = originalSpace + vec2(relativeRight - relativeLeft, relativeTop - relativeBottom);
+		vec2 newSpace = originalSpace - vec2(relativeRight + relativeLeft, relativeTop + relativeBottom);
 
 		OutRenderGeometry.SetLocation(newLocation, EPictorumLocationBasis::RELATIVE);
 		OutRenderGeometry.SetAllotedSpace(newSpace, EPictorumScaleBasis::RELATIVE);
@@ -309,7 +311,7 @@ struct FPadding : public FOffsets {
 		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.AddAllotedSpace(-relativeRight, -relativeTop, EPictorumScaleBasis::RELATIVE);
+		OutRenderGeometry.AddAllotedSpace(-2*relativeRight, -2*relativeTop, EPictorumScaleBasis::RELATIVE);
 	}
 };
 struct FMargins : public FOffsets {

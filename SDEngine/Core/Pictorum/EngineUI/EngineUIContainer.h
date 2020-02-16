@@ -4,6 +4,7 @@
 class TitleBar;
 class FrameStatisticsWidget;
 class LayoutWidget;
+class FloatingDetailsPanel;
 
 class EngineUIContainer : public PictorumWidget {
 public:
@@ -16,5 +17,6 @@ private:
 	LayoutWidget* MainContainer;
 	TitleBar* WindowTitleBar;
 	FrameStatisticsWidget* FrameStatistics;
+	FloatingDetailsPanel* DetailsPanel;
 };
 

@@ -14,6 +14,7 @@ InputSubsystem::InputSubsystem() {
 	for (int i = 0; i < NUM_MOUSE_BUTTONS; i++) {
 		MouseButtonStates.Add(new FInputKey());
 	}
+	SetMouseCursorStyle(EMouseCursorStyle::Arrow);
 }
 InputSubsystem::~InputSubsystem() {
 	for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
@@ -45,6 +46,40 @@ vec2 InputSubsystem::GetMousePosition() {
 }
 vec2 InputSubsystem::GetMouseDelta() {
 	return MouseDelta;
+}
+
+void InputSubsystem::SetMouseCursorStyle(const EMouseCursorStyle& Cursor) {
+	CurrentCursorStyle = Cursor;
+	if (MouseCursor) {
+		SDL_FreeCursor(MouseCursor);
+	}
+	MouseCursor = SDL_CreateSystemCursor((SDL_SystemCursor)CurrentCursorStyle);
+	SDL_SetCursor(MouseCursor);
+}
+const EMouseCursorStyle& InputSubsystem::GetMouseCursorStyle() const {
+	return CurrentCursorStyle;
+}
+void InputSubsystem::CaptureMouseCursor() {
+	bCursorCaptured = true;
+	SDL_CaptureMouse(SDL_TRUE);
+}
+void InputSubsystem::ReleaseMouseCursor() {
+	bCursorCaptured = false;
+	SDL_CaptureMouse(SDL_FALSE);
+}
+const bool InputSubsystem::IsMouseCursorCaptured() const {
+	return bCursorCaptured;
+}
+void InputSubsystem::HideMouseCursor() {
+	bCursorHidden = true;
+	SDL_ShowCursor(SDL_FALSE);
+}
+void InputSubsystem::ShowMouseCursor() {
+	bCursorHidden = false;
+	SDL_ShowCursor(SDL_TRUE);
+}
+const bool InputSubsystem::IsMouseCursorHidden() const {
+	return bCursorHidden;
 }
 
 bool InputSubsystem::RegisterInputReciever(IUserInputReciever* Reciever) {
@@ -90,12 +125,14 @@ void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
 	}
 }
 void InputSubsystem::ProcessMouseDownInput(EMouseButton Button) {
+	MouseDownPosition = MousePosition;
 	MouseButtonStates[Button]->bKeyDown = true;
 	for (IUserInputReciever* reciever : InputRecievers) {
 		reciever->OnMouseButtonDown(MousePosition, Button);
 	}
 }
 void InputSubsystem::ProcessMouseUpInput(EMouseButton Button) {
+	ReleaseMouseCursor();
 	MouseButtonStates[Button]->bKeyDown = false;
 	for (IUserInputReciever* reciever : InputRecievers) {
 		reciever->OnMouseButtonUp(MousePosition, Button);

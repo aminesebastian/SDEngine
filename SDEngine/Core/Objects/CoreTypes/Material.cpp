@@ -106,7 +106,7 @@ void Material::BindMaterial(const Transform& RenderTransform, const Transform& L
 
 	S_Shader->SetShaderInteger("MAT_ID", S_ShaderModel);
 	for (int i = 0; i < this->S_TextureParameters.size(); i++) {
-		S_Shader->SetShaderTexture(S_TextureParameters[i].Name, S_TextureParameters[i].Texture, i);
+		S_TextureParameters[i].Texture->Bind(S_TextureParameters[i].Name, S_Shader, i);
 	}
 	for (int i = 0; i < this->S_Vec4Parameters.size(); i++) {
 		S_Shader->SetShaderVector4(S_Vec4Parameters[i].Name, S_Vec4Parameters[i].Vector);

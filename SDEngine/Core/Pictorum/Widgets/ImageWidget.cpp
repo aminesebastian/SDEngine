@@ -32,6 +32,8 @@ ImageWidget::ImageWidget(const TString& Name) : PictorumWidget(Name) {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 ImageWidget::~ImageWidget() {
 

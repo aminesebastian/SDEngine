@@ -3,6 +3,7 @@
 #include "Core/DataStructures/Array.h"
 #include "Core/Engine/Delegates/Event.h"
 #include "Core/Engine/Engine.h"
+#include "Core/Input/InputSubsystem.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/IWidgetSlot.h"
@@ -77,11 +78,11 @@ public:
 	const float GetParentRotation() const;
 	const PictorumRenderer* GetOwningRenderer() const;
 
-	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseDownDelegate;
-	Event<void(const vec2&, FUserInterfaceEvent&)> OnMouseUpDelegate;
-	Event<void(const vec2&, FUserInterfaceEvent&)> OnHoveredDelegate;
-	Event<void(const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
-	Event<void(const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
+	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnMouseDownDelegate;
+	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnMouseUpDelegate;
+	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnHoveredDelegate;
+	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
+	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
 
 protected:
 	/**
@@ -91,6 +92,10 @@ protected:
 	 */
 	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry);
 	virtual void TickContents(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry);
+
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
 	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;

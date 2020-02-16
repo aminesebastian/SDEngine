@@ -23,14 +23,14 @@ public:
 	void Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, const Camera* RenderCamera);
 	void RecompileShader();
 
-	void SetShaderInteger(TString Name, int Value);
-	void SetShaderVector4(TString Name, vec4 Vector);
-	void SetShaderVector3(TString Name, vec3 Vector);
-	void SetShaderVector2(TString Name, vec2 Vector);
-	void SetShaderFloat(TString Name, float Value);
-	void SetShaderMatrix3(TString Name, mat3 Matrix);
-	void SetShaderMatrix4(TString Name, mat4 Matrix);
-	void SetShaderTexture(TString Name, Texture2D* Texture, int32 Offset);
+	void SetShaderInteger(const TString& Name, const int& Value);
+	void SetShaderVector4(const TString& Name, const vec4& Vector);
+	void SetShaderVector3(const TString& Name, const vec3& Vector);
+	void SetShaderVector2(const TString& Name, const vec2& Vector);
+	void SetShaderFloat(const TString& Name, const float& Value);
+	void SetShaderMatrix3(const TString& Name, const mat3& Matrix);
+	void SetShaderMatrix4(const TString& Name, const mat4& Matrix);
+	void SetShaderTexture(const TString& Name, Texture2D* Texture, const int32& Offset);
 
 	GLuint& GetProgram() { return S_Program; }
 private:
@@ -59,8 +59,13 @@ private:
 	GLuint CreateShader(const TString& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const TString& errorMessage);
 
+	const GLuint& GetUniformLocation(const TString& UniformName);
+
 	bool bCompiled;
 	GLuint S_Program;
 	GLuint S_Shaders[NUM_SHADERS];
+
+
+	SHashMap<TString, GLuint> UniformMap;
 };
 

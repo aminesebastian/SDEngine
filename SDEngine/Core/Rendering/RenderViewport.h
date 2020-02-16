@@ -87,6 +87,6 @@ private:
 	bool bDebugMode;
 	bool bInitialized;
 
-	void OnWindowResized(const int32& WindowId, const FDisplayState& State);
+	void OnWindowResized(Window* WindowIn, const FDisplayState& State);
 };
 

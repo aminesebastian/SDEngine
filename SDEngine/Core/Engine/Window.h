@@ -32,11 +32,11 @@ public:
 	const FDisplayState& GetDisplayState() const;
 	const bool& IsClosed();
 
-	Event<void(const int32&, const FDisplayState&)> OnWindowResized;
-	Event<void(const int32&, const FDisplayState&)> OnWindowMaximized;
-	Event<void(const int32&, const FDisplayState&)> OnWindowRestored;
-	Event<void(const int32&)> OnWindowMinimized;
-	Event<void(const int32&)> OnWindowClosed;
+	Event<void(Window*, const FDisplayState&)> OnWindowResized;
+	Event<void(Window*, const FDisplayState&)> OnWindowMaximized;
+	Event<void(Window*, const FDisplayState&)> OnWindowRestored;
+	Event<void(Window*)> OnWindowMinimized;
+	Event<void(Window*)> OnWindowClosed;
 
 protected:
 	virtual void UpdateInternal(const float& DeltaTime);

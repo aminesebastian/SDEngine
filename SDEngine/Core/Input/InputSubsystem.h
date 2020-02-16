@@ -6,6 +6,21 @@
 
 class IUserInputReciever;
 
+enum class EMouseCursorStyle : uint8 {
+	Arrow,
+	IBeam,
+	Wait,
+	Crosshair,
+	WaitArrow,
+	SizeNWSW,
+	SizeNESW,
+	SizeHorizontal,
+	SizeVertical,
+	SizeALL,
+	Disabled,
+	Hand
+};
+
 class InputSubsystem {
 public:
 	InputSubsystem();
@@ -22,9 +37,18 @@ public:
 	float GetKeyHeldTime(SDL_Scancode Key);
 	bool IsMouseButtonDown(EMouseButton Button);
 	float GetMouseButtonHeldTime(EMouseButton Button);
+
 	vec2 GetMousePosition();
 	vec2 GetMouseDelta();
 
+	void SetMouseCursorStyle(const EMouseCursorStyle& Cursor);
+	const EMouseCursorStyle& GetMouseCursorStyle() const;
+	void CaptureMouseCursor();
+	void ReleaseMouseCursor();
+	const bool IsMouseCursorCaptured() const;
+	void HideMouseCursor();
+	void ShowMouseCursor();
+	const bool IsMouseCursorHidden() const;
 private:
 	SArray<IUserInputReciever*> InputRecievers;
 
@@ -34,6 +58,13 @@ private:
 	vec2 MousePosition;
 	vec2 LastMousePosition;
 	vec2 MouseDelta;
+	vec2 MouseDownPosition;
+
+	bool bCursorCaptured;
+	bool bCursorHidden;
+
+	EMouseCursorStyle CurrentCursorStyle;
+	SDL_Cursor* MouseCursor;
 
 	void ProcessMouseDownInput(EMouseButton Button);
 	void ProcessMouseUpInput(EMouseButton Button);

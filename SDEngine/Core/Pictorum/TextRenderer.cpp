@@ -7,11 +7,14 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	TextBlockCache = new FTextBlock(Leading, Tracking, Alignment);
 
 	SetLeading(0.85f);
-	SetTracking(-0.16f);
+	SetTracking(-0.15f);
 	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
 	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
 	SetTextAlignment(ETextAlignment::LEFT);
+
+	LastFrameMinBounds = ZERO_VECTOR2D;
+	LastFrameMaxBounds = ZERO_VECTOR2D;
 
 	TestBuffer = new GPUVertexBufferArray();
 	TestBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
@@ -44,7 +47,8 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 
 	TestBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
 
-	LastBoundingBoxDimensions = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
+	LastFrameMinBounds = scale * (TextBlockCache->MinPosition) * RenderTargetResolution;
+	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
 }
 
 void TextRenderer::SetText(const TString& Text) {
@@ -113,8 +117,9 @@ void TextRenderer::SetTextAlignment(const ETextAlignment& AlignmentIn) {
 const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
 }
-const vec2& TextRenderer::GetTextBoundingBoxDimensions() const {
-	return LastBoundingBoxDimensions;
+const void TextRenderer::GetTextBoundingBoxDimensions(vec2& MinBounds, vec2& MaxBounds) const {
+	MinBounds = LastFrameMinBounds;
+	MaxBounds = LastFrameMaxBounds;
 }
 
 void TextRenderer::BindToGPU() {

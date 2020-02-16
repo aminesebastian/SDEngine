@@ -5,6 +5,7 @@
 #include "Core/Rendering/DefferedCompositor.h"
 #include "Core/Objects/CoreTypes/Shader.h"
 #include "Core/Utilities/Logger.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation            = 0.0f; // 0 Degrees
@@ -14,7 +15,7 @@ PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	bWasMouseDownInside = false;
 	bDidMouseEnter      = false;
 
-	SetVisibility(EPictorumVisibilityState::VISIBLE);
+	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 PictorumWidget::~PictorumWidget() {
 
@@ -32,7 +33,13 @@ void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 
 }
 vec2 PictorumWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
-	return Geometry.GetRenderResolution();
+	vec2 desiredSize = ZERO_VECTOR2D;
+	for (PictorumWidget* child : Children) {
+		vec2 childSpace = child->GetDesiredDrawSpace(Geometry);
+		desiredSize.x = MathLibrary::Max(desiredSize.x, childSpace.x);
+		desiredSize.y = MathLibrary::Max(desiredSize.y, childSpace.y);
+	}
+	return desiredSize;
 }
 void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
@@ -49,6 +56,7 @@ IWidgetSlot* PictorumWidget::AddChild(PictorumWidget* Widget) {
 }
 IWidgetSlot* PictorumWidget::AddChildInternal(PictorumWidget* Widget) {
 	if (!CanAddChild()) {
+		SD_ENGINE_WARN("There was an attempt to add a child to a widget that does not support children.");
 		return nullptr;
 	}
 	if (Children.AddUnique(Widget)) {
@@ -104,7 +112,7 @@ mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;
-
+	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
 
 	for (int i = 0; i < Children.Count(); i++) {
@@ -112,7 +120,9 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
 		widget->DrawContents(DeltaTime, childGeometry);
+		OnChildDrawn(DeltaTime, Geometry);
 	}
+	OnDrawCompleted(DeltaTime, Geometry);
 }
 void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;
@@ -126,26 +136,35 @@ void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry&
 		widget->TickContents(DeltaTime, childGeometry);
 	}
 }
+void PictorumWidget::OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry) {
+
+}
+void PictorumWidget::OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry) {
+
+}
+void PictorumWidget::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {
+
+}
 void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
-	OnHoveredDelegate.Broadcast(MousePosition, Event);
+	OnHoveredDelegate.Broadcast(this, MousePosition, Event);
 	bDidMouseEnter = true;
 }
 void PictorumWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
 	if (bDidMouseEnter) {
-		OnUnhoveredDelegate.Broadcast(MousePosition, Event);
+		OnUnhoveredDelegate.Broadcast(this, MousePosition, Event);
 		bDidMouseEnter = false;
 	}
 }
 void PictorumWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
-	OnMouseMoveDelegate.Broadcast(MousePosition, MouseDelta, Event);
+	OnMouseMoveDelegate.Broadcast(this, MousePosition, MouseDelta, Event);
 }
 void PictorumWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
-	OnMouseDownDelegate.Broadcast(MousePosition, Event);
+	OnMouseDownDelegate.Broadcast(this, MousePosition, Event);
 	bWasMouseDownInside = true;
 }
 void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
 	if (bWasMouseDownInside) {
-		OnMouseUpDelegate.Broadcast(MousePosition, Event);
+		OnMouseUpDelegate.Broadcast(this, MousePosition, Event);
 		bWasMouseDownInside = false;
 	}
 }

@@ -12,10 +12,10 @@
 TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	TitleBarHeight = 30.0f;
 
-	CloseTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/CloseIcon.sasset");
-	MinimizeTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset");
-	RestoreTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset");
-	MaximizeTexture = Engine::GetInstance()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset");
+	CloseTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/CloseIcon.sasset");
+	MinimizeTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset");
+	RestoreTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset");
+	MaximizeTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset");
 }
 TitleBar::~TitleBar() {
 
@@ -68,13 +68,13 @@ void TitleBar::OnCreated() {
 	MaximizeButton = new ImageWidget("Maximize");
 	MaximizeButton->SetImage(MaximizeTexture);
 	MaximizeButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
-	MaximizeButton->OnMouseUpDelegate.Add<TitleBar, &TitleBar::OnMaximizeClicked>(this);
+	MaximizeButton->OnMouseUpDelegate.Add<TitleBar, & TitleBar::OnMaximizeClicked>(this);
 	buttonContainer->AddChild(MaximizeButton);
 
 	CloseButton = new ImageWidget("Close");
 	CloseButton->SetImage(CloseTexture);
 	CloseButton->SetSize(vec2(TitleBarHeight, TitleBarHeight));
-	CloseButton->OnMouseUpDelegate.Add<TitleBar, &TitleBar::OnCloseButtonClicked>(this);
+	CloseButton->OnMouseUpDelegate.Add<TitleBar, & TitleBar::OnCloseButtonClicked>(this);
 	buttonContainer->AddChild(CloseButton);
 }
 void TitleBar::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
@@ -84,15 +84,15 @@ const bool TitleBar::CanAddChild() const {
 	return true;
 }
 
-void TitleBar::OnCloseButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnCloseButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
 	SDL_Event sdlevent;
 	sdlevent.type = SDL_QUIT;
 	SDL_PushEvent(&sdlevent);
 }
-void TitleBar::OnMinimizeButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnMinimizeButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
 	SDL_MinimizeWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 }
-void TitleBar::OnMaximizeClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnMaximizeClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
 	uint32 flags = SDL_GetWindowFlags(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 	if (flags & SDL_WINDOW_MAXIMIZED) {
 		SDL_RestoreWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());

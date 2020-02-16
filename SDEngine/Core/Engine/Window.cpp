@@ -80,7 +80,7 @@ void Window::UpdateInternal(const float& DeltaTime) {
 
 }
 void Window::Close() {
-	OnWindowClosed.Broadcast(WindowId);
+	OnWindowClosed.Broadcast(this);
 	Closed = true;
 }
 
@@ -88,16 +88,16 @@ void Window::WindowResized(const int32& NewWidth, const int32& NewHeight) {
 	SDL_SetWindowSize(_Window, NewWidth, NewHeight);
 	glViewport(0, 0, NewWidth, NewHeight);
 	UpdateDisplayState(NewWidth, NewHeight);
-	OnWindowResized.Broadcast(WindowId, *DisplayState);
+	OnWindowResized.Broadcast(this, *DisplayState);
 }
 void Window::WindowMaximized(const int32& NewWidth, const int32& NewHeight) {
-	OnWindowMaximized.Broadcast(WindowId, *DisplayState);
+	OnWindowMaximized.Broadcast(this, *DisplayState);
 }
 void Window::WindowRestored(const int32& NewWidth, const int32& NewHeight) {
-	OnWindowRestored.Broadcast(WindowId, *DisplayState);
+	OnWindowRestored.Broadcast(this, *DisplayState);
 }
 void Window::WindowMinimized() {
-	OnWindowMinimized.Broadcast(WindowId);
+	OnWindowMinimized.Broadcast(this);
 }
 
 void Window::UpdateDisplayState(const int32& Width, const int32& Height) {

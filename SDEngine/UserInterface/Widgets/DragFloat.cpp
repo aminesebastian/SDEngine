@@ -45,56 +45,56 @@ FDragFloatEntry* DragFloat::AddEntry(float* Value, TString Format, FColor Color,
 	return entry;
 }
 bool DragFloat::BeginDrawingDragEntries() {
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
-	if (window->SkipItems) {
-		return false;
-	}
+	//ImGuiWindow* window = ImGui::GetCurrentWindow();
+	//if (window->SkipItems) {
+	//	return false;
+	//}
 
-	ImGuiContext& g = *GImGui;
-	ImGui::BeginGroup();
-	ImGui::PushID(Label.c_str());
-	ImGui::PushMultiItemsWidths(Entries.Count(), ImGui::CalcItemWidth());
-	ImGui::TextUnformatted(Label.c_str(), ImGui::FindRenderedTextEnd(Label.c_str()));
+	//ImGuiContext& g = *GImGui;
+	//ImGui::BeginGroup();
+	//ImGui::PushID(Label.c_str());
+	//ImGui::PushMultiItemsWidths(Entries.Count(), ImGui::CalcItemWidth());
+	//ImGui::TextUnformatted(Label.c_str(), ImGui::FindRenderedTextEnd(Label.c_str()));
 	return true;
 }
 bool DragFloat::DrawDragEntry(FDragFloatEntry* Entry, int Index) {
 	bool value_changed = false;
 
-	ImGui::PushID(Index);
-	if (Entry->OnFormatForViewFunction) {
-		InternalValues[Index] = Entry->OnFormatForViewFunction(*Entry->Value);
-	}
+	//ImGui::PushID(Index);
+	//if (Entry->OnFormatForViewFunction) {
+	//	InternalValues[Index] = Entry->OnFormatForViewFunction(*Entry->Value);
+	//}
 
-	value_changed = ImGui::DragFloat("##v", &InternalValues[Index], Entry->ValuePerPixel, Entry->Min, Entry->Max, Entry->Format.c_str(), Entry->Power);
+	//value_changed = ImGui::DragFloat("##v", &InternalValues[Index], Entry->ValuePerPixel, Entry->Min, Entry->Max, Entry->Format.c_str(), Entry->Power);
 
-	if (value_changed) {
-		if (Entry->OnFormatForViewFunction) {
-			*Entry->Value = Entry->OnFormatFromView(InternalValues[Index]);
-		} else {
-			*Entry->Value = InternalValues[Index];
-		}	
-		if (Entry->OnChangeFunction) {
-			Entry->OnChangeFunction(Entry);
-		}
-	}
+	//if (value_changed) {
+	//	if (Entry->OnFormatForViewFunction) {
+	//		*Entry->Value = Entry->OnFormatFromView(InternalValues[Index]);
+	//	} else {
+	//		*Entry->Value = InternalValues[Index];
+	//	}	
+	//	if (Entry->OnChangeFunction) {
+	//		Entry->OnChangeFunction(Entry);
+	//	}
+	//}
 
-	const ImVec2 min = ImGui::GetItemRectMin();
-	const ImVec2 max = ImGui::GetItemRectMax();
-	const float spacing = GImGui->Style.FrameRounding;
-	const float halfSpacing = spacing / 2;
+	//const ImVec2 min = ImGui::GetItemRectMin();
+	//const ImVec2 max = ImGui::GetItemRectMax();
+	//const float spacing = GImGui->Style.FrameRounding;
+	//const float halfSpacing = spacing / 2;
 
-	ImGui::GetCurrentWindow()->DrawList->AddLine({ min.x + spacing, max.y - halfSpacing }, { max.x - spacing, max.y - halfSpacing }, Entry->Color.ToImColor(), 4);
+	//ImGui::GetCurrentWindow()->DrawList->AddLine({ min.x + spacing, max.y - halfSpacing }, { max.x - spacing, max.y - halfSpacing }, Entry->Color.ToImColor(), 4);
 
-	ImGui::SameLine(0, GImGui->Style.ItemInnerSpacing.x);
-	ImGui::PopID();
-	ImGui::PopItemWidth();
+	//ImGui::SameLine(0, GImGui->Style.ItemInnerSpacing.x);
+	//ImGui::PopID();
+	//ImGui::PopItemWidth();
 
 	return value_changed;
 }
 bool DragFloat::EndDrawingDragEntries() {
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::EndGroup();
+	//ImGui::EndGroup();
 
 	return true;
 }

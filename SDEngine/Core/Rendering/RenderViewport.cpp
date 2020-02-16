@@ -252,7 +252,7 @@ RenderTarget* RenderViewport::GetCurrentOutputBuffer() {
 RenderTarget* RenderViewport::GetPreviousOutputBuffer() {
 	return CurrentBuffer == 0 ? OutputBuffer2 : OutputBuffer1;
 }
-void RenderViewport::OnWindowResized(const int32& WindowId, const FDisplayState& State) {
+void RenderViewport::OnWindowResized(Window* WindowIn, const FDisplayState& State) {
 	SD_ENGINE_INFO("Changing render target dimensions for viewport from {0} x {1}", (int)State.GetResolution().x, (int)State.GetResolution().y);
 	GenerateRenderTargets();
 

@@ -18,9 +18,9 @@ void serializeStaticMesh(TString MeshName, TString MeshPath, TString AssetPath, 
 void serializeAllTextures(AssetManager* Manager);
 
 int main(int argc, char* argv[]) {
-	S_Engine = Engine::GetInstance();
+	S_Engine = Engine::Get();
 
-	AssetManager* manager = Engine::GetInstance()->GetAssetManager();
+	AssetManager* manager = Engine::Get()->GetAssetManager();
 	manager->RegisterNewFactory("StaticMesh", new StaticMeshAssetFactory());
 	manager->RegisterNewFactory("Material", new MaterialAssetFactory());
 	manager->RegisterNewFactory("Texture2D", new Texture2DAssetFactory());

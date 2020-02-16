@@ -5,6 +5,7 @@
 #include "Core/Input/IUserInputReciever.h"
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
+#include "Core/Engine/Delegates/Event.h"
 #include "UserInterface/DetailsPanelProvider.h"
 
 class PictorumWidget;
@@ -35,9 +36,14 @@ public:
 	PictorumWidget* GetMouseOverWidget();
 	const Window* GetOwningWindow() const;
 	const SArray<PictorumWidget*>& GetWidgets() const;
+	const PictorumWidget* GetHoveredWidget() const;
 
 	virtual TString GetDetailsPanelName() override;
 	virtual bool PopulateDetailsPanel() override;
+
+	Event<void(const vec2&)> OnMouseDownAnywhereDelegate;
+	Event<void(const vec2&)> OnMouseUpAnywhereDelegate;
+	Event<void(const vec2&, const vec2&)> OnMouseMoveAnywhereDelegate;
 private:
 	SArray<PictorumWidget*> Widgets;
 	PictorumWidget* MouseOverWidget;
@@ -47,6 +53,7 @@ private:
 	FRenderGeometry TopLevelRenderGeometry;
 
 	void CacheMouseOverWidget(vec2 MousePosition);
-	void OnWindowResized(const int32& WindowId, const FDisplayState& State);
+	void OnWindowResized(Window* WindowIn, const FDisplayState& State);
+	void GetAllInteractableWidgets(SArray<PictorumWidget*>& Widgets, PictorumWidget* Root);
 };
 

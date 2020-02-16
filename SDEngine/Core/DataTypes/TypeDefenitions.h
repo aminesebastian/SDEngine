@@ -11,18 +11,25 @@
 #include <stack>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
-#include "UserInterface/UserInterface.h"
 
-typedef std::string TString;
+using TString = std::string;
 
-typedef char    int8;
-typedef short   int16;
-typedef int     int32;
-typedef __int64	int64;
-typedef unsigned char       uint8;
-typedef unsigned short      uint16;
-typedef unsigned int        uint32;
-typedef unsigned __int64	uint64;
+using int8   = char;
+using int16  = short;
+using int32  = int;
+using int64  = __int64;
+using uint8  = unsigned char;
+using uint16 = unsigned short;
+using uint32 = unsigned int;
+using uint64 = unsigned __int64;
+
+using Vector2D = glm::vec2;
+using Vector3D = glm::vec3;
+using Vector4D = glm::vec4;
+
+static const Vector2D ZERO_VECTOR2D = Vector2D(0.0f, 0.0f);
+static const Vector3D ZERO_VECTOR3D = Vector3D(0.0f, 0.0f, 0.0f);
+static const Vector4D ZERO_VECTOR4D = Vector4D(0.0f, 0.0f, 0.0f, 0.0f);
 
 template <typename  N>
 using SStack = std::stack<N>;
@@ -44,8 +51,8 @@ using SSet = std::vector<N>;
 
 using namespace glm;
 
-struct FColor : vec4 {
-	
+struct FColor : Vector4D {
+
 public:
 
 	FColor() {
@@ -54,7 +61,7 @@ public:
 		b = 0.0f;
 		a = 1.0f;
 	}
-	FColor(vec4 Color) {
+	FColor(Vector4D Color) {
 		r = Color.x;
 		g = Color.y;
 		b = Color.z;
@@ -66,7 +73,7 @@ public:
 		b = B;
 		a = A;
 	}
-	FColor(vec3 Color) {
+	FColor(Vector3D Color) {
 		r = Color.x;
 		g = Color.y;
 		b = Color.z;
@@ -76,10 +83,6 @@ public:
 	uint32 ToHexadecimal() {
 		return ((int)(255 * r) << 24) + (((int)(255 * g)) << 16) + (((int)(255 * b)) << 8) + ((int)(255 * a));
 	}
-	ImColor ToImColor() {
-		return ImColor(r, g, b, a);
-	}
-	
 
 	FColor FColor::operator+ (const FColor& c) const {
 		FColor result;
@@ -89,7 +92,7 @@ public:
 		result.a = a + c.a;
 		return result;
 	}
-	FColor FColor::operator+ (const vec4& c) const {
+	FColor FColor::operator+ (const Vector4D& c) const {
 		FColor result;
 		result.r = r + c.x;
 		result.g = g + c.y;
@@ -97,7 +100,7 @@ public:
 		result.a = a + c.w;
 		return result;
 	}
-	FColor FColor::operator+ (const vec3& c) const {
+	FColor FColor::operator+ (const Vector3D& c) const {
 		FColor result;
 		result.r = r + c.x;
 		result.g = g + c.y;
@@ -112,7 +115,7 @@ public:
 		result.a = a - c.a;
 		return result;
 	}
-	FColor FColor::operator- (const vec4& c) const {
+	FColor FColor::operator- (const Vector4D& c) const {
 		FColor result;
 		result.r = r - c.x;
 		result.g = g - c.y;
@@ -120,7 +123,7 @@ public:
 		result.a = a - c.w;
 		return result;
 	}
-	FColor FColor::operator- (const vec3& c) const {
+	FColor FColor::operator- (const Vector3D& c) const {
 		FColor result;
 		result.r = r - c.x;
 		result.g = g - c.y;
@@ -162,7 +165,7 @@ public:
 	static inline TString TrimRight(const TString& s, const TString& delimiters = " \f\n\r\t\v") {
 		return s.substr(0, s.find_last_not_of(delimiters) + 1);
 	}
-	static inline TString TrimLeft( const TString& s, const TString& delimiters = " \f\n\r\t\v") {
+	static inline TString TrimLeft(const TString& s, const TString& delimiters = " \f\n\r\t\v") {
 		return s.substr(s.find_first_not_of(delimiters));
 	}
 	static inline TString Trim(const TString& s, const TString& delimiters = " \f\n\r\t\v") {

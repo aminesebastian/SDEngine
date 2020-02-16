@@ -25,7 +25,7 @@ const vec2& DistanceFieldFont::GetTextureAtlasDimensions() const {
 	if (DistanceFieldTexture) {
 		return DistanceFieldTexture->GetDimensions();
 	}
-	return vec2(0.0f, 0.0f);
+	return ZERO_VECTOR2D;
 }
 void DistanceFieldFont::BindAtlas(Shader* ShaderIn, TString ParameterName, int32 TextureOffset) const {
 	DistanceFieldTexture->Bind(ParameterName, ShaderIn, TextureOffset);

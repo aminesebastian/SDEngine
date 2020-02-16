@@ -32,6 +32,8 @@ SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 SolidWidget::~SolidWidget() {
 
@@ -64,9 +66,46 @@ void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	glBindVertexArray(0);
 	glEnable(GL_DEPTH_TEST);
 }
+const bool SolidWidget::CanAddChild() const {
+	return true;
+}
+void SolidWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
+	PictorumWidget::CalculateChildRenderGeometry(CurrentRenderGeometry, OutputGeometry, ChildIndex);
+	Padding.ApplyToGeometry(OutputGeometry, OutputGeometry);
+}
+vec2 SolidWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
+	vec2 output = PictorumWidget::GetDesiredDrawSpace(Geometry);
+	output.x += Padding.GetLeft() + Padding.GetRight();
+	output.y += Padding.GetTop() + Padding.GetBottom();
+	return output;
+}
 
+const FPadding& SolidWidget::GetPadding() const {
+	return Padding;
+}
+void SolidWidget::SetPadding(const float& AllPadding) {
+	Padding.SetTop(AllPadding);
+	Padding.SetBottom(AllPadding);
+	Padding.SetRight(AllPadding);
+	Padding.SetLeft(AllPadding);
+}
+void SolidWidget::SetPadding(const float& TopBottomPadding, const float& RightLeftPadding) {
+	Padding.SetTop(TopBottomPadding);
+	Padding.SetBottom(TopBottomPadding);
+	Padding.SetRight(RightLeftPadding);
+	Padding.SetLeft(RightLeftPadding);
+}
+void SolidWidget::SetPadding(const float& Top, const float& Right, const float& Bottom, const float& Left) {
+	Padding.SetTop(Top);
+	Padding.SetBottom(Bottom);
+	Padding.SetRight(Right);
+	Padding.SetLeft(Left);
+}
 void SolidWidget::SetBackgroundColor(const FColor& NewColor) {
 	BackgroundColor = NewColor;
+}
+void SolidWidget::SetBorderRadius(const float& Radius) {
+	BorderRadius = Radius;
 }
 
 void SolidWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
@@ -92,8 +131,8 @@ void SolidWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfac
 bool SolidWidget::PopulateDetailsPanel() {
 	PictorumWidget::PopulateDetailsPanel();
 
-	ImGui::Text("Color");
-	ImGui::ColorEdit4("Color", &BackgroundColor[0]);
+	//ImGui::Text("Color");
+	//ImGui::ColorEdit4("Color", &BackgroundColor[0]);
 
 	return true;
 }

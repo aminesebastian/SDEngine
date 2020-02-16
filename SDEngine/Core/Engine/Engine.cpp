@@ -29,11 +29,16 @@ Engine::~Engine() {
 	delete _InputSubsystem;
 }
 
-Engine* Engine::GetInstance() {
+Engine* Engine::Get() {
 	static Engine* S_EngineInstance = new Engine(); // only initialized once!
 	return S_EngineInstance;
 }
-
+AssetManager* Engine::GetAssetManager() {
+	return Get()->_AssetManager;
+}
+InputSubsystem* Engine::GetInputSubsystem() {
+	return Get()->_InputSubsystem;
+}
 bool Engine::Initialize() {
 	if (bIsInitialized) { return false; }
 	SD_ENGINE_INFO("Initializing Engine")
@@ -83,12 +88,7 @@ void Engine::InputLoop() {
 }
 void Engine::OnKeyDown(SDL_Scancode KeyCode) {
 	if (KeyCode == SDL_SCANCODE_RETURN) {
-		//_OpenWindow->RecompileShaders();
+		EngineStatics::RecompileShaders();
+		RecompileShaders.Broadcast();
 	}
-}
-AssetManager* Engine::GetAssetManager() {
-	return _AssetManager;
-}
-InputSubsystem* Engine::GetInputSubsystem() {
-	return _InputSubsystem;
 }

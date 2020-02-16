@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
-#include "Core/Pictorum/Slots/LayoutWidgetSlot.h"
+#include "Core/Pictorum/Slots/LayoutSlot.h"
 
 class LayoutWidget : public PictorumWidget {
 public:

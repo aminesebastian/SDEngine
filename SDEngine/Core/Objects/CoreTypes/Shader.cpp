@@ -161,28 +161,38 @@ void Shader::Update(const class Transform& RenderTransform,  const class Transfo
 
 	SetShaderVector3("CAMERA_POS", RenderCamera->GetTransform().GetLocation());
 }
-void Shader::SetShaderInteger(TString Name, int Value) {
+void Shader::SetShaderInteger(const TString& Name, const int& Value) {
 	glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
 }
-void Shader::SetShaderVector4(TString Name, vec4 Vector) {
+void Shader::SetShaderVector4(const TString& Name, const vec4& Vector) {
 	glUniform4fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
 }
-void Shader::SetShaderVector3(TString Name, vec3 Vector) {
+void Shader::SetShaderVector3(const TString& Name, const vec3& Vector) {
 	glUniform3fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
 }
-void Shader::SetShaderVector2(TString Name, vec2 Vector) {
+void Shader::SetShaderVector2(const TString& Name, const vec2& Vector) {
 	glUniform2fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, &Vector[0]);
 }
-void Shader::SetShaderFloat(TString Name, float Value) {
+void Shader::SetShaderFloat(const TString& Name, const float& Value) {
 	glUniform1f(glGetUniformLocation(GetProgram(), Name.c_str()), Value);
 }
-void Shader::SetShaderMatrix3(TString Name, mat3 Matrix) {
+void Shader::SetShaderMatrix3(const TString& Name, const mat3& Matrix) {
 	glUniformMatrix3fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, GL_FALSE, &Matrix[0][0]);
 }
-void Shader::SetShaderMatrix4(TString Name, mat4 Matrix) {
+void Shader::SetShaderMatrix4(const TString& Name, const mat4& Matrix) {
 	glUniformMatrix4fv(glGetUniformLocation(GetProgram(), Name.c_str()), 1, GL_FALSE, &Matrix[0][0]);
 }
-void Shader::SetShaderTexture(TString Name, Texture2D* Texture, int32 Offset) {
-	//glUniform1i(glGetUniformLocation(GetProgram(), Name.c_str()), Sample);
-	Texture->Bind(Name.c_str(), this, Offset);
+void Shader::SetShaderTexture(const TString& Name, Texture2D* Texture, const int32& Offset) {
+	glActiveTexture(GL_TEXTURE0 + Offset);
+	glBindTexture(GL_TEXTURE_2D, Texture->GetTexture());
+	glUniform1i(glGetUniformLocation(S_Program, Name.c_str()), Offset);
+}
+
+const GLuint& Shader::GetUniformLocation(const TString& UniformName) {
+	if (UniformMap.find(UniformName) != UniformMap.end()) {
+		return UniformMap[UniformName];
+	}
+	const GLuint& location = glGetUniformLocation(S_Program, UniformName.c_str());
+	UniformMap.emplace(UniformName, location);
+	return location;
 }

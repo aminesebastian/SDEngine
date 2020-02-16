@@ -1,6 +1,7 @@
 #include "LayoutWidget.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 #include "UserInterface/Widgets/DragFloat.h"
 
 LayoutWidget::LayoutWidget(const TString& Name) : PictorumWidget(Name) {
@@ -20,6 +21,17 @@ void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRe
 	}
 	Anchors.ApplyToGeometry(CurrentRenderGeometry, OutputGeometry);
 	slot->GetOffsets().ApplyToGeometry(OutputGeometry, OutputGeometry);
+
+	vec2& allotedSpace = OutputGeometry.GetAllotedSpace();
+	const vec2& desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
+
+	if (slot->GetHorizontalFillRule() == EFillRule::AUTOMATIC) {
+		allotedSpace.x = MathLibrary::Min(allotedSpace.x, desiredSpace.x);
+	}
+	if (slot->GetVerticalFillRule() == EFillRule::AUTOMATIC) {
+		allotedSpace.y = MathLibrary::Min(allotedSpace.x, desiredSpace.y);
+	}
+	OutputGeometry.SetAllotedSpace(allotedSpace);
 }
 LayoutWidget* LayoutWidget::SetAnchor(const EPictorumSide& Side, const float& AnchorPosition) {
 	Anchors.SetSide(Side, AnchorPosition);

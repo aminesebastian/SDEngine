@@ -30,7 +30,11 @@ private:
 	void AddCharacter(const FDistanceFieldCharacter& Character) {
 		// If the character is a space, skip it and just advance.
 		if (Character.GetCharacter() != ' ') {
-
+			if (CharacterCount == 0) {
+				FirstCharacterOffset.x = Character.GetOffsets().x;
+				FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
+			}
+			
 			// Extend allocation if needed.
 			if (CharacterCount > Characters.LastIndex()) {
 				ExtendAllocation(5);
@@ -60,7 +64,7 @@ private:
 				// Set the vertices.
 				for (int32 i = 0; i < Character.GetVerticies().Count(); i++) {
 					const vec2& vert = Character.GetVerticies()[i];
-					Verticies[VertexCount + i] = vec2(vert.x + CursorPosition, vert.y);
+					Verticies[VertexCount + i] = vec2(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
 				}
 				bChanged = true;
 			}
@@ -78,16 +82,18 @@ private:
 		CursorPosition += Character.GetAdvance() + Tracking;
 	}
 	void Flush() {
-		CursorPosition     = 0.0f;
-		MaxYBaselineOffset = 0.0f;
-		CurrentIndex       = 0;
-		CharacterCount     = 0;
-		VertexCount        = 0;
-		IndexCount         = 0;
-		TexCoordCount      = 0;
-		FirstChangedIndex  = -1;
-		LastChangedIndex   = -1;
-		bChanged           = false;
+		CursorPosition        = 0.0f;
+		MaxYBaselineOffset    = 0.0f;
+		FirstCharacterOffset.x = 0.0;
+		FirstCharacterOffset.y = 0.0f;
+		CurrentIndex          = 0;
+		CharacterCount        = 0;
+		VertexCount           = 0;
+		IndexCount            = 0;
+		TexCoordCount         = 0;
+		FirstChangedIndex     = -1;
+		LastChangedIndex      = -1;
+		bChanged              = false;
 	}
 	bool HasChanged() {
 		return FirstChangedIndex >= 0;
@@ -96,7 +102,7 @@ private:
 private:
 	void ExtendAllocation(int32 CharactersToAllocate) {
 		const int32 allocationAmount = CharactersToAllocate;
-		Characters.Resize(Characters.Count() + allocationAmount);
+		Characters.Resize(Characters.Count() + allocationAmount, -1);
 		Verticies.Resize(Verticies.Count() + allocationAmount * 4);
 		TexCoords.Resize(TexCoords.Count() + allocationAmount * 4);
 		Indices.Resize(Indices.Count() + allocationAmount * 6);
@@ -108,6 +114,7 @@ private:
 		TexCoordCount += 4;
 		IndexCount += 6;
 	}
+	vec2 FirstCharacterOffset;
 	float Tracking;
 	int32 CurrentIndex;
 	float CursorPosition;
@@ -233,7 +240,10 @@ private:
 			IndexCount                  += line->IndexCount;
 			CurrentlyUsedCharacterSpace += line->CharacterCount;
 		}
+		MaxPosition.y = -CurrentYPosition;
+
 		MaxPosition /= 2.0f;
+		MinPosition /= 2.0f;
 	}
 	void Flush() {
 		UsedLines = 0;
@@ -413,12 +423,7 @@ public:
 	 */
 	const ETextAlignment& GetTextAlignment() const;
 
-	/**
-	 * Gets text bounding box dimensions.
-	 *
-	 * @returns	{const vec2&}	The text bounding box dimensions.
-	 */
-	const vec2& GetTextBoundingBoxDimensions() const;
+	const void GetTextBoundingBoxDimensions(vec2& MinBounds, vec2& MaxBounds) const;
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
@@ -440,7 +445,8 @@ private:
 	/*State Properties*/
 	/*****************/
 	const DistanceFieldFont* Font;
-	vec2 LastBoundingBoxDimensions;
+	vec2 LastFrameMinBounds;
+	vec2 LastFrameMaxBounds;
 
 	/*****************/
 	/*Render Properties*/

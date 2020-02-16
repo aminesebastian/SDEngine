@@ -15,7 +15,7 @@ public:
 	Texture2D(const TString& TextureName, const TString& FileName, int32 ExpectedComponent = 4, GLint WrapBehaviour = GL_REPEAT, GLfloat FilterBehaviour = GL_LINEAR);
 	virtual ~Texture2D();
 
-	void Bind(TString Name, Shader* BindShader, uint32 Unit);
+	void Bind(const TString& Name, Shader* BindShader, const uint8& Offset);
 
 	const GLuint& GetTexture() const;
 	const vec2& GetDimensions() const;

@@ -184,9 +184,6 @@
     <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\Slots\LayoutWidgetSlot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -349,6 +346,24 @@
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\LayoutSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\VerticalBoxWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -427,7 +442,6 @@
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
-    <ClInclude Include="Core\Pictorum\Slots\LayoutWidgetSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
     <ClInclude Include="Core\Utilities\Math\MathLibrary.h">
       <Filter>Headers\Utilities</Filter>
@@ -544,6 +558,12 @@
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
+    <ClInclude Include="Core\Pictorum\Slots\LayoutSlot.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\VerticalBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

@@ -30,7 +30,7 @@ void main() {;
 		float vertical = smoothstep(SHAPE_SIZE.y, SHAPE_SIZE.y - thickness, absoluteShapeCoordinate.y); 
 	}
 
-	FragColor = COLOR * smoothstep(0.0, 0.00, radialAlpha) * squareAlpha;
+	FragColor = COLOR * smoothstep(0.0, 0.1, radialAlpha) * squareAlpha;
 }
 
 

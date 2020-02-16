@@ -2,6 +2,7 @@
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Input/IUserInputReciever.h"
+#include "Core/Engine/Delegates/Event.h"
 
 
 #define WINDOW_WIDTH 1920
@@ -28,12 +29,14 @@ class Window;
 class Engine : public IUserInputReciever {
 
 public:
-	static Engine* GetInstance();
+	static Engine* Get();
+	static AssetManager* GetAssetManager();
+	static InputSubsystem* GetInputSubsystem();
+
 	bool Initialize();
 	void StartEngine();
 
-	InputSubsystem* GetInputSubsystem();
-	AssetManager* GetAssetManager();
+	Event<void(void)> RecompileShaders;
 private:
 	AssetManager* _AssetManager;
 	InputSubsystem* _InputSubsystem;

@@ -38,7 +38,7 @@ Texture2D::~Texture2D() {
 	}
 }
 
-void Texture2D::Bind(TString Name, Shader* BindShader, unsigned int Offset) {
+void Texture2D::Bind(const TString& Name, Shader* BindShader, const uint8& Offset) {
 	if (TextureData.IsEmpty()) {
 		SD_ENGINE_ERROR("Attempted to bind a texture where no data is present with name: {0} with file path: {1}.", Name, FileName);
 		return;
@@ -48,11 +48,7 @@ void Texture2D::Bind(TString Name, Shader* BindShader, unsigned int Offset) {
 		SendTextureDataToGPU();
 	}
 
-	assert(Offset <= 31);
-	//CHANGED FOR PERF glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0 + Offset);
-	glBindTexture(GL_TEXTURE_2D, Texture);
-	glUniform1i(glGetUniformLocation(BindShader->GetProgram(), Name.c_str()), Offset);
+	BindShader->SetShaderTexture(Name, this, Offset);
 }
 const GLuint& Texture2D::GetTexture() const {
 	return Texture; 

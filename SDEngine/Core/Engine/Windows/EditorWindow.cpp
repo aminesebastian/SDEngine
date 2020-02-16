@@ -9,7 +9,7 @@ EditorWindow::~EditorWindow() {
 
 }
 void EditorWindow::Initialize() {
-	Engine::GetInstance()->GetInputSubsystem()->RegisterInputReciever(_EditorWindowUIRenderer);
+	Engine::Get()->GetInputSubsystem()->RegisterInputReciever(_EditorWindowUIRenderer);
 	_EditorUI = CreateEditorWindowUI();
 	if (_EditorUI) {
 		_EditorWindowUIRenderer->AddToViewport(_EditorUI);

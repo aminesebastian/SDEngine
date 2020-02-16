@@ -13,9 +13,11 @@ public:
 	void SetTextColor(const FColor& Color);
 	const FColor& GetTextColor() const;
 	void SetFontSize(const int32& FontSize);
-	const int32& GetFontSize() const;
+	const int32 GetFontSize() const;
 	void SetTextAlignment(const ETextAlignment& Alignment);
 	const ETextAlignment& GetAlignment() const; 
+	void SetFontWeight(const EFontWeight& Weight);
+	const EFontWeight& GetWeight() const;
 
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;

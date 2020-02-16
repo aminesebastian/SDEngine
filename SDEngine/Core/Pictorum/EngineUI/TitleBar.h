@@ -33,9 +33,9 @@ private:
 
 	float TitleBarHeight;
 
-	void OnCloseButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
-	void OnMinimizeButtonClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
-	void OnMaximizeClicked(const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
+	void OnCloseButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
+	void OnMinimizeButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
+	void OnMaximizeClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent);
 
 	void OnWindowMaximized(const int32& WindowId, const FDisplayState& State);
 	void OnWindowRestored(const int32& WindowId, const FDisplayState& State);

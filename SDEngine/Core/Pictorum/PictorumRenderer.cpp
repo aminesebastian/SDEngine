@@ -23,7 +23,7 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWi
 	TopLevelRenderGeometry.SetDPI(OwningWindow->GetDisplayDPI());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 
-	OwningWindow->OnWindowResized.Add<PictorumRenderer, & PictorumRenderer::OnWindowResized>(this);
+	OwningWindow->OnWindowResized.Add<PictorumRenderer, &PictorumRenderer::OnWindowResized>(this);
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -57,26 +57,34 @@ void PictorumRenderer::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {
 }
 
 void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) {
+	OnMouseDownAnywhereDelegate.Broadcast(ScreenPosition);
+
 	if (MouseOverWidget) {
 		FUserInterfaceEvent eventHandle;
 		MouseOverWidget->OnMouseDown(ScreenPosition, Button, eventHandle);
 		if (eventHandle.ShouldCaptureMouse()) {
 			bMouseCaptured = true;
+			SDL_CaptureMouse(SDL_TRUE);
 			SDL_ShowCursor(0);
 		}
 	}
 }
 void PictorumRenderer::OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) {
+	OnMouseUpAnywhereDelegate.Broadcast(ScreenPosition);
+
 	if (MouseOverWidget) {
 		FUserInterfaceEvent eventHandle;
 		MouseOverWidget->OnMouseUp(ScreenPosition, Button, eventHandle);
 		bMouseCaptured = false;
+		SDL_CaptureMouse(SDL_FALSE);
 		SDL_ShowCursor(1);
 	}
 }
 void PictorumRenderer::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	PictorumWidget* previousMouseOver = GetMouseOverWidget();
 	CacheMouseOverWidget(ScreenPosition);
+
+	OnMouseMoveAnywhereDelegate.Broadcast(ScreenPosition, Delta);
 
 	// Raise mouse enter and exit events.
 	if (MouseOverWidget != previousMouseOver) {
@@ -130,23 +138,15 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 	}
 
 	// Capture all the widgets that can be hit.
-	SArray <PictorumWidget*> children;
+	SArray <PictorumWidget*> interactableChildren;
 	for (PictorumWidget* widget : Widgets) {
-		if (widget->GetVisibility() == EPictorumVisibilityState::VISIBLE) {
-			children.Add(widget);
-			widget->GetAllChildren(children);
-		} else if (widget->GetVisibility() == EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE) {
-			widget->GetAllChildren(children);
-		}
+		GetAllInteractableWidgets(interactableChildren, widget);
 	}
 
 	bool hit = false;
 
 	// Test them each for hits.
-	for (PictorumWidget* child : children) {
-		if (child->GetVisibility() != EPictorumVisibilityState::VISIBLE) {
-			continue;
-		}
+	for (PictorumWidget* child : interactableChildren) {
 		vec2 min, max;
 		child->CalculateBounds(OwningWindow->GetDimensions(), min, max);
 
@@ -160,13 +160,32 @@ void PictorumRenderer::CacheMouseOverWidget(vec2 MousePosition) {
 		MouseOverWidget = nullptr;
 	}
 }
+void PictorumRenderer::GetAllInteractableWidgets(SArray<PictorumWidget*>& Widgets, PictorumWidget* Root) {
+	if (!Root) {
+		return;
+	}
+	if (Root->GetVisibility() == EPictorumVisibilityState::COLLAPSED || Root->GetVisibility() == EPictorumVisibilityState::HIDDEN || Root->GetVisibility() == EPictorumVisibilityState::HIT_TEST_INVISIBLE) {
+		return;
+	}
+	if (Root->GetVisibility() == EPictorumVisibilityState::VISIBLE) {
+		Widgets.Add(Root);
+	}
+	SArray<PictorumWidget*> children;
+	Root->GetAllChildren(children);
+	for (PictorumWidget* child : children) {
+		GetAllInteractableWidgets(Widgets, child);
+	}
+}
 const Window* PictorumRenderer::GetOwningWindow() const {
 	return OwningWindow;
 }
 const SArray<PictorumWidget*>& PictorumRenderer::GetWidgets() const {
 	return Widgets;
 }
-void PictorumRenderer::OnWindowResized(const int32& WindowId, const FDisplayState& State) {
+const PictorumWidget* PictorumRenderer::GetHoveredWidget() const {
+	return MouseOverWidget;
+}
+void PictorumRenderer::OnWindowResized(Window* WindowIn, const FDisplayState& State) {
 	TopLevelRenderGeometry.SetRenderResolution(State.GetResolution());
 	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
