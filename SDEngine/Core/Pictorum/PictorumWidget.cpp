@@ -169,10 +169,12 @@ void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInt
 	}
 }
 
-void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const {
+void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents) const {
 	ChildrenOut.AddAll(Children);
-	for (PictorumWidget* widget : Children) {
-		widget->GetAllChildren(ChildrenOut);
+	if (bIncludeAllDescendents) {
+		for (PictorumWidget* widget : Children) {
+			widget->GetAllChildren(ChildrenOut);
+		}
 	}
 }
 PictorumWidget* PictorumWidget::GetParent() const {

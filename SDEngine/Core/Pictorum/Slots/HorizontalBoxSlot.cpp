@@ -19,9 +19,6 @@ const EVerticalAlignment& HorizontalBoxSlot::GetVerticalAlignment() const {
 const EHorizontalAlignment& HorizontalBoxSlot::GetHorizontalAlignment() const{ 
 	return HorizontalAlignment;
 }
-FPadding& HorizontalBoxSlot::GetPadding() {
-	return Padding;
-}
 HorizontalBoxSlot& HorizontalBoxSlot::SetUseWidgetDesiredSpace() {
 	FillRule.SetUseWidgetDesiredSpace();
 	return *this;

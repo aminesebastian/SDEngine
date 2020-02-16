@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/DataStructures/Array.h"
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Core/Pictorum/DistanceFieldFont.h"
+#include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"

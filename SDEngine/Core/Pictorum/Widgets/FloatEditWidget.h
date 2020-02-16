@@ -5,7 +5,7 @@ class TextWidget;
 class SolidWidget;
 class HorizontalBoxWidget;
 
-class FloatEditWidget : PictorumWidget {
+class FloatEditWidget : public PictorumWidget {
 public:
 	FloatEditWidget(const TString& Name);
 	virtual ~FloatEditWidget();
@@ -13,7 +13,6 @@ public:
 	void SetControlledValue(float* ValuePointer, uint8 Count);
 
 private:
-	SolidWidget* Background;
 	HorizontalBoxWidget* Container;
 
 	SArray<SolidWidget*> ValueBackgroundWidgets;

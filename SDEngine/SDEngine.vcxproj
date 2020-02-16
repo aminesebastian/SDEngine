@@ -168,12 +168,15 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>Custom</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalOptions>/Zo %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -221,6 +224,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
@@ -231,7 +235,7 @@
     <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\HorizontalBoxWidget.cpp" />
-    <ClCompile Include="Core\Pictorum\DistanceFieldFont.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp" />
     <ClCompile Include="Core\Utilities\StringUtilities.cpp" />
     <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
     <ClCompile Include="Core\Pictorum\TextRenderer.cpp" />
@@ -318,6 +322,7 @@
     <ClCompile Include="Core\Pictorum\Widgets\VerticalBoxWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
     <ClInclude Include="Core\Engine\WindowDataTypes.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
@@ -333,7 +338,7 @@
     <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
     <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
     <ClInclude Include="Core\Pictorum\Widgets\HorizontalBoxWidget.h" />
-    <ClInclude Include="Core\Pictorum\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\TextRenderer.h" />

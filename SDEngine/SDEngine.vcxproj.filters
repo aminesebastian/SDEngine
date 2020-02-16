@@ -172,9 +172,6 @@
     <ClCompile Include="Core\Pictorum\Widgets\HorizontalBoxWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\DistanceFieldFont.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Utilities\StringUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -364,6 +361,12 @@
     <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -438,7 +441,6 @@
     <ClInclude Include="Core\Pictorum\Pictorum.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\HorizontalBoxWidget.h" />
-    <ClInclude Include="Core\Pictorum\DistanceFieldFont.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
@@ -564,6 +566,8 @@
     <ClInclude Include="Core\Pictorum\Widgets\VerticalBoxWidget.h" />
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

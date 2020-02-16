@@ -17,11 +17,11 @@ void EngineUIContainer::OnCreated() {
 	MainContainer = new LayoutWidget("EngineUIContainer");
 	AddChild(MainContainer);
 
-	//WindowTitleBar = new TitleBar("TitleBar");
-	//MainContainer->AddChild(WindowTitleBar);
+	WindowTitleBar = new TitleBar("TitleBar");
+	MainContainer->AddChild(WindowTitleBar);
 
-	//FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
-	//MainContainer->AddChild(FrameStatistics);
+	FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
+	MainContainer->AddChild(FrameStatistics);
 
 	DetailsPanel = new FloatingDetailsPanel("DetailsPanel");
 	MainContainer->AddChild(DetailsPanel)->SetOffset(EPictorumSide::LEFT, 500)->SetOffset(EPictorumSide::RIGHT, 500)->SetOffset(EPictorumSide::TOP, 500)->SetOffset(EPictorumSide::BOTTOM, 500);

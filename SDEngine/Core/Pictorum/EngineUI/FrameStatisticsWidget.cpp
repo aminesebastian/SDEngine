@@ -24,7 +24,7 @@ void FrameStatisticsWidget::OnCreated() {
 	FrameTimeWidget->SetTextColor(FColor(0.0f, 1.0f, 0.1f));
 	FrameTimeWidget->SetFontSize(12);
 	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
-	mainLayout->AddChild(FrameTimeWidget); // ->SetOffset(EPictorumSide::LEFT, -250);
+	mainLayout->AddChild(FrameTimeWidget)->SetHorizontalFillRule(EFillRule::FILL)->SetVerticalFillRule(EFillRule::FILL);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);

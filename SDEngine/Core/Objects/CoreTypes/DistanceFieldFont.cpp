@@ -5,10 +5,15 @@
 #include "Core/Utilities/Logger.h"
 #include <fstream>
 
-
-DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName, const TString& FilePath) {
+DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : EngineObject(DistanceFieldFontName) {
 	DistanceFieldTexture = nullptr;
+	SupportedCharacterCount = 0;
+	OfflineFontSize = 0;
+	LineHeight = 0;
+	Base = 0;
 	FontName = DistanceFieldFontName;
+}
+DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName, const TString& FilePath) : DistanceFieldFont(DistanceFieldFontName) {
 	ImageFilePath = FilePath + ".png";
 	FontFilePath = FilePath + ".fnt";
 	LoadAndParseFont();
@@ -84,27 +89,27 @@ bool DistanceFieldFont::LoadAndParseFont() {
 		const TString& line = fileContents[i];
 		SArray<TString> keyValuePairs = SplitLineIntoKeyValuePairs(line);
 
-		char character    = stoi(keyValuePairs[2]);
-		float minUCoord   = (float)stoi(keyValuePairs[4]) / atlasDimensions.x;
-		float minVCoord   = (float)stoi(keyValuePairs[6]) / atlasDimensions.y;
-		float width       = (float)stoi(keyValuePairs[8]);
-		float height      = (float)stoi(keyValuePairs[10]);
-		float xOffset     = (float)stoi(keyValuePairs[12]);
-		float yOffset     = (float)stoi(keyValuePairs[14]);
-		float xAdvance    = (float)stoi(keyValuePairs[16]);
+		char character = stoi(keyValuePairs[2]);
+		float minUCoord = (float)stoi(keyValuePairs[4]) / atlasDimensions.x;
+		float minVCoord = (float)stoi(keyValuePairs[6]) / atlasDimensions.y;
+		float width = (float)stoi(keyValuePairs[8]);
+		float height = (float)stoi(keyValuePairs[10]);
+		float xOffset = (float)stoi(keyValuePairs[12]);
+		float yOffset = (float)stoi(keyValuePairs[14]);
+		float xAdvance = (float)stoi(keyValuePairs[16]);
 
-		FDistanceFieldCharacter* characterEntry = new FDistanceFieldCharacter
-		(
+		FDistanceFieldCharacter* characterEntry = new FDistanceFieldCharacter(
 			character,
 			vec2(minUCoord, minVCoord),
 			vec2(minUCoord, minVCoord) + (vec2(width, height) / atlasDimensions),
 			vec2(width, height) / maxWidth,
 			vec2(xOffset - Padding.x, yOffset - Padding.y) / maxWidth,
-			(xAdvance - Padding.x)/maxWidth
+			(xAdvance - Padding.x) / maxWidth
 		);
 
 		if (character >= 0 && character <= 255) {
 			CharacterCache[character] = characterEntry;
+			SupportedCharacterCount++;
 		}
 	}
 	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, FontFilePath, maxWidth, maxWidthChar)
@@ -119,4 +124,52 @@ SArray<TString> DistanceFieldFont::SplitLineIntoKeyValuePairs(const TString& Lin
 		StringUtilities::SplitString(pair, '=', splitByEquals);
 	}
 	return splitByEquals;
+}
+
+bool DistanceFieldFont::SerializeToBuffer(SerializationStream& Stream) const {
+	Stream.SerializeString(FontName);
+	Stream.SerializeString(ImageFilePath);
+	Stream.SerializeString(FontFilePath);
+	Stream.SerializeInteger32(OfflineFontSize);
+	Stream.SerializeInteger32(LineHeight);
+	Stream.SerializeInteger32(Base);
+	Stream.SerializeVec4(Padding);
+
+	DistanceFieldTexture->SerializeToBuffer(Stream);
+
+	Stream.SerializeInteger32(SupportedCharacterCount);
+	for (const FDistanceFieldCharacter* character : CharacterCache) {
+		if (!character) { // The character cache has one entry per ascii character, so some entries may be null.
+			continue;
+		}
+		character->SerializeToBuffer(Stream);
+	}
+
+	return true;
+}
+bool DistanceFieldFont::DeserializeFromBuffer(DeserializationStream& Stream) {
+	Stream.DeserializeString(FontName);
+	Stream.DeserializeString(ImageFilePath);
+	Stream.DeserializeString(FontFilePath);
+	Stream.DeserializeInteger32(OfflineFontSize);
+	Stream.DeserializeInteger32(LineHeight);
+	Stream.DeserializeInteger32(Base);
+	Stream.DeserializeVec4(Padding);
+
+	DistanceFieldTexture = new Texture2D(FontName);
+	DistanceFieldTexture->DeserializeFromBuffer(Stream);
+
+	Stream.DeserializeInteger32(SupportedCharacterCount);
+	CharacterCache.Clear();
+	CharacterCache.Resize(256, nullptr);
+	for (int i = 0; i < SupportedCharacterCount; i++) {
+		FDistanceFieldCharacter* character = new FDistanceFieldCharacter();
+		character->DeserializeFromBuffer(Stream);
+
+		if (character->GetCharacter() >= 0 && character->GetCharacter() <= 255) {
+			CharacterCache[character->GetCharacter()] = character;
+		}
+	}
+
+	return true;
 }

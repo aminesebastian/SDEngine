@@ -31,13 +31,9 @@ void FloatEditWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseMoveAnywhere>(this);
 
-	Background = new SolidWidget("MainContainerBackground");
-	Background->SetBackgroundColor(FColor(0.3f, 0.3f, 0.3f));
-	Background->SetPadding(4.0f);
 	Container = new HorizontalBoxWidget("MainContainer");
-
-	Background->AddChild(Container);
-	AddChild(Background);
+	Container->SetPadding(4.0f);
+	AddChild(Container);
 
 	SetControlledValue(Values, 3);
 }
@@ -58,7 +54,7 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 
 	TextWidget* label = new TextWidget("Entry" + to_string(Index) + "Label");
 	label->SetText("X");
-	label->SetFontSize(12);
+	label->SetFontSize(11);
 
 	SolidWidget* labelBg = new SolidWidget("Entry" + to_string(Index) + "LabelBG");
 	labelBg->SetBackgroundColor(Colors[Index]);
@@ -67,7 +63,7 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 
 	TextWidget* value = new TextWidget("Entry" + to_string(Index) + "Value");
 	value->SetText(StringUtilities::ToStringWithPrecision(InitialValue, 2));
-	value->SetFontSize(12);
+	value->SetFontSize(11);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
 	valueBg->OnMouseDownDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueMouseDown>(this);

@@ -81,12 +81,12 @@ void MainEditorWindow::OnKeyDown(SDL_Scancode KeyCode) {
 }
 void MainEditorWindow::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	if (Engine::GetInputSubsystem()->IsMouseButtonDown(EMouseButton::RIGHT)) {
-		Engine::GetInputSubsystem()->HideMouseCursor();
-		Engine::GetInputSubsystem()->CaptureMouseCursor();
+		//Engine::GetInputSubsystem()->HideMouseCursor();
+		//Engine::GetInputSubsystem()->CaptureMouseCursor();
 		_Camera->AddOrbit((float)(-Delta.y) / CameraLookSpeed, -(float)(Delta.x) / CameraLookSpeed);
 	} else if (Engine::GetInputSubsystem()->IsMouseButtonDown(EMouseButton::MIDDLE)) {
-		Engine::GetInputSubsystem()->HideMouseCursor();
-		Engine::GetInputSubsystem()->CaptureMouseCursor();
+		//Engine::GetInputSubsystem()->HideMouseCursor();
+		//Engine::GetInputSubsystem()->CaptureMouseCursor();
 		_Camera->AddLocation(-_Camera->GetTransform().GetRightVector() * (float)(Delta.x) / 250.0f);
 		_Camera->AddLocation(_Camera->GetTransform().GetUpVector() * (float)(Delta.y) / 250.0f);
 	}

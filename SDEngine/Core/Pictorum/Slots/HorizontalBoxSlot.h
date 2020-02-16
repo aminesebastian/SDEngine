@@ -16,10 +16,8 @@ public:
 	HorizontalBoxSlot& SetHorizontalAlignment(const EHorizontalAlignment& Alignment);
 	HorizontalBoxSlot& SetVerticalAlignment(const EVerticalAlignment& Alignment);
 
-	FPadding& GetPadding();
 private:
 	FFillRule FillRule;
-	FPadding Padding;
 	EHorizontalAlignment HorizontalAlignment;
 	EVerticalAlignment VerticalAlignment;
 };

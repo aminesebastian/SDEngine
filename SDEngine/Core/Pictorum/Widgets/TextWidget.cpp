@@ -1,9 +1,10 @@
 #include "TextWidget.h"
-#include "Core/Pictorum/DistanceFieldFont.h"
+#include "Core/Objects/CoreTypes/DistanceFieldFont.h"
+#include "Core/Assets/AssetManager.h"
 #include "Core/Pictorum/TextRenderer.h"
 
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
-	Font = new DistanceFieldFont("Arial", "./Res/Fonts/Arial");
+	Font = Engine::GetAssetManager()->GetAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
 	Renderer = new TextRenderer(24, Font);
 	LastRenderedAbsoluteLocation = vec2(0.0f, 0.0f);
 

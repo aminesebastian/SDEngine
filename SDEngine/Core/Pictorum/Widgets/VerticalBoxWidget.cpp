@@ -9,11 +9,12 @@ const bool VerticalBoxWidget::CanAddChild() const {
 }
 void VerticalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	float yOffset = CalculateYOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
+	OutputGeometry.AddLocation(0.0f, -yOffset);
+
 	vec2 desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 	desiredSpace.x = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
 	desiredSpace.y = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
-
-	OutputGeometry.AddLocation(yOffset, 0.0f);
+	OutputGeometry.AddLocation(0.0f, -desiredSpace.y);
 
 	VerticalBoxSlot* slot = GetChildSlotAtIndex<VerticalBoxSlot>(ChildIndex);
 	if (slot->GetFillRule() == EFillRule::AUTOMATIC) {
@@ -29,7 +30,6 @@ void VerticalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Curr
 	vec2 location = OutputGeometry.GetLocation();
 	switch (slot->GetHorizontalAlignment()) {
 		case EHorizontalAlignment::LEFT:
-			location.x = (CurrentRenderGeometry.GetLocation().x + CurrentRenderGeometry.GetAllotedSpace().x) - desiredSpace.x;
 			break;
 		case EHorizontalAlignment::CENTER:
 			location.x = OutputGeometry.GetLocation().x - desiredSpace.x / 2.0f;

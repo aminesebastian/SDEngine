@@ -49,6 +49,7 @@ void TitleBar::OnCreated() {
 	overlay->AddChild(bg);
 
 	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");
+	buttonContainer->SetPadding(0.0f, 0.0f, 0.0f, 14.0f);
 	overlay->AddChild(buttonContainer);
 
 	WindowTitleWidget = new TextWidget("WindowTitle");
@@ -56,8 +57,6 @@ void TitleBar::OnCreated() {
 	WindowTitleWidget->SetTextColor(FColor(0.9f, 0.9f, 0.9f));
 	WindowTitleWidget->SetFontSize(11);
 	buttonContainer->AddChild(WindowTitleWidget)->SetFillAvilableSpace(1.0f).SetVerticalAlignment(EVerticalAlignment::CENTER);
-
-	WindowTitleWidget->GetParentSlot<HorizontalBoxSlot>()->GetPadding().SetLeft(14.0f);
 
 	MinimizeButton = new ImageWidget("Minimize");
 	MinimizeButton->SetImage(MinimizeTexture);

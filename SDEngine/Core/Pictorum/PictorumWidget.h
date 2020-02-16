@@ -46,7 +46,7 @@ public:
 	EPictorumVisibilityState GetVisibility() const;
 	vec2 GetPivotOffset() const;
 
-	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut) const;
+	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents = false) const;
 	PictorumWidget* GetParent() const;
 
 	virtual IWidgetSlot* AddChild(PictorumWidget* Widget);

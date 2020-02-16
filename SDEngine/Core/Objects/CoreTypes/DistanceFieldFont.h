@@ -1,8 +1,17 @@
 #pragma once
-#include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Assets/ISerializeableAsset.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
+#include "Core/Objects/EngineObject.h"
+#include "Core/DataTypes/TypeDefenitions.h"
 
-struct FDistanceFieldCharacter {
+struct FDistanceFieldCharacter : public ISerializeableAsset {
+	/**
+	 * Default constructor for deserialization purposes. Instances of this object should not be
+	 * constructed otherwise.
+	 */
+	FDistanceFieldCharacter() {
+
+	}
 	FDistanceFieldCharacter(char Character, vec2 MinTexCoords, vec2 MaxTexCoords, vec2 Dimensions, vec2 Offsets, float Advance) :
 		Character(Character),
 		MinTextureCoords(MinTexCoords),
@@ -10,7 +19,7 @@ struct FDistanceFieldCharacter {
 		Dimensions(Dimensions),
 		Offsets(Offsets),
 		Advance(Advance) {
-	
+
 		vec2 minTexCoords = GetMinTextureCoords();
 		vec2 maxTexCoords = GetMaxTextureCoords();
 		vec2 glyphSize = GetDimensions();
@@ -66,13 +75,37 @@ struct FDistanceFieldCharacter {
 	const SArray<int32>& GetIndices() const {
 		return Indices;
 	}
+	bool SerializeToBuffer(SerializationStream& Stream) const override {
+		Stream.SerializeCharacter(Character);
+		Stream.SerializeVec2(MinTextureCoords);
+		Stream.SerializeVec2(MaxTextureCoord);
+		Stream.SerializeVec2(Dimensions);
+		Stream.SerializeVec2(Offsets);
+		Stream.SerializeFloat(Advance);
+		Stream.SerializeVec2Array(Verticies);
+		Stream.SerializeVec2Array(TextureCoordinates);
+		Stream.SerializeInteger32Array(Indices);
+		return true;
+	}
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override {
+		Stream.DeserializeCharacter(Character);
+		Stream.DeserializeVec2(MinTextureCoords);
+		Stream.DeserializeVec2(MaxTextureCoord);
+		Stream.DeserializeVec2(Dimensions);
+		Stream.DeserializeVec2(Offsets);
+		Stream.DeserializeFloat(Advance);
+		Stream.DeserializeVec2Array(Verticies);
+		Stream.DeserializeVec2Array(TextureCoordinates);
+		Stream.DeserializeInteger32Array(Indices);
+		return true;
+	}
 private:
-	const char Character;
-	const vec2 MinTextureCoords;
-	const vec2 MaxTextureCoord;
-	const vec2 Dimensions;
-	const vec2 Offsets;
-	const float Advance;
+	char Character;
+	vec2 MinTextureCoords;
+	vec2 MaxTextureCoord;
+	vec2 Dimensions;
+	vec2 Offsets;
+	float Advance;
 	SArray<vec2> Verticies;
 	SArray<vec2> TextureCoordinates;
 	SArray<int32> Indices;
@@ -80,8 +113,9 @@ private:
 
 class Shader;
 
-class DistanceFieldFont {
+class DistanceFieldFont : public EngineObject, public ISerializeableAsset {
 public:
+	DistanceFieldFont(const TString& DistanceFieldFontName);
 	DistanceFieldFont(const TString& DistanceFieldFontName, const TString& FilePath);
 	~DistanceFieldFont();
 
@@ -98,11 +132,15 @@ public:
 	void BindAtlas(Shader* ShaderIn, TString ParameterName, int32 TextureOffset) const;
 
 	const int32& GetGeneratedFontSize() const;
+
+	bool SerializeToBuffer(SerializationStream& Stream) const override;
+	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:
 	TString FontName;
 	TString ImageFilePath;
 	TString FontFilePath;
 
+	int32 SupportedCharacterCount;
 	int32 OfflineFontSize;
 	int32 LineHeight;
 	int32 Base;
