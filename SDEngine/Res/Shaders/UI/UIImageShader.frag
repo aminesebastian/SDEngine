@@ -11,11 +11,26 @@ uniform float BORDER_RADIUS;
 uniform vec2 SHAPE_SIZE;
 uniform vec4 TINT;
 
+uniform vec2 MIN_CLIP;
+uniform vec2 MAX_CLIP;
+
 uniform sampler2D IMAGE;
 
 out vec4 FragColor;
 
 void main() {;
+	vec2 relativeScreenPos = gl_FragCoord.xy / RENDER_TARGET_RESOLUTION;
+
+	if(relativeScreenPos.x > MAX_CLIP.x || relativeScreenPos.y > MAX_CLIP.y) {
+		discard;
+		return;
+	}
+	if(relativeScreenPos.x < MIN_CLIP.x || relativeScreenPos.y < MIN_CLIP.y) {
+		discard;
+		return;
+	}
+
+
 	vec2 absoluteShapeCoordinate = abs((texCoord0 *2.0) - 1.0f) * SHAPE_SIZE;
 	float doubledRadius = BORDER_RADIUS * 2.0f;
 	vec2 cornersVector  = SHAPE_SIZE - vec2(doubledRadius);

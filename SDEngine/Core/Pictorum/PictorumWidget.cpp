@@ -8,12 +8,12 @@
 #include "Core/Utilities/Math/MathLibrary.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
-	Rotation            = 0.0f; // 0 Degrees
-	Parent              = nullptr;
-	OwningRenderer      = nullptr;
-	PivotOffset		    = vec2(0.0f, 0.0f);
+	Rotation = 0.0f; // 0 Degrees
+	Parent = nullptr;
+	OwningRenderer = nullptr;
+	PivotOffset = vec2(0.0f, 0.0f);
 	bWasMouseDownInside = false;
-	bDidMouseEnter      = false;
+	bDidMouseEnter = false;
 
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
@@ -46,6 +46,10 @@ void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBound
 	vec2 lastScale = LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE);
 	MinBounds = lastLocation;
 	MaxBounds = lastLocation + lastScale;
+	MinBounds.x = MathLibrary::Max(MinBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x);
+	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
+	MaxBounds.x = MathLibrary::Min(MaxBounds.x, LastRenderedGeometry.GetMaximumClipPoint().x);
+	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	OutputGeometry = CurrentRenderGeometry;
@@ -97,20 +101,31 @@ void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {
 
 mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const {
 	vec2 relativeLocation = Geometry.GetLocation(EPictorumLocationBasis::NDC);
-	vec2 relativeScale    = 2.0f * Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-	float screenRotation  = GetRenderRotation();
+	vec2 relativeScale = 2.0f * Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
+	float screenRotation = GetRenderRotation();
 
-	mat4 posMatrix   = glm::translate(vec3(relativeLocation, 0.0f));
+	mat4 posMatrix = glm::translate(vec3(relativeLocation, 0.0f));
 	mat4 scaleMatrix = glm::scale(vec3(relativeScale, 0.0f));
-	mat4 rotXMatrix  = glm::rotate(0.0f, vec3(1, 0, 0));
-	mat4 rotYMatrix  = glm::rotate(0.0f, vec3(0, 1, 0));
-	mat4 rotZMatrix  = glm::rotate(screenRotation, vec3(0, 0, 1));
+	mat4 rotXMatrix = glm::rotate(0.0f, vec3(1, 0, 0));
+	mat4 rotYMatrix = glm::rotate(0.0f, vec3(0, 1, 0));
+	mat4 rotZMatrix = glm::rotate(screenRotation, vec3(0, 0, 1));
 
 	mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 	return posMatrix * scaleMatrix * combinedRotMatrix;
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
+	// Do not render any widgets that are outside their parent's bounds.
+	vec2 childMin = Geometry.GetLocation();
+	vec2 childMax = childMin + Geometry.GetAllotedSpace();
+
+	if (childMax.y < Geometry.GetMinimumClipPoint().y || childMin.y > Geometry.GetMaximumClipPoint().y) {
+		return;
+	}
+	if (childMax.x < Geometry.GetMinimumClipPoint().x || childMin.x > Geometry.GetMaximumClipPoint().x) {
+		return;
+	}
+
 	LastRenderedGeometry = Geometry;
 	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
@@ -119,6 +134,7 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		PictorumWidget* widget = Children[i];
 		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
+
 		widget->DrawContents(DeltaTime, childGeometry);
 		OnChildDrawn(DeltaTime, Geometry);
 	}
@@ -206,7 +222,7 @@ const float PictorumWidget::GetParentRotation() const {
 const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
 	if (OwningRenderer) {
 		return OwningRenderer;
-	}else if (Parent) {
+	} else if (Parent) {
 		return Parent->GetOwningRenderer();
 	} else {
 		SD_ENGINE_ERROR("Pictorum widget: {0} made a request for its owning renderer and was unable to find one up the parent chain!", GetName());

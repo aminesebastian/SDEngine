@@ -1,6 +1,7 @@
 #include "TextWidget.h"
 #include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 #include "Core/Assets/AssetManager.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 #include "Core/Pictorum/TextRenderer.h"
 
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
@@ -58,7 +59,7 @@ void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	location /= Geometry.GetRenderResolution();
 	location = (location - 0.5f) * 2.0f;
 
-	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI());
+	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI(), Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE), Geometry.GetMaximumClipPoint(EPictorumLocationBasis::RELATIVE));
 }
 vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 min, max;
@@ -76,6 +77,11 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	MaxBounds         = MinBounds;
 	MaxBounds.x      += max.x;
 	MaxBounds.y       = lastLocation.y;
+
+	MinBounds.x = MathLibrary::Max(MinBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x);
+	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
+	MaxBounds.x = MathLibrary::Min(MaxBounds.x, LastRenderedGeometry.GetMaximumClipPoint().x);
+	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMaximumClipPoint().y);
 }
 const bool TextWidget::CanAddChild() const {
 	return false;

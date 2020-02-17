@@ -25,9 +25,7 @@ void TitleBar::OnCreated() {
 	SDL_SetWindowHitTest(GetOwningRenderer()->GetOwningWindow()->GetWindow(), &MouseHitTestCallback, this);
 
 	/*
-	* MasterContainer (LayoutWidget)				  -> Limits draw geometry to TitleBarHeight worth of pixels from the top.
-	* OverlayContainer (OverlayWidget)				  -> Ensures all following geometry follow that constraint.
-	*		TitleBarBackground (SolidWidget)		  -> Provides the background color for the title bar.
+	* TitleBarBackground (SolidWidget)				  -> Provides the background color for the title bar.
 	*		ButtonContainer (HorizontalBoxWidget)	  -> Contains the window title text and the buttons.
 	*				WindowTitle (TextWidget)		  -> The title of the window.
 	*				MimizeButton (ImageWidget)		  -> The minimize button.
@@ -35,22 +33,14 @@ void TitleBar::OnCreated() {
 	*				CloseButton (ImageWidget)		  -> The close button.
 	*	 
 	*/
-
-	MasterContainer = new LayoutWidget("MasterContainer");
-	MasterContainer->SetAnchor(EPictorumSide::BOTTOM, 1.0f);
-	AddChild(MasterContainer);
-
-	OverlayWidget* overlay = new OverlayWidget("OverlayContainer");
-	MasterContainer->AddChild(overlay)->SetOffset(EPictorumSide::BOTTOM, -TitleBarHeight);
-
 	SolidWidget* bg = new SolidWidget("TitleBarBackground");
+	AddChild(bg);
 	bg->SetBackgroundColor(FColor(0.2f, 0.2f, 0.3f));
 	bMouseDownOnTitleBar = false;
-	overlay->AddChild(bg);
 
 	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");
 	buttonContainer->SetPadding(0.0f, 0.0f, 0.0f, 14.0f);
-	overlay->AddChild(buttonContainer);
+	bg->AddChild(buttonContainer);
 
 	WindowTitleWidget = new TextWidget("WindowTitle");
 	WindowTitleWidget->SetText("SD Engine");

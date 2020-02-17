@@ -41,9 +41,6 @@ void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 	}
 
 	OutputGeometry.SetLocation(location);
-
-	// Apply the padding.
-	Padding.ApplyToGeometry(OutputGeometry, OutputGeometry);
 }
 vec2 HorizontalBoxWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;

@@ -50,6 +50,9 @@ void ImageWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	float adjustedBorderRadius = BorderRadius / (glm::max(screenResolution.x, screenResolution.y));
 	mat4 modelMatrix		   = CalculateModelMatrix(Geometry);
 
+	shader->SetShaderVector2("MIN_CLIP", Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE));
+	shader->SetShaderVector2("MAX_CLIP", Geometry.GetMaximumClipPoint(EPictorumLocationBasis::ABSOLUTE));
+
 	shader->SetShaderMatrix4("MODEL_MATRIX", modelMatrix);
 	shader->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
 	shader->SetShaderVector2("SHAPE_SIZE", adjustedScale);

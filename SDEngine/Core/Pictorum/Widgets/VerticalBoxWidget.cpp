@@ -9,7 +9,7 @@ const bool VerticalBoxWidget::CanAddChild() const {
 }
 void VerticalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	float yOffset = CalculateYOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
-	OutputGeometry.AddLocation(0.0f, -yOffset);
+	OutputGeometry.AddLocation(0.0f, OutputGeometry.GetAllotedSpace().y-yOffset);
 
 	vec2 desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 	desiredSpace.x = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);

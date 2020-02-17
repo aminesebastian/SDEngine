@@ -15,16 +15,16 @@ FrameStatisticsWidget::~FrameStatisticsWidget() {
 }
 void FrameStatisticsWidget::OnCreated() {
 	LayoutWidget* mainLayout = new LayoutWidget("MainContainer");
-	mainLayout->SetAnchor(EPictorumSide::LEFT, 0.0f);
-	mainLayout->SetAnchor(EPictorumSide::TOP, 0.9f);
-	mainLayout->SetAnchor(EPictorumSide::RIGHT, 1.0f);
+	//mainLayout->SetAnchor(EPictorumSide::LEFT, 0.0f);
+	//mainLayout->SetAnchor(EPictorumSide::TOP, 0.9f);
+	//mainLayout->SetAnchor(EPictorumSide::RIGHT, 1.0f);
 	AddChild(mainLayout);
 
 	FrameTimeWidget = new TextWidget("FrameTime");
 	FrameTimeWidget->SetTextColor(FColor(0.0f, 1.0f, 0.1f));
 	FrameTimeWidget->SetFontSize(12);
 	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
-	mainLayout->AddChild(FrameTimeWidget)->SetHorizontalFillRule(EFillRule::FILL)->SetVerticalFillRule(EFillRule::FILL);
+	//mainLayout->AddChild(FrameTimeWidget)->SetHorizontalFillRule(EFillRule::FILL)->SetVerticalFillRule(EFillRule::FILL);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);

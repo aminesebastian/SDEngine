@@ -3,6 +3,7 @@
 #include "Core/Pictorum/EngineUI/FrameStatisticsWidget.h"
 #include "Core/Pictorum/EngineUI/FloatingDetailsPanel.h"
 #include "Core/Pictorum/Widgets/LayoutWidget.h"
+#include "Core/Pictorum/Widgets/SolidWidget.h"
 
 EngineUIContainer::EngineUIContainer(const TString& Name) : PictorumWidget(Name) {
 	MainContainer   = nullptr;
@@ -18,13 +19,18 @@ void EngineUIContainer::OnCreated() {
 	AddChild(MainContainer);
 
 	WindowTitleBar = new TitleBar("TitleBar");
-	MainContainer->AddChild(WindowTitleBar);
+	LayoutWidgetSlot* titleBarSlot = MainContainer->AddChild(WindowTitleBar);
+	titleBarSlot->SetAnchor(EPictorumSide::BOTTOM, 1.0f);
+	titleBarSlot->SetOffset(EPictorumSide::TOP, 30.0f);
+	titleBarSlot->SetPivotOffset(0.0f, -1.0f);
 
-	FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
-	MainContainer->AddChild(FrameStatistics);
+	//FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
+	//MainContainer->AddChild(FrameStatistics);
 
 	DetailsPanel = new FloatingDetailsPanel("DetailsPanel");
-	MainContainer->AddChild(DetailsPanel)->SetOffset(EPictorumSide::LEFT, 500)->SetOffset(EPictorumSide::RIGHT, 500)->SetOffset(EPictorumSide::TOP, 500)->SetOffset(EPictorumSide::BOTTOM, 500);
+	LayoutWidgetSlot* slot = MainContainer->AddChild(DetailsPanel);
+	slot->SetAnchor(EPictorumSide::LEFT, 1.0f);
+	slot->SetOffset(EPictorumSide::LEFT, -300.0f);
 }
 const bool EngineUIContainer::CanAddChild() const {
 	return true;

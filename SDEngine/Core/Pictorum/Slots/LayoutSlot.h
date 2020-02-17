@@ -9,13 +9,15 @@ public:
 	const FOffsets& GetOffsets() const;
 	LayoutWidgetSlot* SetOffset(const EPictorumSide& Side, const float& Offset);
 
-	const EFillRule& GetHorizontalFillRule() const;
-	LayoutWidgetSlot* SetHorizontalFillRule(const EFillRule& Rule);
-	const EFillRule& GetVerticalFillRule() const;
-	LayoutWidgetSlot* SetVerticalFillRule(const EFillRule& Rule);
+	const FPivotOffset& GetPivotOffset() const;
+	LayoutWidgetSlot* SetPivotOffset(const float& X, const float& Y);
+
+	const FAnchors& GetAnchors() const;
+	LayoutWidgetSlot* SetAnchor(const EPictorumSide& Side, const float& AnchorPosition);
+
 private:
 	FOffsets Offsets;
-	EFillRule VerticalFillRule;
-	EFillRule HorizontalFillRule;
+	FAnchors Anchors;
+	FPivotOffset PivotOffset;
 };
 

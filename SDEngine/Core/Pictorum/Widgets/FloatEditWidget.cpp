@@ -32,7 +32,7 @@ void FloatEditWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseMoveAnywhere>(this);
 
 	Container = new HorizontalBoxWidget("MainContainer");
-	Container->SetPadding(4.0f);
+	//Container->SetPadding(4.0f);
 	AddChild(Container);
 
 	SetControlledValue(Values, 3);

@@ -1,8 +1,7 @@
 #include "LayoutSlot.h"
 
 LayoutWidgetSlot::LayoutWidgetSlot() {
-	HorizontalFillRule = EFillRule::AUTOMATIC;
-	VerticalFillRule   = EFillRule::AUTOMATIC;
+
 }
 
 const FOffsets& LayoutWidgetSlot::GetOffsets() const{ 
@@ -13,17 +12,19 @@ LayoutWidgetSlot* LayoutWidgetSlot::SetOffset(const EPictorumSide& Side, const f
 	return this;
 }
 
-const EFillRule& LayoutWidgetSlot::GetHorizontalFillRule() const {
-	return HorizontalFillRule;
+const FPivotOffset& LayoutWidgetSlot::GetPivotOffset() const {
+	return PivotOffset;
 }
-LayoutWidgetSlot* LayoutWidgetSlot::SetHorizontalFillRule(const EFillRule& Rule) {
-	HorizontalFillRule = Rule;
+LayoutWidgetSlot* LayoutWidgetSlot::SetPivotOffset(const float& X, const float& Y) {
+	PivotOffset.SetXOffset(X);
+	PivotOffset.SetYOffset(Y);
 	return this;
 }
-const EFillRule& LayoutWidgetSlot::GetVerticalFillRule() const {
-	return VerticalFillRule;
+
+const FAnchors& LayoutWidgetSlot::GetAnchors() const {
+	return Anchors;
 }
-LayoutWidgetSlot* LayoutWidgetSlot::SetVerticalFillRule(const EFillRule& Rule) {
-	VerticalFillRule = Rule;
+LayoutWidgetSlot* LayoutWidgetSlot::SetAnchor(const EPictorumSide& Side, const float& AnchorPosition) {
+	Anchors.SetSide(Side, AnchorPosition);
 	return this;
 }

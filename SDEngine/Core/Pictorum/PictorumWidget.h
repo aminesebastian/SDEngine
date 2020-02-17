@@ -85,21 +85,6 @@ public:
 	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
 
 protected:
-	/**
-	 * This method rarely should be overwritten and should only be called by the renderer.
-	 * This first calls the Draw method of the current widget, then calls DrawContents() on each child.
-	 * This processes all children from the root widget.
-	 */
-	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry);
-	virtual void TickContents(const float& DeltaTime, const FRenderGeometry& Geometry);
-	virtual void OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry);
-	virtual void OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry);
-	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry);
-
-	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
-	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
-	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
-
 	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
 	/** The widget this parent exists in. If null, this widget exists at the room of the widget tree. */
@@ -122,6 +107,20 @@ protected:
 	FRenderGeometry LastRenderedGeometry;
 
 	/**
+	* This method rarely should be overwritten and should only be called by the renderer.
+	* This first calls the Draw method of the current widget, then calls DrawContents() on each child.
+	* This processes all children from the root widget.
+	*/
+	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void TickContents(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry);
+
+	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
+	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
+	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
+	/**
 	 * This method is raised when the widget is added to a parent container.
 	 *
 	 * @param [in,out]	{PictorumWidget*}	ParentIn	If non-null, the parent in.
@@ -134,7 +133,6 @@ protected:
 	 * @param [in,out]	{PictorumWidget*}	ParentIn	If non-null, the parent in.
 	 */
 	virtual void OnRemovedFromParent(PictorumWidget* ParentIn);
-
 	/**
 	 *
 	 * This method is raised when a widget is added to a renderer at the root level.

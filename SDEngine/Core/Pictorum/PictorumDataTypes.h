@@ -101,9 +101,14 @@ private:
 struct FRenderGeometry {
 	FRenderGeometry() {
 		AllotedSpace = vec2(0.0f, 0.0f);
-		Location = vec2(0.0f, 0.0f);
+		Location     = vec2(0.0f, 0.0f);
+		MinClipPoint  = vec2(0.0f, 0.0f);
+		MaxClipPoint  = vec2(0.0f, 0.0f);
 	}
-	explicit FRenderGeometry(const vec2& RenderResolution, const vec2& RenderTargetDPI) : RenderResolution(RenderResolution), RenderTargetDPI(RenderTargetDPI) {}
+	explicit FRenderGeometry(const vec2& RenderResolution, const vec2& RenderTargetDPI) : RenderResolution(RenderResolution), RenderTargetDPI(RenderTargetDPI) {
+		MinClipPoint = vec2(0.0f, 0.0f);
+		MaxClipPoint = RenderResolution;
+	}
 
 	vec2 GetLocation(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
@@ -138,7 +143,7 @@ struct FRenderGeometry {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
 			Location.x += X;
 			Location.y += Y;
-		} else if(Basis == EPictorumLocationBasis::RELATIVE) {
+		} else if (Basis == EPictorumLocationBasis::RELATIVE) {
 			Location.x += (X * RenderResolution.x);
 			Location.y += (Y * RenderResolution.y);
 		}
@@ -186,6 +191,56 @@ struct FRenderGeometry {
 			AllotedSpace.y += (Y * RenderResolution.y);
 		}
 	}
+
+	/**
+	 * Sets minimum clip point. Any point to the Left or Below this point will be clipped if clipping
+	 * is enabled.
+	 *
+	 * @param 	MinimumClip	The minimum clip point.
+	 */
+	void SetMinimumClipPoint(const vec2& MinimumClip) {
+		MinClipPoint = MinimumClip;
+	}
+	/**
+	 * Gets minimum clip point. Any point to the Left or Below this point will be clipped if
+	 * clipping is enabled.
+	 *
+	 * @param 	Basis	(Optional) The basis.
+	 *
+	 * @returns	The minimum clip point.
+	 */
+	const vec2 GetMinimumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
+		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
+			return MinClipPoint;
+		} else {
+			return MinClipPoint / RenderResolution;
+		}
+	}
+	/**
+	 * Sets maximum clip point. Any point to the Right or Above this point will be clipped if clipping
+	 * is enabled.
+	 *
+	 * @param 	MaximumClip	The maximum clip point.
+	 */
+	void SetMaximumClipPoint(const vec2& MaximumClip) {
+		MaxClipPoint = MaximumClip;
+	}
+	/**
+	 * Gets maximum clip point. Any point to the Right or Above this point will be clipped if
+	 * clipping is enabled.
+	 *
+	 * @param 	Basis	(Optional) The basis.
+	 *
+	 * @returns	The maximum clip point.
+	 */
+	const vec2 GetMaximumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
+		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
+			return MaxClipPoint;
+		} else {
+			return MaxClipPoint / RenderResolution;
+		}
+	}
+
 	/**
 	* Gets render resolution in absolute coordinates.
 	*
@@ -225,6 +280,10 @@ private:
 	vec2 AllotedSpace;
 	/** The location this space exists at (int absolute pixel space). */
 	vec2 Location;
+	/** Any point to the Left or Bottom of the line should be clipped. */
+	vec2 MinClipPoint;
+	/** Any point to the Right or Top of this line should be clipped. */
+	vec2 MaxClipPoint;
 };
 struct FOffsets {
 	FOffsets() {
@@ -265,11 +324,11 @@ struct FOffsets {
 	}
 	virtual void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
 		vec2 originalLocation = OriginalRenderGeometry.GetLocation(EPictorumLocationBasis::RELATIVE);
-		vec2 originalSpace    = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-		float relativeTop     = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight   = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom  = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft    = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		vec2 newLocation = originalLocation + vec2(relativeLeft, relativeBottom);
 		vec2 newSpace = originalSpace - vec2(relativeRight + relativeLeft, relativeTop + relativeBottom);
@@ -305,13 +364,13 @@ struct FPadding : public FOffsets {
 	}
 
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
 		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.AddAllotedSpace(-2*relativeRight, -2*relativeTop, EPictorumScaleBasis::RELATIVE);
+		OutRenderGeometry.AddAllotedSpace(-(relativeLeft + relativeRight), -(relativeBottom + relativeTop), EPictorumScaleBasis::RELATIVE);
 	}
 };
 struct FMargins : public FOffsets {
@@ -321,10 +380,10 @@ struct FMargins : public FOffsets {
 	}
 
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop    = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight  = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
 		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft   = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom, EPictorumLocationBasis::RELATIVE);
 		OutRenderGeometry.AddAllotedSpace(-relativeRight, -relativeTop, EPictorumScaleBasis::RELATIVE);
@@ -341,11 +400,11 @@ struct FAnchors : public FOffsets {
 
 	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
 		vec2 originalLocation = OriginalRenderGeometry.GetLocation(EPictorumLocationBasis::RELATIVE);
-		vec2 originalSpace    = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-		float relativeTop     = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight   = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom  = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft    = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
+		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
+		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
+		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
+		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
+		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
 
 		vec2 newLocation = originalLocation + vec2(relativeLeft, relativeBottom);
 		vec2 newSpace = vec2(relativeRight - relativeLeft, relativeTop - relativeBottom);
@@ -353,4 +412,24 @@ struct FAnchors : public FOffsets {
 		OutRenderGeometry.SetLocation(newLocation, EPictorumLocationBasis::RELATIVE);
 		OutRenderGeometry.SetAllotedSpace(newSpace, EPictorumScaleBasis::RELATIVE);
 	}
+};
+struct FPivotOffset {
+	FPivotOffset() {
+		PivotOffset = vec2(0.0f, 0.0f);
+	}
+	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
+		vec2 originalLoc   = OriginalRenderGeometry.GetLocation();
+		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace();
+
+		OutRenderGeometry.SetLocation(originalLoc - (originalSpace * PivotOffset));
+		//OutRenderGeometry.SetAllotedSpace(originalSpace * vec2(1.0f - PivotOffset.x, 1.0f - PivotOffset.y));
+	}
+	void SetXOffset(const float& X) {
+		PivotOffset.x = X;
+	}
+	void SetYOffset(const float& Y) {
+		PivotOffset.y = Y;
+	}
+private:
+	vec2 PivotOffset;
 };

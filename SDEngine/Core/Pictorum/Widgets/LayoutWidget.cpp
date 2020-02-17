@@ -10,33 +10,30 @@ LayoutWidget::LayoutWidget(const TString& Name) : PictorumWidget(Name) {
 LayoutWidget::~LayoutWidget() {
 
 }
+
 const bool LayoutWidget::CanAddChild() const {
 	return true;
 }
 void LayoutWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	LayoutWidgetSlot* slot = GetChildSlotAtIndex<LayoutWidgetSlot>(ChildIndex);
-	if (!slot) {
-		SD_ENGINE_ERROR("Encountered an null slot for widget: {0} in widget: {1} that should have one!", Children[ChildIndex]->GetName(), GetName());
-		return;
-	}
-	Anchors.ApplyToGeometry(CurrentRenderGeometry, OutputGeometry);
-	slot->GetOffsets().ApplyToGeometry(OutputGeometry, OutputGeometry);
 
-	vec2& allotedSpace = OutputGeometry.GetAllotedSpace();
-	const vec2& desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
+	const FAnchors& anchors = slot->GetAnchors();
+	const FOffsets& offsets = slot->GetOffsets();
+	const FPivotOffset& pivotOffset = slot->GetPivotOffset();
 
-	if (slot->GetHorizontalFillRule() == EFillRule::AUTOMATIC) {
-		allotedSpace.x = MathLibrary::Min(allotedSpace.x, desiredSpace.x);
+	if (anchors.GetLeft() == anchors.GetRight()) {
+
+	} else if (anchors.GetTop() == anchors.GetBottom()) {
+
+	} else {
+
 	}
-	if (slot->GetVerticalFillRule() == EFillRule::AUTOMATIC) {
-		allotedSpace.y = MathLibrary::Min(allotedSpace.x, desiredSpace.y);
-	}
-	OutputGeometry.SetAllotedSpace(allotedSpace);
+
+
+	OutputGeometry.SetMaximumClipPoint(OutputGeometry.GetLocation() + OutputGeometry.GetAllotedSpace());
+	OutputGeometry.SetMinimumClipPoint(OutputGeometry.GetLocation());
 }
-LayoutWidget* LayoutWidget::SetAnchor(const EPictorumSide& Side, const float& AnchorPosition) {
-	Anchors.SetSide(Side, AnchorPosition);
-	return this;
-}
+
 LayoutWidgetSlot* LayoutWidget::AddChild(PictorumWidget* Widget) {
 	return Cast<LayoutWidgetSlot>(AddChildInternal(Widget));
 }

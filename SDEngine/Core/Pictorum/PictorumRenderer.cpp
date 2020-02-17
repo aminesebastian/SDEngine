@@ -15,6 +15,7 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWi
 	TopLevelRenderGeometry.SetAllotedSpace(OwningWindow->GetDimensions());
 	TopLevelRenderGeometry.SetDPI(OwningWindow->GetDisplayDPI());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
+	TopLevelRenderGeometry.SetMaximumClipPoint(OwningWindow->GetDimensions());
 
 	OwningWindow->OnWindowResized.Add<PictorumRenderer, &PictorumRenderer::OnWindowResized>(this);
 }
@@ -182,6 +183,7 @@ void PictorumRenderer::OnWindowResized(Window* WindowIn, const FDisplayState& St
 	TopLevelRenderGeometry.SetRenderResolution(State.GetResolution());
 	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
+	TopLevelRenderGeometry.SetMaximumClipPoint(State.GetResolution());
 }
 
 TString PictorumRenderer::GetDetailsPanelName() {

@@ -341,6 +341,20 @@ public:
 	void Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI);
 
 	/**
+	 * Draws the text to the screen at the provided NDC position. Automatically adjusts for the
+	 * provided render target resolution.
+	 *
+	 * @param 	Position			  	vec2&amp;}	Position			  	The position of the text in NDC
+	 * 									coordinates.
+	 * @param 	RenderTargetResolution	vec2&amp;}	RenderTargetResolution	The render target
+	 * 									resolution.
+	 * @param 	DisplayDPI			  	vec2&amp;}	DisplayDPI			  	The display DPI.
+	 * @param 	MinimumClipPoint	  	The minimum clip point.
+	 * @param 	MaximumClipPoint	  	The maximum clip point.
+	 */
+	void Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI, const vec2& MinimumClipPoint, const vec2& MaximumClipPoint);
+
+	/**
 	 * Sets the text lines for this text renderer to render.
 	 * Lines can be split by including a \n new line character in the Text.
 	 *
