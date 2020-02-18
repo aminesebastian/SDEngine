@@ -230,7 +230,7 @@
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\ConstraintBoxWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\LayoutWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\PictorumCanvas.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
@@ -240,7 +240,7 @@
     <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
     <ClCompile Include="Core\Pictorum\TextRenderer.cpp" />
     <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp" />
-    <ClCompile Include="Core\Pictorum\Slots\LayoutSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp" />
     <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
     <ClCompile Include="Core\Assets\Asset.cpp" />
@@ -327,11 +327,12 @@
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EngineUIStyle.h" />
     <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\LayoutWidget.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\PictorumCanvas.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
     <ClInclude Include="Core\Pictorum\Pictorum.h" />
     <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
@@ -343,7 +344,7 @@
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\TextRenderer.h" />
     <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
-    <ClInclude Include="Core\Pictorum\Slots\LayoutSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumCanvasSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="Core\Assets\Asset.h" />

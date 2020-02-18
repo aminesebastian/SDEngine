@@ -6,6 +6,7 @@
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"
+#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
 
@@ -60,6 +61,7 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 	labelBg->SetBackgroundColor(Colors[Index]);
 	labelBg->SetPadding(2.0f);
 	labelBg->AddChild(label);
+	labelBg->SetBorderRadius(5.0f, 0.0f, 5.0f, 0.0f);
 
 	TextWidget* value = new TextWidget("Entry" + to_string(Index) + "Value");
 	value->SetText(StringUtilities::ToStringWithPrecision(InitialValue, 2));
@@ -69,8 +71,9 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 	valueBg->OnMouseDownDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueMouseDown>(this);
 	valueBg->OnHoveredDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueHovered>(this);
 	valueBg->OnUnhoveredDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueUnhovered>(this);
-	valueBg->SetBackgroundColor(FColor(0.2f, 0.2f, 0.2f));
+	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
 	valueBg->SetPadding(2.0f);
+	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
 	valueBg->SetVisibility(EPictorumVisibilityState::VISIBLE);
 	valueBg->AddChild(value);
 

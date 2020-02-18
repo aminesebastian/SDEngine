@@ -15,7 +15,7 @@ public:
 	void SetPadding(const float& TopBottomPadding, const float& RightLeftPadding);
 	void SetPadding(const float& Top, const float& Right, const float& Bottom, const float& Left);
 	void SetBackgroundColor(const FColor& NewColor);
-	void SetBorderRadius(const float& Radius);
+	void SetBorderRadius(const float& TopLeft, const float& TopRight, const float& BottomLeft, const float& BottomRight);
 
 	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
@@ -27,7 +27,8 @@ public:
 
 private:
 	FPadding Padding;
-	float BorderRadius;
+	FBorderRadius Radius;
+	float EdgeSoftness;
 	FColor BackgroundColor;
 	bool bWasMouseDownInWidget;
 

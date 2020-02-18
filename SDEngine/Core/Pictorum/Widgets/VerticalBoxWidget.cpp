@@ -43,7 +43,8 @@ void VerticalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Curr
 	OutputGeometry.SetLocation(location);
 
 	// Apply the padding.
-	slot->GetPadding().ApplyToGeometry(OutputGeometry, OutputGeometry);
+	OutputGeometry.AddLocation(slot->GetPadding().GetLeft(), slot->GetPadding().GetBottom());
+	OutputGeometry.AddAllotedSpace(slot->GetPadding().GetRight(), slot->GetPadding().GetTop());
 }
 vec2 VerticalBoxWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;

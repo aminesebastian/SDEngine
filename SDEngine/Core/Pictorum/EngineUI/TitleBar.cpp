@@ -1,9 +1,10 @@
 #include "TitleBar.h"
 #include "Core/Engine/Window.h"
+#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
-#include "Core/Pictorum/Widgets/LayoutWidget.h"
+#include "Core/Pictorum/Widgets/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/OverlayWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
@@ -35,7 +36,7 @@ void TitleBar::OnCreated() {
 	*/
 	SolidWidget* bg = new SolidWidget("TitleBarBackground");
 	AddChild(bg);
-	bg->SetBackgroundColor(FColor(0.2f, 0.2f, 0.3f));
+	bg->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	bMouseDownOnTitleBar = false;
 
 	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");

@@ -3,7 +3,7 @@
 
 class TitleBar;
 class FrameStatisticsWidget;
-class LayoutWidget;
+class PictorumCanvas;
 class FloatingDetailsPanel;
 
 class EngineUIContainer : public PictorumWidget {
@@ -14,7 +14,7 @@ public:
 	virtual const bool CanAddChild() const override;
 
 private:
-	LayoutWidget* MainContainer;
+	PictorumCanvas* MainContainer;
 	TitleBar* WindowTitleBar;
 	FrameStatisticsWidget* FrameStatistics;
 	FloatingDetailsPanel* DetailsPanel;

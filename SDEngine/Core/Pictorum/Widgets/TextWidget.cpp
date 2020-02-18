@@ -48,11 +48,6 @@ void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	vec2 location = Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
 	location.y += Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
 
-	if (GetAlignment() == ETextAlignment::RIGHT) {
-		location.x = Geometry.GetAllotedSpace().x - GetDesiredDrawSpace(Geometry).x;
-	}
-
-
 	// Capture the last render location with respect to the text.
 	LastRenderedAbsoluteLocation = location;
 

@@ -12,6 +12,25 @@
 MathLibrary::MathLibrary() {}
 MathLibrary::~MathLibrary() {}
 
+Vector2D MathLibrary::MinVector(const Vector2D& First, const Vector2D& Second) {
+	return vec2(Min(First.x, Second.x), Min(First.y, Second.y));
+}
+Vector2D MathLibrary::MaxVector(const Vector2D& First, const Vector2D& Second) {
+	return vec2(Max(First.x, Second.x), Max(First.y, Second.y));
+}
+Vector3D MathLibrary::MinVector(const Vector3D& First, const Vector3D& Second) {
+	return vec3(Min(First.x, Second.x), Min(First.y, Second.y), Min(First.z, Second.z));
+}
+Vector3D MathLibrary::MaxVector(const Vector3D& First, const Vector3D& Second) {
+	return vec3(Max(First.x, Second.x), Max(First.y, Second.y), Max(First.z, Second.z));
+}
+Vector4D MathLibrary::MinVector(const Vector4D& First, const Vector4D& Second) {
+	return vec4(Min(First.x, Second.x), Min(First.y, Second.y), Min(First.z, Second.z), Min(First.w, Second.w));
+}
+Vector4D MathLibrary::MaxVector(const Vector4D& First, const Vector4D& Second) {
+	return vec4(Max(First.x, Second.x), Max(First.y, Second.y), Max(First.z, Second.z), Max(First.w, Second.w));
+}
+
 void MathLibrary::ScreenCoordinatesToWorldRay(vec2 MouseCoordinates, vec2 ScreenDimensions, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut) {
 	// The ray Start and End positions, in Normalized Device Coordinates (Have you read Tutorial 4 ?)
 	MouseCoordinates.y = ScreenDimensions.y - MouseCoordinates.y;

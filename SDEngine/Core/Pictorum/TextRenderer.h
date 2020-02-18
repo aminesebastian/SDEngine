@@ -184,13 +184,13 @@ private:
 			float alignmentOffset = maxLength - line->CursorPosition;
 	
 			// Add texture coordinates.
-			for (int32 i = 0; i < line->TexCoordCount; i++) {
+			for (int32 i = line->TexCoordCount; i >= 0 ; i--) {
 				TexCoords[TexCoordCount + i] = line->TexCoords[i];
 			}
 
 			// Add Indices and capture the max index.
 			int32 maxIndex = 0;
-			for (int32 i = 0; i < line->IndexCount; i++) {
+			for (int32 i = line->IndexCount - 1; i >= 0 ; i--) {
 				int32& index = line->Indices[i];
 				Indices[IndexCount + i] = index + CurrentIndex;
 				if (index > maxIndex) {
@@ -199,7 +199,7 @@ private:
 			}
 
 			// Add vertices and offset for the alignment.
-			for (int32 i = 0; i < line->VertexCount; i++) {
+			for (int32 i = line->VertexCount - 1; i >= 0; i--) {
 				const vec2& vert = line->Verticies[i];
 				vec2& blockVert  = Verticies[VertexCount + i];
 

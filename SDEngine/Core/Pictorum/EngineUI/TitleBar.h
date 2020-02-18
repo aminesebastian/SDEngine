@@ -6,7 +6,7 @@
 class Texture2D;
 class ImageWidget;
 class TextWidget;
-class LayoutWidget;
+class PictorumCanvas;
 
 class TitleBar : public PictorumWidget {
 public:
@@ -26,7 +26,7 @@ private:
 	ImageWidget* MaximizeButton;
 	ImageWidget* CloseButton;
 
-	LayoutWidget* MasterContainer;
+	PictorumCanvas* MasterContainer;
 	TextWidget* WindowTitleWidget;
 
 	bool bMouseDownOnTitleBar;

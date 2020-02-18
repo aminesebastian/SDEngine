@@ -8,14 +8,9 @@
 SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
 	quadVAO = 0;
 	quadVBO = 0;
-	BorderRadius = 0;
 	BackgroundColor = FColor(0.5f, 0.5f, 0.5f, 1.0);
 	bWasMouseDownInWidget = false;
-
-	DragFloat* borderRadiusControl = new DragFloat("Border Radius");
-	borderRadiusControl->AddEntry(&BorderRadius, "Radius %.3fpx", FColor(1.0f, 0.0f, 0.0f), 0.0f, 0.0f, 1.0f, 2.0f);
-	DetailsPanelWidgets.Add(borderRadiusControl);
-
+	EdgeSoftness = 1.0f;
 	GLfloat quadVertices[] = {
 		0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
@@ -44,24 +39,20 @@ void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	shader->Bind();
 
 	vec2 screenResolution      = Geometry.GetRenderResolution();
-	vec2 adjustedScale         = Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-	float screenAspectRatio    = Geometry.GetRenderResolutionAspectRatio();
-	float shapeAspectRatio     = Geometry.GetAllotedSpaceAspectRatio();
-	float adjustedBorderRadius = BorderRadius / (glm::max(screenResolution.x, screenResolution.y));
 	mat4 modelMatrix		   = CalculateModelMatrix(Geometry);
 
-	shader->SetShaderVector2("MIN_CLIP", Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE));
-	shader->SetShaderVector2("MAX_CLIP", Geometry.GetMaximumClipPoint(EPictorumLocationBasis::ABSOLUTE));
 
 	shader->SetShaderMatrix4("MODEL_MATRIX", modelMatrix);
 	shader->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
-	shader->SetShaderVector2("SHAPE_SIZE", adjustedScale);
-	shader->SetShaderFloat("SCREEN_ASPECT_RATIO", screenAspectRatio);
-	shader->SetShaderFloat("SHAPE_ASPECT_RATIO", shapeAspectRatio);
-	shader->SetShaderFloat("BORDER_RADIUS", adjustedBorderRadius);
-	shader->SetShaderFloat("X_BORDER_RADIUS", adjustedBorderRadius / screenResolution.x);
-	shader->SetShaderFloat("Y_BORDER_RADIUS", adjustedBorderRadius / screenResolution.y);
+	shader->SetShaderVector2("LOCATION", Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE));
+	shader->SetShaderVector2("CENTER_LOCATION", Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE) + (Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE)/2.0f));
+	shader->SetShaderVector2("SIZE", Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE));
 	shader->SetShaderVector4("COLOR", BackgroundColor);
+	shader->SetShaderVector4("BORDER_RADIUS", Radius.GetRadii());
+	shader->SetShaderFloat("EDGE_SOFTNESS", EdgeSoftness);
+	shader->SetShaderVector2("MIN_CLIP", Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE));
+	shader->SetShaderVector2("MAX_CLIP", Geometry.GetMaximumClipPoint(EPictorumLocationBasis::ABSOLUTE));
+
 
 	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(quadVAO);
@@ -74,7 +65,9 @@ const bool SolidWidget::CanAddChild() const {
 }
 void SolidWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	PictorumWidget::CalculateChildRenderGeometry(CurrentRenderGeometry, OutputGeometry, ChildIndex);
-	Padding.ApplyToGeometry(OutputGeometry, OutputGeometry);
+
+	OutputGeometry.AddLocation(Padding.GetLeft(), Padding.GetBottom());
+	OutputGeometry.AddAllotedSpace(-(Padding.GetLeft() + Padding.GetRight()), -(Padding.GetBottom() + Padding.GetTop()));
 }
 vec2 SolidWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 output = PictorumWidget::GetDesiredDrawSpace(Geometry);
@@ -107,10 +100,12 @@ void SolidWidget::SetPadding(const float& Top, const float& Right, const float& 
 void SolidWidget::SetBackgroundColor(const FColor& NewColor) {
 	BackgroundColor = NewColor;
 }
-void SolidWidget::SetBorderRadius(const float& Radius) {
-	BorderRadius = Radius;
+void SolidWidget::SetBorderRadius(const float& TopLeft, const float& TopRight, const float& BottomLeft, const float& BottomRight) {
+	Radius.SetTopLeftRadius(TopLeft);
+	Radius.SetTopRightRadius(TopRight);
+	Radius.SetBottomLeftRadius(BottomLeft);
+	Radius.SetBottomRightRadius(BottomRight);
 }
-
 void SolidWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
 	PictorumWidget::OnMouseEnter(MousePosition, Event);
 	BackgroundColor += FColor(0.1f, 0.1f, 0.1f);

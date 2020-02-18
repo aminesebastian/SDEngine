@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 	manager->RegisterNewFactory("Texture2D", new Texture2DAssetFactory());
 	manager->RegisterNewFactory("Font", new FontAssetFactory());
 
-	//serializeFont("Arial", "./Res/Fonts/Arial", "./Res/Assets/Editor/Fonts/Arial.sasset", manager);
+	serializeFont("Arial", "./Res/Fonts/Arial", "./Res/Assets/Editor/Fonts/Arial.sasset", manager);
 	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
 	//serializeAllTextures(manager);
 

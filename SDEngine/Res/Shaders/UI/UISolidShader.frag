@@ -2,21 +2,25 @@
 in vec2 texCoord0;
 in vec2 screenPos0;
 
-uniform vec2 RENDER_TARGET_RESOLUTION;
-uniform float SCREEN_ASPECT_RATIO;
-uniform float SHAPE_ASPECT_RATIO;
-uniform float X_BORDER_RADIUS;
-uniform float Y_BORDER_RADIUS;
-uniform float BORDER_RADIUS;
-uniform vec2 SHAPE_SIZE;
-uniform vec4 COLOR;
-
-uniform vec2 MIN_CLIP;
-uniform vec2 MAX_CLIP;
+uniform vec2 RENDER_TARGET_RESOLUTION; // The resolution we are drawing to.
+uniform vec2 LOCATION;				   // Bottom left location of the quad.
+uniform vec2 CENTER_LOCATION;		   // The center (in pixels) of the quad.
+uniform vec2 SIZE;					   // The size (in pixels) of the quad.
+uniform vec4 COLOR;					   // The color oft the quad.
+uniform vec4 BORDER_RADIUS;			   // The radius of the corners (in pixels) clockwise starting in the top right.
+uniform float EDGE_SOFTNESS;		   // How soft the edge of the quad should be (in pixels).
+uniform vec2 MIN_CLIP;				   // The minimum clipping point of the quad.
+uniform vec2 MAX_CLIP;				   // The maximum clipping point of the quad.
 
 out vec4 FragColor;
 
-
+float roundedBoxSDF(vec2 CenterPosition, vec2 Size, vec4 Radius) {
+    Radius.xy = (CenterPosition.x > 0.0) ? Radius.xy : Radius.zw;
+    Radius.x  = (CenterPosition.y > 0.0) ? Radius.x  : Radius.y;
+    
+    vec2 outerEdge = abs(CenterPosition)-Size+Radius.x;
+    return min(max(outerEdge.x,outerEdge.y),0.0) + length(max(outerEdge,0.0)) - Radius.x;
+}
 void main() {
 	vec2 relativeScreenPos = gl_FragCoord.xy / RENDER_TARGET_RESOLUTION;
 
@@ -29,22 +33,13 @@ void main() {
 		return;
 	}
 
-	vec2 absoluteShapeCoordinate = abs((texCoord0 *2.0) - 1.0f) * SHAPE_SIZE;
-	float doubledRadius = BORDER_RADIUS * 2.0f;
-	vec2 cornersVector  = SHAPE_SIZE - vec2(doubledRadius);
-	float thickness		= 4.0f;
-	vec2 chokeVector	= SHAPE_SIZE - thickness;
-	float radialAlpha	= 1.0f;
-	float squareAlpha	= 1.0f;
+	// Calculate the center of the quad.
+	vec2 centerCoord = LOCATION + SIZE/2.0f;
 
-	if(absoluteShapeCoordinate.x > cornersVector.x && absoluteShapeCoordinate.y > cornersVector.y) {
-		radialAlpha = (doubledRadius-length(cornersVector - absoluteShapeCoordinate))/doubledRadius;
-	}else{
-		float horizontal = smoothstep(SHAPE_SIZE.x, SHAPE_SIZE.x - thickness, absoluteShapeCoordinate.x); 
-		float vertical = smoothstep(SHAPE_SIZE.y, SHAPE_SIZE.y - thickness, absoluteShapeCoordinate.y); 
-	}
-
-	FragColor = COLOR * smoothstep(0.0, 0.1, radialAlpha) * squareAlpha;
+    // Calculate distance to edge.   
+    float distance = roundedBoxSDF(gl_FragCoord.xy - LOCATION - SIZE/2.0f, SIZE / 2.0f, BORDER_RADIUS);
+        
+    // Smooth the result (free antialiasing).
+    float smoothedAlpha =  1.0f-smoothstep(0.0f, EDGE_SOFTNESS * 2.0f, distance);
+    FragColor = vec4(COLOR.r, COLOR.g, COLOR.b, COLOR.a * smoothedAlpha);
 }
-
-

@@ -1,5 +1,5 @@
 #include "FrameStatisticsWidget.h"
-#include "Core/Pictorum/Widgets/LayoutWidget.h"
+#include "Core/Pictorum/Widgets/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Utilities/StringUtilities.h"
 #include "Core/Utilities/Math/MathLibrary.h"
@@ -14,17 +14,16 @@ FrameStatisticsWidget::~FrameStatisticsWidget() {
 
 }
 void FrameStatisticsWidget::OnCreated() {
-	LayoutWidget* mainLayout = new LayoutWidget("MainContainer");
-	//mainLayout->SetAnchor(EPictorumSide::LEFT, 0.0f);
-	//mainLayout->SetAnchor(EPictorumSide::TOP, 0.9f);
-	//mainLayout->SetAnchor(EPictorumSide::RIGHT, 1.0f);
+	PictorumCanvas* mainLayout = new PictorumCanvas("MainContainer");
 	AddChild(mainLayout);
 
 	FrameTimeWidget = new TextWidget("FrameTime");
 	FrameTimeWidget->SetTextColor(FColor(0.0f, 1.0f, 0.1f));
 	FrameTimeWidget->SetFontSize(12);
 	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
-	//mainLayout->AddChild(FrameTimeWidget)->SetHorizontalFillRule(EFillRule::FILL)->SetVerticalFillRule(EFillRule::FILL);
+	PictorumCanvasSlot* slot = mainLayout->AddChild(FrameTimeWidget);
+	slot->Anchors.SetRight(1.0f).SetLeft(1.0f).SetTop(1.0f).SetBottom(0.0f);
+	slot->Offsets.SetXPosition(-900.0f).SetXSize(900.0f).SetTop(40.0f);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);

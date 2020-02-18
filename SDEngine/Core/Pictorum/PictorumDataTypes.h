@@ -285,13 +285,60 @@ private:
 	/** Any point to the Right or Top of this line should be clipped. */
 	vec2 MaxClipPoint;
 };
+struct FAnchors  {
+	FAnchors() {
+		SetTop(1.0f);
+		SetRight(1.0f);
+		SetBottom(0.0f);
+		SetLeft(0.0f);
+	}
+	const float& GetTop() const {
+		return Sides[0];
+	}
+	FAnchors& SetTop(const float& Value) {
+		Sides[0] = Value;
+		return *this;
+	}
+	const float& GetRight() const {
+		return Sides[1];
+	}
+	FAnchors& SetRight(const float& Value) {
+		Sides[1] = Value;
+		return *this;
+	}
+	const float& GetBottom() const {
+		return Sides[2];
+	}
+	FAnchors& SetBottom(const float& Value) {
+		Sides[2] = Value;
+		return *this;
+	}
+	const float& GetLeft() const {
+		return Sides[3];
+	}
+	FAnchors& SetLeft(const float& Value) {
+		Sides[3] = Value;
+		return *this;
+	}
+	float& operator[](const int32 Index) {
+		return Sides[Index];
+	}
+
+protected:
+	float Sides[4];
+};
 struct FOffsets {
 	FOffsets() {
 		memset(&Sides[0], 0, sizeof(float) * 4);
-		memset(&Relative[0], 0, sizeof(uint8) * 4);
+		memset(&Relative[0], false, sizeof(bool) * 4);
+		PivotOffset = vec2(0.0f, 0.0f);
 	}
-	FOffsets& SetSide(const EPictorumSide& Side, const float& Value) {
-		Sides[(uint8)Side] = Value;
+	
+	const float& GetYSize() const {
+		return GetTop();
+	}
+	FOffsets& SetYSize(const float& Value) {
+		SetTop(Value);
 		return *this;
 	}
 	const float& GetTop() const {
@@ -301,11 +348,25 @@ struct FOffsets {
 		Sides[0] = Value;
 		return *this;
 	}
+	const float& GetXSize() const {
+		return GetRight();
+	}
+	FOffsets& SetXSize(const float& Value) {
+		SetRight(Value);
+		return *this;
+	}
 	const float& GetRight() const {
 		return Sides[1];
 	}
 	FOffsets& SetRight(const float& Value) {
 		Sides[1] = Value;
+		return *this;
+	}
+	const float& GetYPosition() const {
+		return GetBottom();
+	}
+	FOffsets& SetYPosition(const float& Value) {
+		SetBottom(Value);
 		return *this;
 	}
 	const float& GetBottom() const {
@@ -315,6 +376,13 @@ struct FOffsets {
 		Sides[2] = Value;
 		return *this;
 	}
+	const float& GetXPosition() const {
+		return GetLeft();
+	}
+	FOffsets& SetXPosition(const float& Value) {
+		SetLeft(Value);
+		return *this;
+	}
 	const float& GetLeft() const {
 		return Sides[3];
 	}
@@ -322,26 +390,29 @@ struct FOffsets {
 		Sides[3] = Value;
 		return *this;
 	}
-	virtual void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		vec2 originalLocation = OriginalRenderGeometry.GetLocation(EPictorumLocationBasis::RELATIVE);
-		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
-
-		vec2 newLocation = originalLocation + vec2(relativeLeft, relativeBottom);
-		vec2 newSpace = originalSpace - vec2(relativeRight + relativeLeft, relativeTop + relativeBottom);
-
-		OutRenderGeometry.SetLocation(newLocation, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.SetAllotedSpace(newSpace, EPictorumScaleBasis::RELATIVE);
+	FOffsets& SetXPivotOffset(const float& X) {
+		PivotOffset.x = X;
+		return *this;
+	}
+	FOffsets& SetYPivotOffset(const float& Y) {
+		PivotOffset.y = Y;
+		return *this;
+	}
+	FOffsets& SetPivotOffset(const float& X, const float& Y) {
+		PivotOffset.x = X;
+		PivotOffset.y = Y;
+		return *this;
+	}
+	const Vector2D GetPivotOffset() const {
+		return PivotOffset;
 	}
 	float& operator[](const int32 Index) {
 		return Sides[Index];
 	}
 protected:
 	float Sides[4];
-	bool Relative[4] = { true };
+	bool Relative[4];
+	vec2 PivotOffset;
 
 	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
 		float value = Sides[(uint8)Side];
@@ -357,79 +428,131 @@ protected:
 		return 0.0f;
 	}
 };
-struct FPadding : public FOffsets {
-	FPadding() : FOffsets() {
+struct FPadding  {
+	FPadding() {
 		memset(&Sides[0], 0, sizeof(float) * 4);
-		memset(&Relative[0], 0, sizeof(bool) * 4);
 	}
+	const float& GetTop() const {
+		return Sides[0];
+	}
+	FPadding& SetTop(const float& Value) {
+		Sides[0] = Value;
+		return *this;
+	}
+	const float& GetRight() const {
+		return Sides[1];
+	}
+	FPadding& SetRight(const float& Value) {
+		Sides[1] = Value;
+		return *this;
+	}
+	const float& GetBottom() const {
+		return Sides[2];
+	}
+	FPadding& SetBottom(const float& Value) {
+		Sides[2] = Value;
+		return *this;
+	}
+	const float& GetLeft() const {
+		return Sides[3];
+	}
+	FPadding& SetLeft(const float& Value) {
+		Sides[3] = Value;
+		return *this;
+	}
+	float& operator[](const int32 Index) {
+		return Sides[Index];
+	}
+protected:
+	float Sides[4];
+	vec2 PivotOffset;
 
-	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
-
-		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.AddAllotedSpace(-(relativeLeft + relativeRight), -(relativeBottom + relativeTop), EPictorumScaleBasis::RELATIVE);
+	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
+		if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
+			return Sides[(uint8)Side] / RenderResolution.y;
+		} else {
+			return Sides[(uint8)Side] / RenderResolution.x;
+		}
 	}
 };
-struct FMargins : public FOffsets {
-	FMargins() : FOffsets() {
+struct FMargins {
+	FMargins() {
 		memset(&Sides[0], 0, sizeof(float) * 4);
-		memset(&Relative[0], 0, sizeof(bool) * 4);
 	}
+	const float& GetTop() const {
+		return Sides[0];
+	}
+	FMargins& SetTop(const float& Value) {
+		Sides[0] = Value;
+		return *this;
+	}
+	const float& GetRight() const {
+		return Sides[1];
+	}
+	FMargins& SetRight(const float& Value) {
+		Sides[1] = Value;
+		return *this;
+	}
+	const float& GetBottom() const {
+		return Sides[2];
+	}
+	FMargins& SetBottom(const float& Value) {
+		Sides[2] = Value;
+		return *this;
+	}
+	const float& GetLeft() const {
+		return Sides[3];
+	}
+	FMargins& SetLeft(const float& Value) {
+		Sides[3] = Value;
+		return *this;
+	}
+	float& operator[](const int32 Index) {
+		return Sides[Index];
+	}
+protected:
+	float Sides[4];
+	vec2 PivotOffset;
 
-	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
-
-		OutRenderGeometry.AddLocation(relativeLeft, relativeBottom, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.AddAllotedSpace(-relativeRight, -relativeTop, EPictorumScaleBasis::RELATIVE);
+	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
+		if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
+			return Sides[(uint8)Side] / RenderResolution.y;
+		} else {
+			return Sides[(uint8)Side] / RenderResolution.x;
+		}
 	}
 };
-struct FAnchors : public FOffsets {
-	FAnchors() : FOffsets() {
-		SetTop(1.0f);
-		SetRight(1.0f);
-		SetBottom(0.0f);
-		SetLeft(0.0f);
-		memset(&Relative[0], 1, sizeof(bool) * 4);
+struct FBorderRadius {
+	FBorderRadius() {
+		Radii = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
-
-	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const override {
-		vec2 originalLocation = OriginalRenderGeometry.GetLocation(EPictorumLocationBasis::RELATIVE);
-		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-		float relativeTop = GetSideRelativeValue(EPictorumSide::TOP, OriginalRenderGeometry.GetRenderResolution());
-		float relativeRight = GetSideRelativeValue(EPictorumSide::RIGHT, OriginalRenderGeometry.GetRenderResolution());
-		float relativeBottom = GetSideRelativeValue(EPictorumSide::BOTTOM, OriginalRenderGeometry.GetRenderResolution());
-		float relativeLeft = GetSideRelativeValue(EPictorumSide::LEFT, OriginalRenderGeometry.GetRenderResolution());
-
-		vec2 newLocation = originalLocation + vec2(relativeLeft, relativeBottom);
-		vec2 newSpace = vec2(relativeRight - relativeLeft, relativeTop - relativeBottom);
-
-		OutRenderGeometry.SetLocation(newLocation, EPictorumLocationBasis::RELATIVE);
-		OutRenderGeometry.SetAllotedSpace(newSpace, EPictorumScaleBasis::RELATIVE);
+	const Vector4D& GetRadii() const {
+		return Radii;
 	}
-};
-struct FPivotOffset {
-	FPivotOffset() {
-		PivotOffset = vec2(0.0f, 0.0f);
+	const float& GetTopLeftRadius() const {
+		return Radii.w;
 	}
-	void ApplyToGeometry(const FRenderGeometry& OriginalRenderGeometry, FRenderGeometry& OutRenderGeometry) const {
-		vec2 originalLoc   = OriginalRenderGeometry.GetLocation();
-		vec2 originalSpace = OriginalRenderGeometry.GetAllotedSpace();
-
-		OutRenderGeometry.SetLocation(originalLoc - (originalSpace * PivotOffset));
-		//OutRenderGeometry.SetAllotedSpace(originalSpace * vec2(1.0f - PivotOffset.x, 1.0f - PivotOffset.y));
+	void SetTopLeftRadius(const float& Radius) {
+		Radii.w = Radius;
 	}
-	void SetXOffset(const float& X) {
-		PivotOffset.x = X;
+	const float& GetTopRightRadius() const {
+		return Radii.x;
 	}
-	void SetYOffset(const float& Y) {
-		PivotOffset.y = Y;
+	void SetTopRightRadius(const float& Radius) {
+		Radii.x = Radius;
+	}
+	const float& GetBottomLeftRadius() const {
+		return Radii.z;
+	}	
+	void SetBottomLeftRadius(const float& Radius) {
+		Radii.z = Radius;
+	}
+	const float& GetBottomRightRadius() const {
+		return Radii.y;
+	}
+	void SetBottomRightRadius(const float& Radius) {
+		Radii.y = Radius;
 	}
 private:
-	vec2 PivotOffset;
+	Vector4D Radii;
 };

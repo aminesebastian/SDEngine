@@ -33,25 +33,33 @@ public:
 	~MathLibrary();
 
 	template<typename T>
-	static T RandRange(T Minimum, T Maximum) {
+	static T RandRange(const T& Minimum, const T& Maximum) {
 		return Minimum + static_cast <T> (rand()) / (static_cast <T> (RAND_MAX / (Maximum - Minimum)));
 	}
 	template<typename T>
-	static T Lerp(T Minimum, T Maximum, float Alpha) {
+	static T Lerp(const T& Minimum, const T& Maximum, float Alpha) {
 		return Minimum + Alpha * (Maximum - Minimum);
 	}
 	template<typename T>
-	static T Max(T Value, T Maximum) {
+	static T Max(const T& Value, const T& Maximum) {
 		return Value > Maximum ? Value : Maximum;
 	}
 	template<typename T>
-	static T Min(T Value, T Minimum) {
+	static T Min(const T& Value, const T& Minimum) {
 		return Value < Minimum ? Value : Minimum;
 	}
 	template<typename T>
-	static T Clamp(T Value, T Minimum, T Maximum) {
+	static T Clamp(const T& Value, const T& Minimum, const T& Maximum) {
 		return Max(Min(Value, Minimum), Maximum);
 	}
+
+	static Vector2D MinVector(const Vector2D& First, const Vector2D& Second);
+	static Vector2D MaxVector(const Vector2D& First, const Vector2D& Second);
+	static Vector3D MinVector(const Vector3D& First, const Vector3D& Second);
+	static Vector3D MaxVector(const Vector3D& First, const Vector3D& Second);
+	static Vector4D MinVector(const Vector4D& First, const Vector4D& Second);
+	static Vector4D MaxVector(const Vector4D& First, const Vector4D& Second);
+
 	static void ScreenCoordinatesToWorldRay(vec2 MouseCoordinates, vec2 ScreenDimensions, mat4 ViewMatrix, mat4 ProjectionMatrix, vec3& RayOriginOut, vec3& RayDirectionOut);
 	static bool LineTraceAgainstWorldFromScreen(FHitInfo& HitInfo, vec2 MouseCoordinates, Camera* Camera, World* World, ECollisionChannel Channel = VISIBILITY);
 	static bool LineTraceAgainstWorld(FHitInfo& HitInfo, World* World, vec3 RayOrigin, vec3 RayDirection, ECollisionChannel Channel = VISIBILITY);
