@@ -22,17 +22,6 @@ float roundedBoxSDF(vec2 CenterPosition, vec2 Size, vec4 Radius) {
     return min(max(outerEdge.x,outerEdge.y),0.0) + length(max(outerEdge,0.0)) - Radius.x;
 }
 void main() {
-	vec2 relativeScreenPos = gl_FragCoord.xy / RENDER_TARGET_RESOLUTION;
-
-	if(relativeScreenPos.x > MAX_CLIP.x || relativeScreenPos.y > MAX_CLIP.y) {
-		discard;
-		return;
-	}
-	if(relativeScreenPos.x < MIN_CLIP.x || relativeScreenPos.y < MIN_CLIP.y) {
-		discard;
-		return;
-	}
-
 	// Calculate the center of the quad.
 	vec2 centerCoord = LOCATION + SIZE/2.0f;
 

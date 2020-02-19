@@ -1,5 +1,5 @@
 #include "FrameStatisticsWidget.h"
-#include "Core/Pictorum/Widgets/PictorumCanvas.h"
+#include "Core/Pictorum/Containers/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Utilities/StringUtilities.h"
 #include "Core/Utilities/Math/MathLibrary.h"

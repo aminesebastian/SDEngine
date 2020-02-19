@@ -30,13 +30,16 @@ void PictorumRenderer::Tick(float DeltaTime) {
 }
 void PictorumRenderer::Draw(float DeltaTime) {
 	glEnable(GL_BLEND);
+	glEnable(GL_SCISSOR_TEST);
 	glDisable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (PictorumWidget* widget : Widgets) {
+		glScissor(TopLevelRenderGeometry.GetMinimumClipPoint().x, TopLevelRenderGeometry.GetMinimumClipPoint().y, TopLevelRenderGeometry.GetMaximumClipPoint().x, TopLevelRenderGeometry.GetMaximumClipPoint().y);
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_SCISSOR_TEST);
 	glDisable(GL_BLEND);
 }
 

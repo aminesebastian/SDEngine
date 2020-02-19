@@ -56,6 +56,7 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
 }
 void TextRenderer::SetText(const TString& Text) {
+	this->Text = Text;
 	Flush();
 	AddLine(Text);
 }

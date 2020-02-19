@@ -461,6 +461,7 @@ private:
 	const DistanceFieldFont* Font;
 	vec2 LastFrameMinBounds;
 	vec2 LastFrameMaxBounds;
+	TString Text;
 
 	/*****************/
 	/*Render Properties*/

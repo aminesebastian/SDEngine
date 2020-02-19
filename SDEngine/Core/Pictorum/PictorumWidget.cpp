@@ -126,6 +126,7 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		return;
 	}
 
+
 	LastRenderedGeometry = Geometry;
 	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
@@ -134,11 +135,13 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		PictorumWidget* widget = Children[i];
 		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
+		glScissor(childGeometry.GetMinimumClipPoint().x, childGeometry.GetMinimumClipPoint().y, childGeometry.GetMaximumClipPoint().x, childGeometry.GetMaximumClipPoint().y);
 
 		widget->DrawContents(DeltaTime, childGeometry);
 		OnChildDrawn(DeltaTime, Geometry);
 	}
 	OnDrawCompleted(DeltaTime, Geometry);
+	glScissor(Geometry.GetMinimumClipPoint().x, Geometry.GetMinimumClipPoint().y, Geometry.GetMaximumClipPoint().x, Geometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;

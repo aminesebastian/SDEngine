@@ -4,7 +4,7 @@
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
-#include "Core/Pictorum/Widgets/PictorumCanvas.h"
+#include "Core/Pictorum/Containers/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/OverlayWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"

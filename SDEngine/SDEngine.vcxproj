@@ -230,7 +230,7 @@
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\ConstraintBoxWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\PictorumCanvas.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumCanvas.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
@@ -284,6 +284,8 @@
     <ClCompile Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -332,7 +334,7 @@
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\PictorumCanvas.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
     <ClInclude Include="Core\Pictorum\Pictorum.h" />
     <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
@@ -395,6 +397,8 @@
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.h" />
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />
@@ -445,7 +449,10 @@
     <ResourceCompile Include="SDEngine.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\Assets\MainIcon.ico" />
+    <Image Include="..\..\Assets\MainLogo.png" />
     <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

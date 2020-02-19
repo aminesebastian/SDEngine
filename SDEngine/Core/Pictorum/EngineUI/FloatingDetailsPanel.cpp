@@ -3,7 +3,7 @@
 #include "Core/Pictorum/EngineUI/EngineUIStyle.h"
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/FloatEditWidget.h"
-#include "Core/Pictorum/Widgets/PictorumCanvas.h"
+#include "Core/Pictorum/Containers/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"

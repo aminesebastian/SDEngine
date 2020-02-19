@@ -361,10 +361,16 @@
     <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\Widgets\PictorumCanvas.cpp">
+    <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp">
+    <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -566,9 +572,11 @@
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
     <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\PictorumCanvas.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumCanvasSlot.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\EngineUIStyle.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
@@ -581,5 +589,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
+    <Image Include="icon1.ico" />
+    <Image Include="..\..\Assets\MainLogo.png" />
+    <Image Include="..\..\Assets\MainIcon.ico" />
   </ItemGroup>
 </Project>

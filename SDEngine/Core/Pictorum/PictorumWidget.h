@@ -11,6 +11,7 @@
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/Transform.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 #include "UserInterface/DetailsPanelProvider.h"
 #include <GLEW/glew.h>
 #include <GLM\glm.hpp>

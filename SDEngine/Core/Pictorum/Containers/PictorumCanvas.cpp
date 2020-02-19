@@ -1,5 +1,4 @@
 #include "PictorumCanvas.h"
-#include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/MathLibrary.h"
 #include "UserInterface/Widgets/DragFloat.h"
