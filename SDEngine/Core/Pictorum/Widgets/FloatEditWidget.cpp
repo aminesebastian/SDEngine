@@ -68,9 +68,9 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 	value->SetFontSize(11);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
-	valueBg->OnMouseDownDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueMouseDown>(this);
-	valueBg->OnHoveredDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueHovered>(this);
-	valueBg->OnUnhoveredDelegate.Add<FloatEditWidget, & FloatEditWidget::ValueUnhovered>(this);
+	valueBg->OnMouseDownDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueMouseDown>(this);
+	valueBg->OnHoveredDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueHovered>(this);
+	valueBg->OnUnhoveredDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueUnhovered>(this);
 	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
 	valueBg->SetPadding(2.0f);
 	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
@@ -83,7 +83,7 @@ void FloatEditWidget::AddEntry(const float& InitialValue, const int32& Index) {
 	ValueBackgroundWidgets.Add(valueBg);
 	ValueWidgets.Add(value);
 }
-void FloatEditWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {
+void FloatEditWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
 	for (int i = 0; i < ValueBackgroundWidgets.Count(); i++) {
 		if (ValueBackgroundWidgets[i] == Widget) {
 			MouseDownEntry = i;

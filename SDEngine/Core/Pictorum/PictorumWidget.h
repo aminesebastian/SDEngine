@@ -12,7 +12,6 @@
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/Transform.h"
 #include "Core/Utilities/Math/MathLibrary.h"
-#include "UserInterface/DetailsPanelProvider.h"
 #include <GLEW/glew.h>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
@@ -20,23 +19,11 @@
 class Shader;
 class DragFloat;
 
-class PictorumWidget : public EngineObject, public IDetailsPanelProvider {
+class PictorumWidget : public EngineObject {
 public:
 	PictorumWidget(const TString& Name);
 	virtual ~PictorumWidget();
 
-	/**
-	 * This method is raised either when this widget is added to the viewport (if this is a top
-	 * level widget) or when it is added to a parent After this point, it is safe to reference all
-	 * widget fields (parent, owning window, etc).
-	 */
-	virtual void OnCreated();
-	/**
-	 * This method is raised either when this widget is removed from the viewport (if this is a top
-	 * level widget) or when it is removed from its parent. After this point, it is no longer safe
-	 * to reference any widget fields (parent, owning window, etc).
-	 */
-	virtual void OnDestroyed();
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const;
@@ -45,8 +32,6 @@ public:
 
 	void SetVisibility(EPictorumVisibilityState NewVisibility);
 	EPictorumVisibilityState GetVisibility() const;
-	vec2 GetPivotOffset() const;
-
 	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents = false) const;
 	PictorumWidget* GetParent() const;
 
@@ -65,22 +50,12 @@ public:
 		return Cast<T>(ParentSlot);
 	}
 
-	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& EventIn);
-	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& EventIn);
-	virtual void OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& EventIn);
-	virtual void OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& EventIn);
-	virtual void OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& EventIn);
-
-	virtual TString GetDetailsPanelName() override;
-	virtual bool PopulateDetailsPanel() override;
-
 	const float GetRenderRotation() const;
 	const float GetRotation() const;
 	const float GetParentRotation() const;
-	const PictorumRenderer* GetOwningRenderer() const;
 
-	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnMouseDownDelegate;
-	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnMouseUpDelegate;
+	Event<void(PictorumWidget*, const vec2&, const EMouseButton&, FUserInterfaceEvent&)> OnMouseDownDelegate;
+	Event<void(PictorumWidget*, const vec2&, const EMouseButton&, FUserInterfaceEvent&)> OnMouseUpDelegate;
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnHoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
@@ -99,8 +74,6 @@ protected:
 
 	/** Rotation of the widget [0-360n] */
 	float Rotation;
-	/** This value represents the pivot point of the widget [0, 1] */
-	vec2 PivotOffset;
 	/** The visibility state of the widget */
 	EPictorumVisibilityState Visibility;
 
@@ -120,7 +93,20 @@ protected:
 
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
-	mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
+	virtual mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
+
+	/**
+	* This method is raised either when this widget is added to the viewport (if this is a top
+	* level widget) or when it is added to a parent After this point, it is safe to reference all
+	* widget fields (parent, owning window, etc).
+	*/
+	virtual void OnCreated();
+	/**
+	* This method is raised either when this widget is removed from the viewport (if this is a top
+	* level widget) or when it is removed from its parent. After this point, it is no longer safe
+	* to reference any widget fields (parent, owning window, etc).
+	*/
+	virtual void OnDestroyed();
 	/**
 	 * This method is raised when the widget is added to a parent container.
 	 *
@@ -140,12 +126,30 @@ protected:
 	 *
 	 * @param [in,out]	{PictorumRenderer*}	Owner	The owning renderer.
 	 */
-	void OnAddedToViewport(PictorumRenderer* Owner);
-
+	virtual void OnAddedToViewport(PictorumRenderer* Owner);
 	/** This method is raised when this widget is removed from the renderer at the root level. */
-	void OnRemovedFromViewport();
+	virtual void OnRemovedFromViewport();
+	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+
+	const bool& IsHovered() const;
+	const bool& WasClickedInside() const;
+	const PictorumRenderer* GetOwningRenderer() const;
 private:
 	friend class PictorumRenderer;
-	bool bWasMouseDownInside;
-	bool bDidMouseEnter;
+	bool bWasClickInside;
+	bool bIsBeginHovered;
+
+	virtual void AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot);
+	virtual void RemovedFromParent(PictorumWidget* ParentIn);
+	virtual void AddedToViewport(PictorumRenderer* Owner);
+	virtual void RemovedFromViewport();
+	virtual void MouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void MouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	virtual void MouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
+	virtual void MouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	virtual void MouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 };

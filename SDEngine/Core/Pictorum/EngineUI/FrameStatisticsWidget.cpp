@@ -14,7 +14,7 @@ FrameStatisticsWidget::~FrameStatisticsWidget() {
 
 }
 void FrameStatisticsWidget::OnCreated() {
-	PictorumCanvas* mainLayout = new PictorumCanvas("MainContainer");
+	PictorumCanvas* mainLayout = new PictorumCanvas("FrameStatisticsMainContainer");
 	AddChild(mainLayout);
 
 	FrameTimeWidget = new TextWidget("FrameTime");
@@ -22,8 +22,8 @@ void FrameStatisticsWidget::OnCreated() {
 	FrameTimeWidget->SetFontSize(12);
 	FrameTimeWidget->SetTextAlignment(ETextAlignment::RIGHT);
 	PictorumCanvasSlot* slot = mainLayout->AddChild(FrameTimeWidget);
-	slot->Anchors.SetRight(1.0f).SetLeft(1.0f).SetTop(1.0f).SetBottom(0.0f);
-	slot->Offsets.SetXPosition(-900.0f).SetXSize(900.0f).SetTop(40.0f);
+	slot->Anchors.SetRight(1.0f).SetLeft(0.0f).SetTop(1.0f).SetBottom(0.0f);
+	slot->Offsets.SetRight(10.0f).SetTop(40.0f);
 }
 void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	PictorumWidget::Tick(DeltaTime, Geometry);
@@ -38,13 +38,15 @@ void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometr
 	TString frameRate = StringUtilities::ToStringWithPrecision(1.0f / smootedFrameTime, 2);
 	TString text = frameRate + "fps\n";
 	text += deltaTime + "ms\n";
-	text += "Mouse Position: " + MathLibrary::LocationToString(Engine::Get()->GetInputSubsystem()->GetMousePosition()) +"\n";
+	text += "Mouse Position: " + MathLibrary::LocationToString(Engine::Get()->GetInputSubsystem()->GetMousePosition()) + "\n";
 
 	if (GetOwningRenderer()->GetHoveredWidget()) {
 		text += "Hovered Widget: " + GetOwningRenderer()->GetHoveredWidget()->GetName();
 	} else {
 		text += "Hovered Widget: None";
 	}
+
+	text += "\n" + ExtraDebugString;
 
 	FrameTimeWidget->SetText(text);
 }
@@ -54,4 +56,8 @@ float FrameStatisticsWidget::GetSmoothedFrameTime() {
 		total += val;
 	}
 	return total / FrameTimeCache.Count();
+}
+
+void FrameStatisticsWidget::SetExtraDebugString(const TString& DebugString) {
+	ExtraDebugString = DebugString;
 }

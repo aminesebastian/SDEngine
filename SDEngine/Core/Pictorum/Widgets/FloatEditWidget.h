@@ -23,7 +23,7 @@ private:
 	uint8 ValueCount;
 	int32 MouseDownEntry;
 
-	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
+	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	void ValueHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
 	void ValueUnhovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
 	void MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta);

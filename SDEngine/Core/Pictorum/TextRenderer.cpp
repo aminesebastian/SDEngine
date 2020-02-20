@@ -28,9 +28,6 @@ TextRenderer::~TextRenderer() {
 }
 
 void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI) {
-	Draw(Position, RenderTargetResolution, DisplayDPI, ZERO_VECTOR2D, vec2(1.0f, 1.0f));
-}
-void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI, const vec2& MinimumClipPoint, const vec2& MaximumClipPoint) {
 	if (!bBoundToGPU) {
 		BindToGPU();
 	}
@@ -41,8 +38,6 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	fontShader->Bind();
 	Font->BindAtlas(fontShader, "Atlas", 0);
 
-	fontShader->SetShaderVector2("MIN_CLIP", MinimumClipPoint);
-	fontShader->SetShaderVector2("MAX_CLIP", MaximumClipPoint);
 	fontShader->SetShaderVector2("LOCATION", Position);
 	fontShader->SetShaderVector2("SCALE", scale);
 	fontShader->SetShaderVector4("COLOR", Color);

@@ -9,7 +9,6 @@ SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
 	quadVAO = 0;
 	quadVBO = 0;
 	BackgroundColor = FColor(0.5f, 0.5f, 0.5f, 1.0);
-	bWasMouseDownInWidget = false;
 	EdgeSoftness = 1.0f;
 	GLfloat quadVertices[] = {
 		0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -106,31 +105,11 @@ void SolidWidget::SetBorderRadius(const float& TopLeft, const float& TopRight, c
 	Radius.SetBottomLeftRadius(BottomLeft);
 	Radius.SetBottomRightRadius(BottomRight);
 }
-void SolidWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
+void SolidWidget::OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	PictorumWidget::OnMouseEnter(MousePosition, Event);
 	BackgroundColor += FColor(0.1f, 0.1f, 0.1f);
 }
-void SolidWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
+void SolidWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	PictorumWidget::OnMouseExit(MousePosition, Event);
 	BackgroundColor -= FColor(0.1f, 0.1f, 0.1f);
-}
-void SolidWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
-	PictorumWidget::OnMouseDown(MousePosition, Button, Event);
-	Event.CaptureMouse();
-	bWasMouseDownInWidget = true;
-}
-void SolidWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
-	PictorumWidget::OnMouseUp(MousePosition, Button, Event);
-	bWasMouseDownInWidget = false;
-}
-void SolidWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
-	PictorumWidget::OnMouseMove(MousePosition, MouseDelta, Event);
-}
-bool SolidWidget::PopulateDetailsPanel() {
-	PictorumWidget::PopulateDetailsPanel();
-
-	//ImGui::Text("Color");
-	//ImGui::ColorEdit4("Color", &BackgroundColor[0]);
-
-	return true;
 }

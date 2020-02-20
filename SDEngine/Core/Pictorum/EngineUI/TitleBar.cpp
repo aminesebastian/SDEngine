@@ -74,15 +74,15 @@ const bool TitleBar::CanAddChild() const {
 	return true;
 }
 
-void TitleBar::OnCloseButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnCloseButtonClicked(PictorumWidget* Widget, const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& UIEvent) {
 	SDL_Event sdlevent;
 	sdlevent.type = SDL_QUIT;
 	SDL_PushEvent(&sdlevent);
 }
-void TitleBar::OnMinimizeButtonClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnMinimizeButtonClicked(PictorumWidget* Widget, const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& UIEvent) {
 	SDL_MinimizeWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 }
-void TitleBar::OnMaximizeClicked(PictorumWidget* Button, const vec2& MousePosition, FUserInterfaceEvent& UIEvent) {
+void TitleBar::OnMaximizeClicked(PictorumWidget* Widget, const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& UIEvent) {
 	uint32 flags = SDL_GetWindowFlags(GetOwningRenderer()->GetOwningWindow()->GetWindow());
 	if (flags & SDL_WINDOW_MAXIMIZED) {
 		SDL_RestoreWindow(GetOwningRenderer()->GetOwningWindow()->GetWindow());

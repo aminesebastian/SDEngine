@@ -11,6 +11,5 @@ public:
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual PictorumCanvasSlot* AddChild(PictorumWidget* Widget) override;
 	virtual PictorumCanvasSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const override;
-	virtual bool PopulateDetailsPanel() override;
 };
 

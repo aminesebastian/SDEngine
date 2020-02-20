@@ -11,27 +11,15 @@ PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation = 0.0f; // 0 Degrees
 	Parent = nullptr;
 	OwningRenderer = nullptr;
-	PivotOffset = vec2(0.0f, 0.0f);
-	bWasMouseDownInside = false;
-	bDidMouseEnter = false;
+	bWasClickInside = false;
+	bIsBeginHovered = false;
 
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 PictorumWidget::~PictorumWidget() {
 
 }
-void PictorumWidget::OnCreated() {
 
-}
-void PictorumWidget::OnDestroyed() {
-
-}
-void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
-
-}
-void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-
-}
 vec2 PictorumWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;
 	for (PictorumWidget* child : Children) {
@@ -65,14 +53,14 @@ IWidgetSlot* PictorumWidget::AddChildInternal(PictorumWidget* Widget) {
 	}
 	if (Children.AddUnique(Widget)) {
 		IWidgetSlot* slot = CreateSlotForWidget(Widget);
-		Widget->OnAddedToParent(this, slot);
+		Widget->AddedToParent(this, slot);
 		return slot;
 	}
 	return nullptr;
 }
 bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	if (Children.Remove(Widget)) {
-		Widget->OnRemovedFromParent(this);
+		Widget->RemovedFromParent(this);
 		delete Widget->GetParentSlot<IWidgetSlot>();
 		return true;
 	}
@@ -86,17 +74,6 @@ PictorumWidget* PictorumWidget::GetChildAtIndex(int32 Index) const {
 }
 IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new IWidgetSlot();
-}
-
-void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
-	Parent = ParentIn;
-	ParentSlot = Slot;
-	OnCreated();
-}
-void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {
-	Parent = nullptr;
-	ParentSlot = nullptr;
-	OnDestroyed();
 }
 
 mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const {
@@ -155,49 +132,64 @@ void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry&
 		widget->TickContents(DeltaTime, childGeometry);
 	}
 }
-void PictorumWidget::OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry) {
 
-}
-void PictorumWidget::OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry) {
-
-}
-void PictorumWidget::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {
-
-}
-void PictorumWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
-	OnHoveredDelegate.Broadcast(this, MousePosition, Event);
-	bDidMouseEnter = true;
-}
-void PictorumWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
-	if (bDidMouseEnter) {
-		OnUnhoveredDelegate.Broadcast(this, MousePosition, Event);
-		bDidMouseEnter = false;
+void PictorumWidget::MouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {
+	bIsBeginHovered = true;
+	OnHoveredDelegate.Broadcast(this, MousePosition, EventIn);
+	if (EventIn.ShouldContinuePropragating()) {
+		OnMouseEnter(MousePosition, EventIn);
 	}
 }
-void PictorumWidget::OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) {
-	OnMouseMoveDelegate.Broadcast(this, MousePosition, MouseDelta, Event);
-}
-void PictorumWidget::OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
-	OnMouseDownDelegate.Broadcast(this, MousePosition, Event);
-	bWasMouseDownInside = true;
-}
-void PictorumWidget::OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) {
-	if (bWasMouseDownInside) {
-		OnMouseUpDelegate.Broadcast(this, MousePosition, Event);
-		bWasMouseDownInside = false;
-	}
-}
-
-void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents) const {
-	ChildrenOut.AddAll(Children);
-	if (bIncludeAllDescendents) {
-		for (PictorumWidget* widget : Children) {
-			widget->GetAllChildren(ChildrenOut);
+void PictorumWidget::MouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {
+	if (bIsBeginHovered) {
+		bIsBeginHovered = false;
+		OnUnhoveredDelegate.Broadcast(this, MousePosition, EventIn);
+		if (EventIn.ShouldContinuePropragating()) {
+			OnMouseExit(MousePosition, EventIn);
 		}
 	}
 }
-PictorumWidget* PictorumWidget::GetParent() const {
-	return Parent;
+void PictorumWidget::MouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) {
+	OnMouseMoveDelegate.Broadcast(this, MousePosition, MouseDelta, EventIn);
+	if (EventIn.ShouldContinuePropragating()) {
+		OnMouseMove(MousePosition, MouseDelta, EventIn);
+	}
+}
+void PictorumWidget::MouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
+	bWasClickInside = true;
+	OnMouseDownDelegate.Broadcast(this, MousePosition, Button, EventIn);
+	if (EventIn.ShouldContinuePropragating()) {
+		OnMouseDown(MousePosition, Button, EventIn);
+	}
+}
+void PictorumWidget::MouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
+	if (bWasClickInside) {
+		bWasClickInside = false;
+		OnMouseUpDelegate.Broadcast(this, MousePosition, Button, EventIn);
+		if (EventIn.ShouldContinuePropragating()) {
+			OnMouseUp(MousePosition, Button, EventIn);
+		}
+	}
+}
+void PictorumWidget::AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
+	Parent = ParentIn;
+	ParentSlot = Slot;
+	OnCreated();
+}
+void PictorumWidget::RemovedFromParent(PictorumWidget* ParentIn) {
+	Parent = nullptr;
+	ParentSlot = nullptr;
+	OnDestroyed();
+}
+void PictorumWidget::AddedToViewport(PictorumRenderer* Owner) {
+	OwningRenderer = Owner;
+	OnCreated();
+	OnAddedToViewport(Owner);
+}
+void PictorumWidget::RemovedFromViewport() {
+	OnRemovedFromViewport();
+	OwningRenderer = nullptr;
+	OnDestroyed();
 }
 
 void PictorumWidget::SetVisibility(EPictorumVisibilityState NewVisibility) {
@@ -205,9 +197,6 @@ void PictorumWidget::SetVisibility(EPictorumVisibilityState NewVisibility) {
 }
 EPictorumVisibilityState PictorumWidget::GetVisibility() const {
 	return Visibility;
-}
-vec2 PictorumWidget::GetPivotOffset() const {
-	return PivotOffset;
 }
 
 const float PictorumWidget::GetRenderRotation() const {
@@ -222,6 +211,17 @@ const float PictorumWidget::GetParentRotation() const {
 	}
 	return Parent->GetRotation();
 }
+void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents) const {
+	ChildrenOut.AddAll(Children);
+	if (bIncludeAllDescendents) {
+		for (PictorumWidget* widget : Children) {
+			widget->GetAllChildren(ChildrenOut);
+		}
+	}
+}
+PictorumWidget* PictorumWidget::GetParent() const {
+	return Parent;
+}
 const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
 	if (OwningRenderer) {
 		return OwningRenderer;
@@ -232,17 +232,26 @@ const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
 		return nullptr;
 	}
 }
-void PictorumWidget::OnAddedToViewport(PictorumRenderer* Owner) {
-	OwningRenderer = Owner;
-	OnCreated();
+const bool& PictorumWidget::IsHovered() const {
+	return bIsBeginHovered;
 }
-void PictorumWidget::OnRemovedFromViewport() {
-	OwningRenderer = nullptr;
-	OnDestroyed();
+const bool& PictorumWidget::WasClickedInside() const {
+	return bWasClickInside;
 }
-TString PictorumWidget::GetDetailsPanelName() {
-	return GetName();
-}
-bool PictorumWidget::PopulateDetailsPanel() {
-	return true;
-}
+
+void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnCreated() {}
+void PictorumWidget::OnDestroyed() {}
+void PictorumWidget::OnAddedToViewport(PictorumRenderer* Owner) {}
+void PictorumWidget::OnRemovedFromViewport() {}
+void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {}
+void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {}
+void PictorumWidget::OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}

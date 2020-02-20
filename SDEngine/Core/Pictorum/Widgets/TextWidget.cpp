@@ -45,16 +45,27 @@ const EFontWeight& TextWidget::GetWeight() const {
 }
 
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	vec2 location = Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
-	location.y += Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
+	// Reposition such that the text always renders from the top.
+	vec2 location = Geometry.GetLocation();
+	location.y += Geometry.GetAllotedSpace().y;
+
+	// Adjust for the text alignment.
+	if (Renderer->GetTextAlignment() == ETextAlignment::RIGHT) {
+		vec2 requiredSpace = GetDesiredDrawSpace(Geometry);
+		location.x += Geometry.GetAllotedSpace().x - requiredSpace.x;
+	} else if (Renderer->GetTextAlignment() == ETextAlignment::CENTER) {
+		vec2 requiredSpace = GetDesiredDrawSpace(Geometry);
+		location.x += (Geometry.GetAllotedSpace().x - requiredSpace.x) / 2.0f;
+	}
 
 	// Capture the last render location with respect to the text.
 	LastRenderedAbsoluteLocation = location;
 
+	// Translate to NDC.
 	location /= Geometry.GetRenderResolution();
 	location = (location - 0.5f) * 2.0f;
 
-	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI(), Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE), Geometry.GetMaximumClipPoint(EPictorumLocationBasis::RELATIVE));
+	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI());
 }
 vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 min, max;
@@ -66,12 +77,12 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	Renderer->GetTextBoundingBoxDimensions(min, max);
 
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
-	MinBounds         = lastLocation;
-	MinBounds.y      += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MinBounds.y      -= max.y;
-	MaxBounds         = MinBounds;
-	MaxBounds.x      += max.x;
-	MaxBounds.y       = lastLocation.y;
+	MinBounds = lastLocation;
+	MinBounds.y += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
+	MinBounds.y -= max.y;
+	MaxBounds = MinBounds;
+	MaxBounds.x += max.x;
+	MaxBounds.y = lastLocation.y;
 
 	MinBounds.x = MathLibrary::Max(MinBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x);
 	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
@@ -80,11 +91,4 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 }
 const bool TextWidget::CanAddChild() const {
 	return false;
-}
-
-void TextWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& EventIn) {
-	Renderer->SetColor(FColor(1.0f, 0.0f, 0.0f));
-}
-void TextWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& EventIn) {
-	Renderer->SetColor(FColor(1.0f, 1.0f, 1.0f));
 }

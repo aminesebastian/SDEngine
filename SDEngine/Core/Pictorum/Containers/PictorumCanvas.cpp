@@ -22,7 +22,7 @@ void PictorumCanvas::CalculateChildRenderGeometry(const FRenderGeometry& Current
 
 	Vector2D originalLocation = CurrentRenderGeometry.GetLocation();
 	Vector2D originalScale = CurrentRenderGeometry.GetAllotedSpace();
-	Vector2D originalResolution = originalLocation + originalScale;
+	Vector2D originalResolution = originalScale;
 
 	Vector2D newLocation;
 	Vector2D newSpace;
@@ -66,9 +66,4 @@ PictorumCanvasSlot* PictorumCanvas::AddChild(PictorumWidget* Widget) {
 }
 PictorumCanvasSlot* PictorumCanvas::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new PictorumCanvasSlot();
-}
-bool PictorumCanvas::PopulateDetailsPanel() {
-	PictorumWidget::PopulateDetailsPanel();
-
-	return true;
 }

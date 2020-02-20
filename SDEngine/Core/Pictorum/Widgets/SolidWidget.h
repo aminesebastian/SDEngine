@@ -17,20 +17,14 @@ public:
 	void SetBackgroundColor(const FColor& NewColor);
 	void SetBorderRadius(const float& TopLeft, const float& TopRight, const float& BottomLeft, const float& BottomRight);
 
-	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseDown(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseUp(vec2 MousePosition, EMouseButton Button, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseMove(vec2 MousePosition, vec2 MouseDelta, FUserInterfaceEvent& Event) override;
-
-	virtual bool PopulateDetailsPanel() override;
+	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
+	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
 
 private:
 	FPadding Padding;
 	FBorderRadius Radius;
 	float EdgeSoftness;
 	FColor BackgroundColor;
-	bool bWasMouseDownInWidget;
 
 	GLuint quadVAO;
 	GLuint quadVBO;

@@ -13,7 +13,7 @@ class TextRenderer;
 class DistanceFieldFont;
 class Window;
 
-class PictorumRenderer : public EngineObject, public IUserInputReciever, public IDetailsPanelProvider {
+class PictorumRenderer : public EngineObject, public IUserInputReciever {
 public:
 	PictorumRenderer(const TString& ViewportName, Window* OwningWindow);
 	virtual ~PictorumRenderer();
@@ -37,9 +37,6 @@ public:
 	const Window* GetOwningWindow() const;
 	const SArray<PictorumWidget*>& GetWidgets() const;
 	const PictorumWidget* GetHoveredWidget() const;
-
-	virtual TString GetDetailsPanelName() override;
-	virtual bool PopulateDetailsPanel() override;
 
 	Event<void(const vec2&)> OnMouseDownAnywhereDelegate;
 	Event<void(const vec2&)> OnMouseUpAnywhereDelegate;

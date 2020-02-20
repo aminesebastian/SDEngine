@@ -9,8 +9,8 @@ public:
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 
-	virtual void OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) override;
-	virtual void OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) override;
+	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
+	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
 	void SetTint(const FColor& NewTint);
 	void SetImage(Texture2D* ImageIn, const bool& MaintainSize = true);
 	void SetSize(const vec2& SizeIn);

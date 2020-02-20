@@ -35,7 +35,7 @@ void PictorumRenderer::Draw(float DeltaTime) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (PictorumWidget* widget : Widgets) {
-		glScissor(TopLevelRenderGeometry.GetMinimumClipPoint().x, TopLevelRenderGeometry.GetMinimumClipPoint().y, TopLevelRenderGeometry.GetMaximumClipPoint().x, TopLevelRenderGeometry.GetMaximumClipPoint().y);
+		glScissor((GLuint)TopLevelRenderGeometry.GetMinimumClipPoint().x, (GLuint)TopLevelRenderGeometry.GetMinimumClipPoint().y, (GLuint)TopLevelRenderGeometry.GetMaximumClipPoint().x, (GLuint)TopLevelRenderGeometry.GetMaximumClipPoint().y);
 		widget->DrawContents(DeltaTime, TopLevelRenderGeometry);
 	}
 	glEnable(GL_DEPTH_TEST);
@@ -58,7 +58,7 @@ void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Butto
 
 	if (MouseOverWidget) {
 		FUserInterfaceEvent eventHandle;
-		MouseOverWidget->OnMouseDown(ScreenPosition, Button, eventHandle);
+		MouseOverWidget->MouseDown(ScreenPosition, Button, eventHandle);
 		if (eventHandle.ShouldCaptureMouse()) {
 			bMouseCaptured = true;
 			SDL_CaptureMouse(SDL_TRUE);
@@ -71,7 +71,7 @@ void PictorumRenderer::OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button)
 
 	if (MouseOverWidget) {
 		FUserInterfaceEvent eventHandle;
-		MouseOverWidget->OnMouseUp(ScreenPosition, Button, eventHandle);
+		MouseOverWidget->MouseUp(ScreenPosition, Button, eventHandle);
 		bMouseCaptured = false;
 		SDL_CaptureMouse(SDL_FALSE);
 		SDL_ShowCursor(1);
@@ -87,18 +87,18 @@ void PictorumRenderer::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	if (MouseOverWidget != previousMouseOver) {
 		if (previousMouseOver) {
 			FUserInterfaceEvent eventHandle;
-			previousMouseOver->OnMouseExit(ScreenPosition, eventHandle);
+			previousMouseOver->MouseExit(ScreenPosition, eventHandle);
 		}
 		if (MouseOverWidget) {
 			FUserInterfaceEvent eventHandle;
-			MouseOverWidget->OnMouseEnter(ScreenPosition, eventHandle);
+			MouseOverWidget->MouseEnter(ScreenPosition, eventHandle);
 		}
 	}
 
 	// Raise mouse move events.
 	if (MouseOverWidget) {
 		FUserInterfaceEvent eventHandle;
-		MouseOverWidget->OnMouseMove(ScreenPosition, Delta, eventHandle);
+		MouseOverWidget->MouseMove(ScreenPosition, Delta, eventHandle);
 	}
 }
 void PictorumRenderer::OnMouseScrollAxis(float Delta) {
@@ -114,7 +114,7 @@ bool PictorumRenderer::AddToViewport(PictorumWidget* Widget) {
 		return false;
 	}
 	if (Widgets.AddUnique(Widget)) {
-		Widget->OnAddedToViewport(this);
+		Widget->AddedToViewport(this);
 		return true;
 	}
 	return false;
@@ -124,7 +124,7 @@ bool PictorumRenderer::RemoveFromViewport(PictorumWidget* Widget) {
 		return false;
 	}
 	if (Widgets.Remove(Widget)) {
-		Widget->OnRemovedFromViewport();
+		Widget->RemovedFromViewport();
 		return true;
 	}
 	return false;
@@ -187,14 +187,4 @@ void PictorumRenderer::OnWindowResized(Window* WindowIn, const FDisplayState& St
 	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 	TopLevelRenderGeometry.SetMaximumClipPoint(State.GetResolution());
-}
-
-TString PictorumRenderer::GetDetailsPanelName() {
-	return "UI Widget";
-}
-bool PictorumRenderer::PopulateDetailsPanel() {
-	if (Widgets[0]) {
-		Widgets[0]->PopulateDetailsPanel();
-	}
-	return true;
 }

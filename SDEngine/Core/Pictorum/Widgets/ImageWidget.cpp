@@ -86,9 +86,9 @@ void ImageWidget::SetTint(const FColor& NewTint) {
 void ImageWidget::SetSize(const vec2& SizeIn) {
 	Size = SizeIn;
 }
-void ImageWidget::OnMouseEnter(vec2 MousePosition, FUserInterfaceEvent& Event) {
+void ImageWidget::OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	Tint += FColor(0.1f, 0.1f, 0.1f);
 }
-void ImageWidget::OnMouseExit(vec2 MousePosition, FUserInterfaceEvent& Event) {
+void ImageWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	Tint -= FColor(0.1f, 0.1f, 0.1f);
 }
