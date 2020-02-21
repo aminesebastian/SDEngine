@@ -10,6 +10,8 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWi
 	MouseOverWidget = nullptr;
 	bMouseCaptured = false;
 
+	ShapeDrawer = new PictorumShapeDrawer(ViewportName + "_ShapeDrawer");
+
 	// Initialize render geometry.
 	TopLevelRenderGeometry.SetRenderResolution(OwningWindow->GetDimensions());
 	TopLevelRenderGeometry.SetAllotedSpace(OwningWindow->GetDimensions());
@@ -17,7 +19,19 @@ PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWi
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 	TopLevelRenderGeometry.SetMaximumClipPoint(OwningWindow->GetDimensions());
 
-	OwningWindow->OnWindowResized.Add<PictorumRenderer, &PictorumRenderer::OnWindowResized>(this);
+	OwningWindow->OnWindowResized.Add<PictorumRenderer, & PictorumRenderer::OnWindowResized>(this);
+
+	VertexArrayBuffer = new GPUVertexBufferArray();
+
+	SArray<Vector3D> verticies;
+	verticies.Emplace(0.0f, 1.0f, 0.0f);
+	verticies.Emplace(0.0f, 0.0f, 0.0f);
+	verticies.Emplace(1.0f, 1.0f, 0.0f);
+	verticies.Emplace(1.0f, 0.0f, 0.0f);
+
+	VertexArrayBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	VertexArrayBuffer->SetBufferData(0, verticies, verticies.Count());
+	VertexArrayBuffer->Update();
 }
 PictorumRenderer::~PictorumRenderer() {
 
@@ -105,10 +119,13 @@ void PictorumRenderer::OnMouseScrollAxis(float Delta) {
 
 }
 
-PictorumWidget* PictorumRenderer::GetMouseOverWidget() {
+PictorumWidget* PictorumRenderer::GetMouseOverWidget() const {
 	return MouseOverWidget;
 }
 
+PictorumShapeDrawer* PictorumRenderer::GetShapeDrawer() const {
+	return ShapeDrawer;
+}
 bool PictorumRenderer::AddToViewport(PictorumWidget* Widget) {
 	if (!Widget) {
 		return false;

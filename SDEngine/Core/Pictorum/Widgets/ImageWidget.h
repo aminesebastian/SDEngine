@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
+#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
 
 class ImageWidget : public PictorumWidget {
 public:
@@ -15,13 +16,6 @@ public:
 	void SetImage(Texture2D* ImageIn, const bool& MaintainSize = true);
 	void SetSize(const vec2& SizeIn);
 private:
-	float BorderRadius;
-	FColor Tint;
-	Texture2D* Image;
-	vec2 Size;
-	bool bWasMouseDownInWidget;
-
-	GLuint quadVAO;
-	GLuint quadVBO;
+	FImageDrawInstruction* DrawInstruction;
 };
 

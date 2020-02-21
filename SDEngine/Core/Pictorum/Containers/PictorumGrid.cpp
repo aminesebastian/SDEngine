@@ -24,6 +24,28 @@ PictorumGrid::~PictorumGrid() {
 	Columns.Clear();
 	Rows.Clear();
 }
+
+void PictorumGrid::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
+	for (PictorumWidget* child : Children) {
+		PictorumGridSlot* slot = child->GetParentSlot<PictorumGridSlot>();
+		if (HoveredRowIndex == slot->Row && HoveredColumnIndex == slot->Column && DistanceToNearestEntry.x <= ResizeHandleDistance) {
+			Vector2D slotLocation, slotSize;
+			GetSlotDimensions(slot->Row, slot->Column, slot->RowSpan, slot->ColumnSpan, Geometry, slotLocation, slotSize);
+			FBoxDrawInstruction drawInstruction;
+			drawInstruction.Size.x = 2.0f;
+			drawInstruction.BackgroundColor = FColor(0.4f, 0.4f, 0.475f);
+			drawInstruction.Size.y = slotSize.y;
+			drawInstruction.Location = slotLocation;
+
+			drawInstruction.Location.x = slotLocation.x - 2.0f;
+			DrawQuad(Geometry, drawInstruction);
+
+			drawInstruction.Location.x = slotLocation.x + slotSize.x;
+			DrawQuad(Geometry, drawInstruction);
+		}
+	}
+}
+
 void PictorumGrid::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	PictorumGridSlot* slot = Children[ChildIndex]->GetParentSlot<PictorumGridSlot>();
 
@@ -51,7 +73,7 @@ void PictorumGrid::SetRowHeight(const int32& Row, const float& RowHeight, bool R
 }
 
 void PictorumGrid::GetSlotDimensions(const int32& Row, const int32& Column, const int32& RowSpan, const int32& ColumnSpan, const FRenderGeometry& CurrentRenderGeometry, Vector2D& Location, Vector2D& Space) const {
-	Location    = CurrentRenderGeometry.GetLocation();
+	Location = CurrentRenderGeometry.GetLocation();
 	Location.y += CurrentRenderGeometry.GetAllotedSpace().y;
 
 	for (int32 i = 0; i <= Row; i++) {
@@ -117,16 +139,25 @@ void PictorumGrid::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& E
 	HoveredRowIndex = -1;
 }
 void PictorumGrid::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) {
+	// If the mouse was clicked inside this widget, check if we are in resizing range.
+	// Otherwise, cache the data required for making this determination.
 	if (WasClickedInside()) {
+		Vector2D relativeDelta = MouseDelta / LastRenderedGeometry.GetRenderResolution();
 		int32 grow, shrink = 0;
 		if (GetTargetResizeColumns(grow, shrink)) {
-			Columns[grow]->Value += MouseDelta.x / LastRenderedGeometry.GetRenderResolution().x;
-			Columns[shrink]->Value -= MouseDelta.x / LastRenderedGeometry.GetRenderResolution().x;
-			EventIn.CaptureMouse();
+			int32 actualShrink = relativeDelta.x > 0 ? shrink : grow;
+			if (GetColumnMinSize(actualShrink) <= Columns[actualShrink]->Value - relativeDelta.x) {
+				Columns[grow]->Value += relativeDelta.x;
+				Columns[shrink]->Value -= relativeDelta.x;
+				EventIn.CaptureMouse();
+			}
 		} else if (GetTargetResizeRows(grow, shrink)) {
-			Rows[grow]->Value += -MouseDelta.y / LastRenderedGeometry.GetRenderResolution().y;
-			Rows[shrink]->Value -= -MouseDelta.y / LastRenderedGeometry.GetRenderResolution().y;
-			EventIn.CaptureMouse();
+			int32 actualShrink = -relativeDelta.y > 0 ? shrink : grow;
+			if (GetRowMinSize(actualShrink) <= Rows[actualShrink]->Value + relativeDelta.y) {
+				Rows[grow]->Value += -relativeDelta.y;
+				Rows[shrink]->Value -= -relativeDelta.y;
+				EventIn.CaptureMouse();
+			}
 		}
 	} else {
 		CacheHoveredCellValues(MousePosition);
@@ -140,11 +171,16 @@ void PictorumGrid::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta
 		}
 	}
 }
-void PictorumGrid::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
-
-}
-void PictorumGrid::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
-
+PictorumWidget* PictorumGrid::GetWidgetInSlot(const int32& Row, const int32& Column) {
+	for (PictorumWidget* child : Children) {
+		PictorumGridSlot* slot = child->GetParentSlot<PictorumGridSlot>();
+		if (slot) {
+			if (slot->Column == Column && slot->Row == Row) {
+				return child;
+			}
+		}
+	}
+	return nullptr;
 }
 bool PictorumGrid::GetTargetResizeColumns(int32& GrowColumnIndex, int32& ShrinkColumnIndex) {
 	GrowColumnIndex = -1;
@@ -166,13 +202,13 @@ bool PictorumGrid::GetTargetResizeRows(int32& GrowRowIndex, int32& ShrinkRowInde
 	if (DistanceToNearestEntry.y <= ResizeHandleDistance) {
 		if (CellRelativePosition.y < 0.5) {
 			GrowRowIndex = HoveredRowIndex;
-			ShrinkRowIndex = HoveredRowIndex + 1 ;
+			ShrinkRowIndex = HoveredRowIndex + 1;
 		} else {
 			GrowRowIndex = HoveredRowIndex - 1;
 			ShrinkRowIndex = HoveredRowIndex;
 		}
 	}
-	return GrowRowIndex >= 0 && ShrinkRowIndex >= 0 && GrowRowIndex < Rows.Count() && ShrinkRowIndex < Rows.Count()  && ShrinkRowIndex != GrowRowIndex;
+	return GrowRowIndex >= 0 && ShrinkRowIndex >= 0 && GrowRowIndex < Rows.Count() && ShrinkRowIndex < Rows.Count() && ShrinkRowIndex != GrowRowIndex;
 }
 void PictorumGrid::CacheHoveredCellValues(const vec2& MousePosition) {
 	for (int x = 0; x < Columns.Count(); x++) {
@@ -194,4 +230,20 @@ void PictorumGrid::CacheHoveredCellValues(const vec2& MousePosition) {
 			}
 		}
 	}
+}
+const float PictorumGrid::GetRowMinSize(const int32& RowIndex) {
+	float relativeValue = 0.0f;
+	for (int32 i = 0; i < Columns.Count(); i++) {
+		PictorumWidget* widget = GetWidgetInSlot(RowIndex, i);
+		relativeValue += widget->GetDesiredDrawSpace(LastRenderedGeometry).y;
+	}
+	return relativeValue / LastRenderedGeometry.GetAllotedSpace().y;
+}
+const float PictorumGrid::GetColumnMinSize(const int32& ColumnIndex) {
+	float relativeValue = 0.0f;
+	for (int32 i = 0; i < Rows.Count(); i++) {
+		PictorumWidget* widget = GetWidgetInSlot(i, ColumnIndex);
+		relativeValue += widget->GetDesiredDrawSpace(LastRenderedGeometry).x;
+	}
+	return relativeValue / LastRenderedGeometry.GetAllotedSpace().x;
 }

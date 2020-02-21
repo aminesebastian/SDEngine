@@ -6,6 +6,7 @@
 #include "Core/Objects/CoreTypes/Shader.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/MathLibrary.h"
+#include "Core/Pictorum/PictorumShapeDrawer.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation = 0.0f; // 0 Degrees
@@ -112,13 +113,13 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		PictorumWidget* widget = Children[i];
 		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
-		glScissor(childGeometry.GetMinimumClipPoint().x, childGeometry.GetMinimumClipPoint().y, childGeometry.GetMaximumClipPoint().x, childGeometry.GetMaximumClipPoint().y);
+		glScissor((GLuint)childGeometry.GetMinimumClipPoint().x, (GLuint)childGeometry.GetMinimumClipPoint().y, (GLuint)childGeometry.GetMaximumClipPoint().x, (GLuint)childGeometry.GetMaximumClipPoint().y);
 
 		widget->DrawContents(DeltaTime, childGeometry);
 		OnChildDrawn(DeltaTime, Geometry);
 	}
 	OnDrawCompleted(DeltaTime, Geometry);
-	glScissor(Geometry.GetMinimumClipPoint().x, Geometry.GetMinimumClipPoint().y, Geometry.GetMaximumClipPoint().x, Geometry.GetMaximumClipPoint().y);
+	glScissor((GLuint)Geometry.GetMinimumClipPoint().x, (GLuint)Geometry.GetMinimumClipPoint().y, (GLuint)Geometry.GetMaximumClipPoint().x, (GLuint)Geometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedGeometry = Geometry;
@@ -237,6 +238,13 @@ const bool& PictorumWidget::IsHovered() const {
 }
 const bool& PictorumWidget::WasClickedInside() const {
 	return bWasClickInside;
+}
+
+void PictorumWidget::DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const {
+	GetOwningRenderer()->GetShapeDrawer()->DrawQuad(Geometry, Instruction);
+}
+void PictorumWidget::DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const {
+	GetOwningRenderer()->GetShapeDrawer()->DrawImage(Geometry, Instruction);
 }
 
 void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {}

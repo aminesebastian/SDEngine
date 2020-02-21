@@ -454,6 +454,6 @@ private:
 	/*****************/
 	bool bBoundToGPU;
 	FTextBlock* TextBlockCache;
-	GPUVertexBufferArray* TestBuffer;
+	GPUVertexBufferArray* VertexArrayBuffer;
 };
 

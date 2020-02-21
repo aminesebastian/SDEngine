@@ -373,6 +373,9 @@
     <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\PictorumShapeDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\Imgui\imgui.h">
@@ -577,6 +580,7 @@
     <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
+    <ClInclude Include="Core\Pictorum\PictorumShapeDrawer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

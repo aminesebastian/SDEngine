@@ -1,16 +1,16 @@
 #pragma once
 #include "Core/DataStructures/DataStructures.h"
+#include "Core/Engine/Delegates/Event.h"
 #include "Core/Engine/WindowDataTypes.h"
 #include "Core/Input/InputUtilities.h"
 #include "Core/Input/IUserInputReciever.h"
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
-#include "Core/Engine/Delegates/Event.h"
+#include "Core/Pictorum/PictorumShapeDrawer.h"
+#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
 #include "UserInterface/DetailsPanelProvider.h"
 
 class PictorumWidget;
-class TextRenderer;
-class DistanceFieldFont;
 class Window;
 
 class PictorumRenderer : public EngineObject, public IUserInputReciever {
@@ -33,7 +33,8 @@ public:
 	bool AddToViewport(PictorumWidget* Widget);
 	bool RemoveFromViewport(PictorumWidget* Widget);
 
-	PictorumWidget* GetMouseOverWidget();
+	PictorumShapeDrawer* GetShapeDrawer() const;
+	PictorumWidget* GetMouseOverWidget() const;
 	const Window* GetOwningWindow() const;
 	const SArray<PictorumWidget*>& GetWidgets() const;
 	const PictorumWidget* GetHoveredWidget() const;
@@ -44,8 +45,9 @@ public:
 private:
 	SArray<PictorumWidget*> Widgets;
 	PictorumWidget* MouseOverWidget;
+	PictorumShapeDrawer* ShapeDrawer;
 	Window* OwningWindow;
-
+	GPUVertexBufferArray* VertexArrayBuffer;
 	bool bMouseCaptured;
 	FRenderGeometry TopLevelRenderGeometry;
 

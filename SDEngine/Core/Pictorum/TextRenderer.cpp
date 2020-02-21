@@ -16,14 +16,14 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	LastFrameMinBounds = ZERO_VECTOR2D;
 	LastFrameMaxBounds = ZERO_VECTOR2D;
 
-	TestBuffer = new GPUVertexBufferArray();
-	TestBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
-	TestBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
-	TestBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
+	VertexArrayBuffer = new GPUVertexBufferArray();
+	VertexArrayBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	VertexArrayBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	VertexArrayBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
 	Flush();
 }
 TextRenderer::~TextRenderer() {
-	delete TestBuffer;
+	delete VertexArrayBuffer;
 	delete TextBlockCache;
 }
 
@@ -45,7 +45,7 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	fontShader->SetShaderFloat("WIDTH", DistanceFieldWidth);
 	fontShader->SetShaderFloat("EDGE", DistanceFieldEdge);
 
-	TestBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
+	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
 
 	LastFrameMinBounds = scale * (TextBlockCache->MinPosition) * RenderTargetResolution;
 	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
@@ -131,10 +131,10 @@ void TextRenderer::BindToGPU() {
 		return;
 	}
 
-	TestBuffer->SetBufferData(0, TextBlockCache->Verticies, TextBlockCache->VertexCount);
-	TestBuffer->SetBufferData(1, TextBlockCache->TexCoords, TextBlockCache->TexCoordCount);
-	TestBuffer->SetBufferData(2, TextBlockCache->Indices, TextBlockCache->IndexCount);
-	TestBuffer->Update();
+	VertexArrayBuffer->SetBufferData(0, TextBlockCache->Verticies, TextBlockCache->VertexCount);
+	VertexArrayBuffer->SetBufferData(1, TextBlockCache->TexCoords, TextBlockCache->TexCoordCount);
+	VertexArrayBuffer->SetBufferData(2, TextBlockCache->Indices, TextBlockCache->IndexCount);
+	VertexArrayBuffer->Update();
 
 	bBoundToGPU = true;
 }

@@ -286,6 +286,7 @@
     <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\PictorumShapeDrawer.cpp" />
     <ClCompile Include="UserInterface\EngineUI.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
+    <ClInclude Include="Core\Pictorum\PictorumShapeDrawer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="UserInterface\EngineUI.h" />

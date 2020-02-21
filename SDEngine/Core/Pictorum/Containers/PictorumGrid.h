@@ -26,6 +26,7 @@ public:
 	PictorumGrid(const TString& Name);
 	virtual ~PictorumGrid();
 
+	virtual void PictorumGrid::Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 
 	const int32 AddColumn(const float& ColumnWidth, bool Relative);
@@ -49,17 +50,34 @@ protected:
 
 	void GetSlotDimensions(const int32& Row, const int32& Column, const int32& RowSpan, const int32& ColumnSpan, const FRenderGeometry& CurrentRenderGeometry, Vector2D& Location, Vector2D& Space) const;
 	Vector2D CalculateTotalDimensions(const FRenderGeometry& Geometry) const;
+	PictorumWidget* GetWidgetInSlot(const int32& Row, const int32& Column);
 
 	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) override;
-	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
-	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 
 private:
 	bool GetTargetResizeColumns(int32& GrowColumnIndex, int32& ShrinkColumnIndex);
 	bool GetTargetResizeRows(int32& GrowRowIndex, int32& ShrinkRowIndex);
 	void CacheHoveredCellValues(const vec2& MousePosition);
+
+	/**
+	 * Gets the minimum height for a row in relative units.
+	 *
+	 * @param 	RowIndex	Zero-based index of the row.
+	 *
+	 * @returns	The row minimum height.
+	 */
+	const float GetRowMinSize(const int32& RowIndex);
+
+	/**
+	 * Gets the minimum width for a column in relative units.
+	 *
+	 * @param 	ColumnIndex	Zero-based index of the column.
+	 *
+	 * @returns	The column minimum width.
+	 */
+	const float GetColumnMinSize(const int32& ColumnIndex);
 };
 
 

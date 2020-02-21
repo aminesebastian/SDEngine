@@ -22,11 +22,7 @@ public:
 
 private:
 	FPadding Padding;
-	FBorderRadius Radius;
-	float EdgeSoftness;
-	FColor BackgroundColor;
-
-	GLuint quadVAO;
-	GLuint quadVBO;
+	
+	FBoxDrawInstruction* DrawInstruction;
 };
 

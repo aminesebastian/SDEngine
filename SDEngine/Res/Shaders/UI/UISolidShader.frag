@@ -1,5 +1,4 @@
 #version 400
-in vec2 texCoord0;
 in vec2 screenPos0;
 
 uniform vec2 RENDER_TARGET_RESOLUTION; // The resolution we are drawing to.
@@ -9,8 +8,6 @@ uniform vec2 SIZE;					   // The size (in pixels) of the quad.
 uniform vec4 COLOR;					   // The color oft the quad.
 uniform vec4 BORDER_RADIUS;			   // The radius of the corners (in pixels) clockwise starting in the top right.
 uniform float EDGE_SOFTNESS;		   // How soft the edge of the quad should be (in pixels).
-uniform vec2 MIN_CLIP;				   // The minimum clipping point of the quad.
-uniform vec2 MAX_CLIP;				   // The maximum clipping point of the quad.
 
 out vec4 FragColor;
 

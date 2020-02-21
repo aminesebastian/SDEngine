@@ -14,6 +14,7 @@ public:
 	void Unbind();
 	void Update();
 	void DrawTriangleElements(const uint8& ElementsBufferIndex, const uint32& ElementCount);
+	void DrawTriangleStrip(const uint32& StartIndex, const uint32& EndIndex);
 
 	void AddBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride = 0, const bool& Normalized = false);
 	void Clear();

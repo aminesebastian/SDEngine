@@ -8,10 +8,11 @@
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/IWidgetSlot.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
+#include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
-#include "Core/Utilities/Math/Transform.h"
 #include "Core/Utilities/Math/MathLibrary.h"
+#include "Core/Utilities/Math/Transform.h"
 #include <GLEW/glew.h>
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
@@ -134,6 +135,9 @@ protected:
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+
+	void DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
+	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
 
 	const bool& IsHovered() const;
 	const bool& WasClickedInside() const;

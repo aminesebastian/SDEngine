@@ -6,58 +6,18 @@
 #include "UserInterface/Widgets/DragFloat.h"
 
 SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
-	quadVAO = 0;
-	quadVBO = 0;
-	BackgroundColor = FColor(0.5f, 0.5f, 0.5f, 1.0);
-	EdgeSoftness = 1.0f;
-	GLfloat quadVertices[] = {
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-	};
-
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	DrawInstruction = new FBoxDrawInstruction();
 
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
 SolidWidget::~SolidWidget() {
-
+	delete DrawInstruction;
 }
 
 void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	Shader* shader = EngineStatics::GetUISolidShader();
-	shader->Bind();
-
-	vec2 screenResolution      = Geometry.GetRenderResolution();
-	mat4 modelMatrix		   = CalculateModelMatrix(Geometry);
-
-
-	shader->SetShaderMatrix4("MODEL_MATRIX", modelMatrix);
-	shader->SetShaderVector2("RENDER_TARGET_RESOLUTION", screenResolution);
-	shader->SetShaderVector2("LOCATION", Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE));
-	shader->SetShaderVector2("CENTER_LOCATION", Geometry.GetLocation(EPictorumLocationBasis::ABSOLUTE) + (Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE)/2.0f));
-	shader->SetShaderVector2("SIZE", Geometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE));
-	shader->SetShaderVector4("COLOR", BackgroundColor);
-	shader->SetShaderVector4("BORDER_RADIUS", Radius.GetRadii());
-	shader->SetShaderFloat("EDGE_SOFTNESS", EdgeSoftness);
-	shader->SetShaderVector2("MIN_CLIP", Geometry.GetMinimumClipPoint(EPictorumLocationBasis::RELATIVE));
-	shader->SetShaderVector2("MAX_CLIP", Geometry.GetMaximumClipPoint(EPictorumLocationBasis::ABSOLUTE));
-
-
-	glDisable(GL_DEPTH_TEST);
-	glBindVertexArray(quadVAO);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);
-	glEnable(GL_DEPTH_TEST);
+	DrawInstruction->Location = Geometry.GetLocation();
+	DrawInstruction->Size = Geometry.GetAllotedSpace();
+	DrawQuad(Geometry, *DrawInstruction);
 }
 const bool SolidWidget::CanAddChild() const {
 	return true;
@@ -97,19 +57,19 @@ void SolidWidget::SetPadding(const float& Top, const float& Right, const float& 
 	Padding.SetLeft(Left);
 }
 void SolidWidget::SetBackgroundColor(const FColor& NewColor) {
-	BackgroundColor = NewColor;
+	DrawInstruction->BackgroundColor = NewColor;
 }
 void SolidWidget::SetBorderRadius(const float& TopLeft, const float& TopRight, const float& BottomLeft, const float& BottomRight) {
-	Radius.SetTopLeftRadius(TopLeft);
-	Radius.SetTopRightRadius(TopRight);
-	Radius.SetBottomLeftRadius(BottomLeft);
-	Radius.SetBottomRightRadius(BottomRight);
+	DrawInstruction->BorderRadius.SetTopLeftRadius(TopLeft);
+	DrawInstruction->BorderRadius.SetTopRightRadius(TopRight);
+	DrawInstruction->BorderRadius.SetBottomLeftRadius(BottomLeft);
+	DrawInstruction->BorderRadius.SetBottomRightRadius(BottomRight);
 }
 void SolidWidget::OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	PictorumWidget::OnMouseEnter(MousePosition, Event);
-	BackgroundColor += FColor(0.1f, 0.1f, 0.1f);
+	DrawInstruction->BackgroundColor += FColor(0.1f, 0.1f, 0.1f);
 }
 void SolidWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) {
 	PictorumWidget::OnMouseExit(MousePosition, Event);
-	BackgroundColor -= FColor(0.1f, 0.1f, 0.1f);
+	DrawInstruction->BackgroundColor -= FColor(0.1f, 0.1f, 0.1f);
 }

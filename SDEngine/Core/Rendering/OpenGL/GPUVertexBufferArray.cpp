@@ -32,6 +32,11 @@ void GPUVertexBufferArray::DrawTriangleElements(const uint8& ElementsBufferIndex
 	glDrawElements(GL_TRIANGLES, ElementCount, GL_UNSIGNED_INT, nullptr);
 	Unbind();
 }
+void GPUVertexBufferArray::DrawTriangleStrip(const uint32& StartIndex, const uint32& EndIndex) {
+	Bind();
+	glDrawArrays(GL_TRIANGLE_STRIP, StartIndex, EndIndex);
+	Unbind();
+}
 void GPUVertexBufferArray::AddBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride, const bool& Normalized) {
 	// Create a new buffer and add it to the buffer array.
 	GPUVertexBuffer* buffer = new GPUVertexBuffer(Name, BufferType, BufferUsage, DataType, Stride, Normalized);

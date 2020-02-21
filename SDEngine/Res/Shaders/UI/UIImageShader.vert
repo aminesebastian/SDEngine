@@ -1,16 +1,18 @@
 #version 400                                                                        
                         
-uniform mat4 MODEL_MATRIX;
+uniform vec2 NDC_LOCATION;
+uniform vec2 RELATIVE_SIZE;
 
 layout (location = 0) in vec3 position;                                             
-layout (location = 1) in vec2 texCoord;                                                                                          
-                             
-out vec2 texCoord0;                                                                                                                         
+layout (location = 1) in vec2 texCoord;     
+
 out vec2 screenPos0;
+out vec2 texCoord0;       
 
 void main() {   
-	vec4 screenPosition  = MODEL_MATRIX * vec4(position, 1.0);
+	vec3 screenPosition  = vec3(RELATIVE_SIZE * 2.0f, 0.0f) * position;
+	screenPosition		+= vec3(NDC_LOCATION, 0.0f);
 	screenPos0			 = screenPosition.xy;
-    gl_Position			 = screenPosition;
-    texCoord0			 = texCoord;         
+	texCoord0			 = texCoord;  
+    gl_Position			 = vec4(screenPosition, 1.0f);     
 }
