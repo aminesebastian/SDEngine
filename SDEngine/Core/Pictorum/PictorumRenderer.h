@@ -42,6 +42,7 @@ public:
 	Event<void(const vec2&)> OnMouseDownAnywhereDelegate;
 	Event<void(const vec2&)> OnMouseUpAnywhereDelegate;
 	Event<void(const vec2&, const vec2&)> OnMouseMoveAnywhereDelegate;
+	Event<void(const float&)> OnMouseScrollAnywhereDelegate;
 private:
 	SArray<PictorumWidget*> Widgets;
 	PictorumWidget* MouseOverWidget;

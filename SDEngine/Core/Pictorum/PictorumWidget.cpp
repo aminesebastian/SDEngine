@@ -96,18 +96,6 @@ const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition
 	return EMouseCursorStyle::Arrow;
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
-	// Do not render any widgets that are outside their parent's bounds.
-	vec2 childMin = Geometry.GetLocation();
-	vec2 childMax = childMin + Geometry.GetAllotedSpace();
-
-	if (childMax.y < Geometry.GetMinimumClipPoint().y || childMin.y > Geometry.GetMaximumClipPoint().y) {
-		return;
-	}
-	if (childMax.x < Geometry.GetMinimumClipPoint().x || childMin.x > Geometry.GetMaximumClipPoint().x) {
-		return;
-	}
-
-
 	LastRenderedGeometry = Geometry;
 	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
@@ -173,6 +161,12 @@ void PictorumWidget::MouseUp(const vec2& MousePosition, const EMouseButton& Butt
 		if (EventIn.ShouldContinuePropragating()) {
 			OnMouseUp(MousePosition, Button, EventIn);
 		}
+	}
+}
+void PictorumWidget::MouseScroll(const float Delta, FUserInterfaceEvent& EventIn) {
+	OnMouseScrollDelegate.Broadcast(this, Delta, EventIn);
+	if (EventIn.ShouldContinuePropragating()) {
+		OnMouseScroll(Delta, EventIn);
 	}
 }
 void PictorumWidget::AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
@@ -266,3 +260,4 @@ void PictorumWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent&
 void PictorumWidget::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}
+void PictorumWidget::OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn) {}

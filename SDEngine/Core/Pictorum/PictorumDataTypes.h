@@ -526,6 +526,12 @@ struct FBorderRadius {
 	FBorderRadius() {
 		Radii = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
+	void SetAllRadii(const float& Radius) {
+		Radii.x = Radius;
+		Radii.y = Radius;
+		Radii.z = Radius;
+		Radii.w = Radius;
+	}
 	const Vector4D& GetRadii() const {
 		return Radii;
 	}

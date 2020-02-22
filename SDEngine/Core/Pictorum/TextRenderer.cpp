@@ -54,6 +54,7 @@ void TextRenderer::SetText(const TString& Text) {
 	this->Text = Text;
 	Flush();
 	AddLine(Text);
+	TextBlockCache->Finalize();
 }
 void TextRenderer::AddLine(const TString& Line) {
 	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
@@ -123,8 +124,6 @@ const void TextRenderer::GetTextBoundingBoxDimensions(vec2& MinBounds, vec2& Max
 }
 
 void TextRenderer::BindToGPU() {
-	TextBlockCache->Finalize();
-
 	// Do not bind if there is no data.
 	if (TextBlockCache->Verticies.Count() == 0 || TextBlockCache->TexCoords.Count() == 0 || TextBlockCache->Indices.Count() == 0) {
 		SD_ENGINE_ERROR("There was an attempt to bind text geometry to the GPU where no geometry was defined!");

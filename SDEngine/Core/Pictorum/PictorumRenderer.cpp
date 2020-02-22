@@ -122,7 +122,15 @@ void PictorumRenderer::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	}
 }
 void PictorumRenderer::OnMouseScrollAxis(float Delta) {
+	OnMouseScrollAnywhereDelegate.Broadcast(Delta);
 
+	if (MouseOverWidget) {
+		FUserInterfaceEvent eventHandle;
+		MouseOverWidget->MouseScroll(Delta, eventHandle);
+		bMouseCaptured = false;
+		SDL_CaptureMouse(SDL_FALSE);
+		SDL_ShowCursor(1);
+	}
 }
 
 PictorumWidget* PictorumRenderer::GetMouseOverWidget() const {

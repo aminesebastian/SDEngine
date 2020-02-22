@@ -60,7 +60,7 @@ public:
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnHoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
-
+	Event<void(PictorumWidget*, const float&, FUserInterfaceEvent&)> OnMouseScrollDelegate;
 protected:
 	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
@@ -135,6 +135,7 @@ protected:
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	virtual void OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
 
 	void DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
@@ -156,4 +157,5 @@ private:
 	virtual void MouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
 	virtual void MouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void MouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	virtual void MouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
 };
