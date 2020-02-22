@@ -234,11 +234,11 @@
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\HorizontalBoxWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumHorizontalBox.cpp" />
     <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp" />
     <ClCompile Include="Core\Utilities\StringUtilities.cpp" />
     <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
-    <ClCompile Include="Core\Pictorum\TextRenderer.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\TextRenderer.cpp" />
     <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp" />
@@ -286,7 +286,7 @@
     <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp" />
-    <ClCompile Include="Core\Pictorum\PictorumShapeDrawer.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumScrollBox.cpp" />
     <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
     <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
@@ -311,7 +311,7 @@
     <ClCompile Include="Core\Rendering\PostProcessing\ToneMapper.cpp" />
     <ClCompile Include="Core\Utilities\Math\Transform.cpp" />
     <ClCompile Include="Core\Engine\World.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\VerticalBoxWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
@@ -330,11 +330,11 @@
     <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
     <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
     <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\HorizontalBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumHorizontalBox.h" />
     <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
-    <ClInclude Include="Core\Pictorum\TextRenderer.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
     <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumCanvasSlot.h" />
     <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
@@ -389,7 +389,7 @@
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
-    <ClInclude Include="Core\Pictorum\PictorumShapeDrawer.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
@@ -414,7 +414,7 @@
     <ClInclude Include="Core\Rendering\PostProcessing\ToneMapper.h" />
     <ClInclude Include="Core\Utilities\Math\Transform.h" />
     <ClInclude Include="Core\Engine\World.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\VerticalBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

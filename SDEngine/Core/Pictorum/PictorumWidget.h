@@ -137,7 +137,7 @@ protected:
 	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
 
-	void DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
+	void DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
 
 	const bool& IsHovered() const;

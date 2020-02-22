@@ -1,4 +1,4 @@
-#include "VerticalBoxWidget.h"
+#include "PictorumVerticalBox.h"
 #include "Core/Utilities/Math/MathLibrary.h"
 
 PictorumVerticalBox::PictorumVerticalBox(const TString& Name) : PictorumWidget(Name) {

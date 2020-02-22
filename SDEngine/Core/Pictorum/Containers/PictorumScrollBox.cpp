@@ -22,7 +22,7 @@ void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 
 	instructions.Size = vec2(5.0f, 50.0f);
 	instructions.BorderRadius.SetAllRadii(4.0f);
-	DrawQuad(Geometry, instructions);
+	DrawBox(Geometry, instructions);
 }
 void PictorumScrollBox::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	if (abs(ScrollEnergy) > 0.0f) {

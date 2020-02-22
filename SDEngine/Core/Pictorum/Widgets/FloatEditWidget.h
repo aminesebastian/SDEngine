@@ -3,7 +3,7 @@
 
 class TextWidget;
 class SolidWidget;
-class HorizontalBoxWidget;
+class PictorumHorizontalBox;
 
 class FloatEditWidget : public PictorumWidget {
 public:
@@ -13,7 +13,7 @@ public:
 	void SetControlledValue(float* ValuePointer, uint8 Count);
 
 private:
-	HorizontalBoxWidget* Container;
+	PictorumHorizontalBox* Container;
 
 	SArray<SolidWidget*> ValueBackgroundWidgets;
 	SArray<TextWidget*> ValueWidgets;

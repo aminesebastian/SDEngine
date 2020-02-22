@@ -2,7 +2,7 @@
 #include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 #include "Core/Assets/AssetManager.h"
 #include "Core/Utilities/Math/MathLibrary.h"
-#include "Core/Pictorum/TextRenderer.h"
+#include "Core/Pictorum/Utilities/TextRenderer.h"
 
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
 	Font = Engine::GetAssetManager()->GetAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");

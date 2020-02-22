@@ -2,7 +2,7 @@
 #include "Core/Engine/Window.h"
 #include "Core/Pictorum/EngineUI/EngineUIStyle.h"
 #include "Core/Pictorum/PictorumRenderer.h"
-#include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
+#include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
 #include "Core/Pictorum/Containers/PictorumCanvas.h"
 #include "Core/Pictorum/Widgets/OverlayWidget.h"
@@ -39,7 +39,7 @@ void TitleBar::OnCreated() {
 	bg->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	bMouseDownOnTitleBar = false;
 
-	HorizontalBoxWidget* buttonContainer = new HorizontalBoxWidget("ButtonContainer");
+	PictorumHorizontalBox* buttonContainer = new PictorumHorizontalBox("ButtonContainer");
 	buttonContainer->SetPadding(0.0f, 0.0f, 0.0f, 14.0f);
 	bg->AddChild(buttonContainer);
 

@@ -28,7 +28,7 @@ PictorumShapeDrawer::~PictorumShapeDrawer() {
 
 }
 
-void PictorumShapeDrawer::DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const {
+void PictorumShapeDrawer::DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const {
 	Shader* shader = EngineStatics::GetUISolidShader();
 	shader->Bind();
 

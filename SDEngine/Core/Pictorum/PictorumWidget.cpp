@@ -6,7 +6,7 @@
 #include "Core/Objects/CoreTypes/Shader.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/MathLibrary.h"
-#include "Core/Pictorum/PictorumShapeDrawer.h"
+#include "Core/Pictorum/Utilities/PictorumShapeDrawer.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation = 0.0f; // 0 Degrees
@@ -237,8 +237,8 @@ const bool& PictorumWidget::WasClickedInside() const {
 	return bWasClickInside;
 }
 
-void PictorumWidget::DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const {
-	GetOwningRenderer()->GetShapeDrawer()->DrawQuad(Geometry, Instruction);
+void PictorumWidget::DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const {
+	GetOwningRenderer()->GetShapeDrawer()->DrawBox(Geometry, Instruction);
 }
 void PictorumWidget::DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const {
 	GetOwningRenderer()->GetShapeDrawer()->DrawImage(Geometry, Instruction);

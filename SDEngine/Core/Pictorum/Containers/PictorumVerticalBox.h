@@ -2,9 +2,9 @@
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Pictorum/Slots/VerticalBoxSlot.h"
 
-class VerticalBoxWidget : public PictorumWidget {
+class PictorumVerticalBox : public PictorumWidget {
 public:
-	VerticalBoxWidget(const TString& Name);
+	PictorumVerticalBox(const TString& Name);
 	virtual const bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;

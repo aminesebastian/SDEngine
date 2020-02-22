@@ -42,10 +42,10 @@ void PictorumGrid::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 			drawInstruction.Location = slotLocation;
 
 			drawInstruction.Location.x = slotLocation.x - 2.0f;
-			DrawQuad(Geometry, drawInstruction);
+			DrawBox(Geometry, drawInstruction);
 
 			drawInstruction.Location.x = slotLocation.x + slotSize.x;
-			DrawQuad(Geometry, drawInstruction);
+			DrawBox(Geometry, drawInstruction);
 		}
 	}
 }

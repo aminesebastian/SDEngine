@@ -16,7 +16,7 @@ SolidWidget::~SolidWidget() {
 void SolidWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	DrawInstruction->Location = Geometry.GetLocation();
 	DrawInstruction->Size = Geometry.GetAllotedSpace();
-	DrawQuad(Geometry, *DrawInstruction);
+	DrawBox(Geometry, *DrawInstruction);
 }
 const bool SolidWidget::CanAddChild() const {
 	return true;

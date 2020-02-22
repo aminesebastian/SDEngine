@@ -6,7 +6,7 @@
 #include "Core/Input/IUserInputReciever.h"
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
-#include "Core/Pictorum/PictorumShapeDrawer.h"
+#include "Core/Pictorum/Utilities/PictorumShapeDrawer.h"
 #include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
 
 class PictorumWidget;

@@ -1,13 +1,13 @@
-#include "HorizontalBoxWidget.h"
+#include "PictorumHorizontalBox.h"
 #include "Core/Utilities/Math/MathLibrary.h"
 
-HorizontalBoxWidget::HorizontalBoxWidget(const TString& Name) : PictorumWidget(Name) {
+PictorumHorizontalBox::PictorumHorizontalBox(const TString& Name) : PictorumWidget(Name) {
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
-const bool HorizontalBoxWidget::CanAddChild() const {
+const bool PictorumHorizontalBox::CanAddChild() const {
 	return true;
 }
-void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
+void PictorumHorizontalBox::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	float xOffset           = CalculateXOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
 	vec2 desiredSpace       = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 	desiredSpace.x          = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
@@ -42,7 +42,7 @@ void HorizontalBoxWidget::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 
 	OutputGeometry.SetLocation(location);
 }
-vec2 HorizontalBoxWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
+vec2 PictorumHorizontalBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;
 	for (uint8 i = 0; i < Children.Count(); i++) {
 		PictorumWidget* child = Children[i];
@@ -55,7 +55,7 @@ vec2 HorizontalBoxWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) c
 	return desiredSize;
 }
 
-float HorizontalBoxWidget::CalculateXOffsetForChild(const FRenderGeometry& CurrentRenderGeometry, const int32& ChildIndex) const {
+float PictorumHorizontalBox::CalculateXOffsetForChild(const FRenderGeometry& CurrentRenderGeometry, const int32& ChildIndex) const {
 	float offset = 0.0f;
 
 	for (int32 i = 0; i <= ChildIndex; i++) {
@@ -64,7 +64,7 @@ float HorizontalBoxWidget::CalculateXOffsetForChild(const FRenderGeometry& Curre
 
 	return offset;
 }
-float HorizontalBoxWidget::CalculateChildWidth(const FRenderGeometry& CurrentRenderGeometry,const int32 ChildIndex) const {
+float PictorumHorizontalBox::CalculateChildWidth(const FRenderGeometry& CurrentRenderGeometry,const int32 ChildIndex) const {
 	HorizontalBoxSlot* slot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
 	float desiredX          = Children[ChildIndex]->GetDesiredDrawSpace(CurrentRenderGeometry).x;
 	desiredX                = MathLibrary::Min(desiredX, CurrentRenderGeometry.GetAllotedSpace().x);
@@ -81,36 +81,36 @@ float HorizontalBoxWidget::CalculateChildWidth(const FRenderGeometry& CurrentRen
 	return 0.0f;
 }
 
-HorizontalBoxSlot* HorizontalBoxWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
+HorizontalBoxSlot* PictorumHorizontalBox::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new HorizontalBoxSlot();
 }
-HorizontalBoxSlot* HorizontalBoxWidget::AddChild(PictorumWidget* Widget) {
+HorizontalBoxSlot* PictorumHorizontalBox::AddChild(PictorumWidget* Widget) {
 	return Cast<HorizontalBoxSlot>(AddChildInternal(Widget));
 }
 
-const FPadding& HorizontalBoxWidget::GetPadding() const {
+const FPadding& PictorumHorizontalBox::GetPadding() const {
 	return Padding;
 }
-void HorizontalBoxWidget::SetPadding(const float& AllPadding) {
+void PictorumHorizontalBox::SetPadding(const float& AllPadding) {
 	Padding.SetTop(AllPadding);
 	Padding.SetBottom(AllPadding);
 	Padding.SetRight(AllPadding);
 	Padding.SetLeft(AllPadding);
 }
-void HorizontalBoxWidget::SetPadding(const float& TopBottomPadding, const float& RightLeftPadding) {
+void PictorumHorizontalBox::SetPadding(const float& TopBottomPadding, const float& RightLeftPadding) {
 	Padding.SetTop(TopBottomPadding);
 	Padding.SetBottom(TopBottomPadding);
 	Padding.SetRight(RightLeftPadding);
 	Padding.SetLeft(RightLeftPadding);
 }
-void HorizontalBoxWidget::SetPadding(const float& Top, const float& Right, const float& Bottom, const float& Left) {
+void PictorumHorizontalBox::SetPadding(const float& Top, const float& Right, const float& Bottom, const float& Left) {
 	Padding.SetTop(Top);
 	Padding.SetBottom(Bottom);
 	Padding.SetRight(Right);
 	Padding.SetLeft(Left);
 }
 
-float HorizontalBoxWidget::GetFillRatioForChild(int32 ChildIndex) const {
+float PictorumHorizontalBox::GetFillRatioForChild(int32 ChildIndex) const {
 	HorizontalBoxSlot* childSlot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
 	if (childSlot->GetFillRule() == EFillRule::AUTOMATIC) {
 		return 0.0f;
@@ -127,7 +127,7 @@ float HorizontalBoxWidget::GetFillRatioForChild(int32 ChildIndex) const {
 
 	return childSlot->GetFillRatio() / sum;
 }
-float HorizontalBoxWidget::GetNonFillSpaceRequirements(const FRenderGeometry& CurrentRenderGeometry) const {
+float PictorumHorizontalBox::GetNonFillSpaceRequirements(const FRenderGeometry& CurrentRenderGeometry) const {
 	float widthRequirement = 0.0f;
 
 	for (const PictorumWidget* child : Children) {

@@ -1,7 +1,7 @@
 #include "FloatEditWidget.h"
 #include "Core/Engine/Window.h"
 #include "Core/Pictorum/PictorumRenderer.h"
-#include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
+#include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
@@ -32,7 +32,7 @@ void FloatEditWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseMoveAnywhere>(this);
 
-	Container = new HorizontalBoxWidget("MainContainer");
+	Container = new PictorumHorizontalBox("MainContainer");
 	//Container->SetPadding(4.0f);
 	AddChild(Container);
 

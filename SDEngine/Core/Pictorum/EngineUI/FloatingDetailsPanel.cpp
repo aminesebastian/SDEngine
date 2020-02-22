@@ -7,8 +7,8 @@
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Core/Pictorum/Widgets/HorizontalBoxWidget.h"
-#include "Core/Pictorum/Widgets/VerticalBoxWidget.h"
+#include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
+#include "Core/Pictorum/Containers/PictorumVerticalBox.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
 
@@ -25,7 +25,7 @@ void FloatingDetailsPanel::OnCreated() {
 	root->SetPadding(8.0f);
 	AddChild(root);
 
-	VerticalBoxWidget* vb = new VerticalBoxWidget("DetailsPanelWidgetsContainer");
+	PictorumVerticalBox* vb = new PictorumVerticalBox("DetailsPanelWidgetsContainer");
 	root->AddChild(vb);
 
 	for (int i = 0; i < 5; i++) {
@@ -34,7 +34,7 @@ void FloatingDetailsPanel::OnCreated() {
 			vb->AddChild(sep);
 			sep->SetSize(0.0f, 5.0f);
 		}
-		HorizontalBoxWidget* hbox = new HorizontalBoxWidget("EditWidgetHBox" + to_string(i) + "Label");
+		PictorumHorizontalBox* hbox = new PictorumHorizontalBox("EditWidgetHBox" + to_string(i) + "Label");
 		vb->AddChild(hbox);
 
 		TextWidget* label = new TextWidget("EditWidget" + to_string(i) + "Label");

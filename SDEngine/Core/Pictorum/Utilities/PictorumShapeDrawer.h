@@ -43,7 +43,7 @@ public:
 	PictorumShapeDrawer(const TString& Name);
 	virtual ~PictorumShapeDrawer();
 
-	void DrawQuad(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
+	void DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
 private:
 	GPUVertexBufferArray* QuadVertexBuffer;
