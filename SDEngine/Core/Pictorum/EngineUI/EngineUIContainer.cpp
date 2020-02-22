@@ -26,7 +26,8 @@ void EngineUIContainer::OnCreated() {
 	titleBarSlot->Offsets.SetYSize(30.0f).SetYPosition(-30.0f);
 	
 	PictorumGrid* grid = new PictorumGrid("Grid");
-	grid->AddRow(1.0f, true);
+	grid->AddRow(0.5f, true);
+	grid->AddRow(0.5f, true);
 	grid->AddColumn(0.2f, true);
 	grid->AddColumn(0.6f, true);
 	grid->AddColumn(0.2f, true);
@@ -38,16 +39,19 @@ void EngineUIContainer::OnCreated() {
 	PictorumGridSlot* leftSlot = grid->AddChild(leftSolid);
 	leftSlot->Column = 0;
 	leftSlot->Row = 0;
+	leftSlot->RowSpan = 2;
 
 	FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
 	PictorumGridSlot* middleSlot = grid->AddChild(FrameStatistics);
 	middleSlot->Column = 1;
 	middleSlot->Row = 0;
+	middleSlot->RowSpan = 2;
 
 	DetailsPanel = new FloatingDetailsPanel("DetailsPanel");
 	PictorumGridSlot* rightSlot = grid->AddChild(DetailsPanel);
 	rightSlot->Column = 2;
 	rightSlot->Row = 0;
+	rightSlot->RowSpan = 2;
 }
 const bool EngineUIContainer::CanAddChild() const {
 	return true;

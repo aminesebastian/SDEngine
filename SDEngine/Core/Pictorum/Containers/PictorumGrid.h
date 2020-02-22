@@ -16,8 +16,10 @@ struct FGridRule {
 			return Value;
 		}
 	}
-	void AddRelativeValue(const float& ValueIn) {
-		Value = MathLibrary::Max(ValueIn, 1.0f);
+	float AddRelativeValue(const float& ValueIn) {
+		float initialValue = Value;
+		Value = MathLibrary::Clamp(Value + ValueIn, 0.0f, 1.0f);
+		return Value - initialValue;
 	}
 };
 
@@ -48,18 +50,26 @@ protected:
 	Vector2D DistanceToNearestEntry;
 	Vector2D CellRelativePosition;
 
+
+	/************/
+	/* RESIZING */
+	/************/
+	bool bCanResize;
+	bool bIsResizeTargetRow;
+	int32 ShrinkTarget;
+	int32 GrowTarget;
+
 	void GetSlotDimensions(const int32& Row, const int32& Column, const int32& RowSpan, const int32& ColumnSpan, const FRenderGeometry& CurrentRenderGeometry, Vector2D& Location, Vector2D& Space) const;
 	Vector2D CalculateTotalDimensions(const FRenderGeometry& Geometry) const;
 	PictorumWidget* GetWidgetInSlot(const int32& Row, const int32& Column);
-
-	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
+	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition) override;
 	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) override;
 
 private:
 	bool GetTargetResizeColumns(int32& GrowColumnIndex, int32& ShrinkColumnIndex);
 	bool GetTargetResizeRows(int32& GrowRowIndex, int32& ShrinkRowIndex);
-	void CacheHoveredCellValues(const vec2& MousePosition);
+	void CacheMouseMoveValues(const vec2& MousePosition);
 
 	/**
 	 * Gets the minimum height for a row in relative units.

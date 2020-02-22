@@ -97,6 +97,12 @@ void PictorumRenderer::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 
 	OnMouseMoveAnywhereDelegate.Broadcast(ScreenPosition, Delta);
 
+	if (MouseOverWidget) {
+		Engine::GetInputSubsystem()->SetMouseCursorStyle(MouseOverWidget->GetMouseCursor(ScreenPosition));
+	} else {
+		Engine::GetInputSubsystem()->SetMouseCursorStyle(EMouseCursorStyle::Arrow);
+	}
+
 	// Raise mouse enter and exit events.
 	if (MouseOverWidget != previousMouseOver) {
 		if (previousMouseOver) {

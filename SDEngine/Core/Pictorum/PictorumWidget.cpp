@@ -92,6 +92,9 @@ mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const
 
 	return posMatrix * scaleMatrix * combinedRotMatrix;
 }
+const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition) {
+	return EMouseCursorStyle::Arrow;
+}
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	// Do not render any widgets that are outside their parent's bounds.
 	vec2 childMin = Geometry.GetLocation();

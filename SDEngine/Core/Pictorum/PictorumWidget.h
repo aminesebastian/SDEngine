@@ -95,7 +95,7 @@ protected:
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
 	virtual mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
-
+	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition);
 	/**
 	* This method is raised either when this widget is added to the viewport (if this is a top
 	* level widget) or when it is added to a parent After this point, it is safe to reference all

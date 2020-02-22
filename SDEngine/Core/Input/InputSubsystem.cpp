@@ -49,6 +49,11 @@ vec2 InputSubsystem::GetMouseDelta() {
 }
 
 void InputSubsystem::SetMouseCursorStyle(const EMouseCursorStyle& Cursor) {
+	// Do nothing if this is the same mouse cursor style currently being used.
+	if (Cursor == CurrentCursorStyle) {
+		return;
+	}
+
 	CurrentCursorStyle = Cursor;
 	if (MouseCursor) {
 		SDL_FreeCursor(MouseCursor);

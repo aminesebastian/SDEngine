@@ -50,7 +50,7 @@ public:
 	}
 	template<typename T>
 	static T Clamp(const T& Value, const T& Minimum, const T& Maximum) {
-		return Max(Min(Value, Minimum), Maximum);
+		return Min(Max(Value, Minimum), Maximum);
 	}
 
 	static Vector2D MinVector(const Vector2D& First, const Vector2D& Second);
