@@ -3,7 +3,6 @@
 #include "Core/Engine/Engine.h"
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Objects/CoreTypes/Shader.h"
-#include "UserInterface/Widgets/DragFloat.h"
 
 SolidWidget::SolidWidget(const TString& Name) : PictorumWidget(Name) {
 	DrawInstruction = new FBoxDrawInstruction();

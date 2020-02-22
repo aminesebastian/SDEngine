@@ -4,12 +4,11 @@
 #include "Core/DataStructures/DataStructures.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Rendering/RenderTypeDefenitions.h"
-#include "UserInterface/DetailsPanelProvider.h"
 
 class Component;
 class DragFloat;
 
-class Actor : public Entity, public IDetailsPanelProvider {
+class Actor : public Entity {
 public:
 	Actor(const TString& Name);
 	~Actor();
@@ -44,12 +43,6 @@ public:
 	virtual void PreFrameRendered() override;
 	virtual void PostFrameRendered() override;
 	virtual void DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) override;
-
-	//////////////////
-	//USER INTERFACE//
-	//////////////////
-	virtual bool PopulateDetailsPanel() override;
-	virtual TString GetDetailsPanelName() override;
 
 protected:
 	Component* RootComponent;

@@ -98,15 +98,3 @@ void BloomPostProcessing::SetBloomWeight(float Weight) {
 float BloomPostProcessing::GetBloomWeight() {
 	return BloomWeight;
 }
-
-bool BloomPostProcessing::PopulatePostProcessingDetailsPanel() {
-	float bloomSize = GetBloomSize();
-	if (ImGui::SliderFloat("Size", &bloomSize, 0.0f, 10.0f)) {
-		SetBloomSize(bloomSize);
-	}
-	ImGui::SliderFloat("Weight", &BloomWeight, 0.0f, 10.0f);
-	ImGui::SliderFloat("Threshold", &BloomThreshold, 0.0f, 5.0f);
-	ImGui::SliderInt("Passes", &BlurPasses, 1, 5, "%d Passes");
-
-	return true;
-}

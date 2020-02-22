@@ -4,7 +4,6 @@
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Engine/Engine.h"
 #include "Core/Rendering/DefferedCompositor.h"
-#include "UserInterface/UserInterface.h"
 #include "Core/Assets/AssetManager.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
 
@@ -63,19 +62,6 @@ mat4 Light::GetLightViewMatrix() {
 }
 mat4 Light::GetLightOrthogonalMatrix() {
 	return S_ShadowOrthoMatrix;
-}
-
-bool Light::PopulateDetailsPanel() {
-	Actor::PopulateDetailsPanel();
-	if (ImGui::CollapsingHeader("Light Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
-		ImGui::Text("Intensity");
-		ImGui::DragFloat("Intensity", &S_LightInfo.Intensity, 0.01f, 0.0f, 10000000.0f);
-		ImGui::Text("Attenuation");
-		ImGui::DragFloat("Attenuation", &S_LightInfo.Attenuation, 0.01f, 0.0f, 10000000.0f);
-		ImGui::Text("Color");
-		ImGui::ColorEdit3("Color", &S_LightInfo.Color[0]);
-	}
-	return true;
 }
 
 void Light::GenerateShadowTexture(DefferedCompositor* Compositor) {

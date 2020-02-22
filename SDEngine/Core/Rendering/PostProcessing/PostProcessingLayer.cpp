@@ -1,5 +1,4 @@
 #include "PostProcessingLayer.h"
-#include "UserInterface/UserInterface.h"
 #include "Core/Utilities/Logger.h"
 
 
@@ -9,18 +8,6 @@ PostProcessingLayer::PostProcessingLayer(const TString& Name, RenderViewport* Ow
 }
 PostProcessingLayer::~PostProcessingLayer() {
 
-}
-bool PostProcessingLayer::PopulateDetailsPanel() {
-	if (ImGui::Button(IsEnabled() ? "Disable" : "Enable")) {
-		ToggleEnabled();
-	}
-	return PopulatePostProcessingDetailsPanel();
-}
-TString PostProcessingLayer::GetDetailsPanelName() {
-	return GetPostProcessingLayerName();
-}
-bool PostProcessingLayer::PopulatePostProcessingDetailsPanel() {
-	return true;
 }
 void PostProcessingLayer::Enable() {
 	SD_ENGINE_INFO("Enabling Post Process Layer: {0}", GetPostProcessingLayerName())

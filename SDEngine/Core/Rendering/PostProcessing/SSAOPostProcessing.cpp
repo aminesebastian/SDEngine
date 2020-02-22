@@ -179,22 +179,3 @@ void SSAOPostProcessing::SetBlurRadius(const int& Radius) {
 const int& SSAOPostProcessing::GetBlurRadius() const {
 	return BlurRadius;
 }
-
-
-bool SSAOPostProcessing::PopulatePostProcessingDetailsPanel() {
-	ImGui::SliderFloat("Radius", &Radius, 0.0f, 50.0f);
-	ImGui::SliderFloat("Power", &Power, 0.0f, 20.0f);
-	ImGui::SliderFloat("Bias", &Bias, 0.0f, 0.05f);
-
-	int noiseSize = GetNoiseSize();
-	int samples = GetSampleCount();
-
-	if(ImGui::SliderInt("Samples", &samples, 1, 255)) {
-		SetSampleCount(samples);
-	}
-	if (ImGui::SliderInt("Noise Size", &noiseSize, 4, 32)) {
-		SetNoiseSize(noiseSize);
-	}
-
-	return true;
-}

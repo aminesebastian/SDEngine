@@ -1,7 +1,6 @@
 #include "PictorumCanvas.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/Math/MathLibrary.h"
-#include "UserInterface/Widgets/DragFloat.h"
 
 PictorumCanvas::PictorumCanvas(const TString& Name) : PictorumWidget(Name) {
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);

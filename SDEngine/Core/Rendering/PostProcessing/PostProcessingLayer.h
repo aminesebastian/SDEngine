@@ -5,12 +5,10 @@
 #include "Core/Rendering/DefferedCompositor.h"
 #include "Core/Rendering/GBuffer.h"
 #include "Core/Rendering/RenderViewport.h"
-#include "UserInterface/DetailsPanelProvider.h"
-#include "UserInterface/UserInterface.h"
 
 class RenderViewport;
 
-class PostProcessingLayer : public IDetailsPanelProvider {
+class PostProcessingLayer {
 public:
 	PostProcessingLayer(const TString& Name, RenderViewport* OwningViewport);
 	~PostProcessingLayer();
@@ -18,10 +16,6 @@ public:
 	virtual void RenderLayer(const DefferedCompositor* Compositor, const Camera* Camera, GBuffer* ReadBuffer, RenderTarget* PreviousOutput, RenderTarget* OutputBuffer) = 0;
 	virtual void RecompileShaders() {}
 	virtual void OnScreenResolutionChanged() {}
-
-	virtual bool PopulateDetailsPanel() override;
-	virtual bool PopulatePostProcessingDetailsPanel();
-	virtual TString GetDetailsPanelName() override;
 
 	void Enable();
 	void Disable();

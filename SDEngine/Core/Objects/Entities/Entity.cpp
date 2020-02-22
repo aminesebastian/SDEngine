@@ -1,9 +1,6 @@
 #include "Entity.h"
 #include "Core/Objects/Entities/Camera.h"
 #include "Core/Engine/World.h"
-#include "UserInterface/UserInterface.h"
-#include "UserInterface/UserInterfaceUtilities.h"
-#include "UserInterface/Widgets/DragFloat.h"
 
 Entity::Entity(TString Name) : EngineObject(Name) {
 	bVisible        = true;

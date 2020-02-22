@@ -4,6 +4,8 @@ PictorumScrollBox::PictorumScrollBox(const TString& Name) : PictorumWidget(Name)
 	ScrollOffset = 0.0f;
 	ScrollSpeed = 10.0f;
 	bWasRightClickedIn = false;
+	ScrollDampening = 150.0f;
+	ScrollEnergy = 0.0f;
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 PictorumScrollBox::~PictorumScrollBox() {
@@ -21,6 +23,17 @@ void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	instructions.Size = vec2(5.0f, 50.0f);
 	instructions.BorderRadius.SetAllRadii(4.0f);
 	DrawQuad(Geometry, instructions);
+}
+void PictorumScrollBox::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
+	if (abs(ScrollEnergy) > 0.0f) {
+		ScrollOffset += ScrollEnergy * DeltaTime;
+		if (ScrollEnergy < 0.0f) {
+			ScrollEnergy += MathLibrary::Min(-ScrollEnergy, ScrollDampening * DeltaTime);
+		} else if (ScrollEnergy > 0.0f) {
+			ScrollEnergy -= MathLibrary::Min(ScrollEnergy, ScrollDampening * DeltaTime);
+		}
+		PreventOverscroll();
+	}
 }
 void PictorumScrollBox::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	float offset = GetOffsetForChild(ChildIndex);
@@ -50,20 +63,17 @@ vec2 PictorumScrollBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry) con
 
 void PictorumScrollBox::AddScroll(const float& ScrollAmount) {
 	ScrollOffset = ScrollOffset + ScrollAmount;
-	if (ScrollOffset > GetDesiredDrawSpace(LastRenderedGeometry).y - LastRenderedGeometry.GetAllotedSpace().y) {
-		ScrollOffset = GetDesiredDrawSpace(LastRenderedGeometry).y - LastRenderedGeometry.GetAllotedSpace().y;
-	}
-	if (ScrollOffset < 0.0f) {
-		ScrollOffset = 0.0f;
-	}
+	PreventOverscroll();
 }
 void PictorumScrollBox::SetScrollPosition(const float& ScrollPosition) {
-
+	ScrollOffset = ScrollPosition;
+	PreventOverscroll();
 }
 
 void PictorumScrollBox::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) {
 	if (bWasRightClickedIn) {
 		AddScroll(MouseDelta.y);
+		LastMouseDelta = MouseDelta;
 	}
 }
 void PictorumScrollBox::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
@@ -72,7 +82,10 @@ void PictorumScrollBox::OnMouseDown(const vec2& MousePosition, const EMouseButto
 	}
 }
 void PictorumScrollBox::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
-	bWasRightClickedIn = false;
+	if (bWasRightClickedIn) {
+		ScrollEnergy = LastMouseDelta.y  * 10.0f;
+		bWasRightClickedIn = false;
+	}
 }
 void PictorumScrollBox::OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn) {
 	AddScroll(-Delta * ScrollSpeed);
@@ -87,4 +100,12 @@ const float PictorumScrollBox::GetOffsetForChild(const int32& ChildIndex) const 
 }
 const float PictorumScrollBox::GetScrollAlpha() const {
 	return ScrollOffset / MathLibrary::Max(0.00001f, GetDesiredDrawSpace(LastRenderedGeometry).y); // Cover for the case where the desired is 0. NO DIVIDE BY ZERO HERE.
+}
+void PictorumScrollBox::PreventOverscroll() {
+	if (ScrollOffset > GetDesiredDrawSpace(LastRenderedGeometry).y - LastRenderedGeometry.GetAllotedSpace().y) {
+		ScrollOffset = GetDesiredDrawSpace(LastRenderedGeometry).y - LastRenderedGeometry.GetAllotedSpace().y;
+	}
+	if (ScrollOffset < 0.0f) {
+		ScrollOffset = 0.0f;
+	}
 }

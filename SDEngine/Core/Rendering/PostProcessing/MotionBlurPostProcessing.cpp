@@ -50,9 +50,3 @@ int MotionBlurPostProcessing::GetMotionBlurSamples() {
 void MotionBlurPostProcessing::SetMotionBlurSamples(int Samples) {
 	this->Samples = Samples;
 }
-bool MotionBlurPostProcessing::PopulatePostProcessingDetailsPanel() {
-	ImGui::SliderFloat("Amount", &Amount, 0.0f, 50.0f);
-	ImGui::SliderInt("Samples", &Samples, 1, 100);
-
-	return true;
-}

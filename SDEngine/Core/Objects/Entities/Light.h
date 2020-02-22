@@ -41,8 +41,6 @@ public:
 
 	void BlurTexture(RenderTarget* ReadBuffer, RenderTarget* WriteBuffer);
 
-	virtual bool PopulateDetailsPanel() override;
-
 private:
 	FLightInfo S_LightInfo;
 

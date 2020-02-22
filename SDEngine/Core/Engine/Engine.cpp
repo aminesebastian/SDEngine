@@ -10,7 +10,6 @@
 #include "Core/Engine/Windows/MainEditorWindow.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Engine/Window.h"
-#include "UserInterface/EngineUI.h"
 
 
 Engine::Engine() {
@@ -19,7 +18,6 @@ Engine::Engine() {
 	bGameMode                  = true;
 	bIsInitialized             = false;
 	bShouldLoop                = false;
-	_IMGuiEngineUI             = new EngineUI();
 
 	_OpenWindow = new MainEditorWindow(vec2(1920, 1200));
 }

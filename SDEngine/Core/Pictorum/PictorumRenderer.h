@@ -8,7 +8,6 @@
 #include "Core/Pictorum/PictorumDataTypes.h"
 #include "Core/Pictorum/PictorumShapeDrawer.h"
 #include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
-#include "UserInterface/DetailsPanelProvider.h"
 
 class PictorumWidget;
 class Window;

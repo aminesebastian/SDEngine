@@ -40,7 +40,6 @@ public:
 private:
 	AssetManager* _AssetManager;
 	InputSubsystem* _InputSubsystem;
-	EngineUI* _IMGuiEngineUI;
 	Window* _OpenWindow;
 
 	bool bIsInitialized;

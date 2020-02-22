@@ -12,9 +12,6 @@ public:
 	virtual void RecompileShaders() override;
 	virtual void OnScreenResolutionChanged() override;
 
-
-	virtual bool PopulatePostProcessingDetailsPanel() override;
-
 	void RenderOcclusion(const DefferedCompositor* Compositor, const Camera* RenderCamera, GBuffer* GBufferIn, RenderTarget* OutputBuffer);
 	void Blur(const DefferedCompositor* Compositor, const Camera* RenderCamera, RenderTarget* ReadBuffer, RenderTarget* OutputBuffer);
 	void GenerateKernel();
