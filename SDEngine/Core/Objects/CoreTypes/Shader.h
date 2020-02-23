@@ -19,8 +19,8 @@ public:
 	virtual ~Shader();
 
 	void Bind();
-	void Update(const class Transform& RenderTransform, const Camera* RenderCamera);
-	void Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, const Camera* RenderCamera);
+	void Update(const Transform& RenderTransform, const Camera* RenderCamera);
+	void Update(const Transform& RenderTransform,  const Transform& LastFrameTransform, const Camera* RenderCamera);
 	void RecompileShader();
 
 	void SetShaderInteger(const TString& Name, const int& Value);
@@ -32,40 +32,33 @@ public:
 	void SetShaderMatrix4(const TString& Name, const mat4& Matrix);
 	void SetShaderTexture(const TString& Name, Texture2D* Texture, const int32& Offset);
 
-	GLuint& GetProgram() { return S_Program; }
+	void SetShaderInteger(const GLuint& Location, const int& Value);
+	void SetShaderVector4(const GLuint& Location, const vec4& Vector);
+	void SetShaderVector3(const GLuint& Location, const vec3& Vector);
+	void SetShaderVector2(const GLuint& Location, const vec2& Vector);
+	void SetShaderFloat(const GLuint& Location, const float& Value);
+	void SetShaderMatrix3(const GLuint& Location, const mat3& Matrix);
+	void SetShaderMatrix4(const GLuint& Location, const mat4& Matrix);
+	void SetShaderTexture(const GLuint& Location, Texture2D* Texture, const int32& Offset);
+
+	GLuint& GetProgram() { return Program; }
 private:
-	enum {
-		MODEL_MATRIX_U,
-		MVP_MATRIX_U,
-		AMBIENT_COLOR_U,
-		AMBIENT_INTENSITY_U,
-		LIGHT_DIRECTION_U,
-		LIGHT_COLOR_U,
-		LIGHT_INTENSITY_U,
-		CAMERA_VIEW_VECTOR_U,
-		NUM_UNIFORMS
-	};
 	enum {
 		VERTEX_SHADER,
 		FRAGMENT_SHADER,
 
 		NUM_SHADERS
 	};
-	TString S_FragmentShaderPath;
-	TString S_VertexShaderPath;
-	TString S_ShaderName;
+	TString FragmentShaderFilePath;
+	TString VertexShaderFilePath;
+	TString Name;
+	bool bCompiled;
+	GLuint Program;
+	GLuint Shaders[NUM_SHADERS];
 
 	TString LoadShader(const TString& fileName);
 	GLuint CreateShader(const TString& text, GLenum ShaderType);
 	bool CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const TString& errorMessage);
 
-	const GLuint& GetUniformLocation(const TString& UniformName);
-
-	bool bCompiled;
-	GLuint S_Program;
-	GLuint S_Shaders[NUM_SHADERS];
-
-
-	SHashMap<TString, GLuint> UniformMap;
 };
 

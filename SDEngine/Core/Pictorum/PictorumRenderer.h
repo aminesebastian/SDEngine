@@ -33,25 +33,27 @@ public:
 	bool RemoveFromViewport(PictorumWidget* Widget);
 
 	PictorumShapeDrawer* GetShapeDrawer() const;
-	PictorumWidget* GetMouseOverWidget() const;
 	const Window* GetOwningWindow() const;
 	const SArray<PictorumWidget*>& GetWidgets() const;
-	const PictorumWidget* GetHoveredWidget() const;
+	const SArray<PictorumWidget*>& GetWidgetsUnderCursor() const;
 
 	Event<void(const vec2&)> OnMouseDownAnywhereDelegate;
 	Event<void(const vec2&)> OnMouseUpAnywhereDelegate;
 	Event<void(const vec2&, const vec2&)> OnMouseMoveAnywhereDelegate;
 	Event<void(const float&)> OnMouseScrollAnywhereDelegate;
+
 private:
 	SArray<PictorumWidget*> Widgets;
-	PictorumWidget* MouseOverWidget;
+	SArray<PictorumWidget*> WidgetsUnderMouse;
+	SArray<PictorumWidget*> LastFrameWidgetsUnderMouse;
+
 	PictorumShapeDrawer* ShapeDrawer;
 	Window* OwningWindow;
 	GPUVertexBufferArray* VertexArrayBuffer;
-	bool bMouseCaptured;
 	FRenderGeometry TopLevelRenderGeometry;
 
-	void CacheMouseOverWidget(vec2 MousePosition);
+
+	void CacheMouseOverWidgets(const Vector2D& MousePosition);
 	void OnWindowResized(Window* WindowIn, const FDisplayState& State);
 	void GetAllInteractableWidgets(SArray<PictorumWidget*>& Widgets, PictorumWidget* Root);
 };

@@ -1,12 +1,14 @@
 #include "EngineObject.h"
 
-EngineObject::EngineObject(const TString& Name) : Name(Name) {
+EngineObject::EngineObject(const TString& Name, const TString& Type) : EngineObjectName(Name), EngineObjectType(Type) {}
+EngineObject::~EngineObject() {}
 
+const TString& EngineObject::GetObjectName() const {
+	return EngineObjectName;
 }
-EngineObject::~EngineObject() {
-
+const TString& EngineObject::GetObjectType() const {
+	return EngineObjectType;
 }
-
-const TString& EngineObject::GetName() const {
-	return Name;
+void EngineObject::SetObjectType(const TString& Type) {
+	EngineObjectType = Type;
 }

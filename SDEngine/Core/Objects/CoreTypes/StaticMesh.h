@@ -69,7 +69,6 @@ class StaticMesh : public EngineObject, public ISerializeableAsset {
 
 public:
 	StaticMesh(const TString& Name);
-	StaticMesh(const TString& Name, const TString& FilePath);
 	virtual ~StaticMesh();
 
 	/**
@@ -85,15 +84,10 @@ public:
 	*/
 	void GenerateGPUBuffers();
 
+	bool ImportAsset(const TString& FilePath) override;
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
 	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 protected:
-	/**
-	 * Begins loading model from file.
-	 * 
-	 * @param ModelName The filepath of the model to load.
-	 */
-	void LoadModel(const TString FilePath);
 	/**
 	 * Recursively traverses model tree, calling GenerateSubMesh for each node encountered.
 	 * 

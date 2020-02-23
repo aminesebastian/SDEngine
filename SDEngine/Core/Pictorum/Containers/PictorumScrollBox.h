@@ -10,29 +10,57 @@ public:
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
-	void AddScroll(const float& ScrollAmount);
-	void SetScrollPosition(const float& ScrollPosition);
 
-protected:
-	float ScrollBarHeight;
-	float ScrollBarThickness;
-	float ScrollBarOffset;
-	float ScrollSpeed;
-	
-	const float GetOffsetForChild(const int32& ChildIndex) const;
+	void AddScrollPosition(const float& ScrollAmount);
+	void SetScrollPosition(const float& ScrollPosition);
+	const float& GetScrollPosition() const;
 	const float GetScrollAlpha() const;
 
+	void SetSelectionEnabled(const bool& Enabled);
+	const bool& IsSelectionEnabled() const;
+
+	Event<void(PictorumWidget*, const SArray<int32>&)> SelectionUpdated;
+
+protected:
+	bool bSelectionEnabled;
+	bool bWasRightClickedIn;
+	bool bIsScrollingUsingScrollBar;
+
+	FColor ScrollBarColor;
+	FColor ScrollBarHoveredColor;
+
+	float MinScrollBarHeight;
+	float ScrollBarThickness;
+	float ScrollBarSideOffset;
+	float ScrollSpeed;
+	float ScrollBarPadding;
+	
+	float ScrollOffset;
+	float ScrollEnergy;
+	float ScrollDampening;
+
+	FBoxDrawInstruction* ScrollBarDrawInstruction;
+	FBoxDrawInstruction* ScrollBarLineDrawInstruction;
+	FBoxDrawInstruction* EntryBackgroundDrawInstruction;
+
+	int32 HoveredIndex;
+	vec2 LastMouseDelta;
+	SArray<int32> SelectedIndices;
+
+	const float GetOffsetForChild(const int32& ChildIndex) const;
+	const vec2 CalculateSizeOfContents(const FRenderGeometry& Geometry) const;
+
+	virtual void OnChildAdded(PictorumWidget* Widget) override;
+	virtual void OnChildRemoved(PictorumWidget* Widget) override;
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn) override;
 
+	void OnScrollEntryHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
+	void OnScrollEntryUnhovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
+	void OnScrollEntryClicked(PictorumWidget* Widget, const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	void PreventOverscroll();
-private:
-	float ScrollOffset;
-	float ScrollEnergy;
-	float ScrollDampening;
-	bool bWasRightClickedIn;
-	vec2 LastMouseDelta;
+	void DrawEntryBackground(const FRenderGeometry& Geometry, const int32& ChildIndex, const FColor& Color);
 };
 

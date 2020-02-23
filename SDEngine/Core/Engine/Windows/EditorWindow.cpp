@@ -24,6 +24,3 @@ void EditorWindow::UpdateInternal(const float& DeltaTime) {
 	_EditorWindowUIRenderer->Tick(DeltaTime);
 	_EditorWindowUIRenderer->Draw(DeltaTime);
 }
-PictorumWidget* EditorWindow::GetEditorWindowUI() const {
-	return _EditorUI;
-}

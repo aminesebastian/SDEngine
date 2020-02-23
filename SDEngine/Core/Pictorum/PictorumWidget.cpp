@@ -8,7 +8,7 @@
 #include "Core/Utilities/Math/MathLibrary.h"
 #include "Core/Pictorum/Utilities/PictorumShapeDrawer.h"
 
-PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
+PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name, "UIWidget") {
 	Rotation = 0.0f; // 0 Degrees
 	Parent = nullptr;
 	OwningRenderer = nullptr;
@@ -55,17 +55,27 @@ IWidgetSlot* PictorumWidget::AddChildInternal(PictorumWidget* Widget) {
 	if (Children.AddUnique(Widget)) {
 		IWidgetSlot* slot = CreateSlotForWidget(Widget);
 		Widget->AddedToParent(this, slot);
+		OnChildAdded(Widget);
 		return slot;
 	}
 	return nullptr;
 }
-bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
+const bool PictorumWidget::RemoveChild(PictorumWidget* Widget) {
 	if (Children.Remove(Widget)) {
 		Widget->RemovedFromParent(this);
+		OnChildRemoved(Widget);
 		delete Widget->GetParentSlot<IWidgetSlot>();
+		delete Widget;
 		return true;
 	}
 	return false;
+}
+const bool PictorumWidget::RemoveChildAt(const int32& Index) {
+	if (Index > Children.LastIndex()) {
+		SD_ENGINE_WARN("Index out of bounds when attempting to remove a child widget. Index: {0} for array of children of size: {1}.", Index, Children.Count());
+		return false;
+	}
+	return RemoveChild(Children[Index]);
 }
 const bool PictorumWidget::CanAddChild() const {
 	return true;
@@ -73,25 +83,24 @@ const bool PictorumWidget::CanAddChild() const {
 PictorumWidget* PictorumWidget::GetChildAtIndex(int32 Index) const {
 	return Children[Index];
 }
+void PictorumWidget::ClearChildren() {
+	for (int32 i = Children.LastIndex(); i >= 0; i--) {
+		RemoveChildAt(i);
+	}
+	Children.Clear();
+}
+const int32 PictorumWidget::GetIndexOfChild(PictorumWidget* Widget) const {
+	for (int32 i = 0; i < Children.Count(); i++) {
+		if (Children[i] == Widget) {
+			return i;
+		}
+	}
+	return -1;
+}
 IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) const {
 	return new IWidgetSlot();
 }
 
-mat4 PictorumWidget::CalculateModelMatrix(const FRenderGeometry& Geometry) const {
-	vec2 relativeLocation = Geometry.GetLocation(EPictorumLocationBasis::NDC);
-	vec2 relativeScale = 2.0f * Geometry.GetAllotedSpace(EPictorumScaleBasis::RELATIVE);
-	float screenRotation = GetRenderRotation();
-
-	mat4 posMatrix = glm::translate(vec3(relativeLocation, 0.0f));
-	mat4 scaleMatrix = glm::scale(vec3(relativeScale, 0.0f));
-	mat4 rotXMatrix = glm::rotate(0.0f, vec3(1, 0, 0));
-	mat4 rotYMatrix = glm::rotate(0.0f, vec3(0, 1, 0));
-	mat4 rotZMatrix = glm::rotate(screenRotation, vec3(0, 0, 1));
-
-	mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
-
-	return posMatrix * scaleMatrix * combinedRotMatrix;
-}
 const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition) {
 	return EMouseCursorStyle::Arrow;
 }
@@ -107,7 +116,7 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		glScissor((GLuint)childGeometry.GetMinimumClipPoint().x, (GLuint)childGeometry.GetMinimumClipPoint().y, (GLuint)childGeometry.GetMaximumClipPoint().x, (GLuint)childGeometry.GetMaximumClipPoint().y);
 
 		widget->DrawContents(DeltaTime, childGeometry);
-		OnChildDrawn(DeltaTime, Geometry);
+		OnChildDrawn(DeltaTime, Geometry, widget);
 	}
 	OnDrawCompleted(DeltaTime, Geometry);
 	glScissor((GLuint)Geometry.GetMinimumClipPoint().x, (GLuint)Geometry.GetMinimumClipPoint().y, (GLuint)Geometry.GetMaximumClipPoint().x, (GLuint)Geometry.GetMaximumClipPoint().y);
@@ -226,7 +235,7 @@ const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
 	} else if (Parent) {
 		return Parent->GetOwningRenderer();
 	} else {
-		SD_ENGINE_ERROR("Pictorum widget: {0} made a request for its owning renderer and was unable to find one up the parent chain!", GetName());
+		SD_ENGINE_ERROR("Pictorum widget: {0} made a request for its owning renderer and was unable to find one up the parent chain!", GetObjectName());
 		return nullptr;
 	}
 }
@@ -253,8 +262,10 @@ void PictorumWidget::OnRemovedFromViewport() {}
 void PictorumWidget::OnAddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {}
 void PictorumWidget::OnRemovedFromParent(PictorumWidget* ParentIn) {}
 void PictorumWidget::OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry) {}
-void PictorumWidget::OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry, const PictorumWidget* Child) {}
 void PictorumWidget::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::OnChildAdded(PictorumWidget* Widget) {}
+void PictorumWidget::OnChildRemoved(PictorumWidget* Widget) {}
 void PictorumWidget::OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& Event) {}

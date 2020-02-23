@@ -97,8 +97,9 @@
         "platform/win32/arguments": "",
         "platform/win32/autoconnect": true,
         "platform/win32/environment": "",
-        "platform/win32/executable": "E:/Suburban Digital/SDEngine/x64/Development/SDEngine.exe",
+        "platform/win32/executable": "E:/Suburban Digital/SDEngine/x64/Release/SDEngine.exe",
         "platform/win32/executable/history": [
+            "E:/Suburban Digital/SDEngine/x64/Release/SDEngine.exe",
             "E:/Suburban Digital/SDEngine/x64/Development/SDEngine.exe",
             "E:/Suburban Digital/SDEngine/x64/Debug/SDEngine.exe"
         ],

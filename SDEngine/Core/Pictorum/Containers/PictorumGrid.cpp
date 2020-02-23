@@ -16,7 +16,7 @@ PictorumGrid::PictorumGrid(const TString& Name) : PictorumWidget(Name) {
 	CellRelativePosition.y = 0.0f;
 	ResizeHandleDistance = 5;
 
-	//SetVisibility(EPictorumVisibilityState::VISIBLE);
+	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 PictorumGrid::~PictorumGrid() {
 	for (FGridRule* rule : Columns) {
@@ -174,6 +174,7 @@ const EMouseCursorStyle PictorumGrid::GetMouseCursor(const vec2& MousePosition) 
 	}
 	return PictorumWidget::GetMouseCursor(MousePosition);
 }
+
 void PictorumGrid::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {
 	// Set both values to -1 when the mouse leaves this container.
 	HoveredColumnIndex = -1;

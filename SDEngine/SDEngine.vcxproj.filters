@@ -217,9 +217,6 @@
     <ClCompile Include="Core\Objects\Entities\Actors\TransformGizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Objects\Entities\Components\EditorSpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Objects\Entities\Components\StaticMeshComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -263,9 +260,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Engine\Delegates\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Engine\Window.cpp">
@@ -341,6 +335,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\MainViewportUserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Components\BillboardComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -444,7 +450,6 @@
     <ClInclude Include="Core\Objects\Entities\Actors\HeadActor.h" />
     <ClInclude Include="Core\Objects\Entities\Actors\StaticMeshActor.h" />
     <ClInclude Include="Core\Objects\Entities\Actors\TransformGizmo.h" />
-    <ClInclude Include="Core\Objects\Entities\Components\EditorSpriteComponent.h" />
     <ClInclude Include="Core\Objects\Entities\Components\StaticMeshComponent.h" />
     <ClInclude Include="Core\Objects\Entities\Actor.h">
       <Filter>Headers\Entities</Filter>
@@ -472,7 +477,6 @@
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
     <ClInclude Include="Core\Engine\Window.h">
       <Filter>Headers\Engine</Filter>
     </ClInclude>
@@ -504,6 +508,10 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
     <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\MainViewportUserInterface.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

@@ -3,7 +3,7 @@
 #include "Core/Engine/World.h"
 #include "Core/Input/InputSubsystem.h"
 #include "Core/Objects/Entities/Camera.h"
-#include "Core/Pictorum/EngineUI/EngineUIContainer.h"
+#include "Core/Pictorum/EngineUI/MainViewportUserInterface.h"
 #include "GLM/glm.hpp"
 
 MainEditorWindow::MainEditorWindow(const vec2& Size) : EditorWindow("MainEditorViewport", Size) {
@@ -30,6 +30,8 @@ void MainEditorWindow::Initialize() {
 	LoadScene(scene);
 
 	EditorWindow::Initialize();
+
+	GetEditorWindowUI<MainViewportUserInterface>()->OnWorldUpdated(_World);
 }
 void MainEditorWindow::UpdateInternal(const float& DeltaTime) {
 	_World->TickWorld(DeltaTime);
@@ -47,7 +49,7 @@ void MainEditorWindow::LoadScene(Scene* SceneIn) {
 	}
 }
 PictorumWidget* MainEditorWindow::CreateEditorWindowUI() {
-	return new EngineUIContainer("EngineUI");
+	return new MainViewportUserInterface("EngineUI");
 }
 void MainEditorWindow::WindowResized(const int32& Width, const int32& Height) {
 	EditorWindow::WindowResized(Width, Height);

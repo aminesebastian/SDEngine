@@ -6,67 +6,69 @@
 
 Shader::Shader() {
 	bCompiled    = false;
+	Program      = 0;
+	Shaders[0]   = 0;
+	Shaders[1]   = 0;
 }
 Shader::Shader(const TString& ShaderName, bool bUseDefaultGeometry) : Shader() {
-	S_FragmentShaderPath = ShaderName + ".frag";
+	FragmentShaderFilePath = ShaderName + ".frag";
 	if(bUseDefaultGeometry) {
-		S_VertexShaderPath = "./Res/Shaders/DefaultGeometryPassShader.vert";
+		VertexShaderFilePath = "./Res/Shaders/DefaultGeometryPassShader.vert";
 	}else{
-		S_VertexShaderPath = ShaderName + ".vert";
+		VertexShaderFilePath = ShaderName + ".vert";
 	}
 	int lastSlash = 0;
-	for (int i = 0; i < S_FragmentShaderPath.length(); i++) {
-		if (S_FragmentShaderPath[i] == '/') {
+	for (int i = 0; i < FragmentShaderFilePath.length(); i++) {
+		if (FragmentShaderFilePath[i] == '/') {
 			lastSlash = i;
 		}
 	}
-	S_ShaderName = S_FragmentShaderPath.substr(lastSlash + 1, S_FragmentShaderPath.length() - lastSlash - 5);
+	Name = FragmentShaderFilePath.substr(lastSlash + 1, FragmentShaderFilePath.length() - lastSlash - 5);
 	RecompileShader();
 }
 
 void Shader::RecompileShader() {
 	// Check if this shader was previously compiled.
 	if (bCompiled) {
-		glDeleteProgram(S_Program);
-		glDeleteProgram(S_Shaders[0]);
-		glDeleteProgram(S_Shaders[1]);
+		glDeleteProgram(Program);
+		glDeleteProgram(Shaders[0]);
+		glDeleteProgram(Shaders[1]);
 	}
 
-	S_Program = glCreateProgram();
-	S_Shaders[0] = CreateShader(LoadShader(S_VertexShaderPath), GL_VERTEX_SHADER);
-	S_Shaders[1] = CreateShader(LoadShader(S_FragmentShaderPath), GL_FRAGMENT_SHADER);
+	Program = glCreateProgram();
+	Shaders[0] = CreateShader(LoadShader(VertexShaderFilePath), GL_VERTEX_SHADER);
+	Shaders[1] = CreateShader(LoadShader(FragmentShaderFilePath), GL_FRAGMENT_SHADER);
 
-	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
-		glAttachShader(S_Program, S_Shaders[i]);
-	}
+	glAttachShader(Program, Shaders[0]);
+	glAttachShader(Program, Shaders[1]);
 
-	glBindAttribLocation(S_Program, 0, "position");
-	glBindAttribLocation(S_Program, 1, "texCoord");
-	glBindAttribLocation(S_Program, 2, "normal");
-	glBindAttribLocation(S_Program, 3, "vertexColor");
+	glBindAttribLocation(Program, 0, "position");
+	glBindAttribLocation(Program, 1, "texCoord");
+	glBindAttribLocation(Program, 2, "normal");
+	glBindAttribLocation(Program, 3, "vertexColor");
 
 	bool success = true;
-	glLinkProgram(S_Program);
-	success = CheckShaderError(S_Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed For Shader:" + S_ShaderName + " ");
+	glLinkProgram(Program);
+	success = CheckShaderError(Program, GL_LINK_STATUS, true, "ERROR: Program Linking Failed For Shader:" + Name + " ");
 
 	if(!success) {
 		return;
 	}
-	glValidateProgram(S_Program);
-	success = CheckShaderError(S_Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
+	glValidateProgram(Program);
+	success = CheckShaderError(Program, GL_VALIDATE_STATUS, true, "ERROR: Program Validation Failed: ");
 
 	if (!success) {
 		return;
 	}
 	bCompiled = true;
-	SD_ENGINE_INFO("Shader Compilation Success: {0}", S_ShaderName)
+	SD_ENGINE_INFO("Shader Compilation Success: {0}", Name)
 }
 Shader::~Shader() {
 	for (unsigned int i = 0; i < NUM_SHADERS; i++) {
-		glDetachShader(S_Program, S_Shaders[i]);
-		glDeleteShader(S_Shaders[i]);
+		glDetachShader(Program, Shaders[i]);
+		glDeleteShader(Shaders[i]);
 	}
-	glDeleteProgram(S_Program);
+	glDeleteProgram(Program);
 }
 
 TString Shader::LoadShader(const TString& fileName) {
@@ -134,20 +136,13 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 
 
 void Shader::Bind() {
-	glUseProgram(S_Program);
+	glUseProgram(Program);
 }
-/************************************************************************/
-/* Sets the Shader MODEL_MATRIX
-/* Sets the shader MVP
-/* Sets the NEAR_CLIP
-/* Sets the FAR_CLIP
-/* Sets the CAMERA_POS
-/************************************************************************/
-void Shader::Update(const class Transform& RenderTransform, const Camera* RenderCamera) {
+void Shader::Update(const Transform& RenderTransform, const Camera* RenderCamera) {
 	Update(RenderTransform, RenderTransform, RenderCamera);
 }
-void Shader::Update(const class Transform& RenderTransform,  const class Transform& LastFrameTrasnform, const Camera* RenderCamera) {
-	mat4 lastFrameMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetLastFrameViewMatrix() * LastFrameTrasnform.GetModelMatrix();
+void Shader::Update(const Transform& RenderTransform,  const Transform& LastFrameTransform, const Camera* RenderCamera) {
+	mat4 lastFrameMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetLastFrameViewMatrix() * LastFrameTransform.GetModelMatrix();
 	mat4 tempMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetViewMatrix() * RenderTransform.GetModelMatrix();
 
 	SetShaderMatrix3("NORMAL_MODEL_MATRIX", glm::transpose(glm::inverse(RenderTransform.GetModelMatrix())));
@@ -185,14 +180,32 @@ void Shader::SetShaderMatrix4(const TString& Name, const mat4& Matrix) {
 void Shader::SetShaderTexture(const TString& Name, Texture2D* Texture, const int32& Offset) {
 	glActiveTexture(GL_TEXTURE0 + Offset);
 	glBindTexture(GL_TEXTURE_2D, Texture->GetTexture());
-	glUniform1i(glGetUniformLocation(S_Program, Name.c_str()), Offset);
+	glUniform1i(glGetUniformLocation(Program, Name.c_str()), Offset);
 }
 
-const GLuint& Shader::GetUniformLocation(const TString& UniformName) {
-	if (UniformMap.find(UniformName) != UniformMap.end()) {
-		return UniformMap[UniformName];
-	}
-	const GLuint& location = glGetUniformLocation(S_Program, UniformName.c_str());
-	UniformMap.emplace(UniformName, location);
-	return location;
+void Shader::SetShaderInteger(const GLuint& Location, const int& Value) {
+	glUniform1i(Location, Value);
+}
+void Shader::SetShaderVector4(const GLuint& Location, const vec4& Vector) {
+	glUniform4fv(Location, 1, &Vector[0]);
+}
+void Shader::SetShaderVector3(const GLuint& Location, const vec3& Vector) {
+	glUniform3fv(Location, 1, &Vector[0]);
+}
+void Shader::SetShaderVector2(const GLuint& Location, const vec2& Vector) {
+	glUniform2fv(Location, 1, &Vector[0]);
+}
+void Shader::SetShaderFloat(const GLuint& Location, const float& Value) {
+	glUniform1f(Location, Value);
+}
+void Shader::SetShaderMatrix3(const GLuint& Location, const mat3& Matrix) {
+	glUniformMatrix3fv(Location, 1, GL_FALSE, &Matrix[0][0]);
+}
+void Shader::SetShaderMatrix4(const GLuint& Location, const mat4& Matrix) {
+	glUniformMatrix4fv(Location, 1, GL_FALSE, &Matrix[0][0]);
+}
+void Shader::SetShaderTexture(const GLuint& Location, Texture2D* Texture, const int32& Offset) {
+	glActiveTexture(GL_TEXTURE0 + Offset);
+	glBindTexture(GL_TEXTURE_2D, Texture->GetTexture());
+	glUniform1i(Location, Offset);
 }

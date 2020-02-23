@@ -4,7 +4,7 @@
 
 class PictorumVerticalBox : public PictorumWidget {
 public:
-	PictorumVerticalBox(const TString& Name);
+	PictorumVerticalBox(const TString& EngineObjectName);
 	virtual const bool CanAddChild() const override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;

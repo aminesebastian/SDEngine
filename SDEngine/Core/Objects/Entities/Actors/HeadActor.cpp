@@ -3,7 +3,7 @@
 
 
 HeadActor::HeadActor(const TString& Name) : StaticMeshActor(Name) {
-	StaticMesh* head = Engine::Get()->GetAssetManager()->GetAsset<StaticMesh>("./Res/Assets/Head.sasset");
+	StaticMesh* head = Engine::GetAssetManager()->FindAsset<StaticMesh>("./Res/Assets/Head.sasset");
 	SetStaticMesh(head);
 }
 HeadActor::~HeadActor() {

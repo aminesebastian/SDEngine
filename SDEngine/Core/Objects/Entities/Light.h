@@ -3,7 +3,7 @@
 #include "GLM/glm.hpp"
 #include "Core/Objects/CoreTypes/RenderTarget.h"
 #include "Core/Objects/CoreTypes/StaticMesh.h"
-#include "Core/Objects/Entities/Components/EditorSpriteComponent.h"
+#include "Core/Objects/Entities/Components/BillboardComponent.h"
 
 enum ELightType {
 	POINT,

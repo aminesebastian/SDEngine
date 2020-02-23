@@ -1,5 +1,4 @@
 #include "StaticMeshActor.h"
-#include "Core/Objects/Entities/Components/StaticMeshComponent.h"
 
 StaticMeshActor::StaticMeshActor(const TString& Name) : Actor(Name) {
 	RegisterComponent(new StaticMeshComponent("Root"));

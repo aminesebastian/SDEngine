@@ -29,6 +29,7 @@ public:
 	void SetGameMode(const bool& GameMode);
 
 	Entity* GetSelectedEntity() const;
+	void SetSelectedEntity(Entity* SelectedEntityIn);
 private:
 	SArray<Actor*> ActorList;
 	SArray<Light*> LightList;

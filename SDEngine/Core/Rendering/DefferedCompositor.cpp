@@ -25,10 +25,12 @@ DefferedCompositor::DefferedCompositor(RenderViewport* OwningViewport) : OwningV
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-
 }
 DefferedCompositor::~DefferedCompositor() {}
 
+void DefferedCompositor::Initialize() {
+	Engine::Get()->RecompileShaders.Add<DefferedCompositor, &DefferedCompositor::RecompileShaders>(this);
+}
 void DefferedCompositor::RecompileShaders() {
 	S_LightingShader->RecompileShader();
 	S_FinalOutputShader->RecompileShader();
@@ -64,8 +66,6 @@ void DefferedCompositor::CompositeLighting(GBuffer* GBufferIn, RenderTarget* Wri
 	glUniform2fv(glGetUniformLocation(S_LightingShader->GetProgram(), "SCREEN_RES"), 1, &OwningViewport->GetOwningWindow()->GetDimensions()[0]);
 
 	GBufferIn->BindTextures(S_LightingShader);
-
-
 
 	DrawScreenQuad();
 }

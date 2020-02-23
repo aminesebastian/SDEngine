@@ -5,6 +5,7 @@
 
 class ISerializeableAsset {
 public:
+	virtual bool ImportAsset(const TString& FilePath) = 0;
 	virtual bool SerializeToBuffer(SerializationStream& Buffer) const = 0;
 	virtual bool DeserializeFromBuffer(DeserializationStream& Buffer) = 0;
 };

@@ -37,9 +37,13 @@ public:
 	PictorumWidget* GetParent() const;
 
 	virtual IWidgetSlot* AddChild(PictorumWidget* Widget);
-	virtual bool RemoveChild(PictorumWidget* Widget);
 	virtual const bool CanAddChild() const;
+
+	const bool RemoveChild(PictorumWidget* Widget);
+	const bool RemoveChildAt(const int32& Index);
 	PictorumWidget* GetChildAtIndex(int32 Slot) const;
+	const int32 GetIndexOfChild(PictorumWidget* Widget) const;
+	void ClearChildren();
 	template<typename T>
 	T* GetChildSlotAtIndex(const int32& Index) const {
 		static_assert(std::is_base_of<IWidgetSlot, T>::value, "T must derive from IWidgetSlot!");
@@ -61,6 +65,7 @@ public:
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
 	Event<void(PictorumWidget*, const float&, FUserInterfaceEvent&)> OnMouseScrollDelegate;
+
 protected:
 	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
@@ -89,12 +94,11 @@ protected:
 	virtual void DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry);
 	virtual void TickContents(const float& DeltaTime, const FRenderGeometry& Geometry);
 	virtual void OnDrawStart(const float& DeltaTime, const FRenderGeometry& Geometry);
-	virtual void OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry);
+	virtual void OnChildDrawn(const float& DeltaTime, const FRenderGeometry& Geometry, const PictorumWidget* Child);
 	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry);
 
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
-	virtual mat4 CalculateModelMatrix(const FRenderGeometry& Geometry) const;
 	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition);
 	/**
 	* This method is raised either when this widget is added to the viewport (if this is a top
@@ -128,6 +132,8 @@ protected:
 	 * @param [in,out]	{PictorumRenderer*}	Owner	The owning renderer.
 	 */
 	virtual void OnAddedToViewport(PictorumRenderer* Owner);
+	virtual void OnChildAdded(PictorumWidget* Widget);
+	virtual void OnChildRemoved(PictorumWidget* Widget);
 	/** This method is raised when this widget is removed from the renderer at the root level. */
 	virtual void OnRemovedFromViewport();
 	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn);

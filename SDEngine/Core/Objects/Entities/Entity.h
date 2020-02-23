@@ -18,7 +18,7 @@ class World;
 class Entity : public EngineObject {
 
 public:
-	Entity(TString Name);
+	Entity(const TString& Name, const TString& Type);
 	virtual ~Entity();
 
 	bool IsVisible() const;

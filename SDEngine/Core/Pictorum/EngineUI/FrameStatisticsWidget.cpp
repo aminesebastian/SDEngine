@@ -39,14 +39,11 @@ void FrameStatisticsWidget::Tick(float DeltaTime, const FRenderGeometry& Geometr
 	TString text = frameRate + "fps\n";
 	text += deltaTime + "ms\n";
 	text += "Mouse Position: " + MathLibrary::LocationToString(Engine::Get()->GetInputSubsystem()->GetMousePosition()) + "\n";
-
-	if (GetOwningRenderer()->GetHoveredWidget()) {
-		text += "Hovered Widget: " + GetOwningRenderer()->GetHoveredWidget()->GetName();
-	} else {
-		text += "Hovered Widget: None";
+	
+	for (PictorumWidget* widget : GetOwningRenderer()->GetWidgetsUnderCursor()) {
+		text += "Hovered Widget: " + widget->GetObjectName() + "\n";
 	}
-
-	text += "\n" + ExtraDebugString;
+	//text += "\n" + ExtraDebugString;
 
 	FrameTimeWidget->SetText(text);
 }

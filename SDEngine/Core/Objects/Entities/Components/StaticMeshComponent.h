@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Objects/Entities/Component.h"
-
-class StaticMesh;
+#include "Core/Objects/CoreTypes/StaticMesh.h"
 
 class StaticMeshComponent : public Component {
 public:

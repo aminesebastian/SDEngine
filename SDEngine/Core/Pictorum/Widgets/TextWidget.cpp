@@ -5,14 +5,14 @@
 #include "Core/Pictorum/Utilities/TextRenderer.h"
 
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
-	Font = Engine::GetAssetManager()->GetAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
+	Font = Engine::GetAssetManager()->FindAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
 	Renderer = new TextRenderer(24, Font);
 	LastRenderedAbsoluteLocation = vec2(0.0f, 0.0f);
 
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 TextWidget::~TextWidget() {
-
+	delete Renderer;
 }
 
 void TextWidget::SetText(const TString& Text) {
@@ -73,21 +73,16 @@ vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	return max;
 }
 void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
-	vec2 min, max;
-	Renderer->GetTextBoundingBoxDimensions(min, max);
-
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
 	MinBounds = lastLocation;
-	MinBounds.y += LastRenderedGeometry.GetAllotedSpace(EPictorumScaleBasis::ABSOLUTE).y;
-	MinBounds.y -= max.y;
-	MaxBounds = MinBounds;
-	MaxBounds.x += max.x;
-	MaxBounds.y = lastLocation.y;
+
+	MaxBounds = lastLocation + LastRenderedGeometry.GetAllotedSpace().y;
+	MaxBounds.x += LastRenderedGeometry.GetAllotedSpace().x;
 
 	MinBounds.x = MathLibrary::Max(MinBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x);
 	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
-	MaxBounds.x = MathLibrary::Min(MaxBounds.x, LastRenderedGeometry.GetMaximumClipPoint().x);
-	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMaximumClipPoint().y);
+	MaxBounds.x = MathLibrary::Min(MaxBounds.x,  LastRenderedGeometry.GetMinimumClipPoint().x + LastRenderedGeometry.GetMaximumClipPoint().x);
+	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y + LastRenderedGeometry.GetMaximumClipPoint().y);
 }
 const bool TextWidget::CanAddChild() const {
 	return false;

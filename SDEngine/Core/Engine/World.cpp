@@ -64,3 +64,6 @@ void World::SetGameMode(const bool& GameMode) {
 Entity* World::GetSelectedEntity() const {
 	return SelectedEntity;
 }
+void World::SetSelectedEntity(Entity* SelectedEntityIn) {
+	SelectedEntity = SelectedEntityIn;
+}

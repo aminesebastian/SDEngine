@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Objects/Entities/Actor.h"
-
-class StaticMesh;
+#include "Core/Objects/CoreTypes/StaticMesh.h"
+#include "Core/Objects/Entities/Components/StaticMeshComponent.h"
 
 class StaticMeshActor : public Actor {
 public:

@@ -192,3 +192,7 @@ bool MathLibrary::LineTraceAgainstAABB(vec3 RayOrigin, vec3 RayDirection, vec3 A
 
 	return true;
 }
+
+bool MathLibrary::PointIntersect2DBox(const Vector2D& Point, const Vector2D& BoxMinExtent, const Vector2D& BoxMaxExtent) {
+	return Point.x >= BoxMinExtent.x && Point.y >= BoxMinExtent.y && Point.x <= BoxMaxExtent.x && Point.y <= BoxMaxExtent.y;
+}

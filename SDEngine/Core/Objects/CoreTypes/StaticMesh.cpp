@@ -7,11 +7,8 @@
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 
-StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name) {
+StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name, "StaticMesh") {
 	bSentToGPU = false;
-}
-StaticMesh::StaticMesh(const TString& Name, const TString& FilePath) : StaticMesh(Name) {
-	LoadModel(FilePath);
 }
 StaticMesh::~StaticMesh() {
 	for (FSubMesh* subMesh : SubMeshes) {
@@ -26,20 +23,6 @@ bool StaticMesh::SentToGPU() {
 	return bSentToGPU;
 }
 
-void StaticMesh::LoadModel(const TString FilePath) {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(FilePath, aiProcess_Triangulate |
-		aiProcess_FlipUVs |
-		aiProcess_CalcTangentSpace |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_GenSmoothNormals);
-
-	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		SD_ENGINE_ERROR("Error: Failed to import model {0} with error {1}.", FilePath, import.GetErrorString());
-		return;
-	}
-	ProcessNode(scene->mRootNode, scene);
-}
 void StaticMesh::ProcessNode(aiNode* Node, const aiScene* Scene) {
 	// Handle Root
 	for (GLuint i = 0; i < Node->mNumMeshes; i++) {
@@ -121,7 +104,7 @@ FSubMesh* StaticMesh::GenerateSubMesh(aiMesh* Mesh) {
 }
 void StaticMesh::GenerateGPUBuffers() {
 	if (bSentToGPU) {
-		SD_ENGINE_WARN("There was an attempt to resend data to the GPU for static mesh: {0}.", GetName());
+		SD_ENGINE_WARN("There was an attempt to resend data to the GPU for static mesh: {0}.", GetObjectName());
 		return;
 	}
 	for (FSubMesh* subMesh : SubMeshes) {
@@ -189,6 +172,22 @@ void StaticMesh::GenerateGPUBuffers() {
 		glBindVertexArray(0);
 	}
 	bSentToGPU = true;
+}
+
+bool StaticMesh::ImportAsset(const TString& FilePath){
+	Assimp::Importer import;
+	const aiScene* scene = import.ReadFile(FilePath, aiProcess_Triangulate |
+		aiProcess_FlipUVs |
+		aiProcess_CalcTangentSpace |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_GenSmoothNormals);
+
+	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		SD_ENGINE_ERROR("Error: Failed to import model {0} with error {1}.", FilePath, import.GetErrorString());
+		return false;
+	}
+	ProcessNode(scene->mRootNode, scene);
+	return true;
 }
 bool StaticMesh::SerializeToBuffer(SerializationStream& Stream) const {
 	Stream.SerializeInteger32(SubMeshes.Count());

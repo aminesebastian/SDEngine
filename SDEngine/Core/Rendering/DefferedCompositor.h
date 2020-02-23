@@ -16,6 +16,8 @@ public:
 	DefferedCompositor(RenderViewport* OwningViewport);
 	~DefferedCompositor();
 
+	void Initialize();
+
 	void CompositeLighting(GBuffer* GBufferIn, RenderTarget* OutputBuffer, SArray<Light*> Lights, const Camera* camera);
 	void OutputToScreen(RenderTarget* ReadBuffer);
 

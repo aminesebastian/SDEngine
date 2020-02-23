@@ -3,7 +3,7 @@
 #include "Core/Objects/Entities/Component.h"
 #include "Core/Objects/Entities/Entity.h"
 
-Actor::Actor(const TString& Name) : Entity(Name) {
+Actor::Actor(const TString& Name) : Entity(Name, "Actor") {
 	RootComponent = nullptr;
 }
 Actor::~Actor() {}

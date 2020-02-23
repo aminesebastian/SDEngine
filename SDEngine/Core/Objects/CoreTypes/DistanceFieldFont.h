@@ -10,7 +10,8 @@ struct FDistanceFieldCharacter : public ISerializeableAsset {
 	 * constructed otherwise.
 	 */
 	FDistanceFieldCharacter() {
-
+		Advance   = 0.0f;
+		Character = 0;
 	}
 	FDistanceFieldCharacter(char Character, vec2 MinTexCoords, vec2 MaxTexCoords, vec2 Dimensions, vec2 Offsets, float Advance) :
 		Character(Character),
@@ -75,6 +76,9 @@ struct FDistanceFieldCharacter : public ISerializeableAsset {
 	const SArray<int32>& GetIndices() const {
 		return Indices;
 	}
+	bool ImportAsset(const TString& FilePath) override {
+		return true;
+	}
 	bool SerializeToBuffer(SerializationStream& Stream) const override {
 		Stream.SerializeCharacter(Character);
 		Stream.SerializeVec2(MinTextureCoords);
@@ -116,7 +120,6 @@ class Shader;
 class DistanceFieldFont : public EngineObject, public ISerializeableAsset {
 public:
 	DistanceFieldFont(const TString& DistanceFieldFontName);
-	DistanceFieldFont(const TString& DistanceFieldFontName, const TString& FilePath);
 	~DistanceFieldFont();
 
 	/**
@@ -133,12 +136,11 @@ public:
 
 	const int32& GetGeneratedFontSize() const;
 
+	bool ImportAsset(const TString& FilePath) override;
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
 	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:
 	TString FontName;
-	TString ImageFilePath;
-	TString FontFilePath;
 
 	int32 SupportedCharacterCount;
 	int32 OfflineFontSize;
@@ -148,8 +150,6 @@ private:
 
 	SArray<const FDistanceFieldCharacter*> CharacterCache;
 	Texture2D* DistanceFieldTexture;
-
-	bool LoadAndParseFont();
 	SArray<TString> SplitLineIntoKeyValuePairs(const TString& Line);
 };
 

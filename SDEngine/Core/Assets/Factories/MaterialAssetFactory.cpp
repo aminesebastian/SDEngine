@@ -7,7 +7,7 @@ MaterialAssetFactory::MaterialAssetFactory() {
 MaterialAssetFactory::~MaterialAssetFactory() {
 
 }
-Asset* MaterialAssetFactory::CreateNewInstance(TString Name) const {
+Asset* MaterialAssetFactory::CreateNewInstance(const TString& Name) const {
 	return new Asset("Material", new Material(Name));
 }
 FColor MaterialAssetFactory::GetAssetColor() const {

@@ -9,7 +9,7 @@ enum EDrawType;
 
 class Component : public Entity {
 public:
-	Component(const TString& Name);
+	Component(const TString& Name, const TString& Type);
 	~Component();
 
 	////////

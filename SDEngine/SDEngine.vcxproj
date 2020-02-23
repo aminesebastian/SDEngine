@@ -255,7 +255,7 @@
     <ClCompile Include="Core\Utilities\Serialization\DeserializationStream.cpp" />
     <ClCompile Include="Core\Utilities\Serialization\SerializationStream.cpp" />
     <ClCompile Include="Core\Objects\Entities\Component.cpp" />
-    <ClCompile Include="Core\Objects\Entities\Components\EditorSpriteComponent.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Components\BillboardComponent.cpp" />
     <ClCompile Include="Core\Objects\EngineObject.cpp" />
     <ClCompile Include="Core\Objects\Entities\Actors\HeadActor.cpp" />
     <ClCompile Include="Core\Objects\Entities\Components\StaticMeshComponent.cpp" />
@@ -274,7 +274,7 @@
     <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
     <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp" />
     <ClCompile Include="Core\Engine\Delegates\Event.cpp" />
-    <ClCompile Include="Core\Pictorum\EngineUI\EngineUIContainer.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.cpp" />
     <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp" />
     <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp" />
@@ -312,6 +312,8 @@
     <ClCompile Include="Core\Utilities\Math\Transform.cpp" />
     <ClCompile Include="Core\Engine\World.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\MainViewportUserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
@@ -356,7 +358,7 @@
     <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
     <ClInclude Include="Core\Objects\Entities\Component.h" />
-    <ClInclude Include="Core\Objects\Entities\Components\EditorSpriteComponent.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
     <ClInclude Include="Core\Objects\EngineObject.h" />
     <ClInclude Include="Core\Objects\Entities\Actors\HeadActor.h" />
     <ClInclude Include="Core\Physics\CollisionChannels.h" />
@@ -378,7 +380,7 @@
     <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\EngineUIContainer.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.h" />
     <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
     <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
     <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
@@ -391,6 +393,7 @@
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
     <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\MainViewportUserInterface.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
@@ -415,6 +418,7 @@
     <ClInclude Include="Core\Utilities\Math\Transform.h" />
     <ClInclude Include="Core\Engine\World.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

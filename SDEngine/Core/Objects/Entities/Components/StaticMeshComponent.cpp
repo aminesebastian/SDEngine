@@ -4,7 +4,7 @@
 #include "Core/Objects/Entities/Actor.h"
 #include "Core/Engine/EngineStatics.h"
 
-StaticMeshComponent::StaticMeshComponent(const TString& Name) : Component(Name) {
+StaticMeshComponent::StaticMeshComponent(const TString& Name) : Component(Name, "StaticMeshComponent") {
 	Mesh = nullptr;
 }
 StaticMeshComponent::~StaticMeshComponent() {

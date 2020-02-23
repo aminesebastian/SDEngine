@@ -5,18 +5,13 @@
 #include "Core/Utilities/Logger.h"
 #include <fstream>
 
-DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : EngineObject(DistanceFieldFontName) {
+DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : EngineObject(DistanceFieldFontName, "DistanceFieldFont") {
 	DistanceFieldTexture = nullptr;
 	SupportedCharacterCount = 0;
 	OfflineFontSize = 0;
 	LineHeight = 0;
 	Base = 0;
 	FontName = DistanceFieldFontName;
-}
-DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName, const TString& FilePath) : DistanceFieldFont(DistanceFieldFontName) {
-	ImageFilePath = FilePath + ".png";
-	FontFilePath = FilePath + ".fnt";
-	LoadAndParseFont();
 }
 DistanceFieldFont::~DistanceFieldFont() {
 	if (DistanceFieldTexture) {
@@ -38,16 +33,30 @@ void DistanceFieldFont::BindAtlas(Shader* ShaderIn, TString ParameterName, int32
 const int32& DistanceFieldFont::GetGeneratedFontSize() const {
 	return OfflineFontSize;
 }
-bool DistanceFieldFont::LoadAndParseFont() {
+SArray<TString> DistanceFieldFont::SplitLineIntoKeyValuePairs(const TString& Line) {
+	SArray<TString> splitByWhitespace;
+	StringUtilities::SplitStringByWhitespace(Line, splitByWhitespace);
+
+	SArray<TString> splitByEquals;
+	for (const TString& pair : splitByWhitespace) {
+		StringUtilities::SplitString(pair, '=', splitByEquals);
+	}
+	return splitByEquals;
+}
+bool DistanceFieldFont::ImportAsset(const TString& FilePath) {
+	TString imageFilePath = FilePath + ".png";
+	TString fontFilePath = FilePath + ".fnt";
+
 	// Create and get the texture.
-	DistanceFieldTexture = new Texture2D(FontName + "AtlasTexture", ImageFilePath);
+	DistanceFieldTexture = new Texture2D(FontName + "AtlasTexture");
+	DistanceFieldTexture->ImportAsset(imageFilePath);
 
 	// Preallocate the character cache to cover entirety of ascii extended.
 	CharacterCache.Resize(256, nullptr);
 
 	// Split file into array of lines.
 	SArray<TString> fileContents;
-	FileUtilities::ParseFileIntoLines(FontFilePath, fileContents);
+	FileUtilities::ParseFileIntoLines(fontFilePath, fileContents);
 
 	// Capture the first two lines of metadata.
 	SArray<TString> firstLine = SplitLineIntoKeyValuePairs(fileContents[0]);
@@ -112,24 +121,11 @@ bool DistanceFieldFont::LoadAndParseFont() {
 			SupportedCharacterCount++;
 		}
 	}
-	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, FontFilePath, maxWidth, maxWidthChar)
+	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, fontFilePath, maxWidth, maxWidthChar)
 		return true;
 }
-SArray<TString> DistanceFieldFont::SplitLineIntoKeyValuePairs(const TString& Line) {
-	SArray<TString> splitByWhitespace;
-	StringUtilities::SplitStringByWhitespace(Line, splitByWhitespace);
-
-	SArray<TString> splitByEquals;
-	for (const TString& pair : splitByWhitespace) {
-		StringUtilities::SplitString(pair, '=', splitByEquals);
-	}
-	return splitByEquals;
-}
-
 bool DistanceFieldFont::SerializeToBuffer(SerializationStream& Stream) const {
 	Stream.SerializeString(FontName);
-	Stream.SerializeString(ImageFilePath);
-	Stream.SerializeString(FontFilePath);
 	Stream.SerializeInteger32(OfflineFontSize);
 	Stream.SerializeInteger32(LineHeight);
 	Stream.SerializeInteger32(Base);
@@ -149,8 +145,6 @@ bool DistanceFieldFont::SerializeToBuffer(SerializationStream& Stream) const {
 }
 bool DistanceFieldFont::DeserializeFromBuffer(DeserializationStream& Stream) {
 	Stream.DeserializeString(FontName);
-	Stream.DeserializeString(ImageFilePath);
-	Stream.DeserializeString(FontFilePath);
 	Stream.DeserializeInteger32(OfflineFontSize);
 	Stream.DeserializeInteger32(LineHeight);
 	Stream.DeserializeInteger32(Base);

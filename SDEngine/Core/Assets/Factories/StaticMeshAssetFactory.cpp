@@ -7,7 +7,7 @@ StaticMeshAssetFactory::StaticMeshAssetFactory() {
 StaticMeshAssetFactory::~StaticMeshAssetFactory() {
 
 }
-Asset* StaticMeshAssetFactory::CreateNewInstance(TString Name) const {
+Asset* StaticMeshAssetFactory::CreateNewInstance(const TString& Name) const {
 	return new Asset("StaticMesh", new StaticMesh(Name));
 }
 FColor StaticMeshAssetFactory::GetAssetColor() const {

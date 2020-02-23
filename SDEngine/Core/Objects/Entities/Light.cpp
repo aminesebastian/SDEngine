@@ -9,6 +9,7 @@
 
 
 Light::Light(TString Name, const Transform IntialTransform, ELightType Type, float Intensity, vec3 Color, float Attenuation, bool CastShadows) : Actor(Name) {
+	SetObjectType("Light");
 	SetTransform(IntialTransform);
 	S_LightInfo.Type = Type;
 	S_LightInfo.Intensity = Intensity;
@@ -20,7 +21,7 @@ Light::Light(TString Name, const Transform IntialTransform, ELightType Type, flo
 
 	bCastShadows = CastShadows;
 
-	RegisterComponent(new EditorSpriteComponent("PointLightSprite", Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), Color));
+	RegisterComponent(new BillboardComponent("PointLightSprite", Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), Color));
 
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 

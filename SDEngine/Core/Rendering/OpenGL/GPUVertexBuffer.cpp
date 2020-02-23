@@ -26,7 +26,7 @@ void GPUVertexBuffer::Clear() {
 	DataLength = 0;
 	ComponentCount = 0;
 }
-const GLuint& GPUVertexBuffer::Generate() {
+const GLuint GPUVertexBuffer::Generate() {
 	if (DataLength == 0) {
 		SD_ENGINE_ERROR("Attempted to generate GPU buffer: {0} with empty data.", Name);
 		return 0;
@@ -34,9 +34,9 @@ const GLuint& GPUVertexBuffer::Generate() {
 
 	glGenBuffers(1, &VertexBufferPointer);
 	glBindBuffer(RenderDataTypeUtilities::GetGLBufferType(BufferType), VertexBufferPointer);
-	glBufferData(RenderDataTypeUtilities::GetGLBufferType(BufferType), SizeOfData * DataLength, DataPointer, RenderDataTypeUtilities::GetGLBufferUsage(BufferUsage));
-
-	CurrentBufferSize = DataLength;
+	glBufferData(RenderDataTypeUtilities::GetGLBufferType(BufferType), SizeOfData * DataLength * 10, nullptr, RenderDataTypeUtilities::GetGLBufferUsage(BufferUsage));
+	glBufferSubData(RenderDataTypeUtilities::GetGLBufferType(BufferType), 0, SizeOfData * DataLength, DataPointer);
+	CurrentBufferSize = DataLength * 10;
 	bSentToGPU = true;
 
 	return VertexBufferPointer;

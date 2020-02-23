@@ -7,7 +7,7 @@ Texture2DAssetFactory::Texture2DAssetFactory() {
 Texture2DAssetFactory::~Texture2DAssetFactory() {
 
 }
-Asset* Texture2DAssetFactory::CreateNewInstance(TString Name) const {
+Asset* Texture2DAssetFactory::CreateNewInstance(const TString& Name) const {
 	return new Asset("Texture2D", new Texture2D(Name));
 }
 FColor Texture2DAssetFactory::GetAssetColor() const {

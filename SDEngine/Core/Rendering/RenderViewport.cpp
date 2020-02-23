@@ -20,16 +20,16 @@
 #include <GLEW/glew.h>
 
 RenderViewport::RenderViewport(const World* RenderWorld, const Window* OwningWindow) : RenderWorld(RenderWorld), OwningWindow(OwningWindow) {
-	CurrentBuffer                  = 0;
-	bDebugMode                     = false;
-	bInitialized                   = false;
-	Compositor                     = new DefferedCompositor(this);
-	SelectionOutlineShader         = new Shader("./Res/Shaders/SelectionOutlineShader", false);
-	MainGBuffer                    = nullptr;
-	OutputBuffer1                  = nullptr;
-	OutputBuffer2                  = nullptr;
-	CurrentlyActiveShader          = nullptr;
-	CurrentRenderStage             = GEOMETRY;
+	CurrentBuffer          = 0;
+	bDebugMode             = false;
+	bInitialized           = false;
+	Compositor             = new DefferedCompositor(this);
+	SelectionOutlineShader = new Shader("./Res/Shaders/SelectionOutlineShader", false);
+	MainGBuffer            = nullptr;
+	OutputBuffer1          = nullptr;
+	OutputBuffer2          = nullptr;
+	CurrentlyActiveShader  = nullptr;
+	CurrentRenderStage     = GEOMETRY;
 
 	LastFrameRenderTime = 0;
 	RenderDeltaTime     = 0.0f;
@@ -45,14 +45,15 @@ void RenderViewport::Initialize() {
 		return;
 	}
 
- 	SD_ENGINE_INFO("Initializing Viewport")
+	SD_ENGINE_INFO("Initializing Viewport");
+	Compositor->Initialize();
 	GenerateRenderTargets();
 	RegisterPostProcessEffects();
-	OwningWindow->OnWindowResized.Add<RenderViewport, &RenderViewport::OnWindowResized>(this);
+	OwningWindow->OnWindowResized.Add<RenderViewport, & RenderViewport::OnWindowResized>(this);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);
 	bInitialized = true;
-	SD_ENGINE_INFO("Viewport Initialized")
+	SD_ENGINE_INFO("Viewport Initialized");
 }
 void RenderViewport::GenerateRenderTargets() {
 	if (!bInitialized) {
@@ -85,7 +86,7 @@ void RenderViewport::GenerateRenderTargets() {
 	OutputBuffer2->FinalizeRenderTarget();
 }
 void RenderViewport::RegisterPostProcessEffects() {
-	SD_ENGINE_INFO("Creating Post Process Stack")
+	SD_ENGINE_INFO("Creating Post Process Stack");
 
 	S_PostProcessingLayers.Clear();
 	S_PostProcessingLayers.Add(new SSAOPostProcessing(this));
@@ -175,7 +176,7 @@ void RenderViewport::Render(const Camera* RenderCamera) {
 
 	CurrentRenderStage = ERenderingStage::POST_PROCESSING;
 	RenderPostProcessing(RenderCamera);
-	
+
 	CurrentRenderStage = EDITOR_ELEMENTS;
 	RenderEditorElements(RenderCamera);
 

@@ -1,15 +1,15 @@
-#include "EditorSpriteComponent.h"
+#include "BillboardComponent.h"
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
 #include "Core/Objects/Entities/Actor.h"
 #include "Core/Objects/Entities/Camera.h"
 
-EditorSpriteComponent::EditorSpriteComponent(const TString& Name, TString TexturePath, vec3 Color) : EditorSpriteComponent(Name, new Texture2D(TexturePath), Color) { }
-EditorSpriteComponent::EditorSpriteComponent(const TString& Name, Texture2D* Sprite, vec3 Color) : EditorSpriteComponent(Name) {
+BillboardComponent::BillboardComponent(const TString& Name, TString TexturePath, const FColor& Color) : BillboardComponent(Name, new Texture2D(TexturePath), Color) { }
+BillboardComponent::BillboardComponent(const TString& Name, Texture2D* Sprite, const FColor& Color) : BillboardComponent(Name) {
 	this->Sprite = Sprite;
 	Tint = Color;
 }
-EditorSpriteComponent::EditorSpriteComponent(const TString& Name) : Component(Name) {
+BillboardComponent::BillboardComponent(const TString& Name) : Component(Name, "BillboardComponent") {
 	SpriteVertexArray = 0;
 	SpriteVertexBuffer = 0;
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
@@ -40,11 +40,11 @@ EditorSpriteComponent::EditorSpriteComponent(const TString& Name) : Component(Na
 	SetCastShadows(false);
 	SetHiddenInGame(true);
 }
-EditorSpriteComponent::~EditorSpriteComponent() {
+BillboardComponent::~BillboardComponent() {
 
 }
 
-void EditorSpriteComponent::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
+void BillboardComponent::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) {
 	if (Sprite == nullptr) {
 		return;
 	}
@@ -64,7 +64,7 @@ void EditorSpriteComponent::DrawAdvanced(const Camera* RenderCamera, const EDraw
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 	glBindVertexArray(0);
 }
-bool EditorSpriteComponent::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) {
+bool BillboardComponent::TraceAgainstRay(const Vector3D& Origin, const Vector3D& Direction, Vector3D& HitPoint, float& Distance, ECollisionChannel Channel) {
 	//if (GetAxisAlignedBoundingBox()->IntersectWithRay(Origin, Direction, GetTransform(), HitPoint, Distance)) {
 	//	mat4 invModelMatrix = glm::inverse(GetTransform().GetModelMatrix());
 	//	vec3 objectSpaceOrigin = invModelMatrix * vec4(Origin.x, Origin.y, Origin.z, 1.0f);
@@ -74,9 +74,9 @@ bool EditorSpriteComponent::TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& H
 	return false;
 }
 
-void EditorSpriteComponent::SetTint(vec3 NewTint) {
+void BillboardComponent::SetTint(const FColor& NewTint) {
 	Tint = NewTint;
 }
-vec3 EditorSpriteComponent::GetTint() {
+const FColor& BillboardComponent::GetTint() const {
 	return Tint;
 }

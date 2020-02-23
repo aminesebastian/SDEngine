@@ -78,6 +78,8 @@ public:
 	static bool LineTraceAgainstTriangles(vec3 RayOrigin, vec3 RayDirection, SArray<vec3> Verticies, SArray<uint32> Indecies, vec3& HitLocation, float& Distance);
 	static bool LineTraceAgainstAABB(vec3 RayOrigin, vec3 RayDirection, vec3 AABBMin, vec3 AABBMax, vec3& HitLocation, float& Distance);
 
+	static bool PointIntersect2DBox(const Vector2D& Point, const Vector2D& BoxMinExtent, const Vector2D& BoxMaxExtent);
+
 	static inline TString LocationToString(vec2 Position) { return "X: " + std::to_string(Position.x) + " Y: " + std::to_string(Position.y); }
 	static inline TString LocationToString(vec3 Position) { return "X: " + std::to_string(Position.x) + " Y: " + std::to_string(Position.y) + " Z: " + std::to_string(Position.z); }
 	static inline TString RotationToString(vec3 EulerRotation) { return "P: " + std::to_string(degrees(EulerRotation.x)) + " Y: " + std::to_string(degrees(EulerRotation.y)) + " R: " + std::to_string(degrees(EulerRotation.z)); }

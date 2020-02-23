@@ -13,10 +13,10 @@
 TitleBar::TitleBar(const TString& Name) : PictorumWidget(Name) {
 	TitleBarHeight = 30.0f;
 
-	CloseTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/CloseIcon.sasset");
-	MinimizeTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset");
-	RestoreTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset");
-	MaximizeTexture = Engine::Get()->GetAssetManager()->GetAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset");
+	CloseTexture = Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/CloseIcon.sasset");
+	MinimizeTexture = Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset");
+	RestoreTexture = Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset");
+	MaximizeTexture = Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset");
 }
 TitleBar::~TitleBar() {
 

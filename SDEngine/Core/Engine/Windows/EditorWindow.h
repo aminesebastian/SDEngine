@@ -10,7 +10,10 @@ public:
 	virtual void Initialize() override;
 	virtual void UpdateInternal(const float& DeltaTime) override;
 
-	PictorumWidget* GetEditorWindowUI() const;
+	template<typename T>
+	T* GetEditorWindowUI() const {
+		return Cast<T>(_EditorUI);
+	}
 protected:
 	PictorumRenderer* _EditorWindowUIRenderer;
 	PictorumWidget* _EditorUI;

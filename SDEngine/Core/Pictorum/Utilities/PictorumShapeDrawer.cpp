@@ -3,7 +3,7 @@
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
 
-PictorumShapeDrawer::PictorumShapeDrawer(const TString& Name) : EngineObject(Name) {
+PictorumShapeDrawer::PictorumShapeDrawer(const TString& Name) : EngineObject(Name, "PictorumShapeDrawer") {
 	QuadVertexBuffer = new GPUVertexBufferArray();
 
 	SArray<Vector3D> verticies;

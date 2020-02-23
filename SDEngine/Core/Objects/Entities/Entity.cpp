@@ -2,7 +2,7 @@
 #include "Core/Objects/Entities/Camera.h"
 #include "Core/Engine/World.h"
 
-Entity::Entity(TString Name) : EngineObject(Name) {
+Entity::Entity(const TString& Name, const TString& Type) : EngineObject(Name, Type) {
 	bVisible        = true;
 	bHiddenInGame   = false;
 	bNeedsTick      = true;

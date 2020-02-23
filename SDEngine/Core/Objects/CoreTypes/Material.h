@@ -40,7 +40,7 @@ enum EShaderModel {
 
 class Entity;
 
-class Material  : public ISerializeableAsset {
+class Material : public ISerializeableAsset {
 
 public:
 	Material(string BaseShaderName);
@@ -48,7 +48,7 @@ public:
 	~Material();
 
 	Shader* GetShader() { return S_Shader; }
-	
+
 	bool SetVec4Parameter(string Name, vec4 Value);
 	bool SetVec3Parameter(string Name, vec3 Value);
 	bool SetVec2Parameter(string Name, vec2 Value);
@@ -61,6 +61,7 @@ public:
 	void BindMaterial(const Transform& RenderTransform, const Camera* RenderCamera);
 	void BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, const Camera* RenderCamera);
 
+	bool ImportAsset(const TString& FilePath) override { return true; }
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
 	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:

@@ -3,9 +3,6 @@
 #include "Core/Engine/Engine.h"
 
 #include "SDL/SDL_scancode.h"
-#include "Lib/Imgui/imgui.h"
-#include "Lib/Imgui/imgui_impl_sdl.h"
-#include "Lib/Imgui/imgui_impl_opengl3.h"
 
 InputSubsystem::InputSubsystem() {
 	for (int i = 0; i < SDL_NUM_SCANCODES; i++) {

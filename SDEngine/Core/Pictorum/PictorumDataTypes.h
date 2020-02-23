@@ -57,16 +57,19 @@ struct FUserInterfaceEvent {
 		bHandled = false;
 		bCaptureMouse = false;
 	}
-	bool ShouldContinuePropragating() {
-		return !bHandled && !bCaptureMouse;
+	void Handled() { 
+		bHandled = true; 
 	}
-	bool GetHandled() { return bHandled; }
-	void SetHandled() { bHandled = true; }
-	void SetUnhandled() { bHandled = false; }
-
-	bool ShouldCaptureMouse() { return bCaptureMouse; }
-	void CaptureMouse() { bCaptureMouse = true; }
+	void CaptureMouse() { 
+		Handled();
+		bCaptureMouse = true; 
+	}
+	bool ShouldContinuePropragating() {
+		return !bHandled;
+	}
 private:
+	friend class PictorumRenderer;
+
 	bool bHandled;
 	bool bCaptureMouse;
 };

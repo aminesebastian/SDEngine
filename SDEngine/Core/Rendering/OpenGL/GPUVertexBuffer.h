@@ -31,7 +31,7 @@ public:
 				DataPointer = (void*)& Data[0];
 				SizeOfData = sizeof(Data[0]);
 				ComponentCount = SizeOfData / RenderDataTypeUtilities::GetGLDataTypeSize(DataType);
-				DataLength = Data.Count();
+				DataLength = DataElements;
 			}
 		} else {
 			DataPointer = nullptr;
@@ -55,7 +55,7 @@ private:
 
 	GPUVertexBuffer(const TString& Name, const EGPUBufferType& BufferType, const EGPUBufferUsage& BufferUsage, const EGPUBufferDataType& DataType, const uint8& Stride = 0, const bool& Normalized = false);
 	virtual ~GPUVertexBuffer();
-	const GLuint& Generate();
+	const GLuint Generate();
 	void Clear();
 
 	const TString Name;
@@ -66,7 +66,6 @@ private:
 	const uint8 Stride;
 
 	GLuint VertexBufferPointer;
-
 
 	bool bSentToGPU;
 	uint32 CurrentBufferSize;

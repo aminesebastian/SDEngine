@@ -4,7 +4,7 @@
 
 class IAssetFactory {
 public:
-	virtual Asset* CreateNewInstance(TString Name) const = 0;
+	virtual Asset* CreateNewInstance(const TString& Name) const = 0;
 	virtual FColor GetAssetColor() const = 0;
 	virtual TString GetAssetType() const = 0;
 };

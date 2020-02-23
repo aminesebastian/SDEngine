@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 	manager->RegisterNewFactory("Texture2D", new Texture2DAssetFactory());
 	manager->RegisterNewFactory("Font", new FontAssetFactory());
 
-	serializeFont("Arial", "./Res/Fonts/Arial", "./Res/Assets/Editor/Fonts/Arial.sasset", manager);
+	//serializeFont("Arial", "./Res/Fonts/Arial", "./Res/Assets/Editor/Fonts/Arial.sasset", manager);
 	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
 	//serializeAllTextures(manager);
 
@@ -54,7 +54,8 @@ void serializeTexture(TString TextureName, TString TexturePath, TString AssetPat
 	ByteBuffer buffer;
 	SerializationStream stream(buffer);
 
-	Texture2D tex(TextureName, TexturePath);
+	Texture2D tex(TextureName);
+	tex.ImportAsset(TexturePath);
 	AssetMetadata metadata("Texture2D", 1, stream);
 	tex.SerializeToBuffer(stream);
 	buffer.WriteToCompressedFile(AssetPath);
@@ -63,7 +64,8 @@ void serializeStaticMesh(TString MeshName, TString MeshPath, TString AssetPath, 
 	ByteBuffer buffer;
 	SerializationStream stream(buffer);
 
-	StaticMesh tex(MeshName, MeshPath);
+	StaticMesh tex(MeshName);
+	tex.ImportAsset(MeshPath);
 	AssetMetadata metadata("StaticMesh", 1, stream);
 	tex.SerializeToBuffer(stream);
 	buffer.WriteToCompressedFile(AssetPath);
@@ -72,7 +74,8 @@ void serializeFont(TString FontName, TString FontPath, TString AssetPath, AssetM
 	ByteBuffer buffer;
 	SerializationStream stream(buffer);
 
-	DistanceFieldFont font(FontName, FontPath);
+	DistanceFieldFont font(FontName);
+	font.ImportAsset(FontPath);
 	AssetMetadata metadata("Font", 1, stream);
 	font.SerializeToBuffer(stream);
 	buffer.WriteToCompressedFile(AssetPath);
