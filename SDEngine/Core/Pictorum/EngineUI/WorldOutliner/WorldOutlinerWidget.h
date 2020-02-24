@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Pictorum/EngineUI/WorldOutliner/WorldOutlinerEntry.h"
 #include "Core/Engine/World.h"
 
 class PictorumScrollBox;
@@ -11,11 +12,13 @@ public:
 	virtual ~WorldOutlinerWidget();
 
 	virtual void OnCreated() override;
+	void SetWorld(World* WorldIn);
 
-	void WorldUpdated(World* WorldIn);
-	void OnSelectedValuesChanged(PictorumWidget* ScrollBoxWidget, const SArray<int32>& SelectedIndices);
-private:
+protected:
 	PictorumScrollBox* ScrollBox;
 	World* ReferencedWorld;
+
+	void UpdateEntityList();
+	void OnSelectedValuesChanged(PictorumWidget* ScrollBoxWidget, const SArray<int32>& SelectedIndices);
 };
 

@@ -57,6 +57,7 @@ protected:
 	/* RESIZING */
 	/************/
 	bool bCanResize;
+	bool bWasMouseClickedDuringResize;
 	FGridRule* ShrinkTarget;
 	FGridRule* GrowTarget;
 	int32 ShrinkTargetIndex;
@@ -72,6 +73,7 @@ protected:
 	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
+	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 private:
 	bool UpdateResizeTargets();
 	void CacheMouseMoveValues(const vec2& MousePosition);

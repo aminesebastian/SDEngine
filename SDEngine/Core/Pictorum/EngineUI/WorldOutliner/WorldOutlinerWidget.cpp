@@ -1,13 +1,14 @@
 #include "WorldOutlinerWidget.h"
 #include "Core/Engine/World.h"
 #include "Core/Objects/Entities/Actor.h"
-#include "Core/Pictorum/Containers/PictorumScrollBox.h"
-#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
-#include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
+#include "Core/Pictorum/Widgets/SolidWidget.h"
+#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
+#include "Core/Pictorum/Containers/PictorumScrollBox.h"
 
 WorldOutlinerWidget::WorldOutlinerWidget(const TString& Name) : PictorumWidget(Name) {
-
+	ReferencedWorld = nullptr;
+	ScrollBox       = nullptr;
 }
 WorldOutlinerWidget::~WorldOutlinerWidget() {
 
@@ -22,14 +23,16 @@ void WorldOutlinerWidget::OnCreated() {
 	bg->AddChild(ScrollBox);
 	ScrollBox->SelectionUpdated.Add<WorldOutlinerWidget, &WorldOutlinerWidget::OnSelectedValuesChanged>(this);
 }
-void WorldOutlinerWidget::WorldUpdated(World* WorldIn) {
+void WorldOutlinerWidget::SetWorld(World* WorldIn) {
 	ReferencedWorld = WorldIn;
+	UpdateEntityList();
+}
+void WorldOutlinerWidget::UpdateEntityList() {
 	ScrollBox->ClearChildren();
-	for (Actor* actor : WorldIn->GetWorldActors()) {
-		TextWidget* actorEntry = new TextWidget(actor->GetObjectName());
-		actorEntry->SetText(actor->GetObjectName());
-		actorEntry->SetFontSize(12);
-		ScrollBox->AddChild(actorEntry);
+
+	for (Actor* actor : ReferencedWorld->GetWorldActors()) {
+		AssignNewToChildLocal(ScrollBox, WorldOutlinerEntry, actorEntry, "WorldOutlinerEntry: " + actor->GetObjectName());
+		actorEntry->Initialize(actor);
 	}
 }
 void WorldOutlinerWidget::OnSelectedValuesChanged(PictorumWidget* ScrollBoxWidget, const SArray<int32>& SelectedIndices) {

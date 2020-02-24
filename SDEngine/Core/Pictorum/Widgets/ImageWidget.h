@@ -13,9 +13,10 @@ public:
 	virtual void OnMouseEnter(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
 	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& Event) override;
 	void SetTint(const FColor& NewTint);
-	void SetImage(Texture2D* ImageIn, const bool& MaintainSize = true);
+	void SetImage(Texture2D* ImageIn, const bool& UpdateSize = false);
 	void SetSize(const vec2& SizeIn);
 private:
 	FImageDrawInstruction* DrawInstruction;
+	Vector2D Size;
 };
 

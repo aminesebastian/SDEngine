@@ -17,8 +17,27 @@
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
 
+#define AddNew(WidgetClass, Name) AddChild(new WidgetClass(Name));
+
+#define AssignNewChildLocal(WidgetClass, VariableName, Name) \
+	WidgetClass* VariableName = new WidgetClass(Name); \
+	AddChild(VariableName); \
+
+#define AssignNewChild(WidgetClass, Output, Name) \
+	Output = new WidgetClass(Name); \
+	AddChild(Output); \
+
+#define AddToChild(Parent, WidgetClass, Name) Parent->AddChild(new WidgetClass(Name));
+
+#define AssignNewToChildLocal(Parent, WidgetClass, VariableName, Name) \
+	WidgetClass* VariableName = new WidgetClass(Name); \
+	Parent->AddChild(VariableName); \
+
+#define AssignNewToChild(Parent, WidgetClass, Output, Name) \
+	Output = new WidgetClass(Name); \
+	Parent->AddChild(Output); \
+
 class Shader;
-class DragFloat;
 
 class PictorumWidget : public EngineObject {
 public:
@@ -75,9 +94,6 @@ protected:
 	IWidgetSlot* ParentSlot;
 	/** The owning renderer viewport of this widget. */
 	PictorumRenderer* OwningRenderer;
-
-	SArray<DragFloat*> DetailsPanelWidgets;
-
 	/** Rotation of the widget [0-360n] */
 	float Rotation;
 	/** The visibility state of the widget */

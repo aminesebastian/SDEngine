@@ -50,8 +50,6 @@ vec2 PictorumHorizontalBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry)
 		desiredSize.y = MathLibrary::Max(desiredSize.y, childSpace.y);
 		desiredSize.x += CalculateChildWidth(Geometry, i);
 	}
-	desiredSize.x += Padding.GetLeft() + Padding.GetRight();
-	desiredSize.y += Padding.GetTop() + Padding.GetBottom();
 	return desiredSize;
 }
 
@@ -75,7 +73,7 @@ float PictorumHorizontalBox::CalculateChildWidth(const FRenderGeometry& CurrentR
 		float ratio = GetFillRatioForChild(ChildIndex);
 		float filledXSpace = CurrentRenderGeometry.GetAllotedSpace().x;
 		filledXSpace -= GetNonFillSpaceRequirements(CurrentRenderGeometry);
-		filledXSpace /= ratio;
+		filledXSpace *= ratio;
 		return filledXSpace;
 	}
 	return 0.0f;

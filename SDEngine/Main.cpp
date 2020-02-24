@@ -10,18 +10,39 @@
 #include "Core/Objects/CoreTypes/StaticMesh.h"
 #include "Core/Utilities/Logger.h"
 
+#include "Core/Reflection/Reflection.h"
+
+
+
 #undef main
 using namespace glm;
 
 Engine* S_Engine;
 
-void serializeTexture(TString TextureName,TString TexturePath, TString AssetPath, AssetManager* Manager);
+void serializeTexture(TString TextureName, TString TexturePath, TString AssetPath, AssetManager* Manager);
 void serializeStaticMesh(TString MeshName, TString MeshPath, TString AssetPath, AssetManager* Manager);
 void serializeAllTextures(AssetManager* Manager);
 void serializeFont(TString FontName, TString FontPath, TString AssetPath, AssetManager* Manager);
 
+SD_STRUCT();
+struct FTest {
+	SD_STRUCT_PROPERTIES();
+
+	SD_PROPERTY();
+	float Test
+};
+
+REFLECT_STRUCT_BEGIN(FTest)
+REFLECT_STRUCT_MEMBER(Test)
+REFLECT_STRUCT_END()
+
+
 int main(int argc, char* argv[]) {
 	S_Engine = Engine::Get();
+
+	FTest* test = new FTest();
+
+	TypeDescriptor* typeDesc = TypeResolver<FTest>::Get();
 
 	AssetManager* manager = Engine::Get()->GetAssetManager();
 	manager->RegisterNewFactory("StaticMesh", new StaticMeshAssetFactory());
@@ -33,7 +54,7 @@ int main(int argc, char* argv[]) {
 	//serializeStaticMesh("head", "./Res/Head/Head.fbx", "./Res/Assets/Head.sasset", manager);
 	//serializeAllTextures(manager);
 
-	if (!S_Engine->Initialize()) {		
+	if (!S_Engine->Initialize()) {
 		return 0;
 	}
 
@@ -49,6 +70,8 @@ void serializeAllTextures(AssetManager* Manager) {
 	serializeTexture("restore_icon", "./Res/Textures/Editor/UI/RestoreIcon.png", "./Res/Assets/Editor/Textures/UI/RestoreIcon.sasset", Manager);
 	serializeTexture("minimize_icon", "./Res/Textures/Editor/UI/MinimizeIcon.png", "./Res/Assets/Editor/Textures/UI/MinimizeIcon.sasset", Manager);
 	serializeTexture("maximize_icon", "./Res/Textures/Editor/UI/MaximizeIcon.png", "./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset", Manager);
+	serializeTexture("eye_open", "./Res/Textures/Editor/UI/EyeOpenIcon.png", "./Res/Assets/Editor/Textures/UI/EyeOpenIcon.sasset", Manager);
+	serializeTexture("eye_closed", "./Res/Textures/Editor/UI/EyeClosedIcon.png", "./Res/Assets/Editor/Textures/UI/EyeClosedIcon.sasset", Manager);
 }
 void serializeTexture(TString TextureName, TString TexturePath, TString AssetPath, AssetManager* Manager) {
 	ByteBuffer buffer;
@@ -80,3 +103,4 @@ void serializeFont(TString FontName, TString FontPath, TString AssetPath, AssetM
 	font.SerializeToBuffer(stream);
 	buffer.WriteToCompressedFile(AssetPath);
 }
+

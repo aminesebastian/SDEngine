@@ -42,24 +42,26 @@ void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 		}
 	}
 
-	// Draw the line behind the scroll bar.
-	ScrollBarLineDrawInstruction->Size.y      = Geometry.GetAllotedSpace().y - 10.0f;
-	ScrollBarLineDrawInstruction->Location    = Geometry.GetLocation();
-	ScrollBarLineDrawInstruction->Location.y += 5.0f;
-	ScrollBarLineDrawInstruction->Location.x += Geometry.GetAllotedSpace().x;
-	ScrollBarLineDrawInstruction->Location.x -= (ScrollBarSideOffset + (ScrollBarLineDrawInstruction->Size.x / 2.0f) - (ScrollBarThickness / 2.0f));
-	DrawBox(Geometry, *ScrollBarLineDrawInstruction);
+	if (ShouldRenderScrollBar()) {
+		// Draw the line behind the scroll bar.
+		ScrollBarLineDrawInstruction->Size.y = Geometry.GetAllotedSpace().y - 10.0f;
+		ScrollBarLineDrawInstruction->Location = Geometry.GetLocation();
+		ScrollBarLineDrawInstruction->Location.y += 5.0f;
+		ScrollBarLineDrawInstruction->Location.x += Geometry.GetAllotedSpace().x;
+		ScrollBarLineDrawInstruction->Location.x -= (ScrollBarSideOffset + (ScrollBarLineDrawInstruction->Size.x / 2.0f) - (ScrollBarThickness / 2.0f));
+		DrawBox(Geometry, *ScrollBarLineDrawInstruction);
 
-	// Draw the scroll bar.
-	float scrollBarHeight                     = Geometry.GetAllotedSpace().y * (Geometry.GetAllotedSpace().y / CalculateSizeOfContents(Geometry).y);
-	scrollBarHeight                           = MathLibrary::Max(MinScrollBarHeight, scrollBarHeight);
-	ScrollBarDrawInstruction->Location        = Geometry.GetLocation();
-	ScrollBarDrawInstruction->Location.y     += ScrollBarPadding;
-	ScrollBarDrawInstruction->Location.x     += Geometry.GetAllotedSpace().x - ScrollBarSideOffset;
-	ScrollBarDrawInstruction->Location.y     += Geometry.GetAllotedSpace().y - scrollBarHeight - ((Geometry.GetAllotedSpace().y - scrollBarHeight) * GetScrollAlpha());
-	ScrollBarDrawInstruction->Size            = vec2(ScrollBarThickness, scrollBarHeight);
-	ScrollBarDrawInstruction->Size.y         -= (2*ScrollBarPadding);
-	DrawBox(Geometry, *ScrollBarDrawInstruction);
+		// Draw the scroll bar.
+		float scrollBarHeight = Geometry.GetAllotedSpace().y * (Geometry.GetAllotedSpace().y / CalculateSizeOfContents(Geometry).y);
+		scrollBarHeight = MathLibrary::Max(MinScrollBarHeight, scrollBarHeight);
+		ScrollBarDrawInstruction->Location = Geometry.GetLocation();
+		ScrollBarDrawInstruction->Location.y += ScrollBarPadding;
+		ScrollBarDrawInstruction->Location.x += Geometry.GetAllotedSpace().x - ScrollBarSideOffset;
+		ScrollBarDrawInstruction->Location.y += Geometry.GetAllotedSpace().y - scrollBarHeight - ((Geometry.GetAllotedSpace().y - scrollBarHeight) * GetScrollAlpha());
+		ScrollBarDrawInstruction->Size = vec2(ScrollBarThickness, scrollBarHeight);
+		ScrollBarDrawInstruction->Size.y -= (2 * ScrollBarPadding);
+		DrawBox(Geometry, *ScrollBarDrawInstruction);
+	}
 }
 void PictorumScrollBox::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	if (abs(ScrollEnergy) > 0.0f) {
@@ -188,6 +190,9 @@ void PictorumScrollBox::SetSelectionEnabled(const bool& Enabled) {
 }
 const bool& PictorumScrollBox::IsSelectionEnabled() const {
 	return bSelectionEnabled;
+}
+const bool PictorumScrollBox::ShouldRenderScrollBar() const {
+	return CalculateSizeOfContents(LastRenderedGeometry).y > LastRenderedGeometry.GetAllotedSpace().y;
 }
 void PictorumScrollBox::PreventOverscroll() {
 	if (ScrollOffset > CalculateSizeOfContents(LastRenderedGeometry).y - LastRenderedGeometry.GetAllotedSpace().y) {

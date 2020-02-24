@@ -18,6 +18,7 @@ public:
 
 	const GLuint& GetTexture() const;
 	const vec2& GetDimensions() const;
+	const float& GetAspectRatio() const;
 
 	bool ImportAsset(const TString& FilePath) override;
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
@@ -31,6 +32,7 @@ private:
 	GLuint Texture;
 
 	vec2 TextureDimensions;
+	float AspectRatio;
 	int32 NumComponents;
 	int32 ExpectedComponents;
 	GLint WrapBehaviour;

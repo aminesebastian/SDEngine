@@ -228,7 +228,7 @@
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\ConstraintBoxWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumConstraintBox.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumCanvas.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
@@ -236,6 +236,7 @@
     <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumHorizontalBox.cpp" />
     <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp" />
+    <ClCompile Include="Core\Reflection\Reflection.cpp" />
     <ClCompile Include="Core\Utilities\StringUtilities.cpp" />
     <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\TextRenderer.cpp" />
@@ -312,8 +313,9 @@
     <ClCompile Include="Core\Utilities\Math\Transform.cpp" />
     <ClCompile Include="Core\Engine\World.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp" />
-    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.cpp" />
-    <ClCompile Include="Core\Pictorum\EngineUI\MainViewportUserInterface.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\MainEditorViewport\MainViewportUserInterface.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
@@ -324,7 +326,7 @@
     <ClInclude Include="Core\Pictorum\EngineUI\EngineUIStyle.h" />
     <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
@@ -334,6 +336,8 @@
     <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumHorizontalBox.h" />
     <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\TypeResolver.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
@@ -393,7 +397,8 @@
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
     <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\MainViewportUserInterface.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\MainEditorViewport\MainViewportUserInterface.h" />
+    <ClInclude Include="Core\Reflection\Reflection.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
@@ -418,7 +423,9 @@
     <ClInclude Include="Core\Utilities\Math\Transform.h" />
     <ClInclude Include="Core\Engine\World.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerWidget.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerEntry.h" />
+    <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

@@ -37,8 +37,8 @@ void PictorumWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBound
 	MaxBounds = lastLocation + lastScale;
 	MinBounds.x = MathLibrary::Max(MinBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x);
 	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
-	MaxBounds.x = MathLibrary::Min(MaxBounds.x, LastRenderedGeometry.GetMaximumClipPoint().x);
-	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMaximumClipPoint().y);
+	MaxBounds.x = MathLibrary::Min(MaxBounds.x, LastRenderedGeometry.GetMinimumClipPoint().x + LastRenderedGeometry.GetMaximumClipPoint().x);
+	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y + LastRenderedGeometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	OutputGeometry = CurrentRenderGeometry;

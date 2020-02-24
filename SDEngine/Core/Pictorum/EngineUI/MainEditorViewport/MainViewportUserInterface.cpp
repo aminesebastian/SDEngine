@@ -2,7 +2,7 @@
 #include "Core/Pictorum/Containers/PictorumGrid.h"
 #include "Core/Pictorum/EngineUI/FrameStatisticsWidget.h"
 #include "Core/Pictorum/EngineUI/FloatingDetailsPanel.h"
-#include "Core/Pictorum/EngineUI/WorldOutlinerWidget.h"
+#include "Core/Pictorum/EngineUI/WorldOutliner/WorldOutlinerWidget.h"
 #include "Core/Engine/World.h"
 
 MainViewportUserInterface::MainViewportUserInterface(const TString& Name) : EngineWindowUserInterface(Name) {
@@ -16,8 +16,8 @@ void MainViewportUserInterface::OnCreated() {
 	EngineWindowUserInterface::OnCreated();
 
 	PictorumGrid* grid = new PictorumGrid("Grid");
-	grid->AddRow(0.5f);
-	grid->AddRow(0.5f);
+	grid->AddRow(0.25f);
+	grid->AddRow(0.75f);
 	grid->AddColumn(0.2f);
 	grid->AddColumn(0.6f);
 	grid->AddColumn(0.2f);
@@ -50,5 +50,5 @@ void MainViewportUserInterface::OnCreated() {
 	rightSlot->RowSpan = 1;
 }
 void MainViewportUserInterface::OnWorldUpdated(World* WorldIn) {
-	WorldOutliner->WorldUpdated(WorldIn);
+	WorldOutliner->SetWorld(WorldIn);
 }

@@ -15,6 +15,7 @@ PictorumGrid::PictorumGrid(const TString& Name) : PictorumWidget(Name) {
 	CellRelativePosition.x = 0.0f;
 	CellRelativePosition.y = 0.0f;
 	ResizeHandleDistance = 5;
+	bWasMouseClickedDuringResize = false;
 
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
@@ -183,7 +184,7 @@ void PictorumGrid::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& E
 void PictorumGrid::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) {
 	// If the mouse was clicked inside this widget, check if we are in resizing range.
 	// Otherwise, cache the data required for making this determination.
-	if (WasClickedInside() && bCanResize) {
+	if (bWasMouseClickedDuringResize) {
 		Vector2D relativeDelta = MouseDelta / LastRenderedGeometry.GetRenderResolution();
 
 		if (!GrowTarget->bIsRow) {
@@ -209,6 +210,14 @@ void PictorumGrid::OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta
 void PictorumGrid::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
 	if (bCanResize) {
 		EventIn.CaptureMouse();
+		bWasMouseClickedDuringResize = true;
+	} else {
+		bWasMouseClickedDuringResize = false;
+	}
+}
+void PictorumGrid::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
+	if (bWasMouseClickedDuringResize) {
+		bWasMouseClickedDuringResize = false;
 	}
 }
 

@@ -18,6 +18,7 @@ public:
 
 	void SetSelectionEnabled(const bool& Enabled);
 	const bool& IsSelectionEnabled() const;
+	const bool ShouldRenderScrollBar() const;
 
 	Event<void(PictorumWidget*, const SArray<int32>&)> SelectionUpdated;
 

@@ -48,7 +48,9 @@ const GLuint& Texture2D::GetTexture() const {
 const vec2& Texture2D::GetDimensions() const {
 	return TextureDimensions;
 }
-
+const float& Texture2D::GetAspectRatio() const {
+	return AspectRatio;
+}
 
 void Texture2D::SendTextureDataToGPU() {
 	if (TextureData.IsEmpty()) {
@@ -99,6 +101,7 @@ bool Texture2D:: ImportAsset(const TString& FilePath) {
 
 	// Capture texture dimensions.
 	TextureDimensions = vec2(width, height);
+	AspectRatio = (float)width / (float)height;
 
 	// Free the image data buffer.
 	stbi_image_free(image);
@@ -106,12 +109,14 @@ bool Texture2D:: ImportAsset(const TString& FilePath) {
 	return true;
 }
 bool Texture2D::SerializeToBuffer(SerializationStream& Stream) const {
+	Stream.SerializeFloat(AspectRatio);
 	Stream.SerializeVec2(TextureDimensions);
 	Stream.SerializeInteger32(NumComponents);
 	Stream.SerializeUnsignedCharacterArray(TextureData);
 	return true;
 }
 bool Texture2D::DeserializeFromBuffer(DeserializationStream& Stream) {
+	Stream.DeserializeFloat(AspectRatio);
 	Stream.DeserializeVec2(TextureDimensions);
 	Stream.DeserializeInteger32(NumComponents);
 	Stream.DeserializeUnsignedCharacterArray(TextureData);

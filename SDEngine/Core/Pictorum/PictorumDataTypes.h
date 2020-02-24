@@ -57,12 +57,12 @@ struct FUserInterfaceEvent {
 		bHandled = false;
 		bCaptureMouse = false;
 	}
-	void Handled() { 
-		bHandled = true; 
+	void Handled() {
+		bHandled = true;
 	}
-	void CaptureMouse() { 
+	void CaptureMouse() {
 		Handled();
-		bCaptureMouse = true; 
+		bCaptureMouse = true;
 	}
 	bool ShouldContinuePropragating() {
 		return !bHandled;
@@ -104,9 +104,9 @@ private:
 struct FRenderGeometry {
 	FRenderGeometry() {
 		AllotedSpace = vec2(0.0f, 0.0f);
-		Location     = vec2(0.0f, 0.0f);
-		MinClipPoint  = vec2(0.0f, 0.0f);
-		MaxClipPoint  = vec2(0.0f, 0.0f);
+		Location = vec2(0.0f, 0.0f);
+		MinClipPoint = vec2(0.0f, 0.0f);
+		MaxClipPoint = vec2(0.0f, 0.0f);
 	}
 	explicit FRenderGeometry(const vec2& RenderResolution, const vec2& RenderTargetDPI) : RenderResolution(RenderResolution), RenderTargetDPI(RenderTargetDPI) {
 		MinClipPoint = vec2(0.0f, 0.0f);
@@ -288,7 +288,7 @@ private:
 	/** Any point to the Right or Top of this line should be clipped. */
 	vec2 MaxClipPoint;
 };
-struct FAnchors  {
+struct FAnchors {
 	FAnchors() {
 		SetTop(1.0f);
 		SetRight(1.0f);
@@ -336,7 +336,7 @@ struct FOffsets {
 		memset(&Relative[0], false, sizeof(bool) * 4);
 		PivotOffset = vec2(0.0f, 0.0f);
 	}
-	
+
 	const float& GetYSize() const {
 		return GetTop();
 	}
@@ -431,7 +431,7 @@ protected:
 		return 0.0f;
 	}
 };
-struct FPadding  {
+struct FPadding {
 	FPadding() {
 		memset(&Sides[0], 0, sizeof(float) * 4);
 	}
@@ -552,7 +552,7 @@ struct FBorderRadius {
 	}
 	const float& GetBottomLeftRadius() const {
 		return Radii.z;
-	}	
+	}
 	void SetBottomLeftRadius(const float& Radius) {
 		Radii.z = Radius;
 	}
@@ -562,6 +562,8 @@ struct FBorderRadius {
 	void SetBottomRightRadius(const float& Radius) {
 		Radii.y = Radius;
 	}
+
 private:
 	Vector4D Radii;
 };
+

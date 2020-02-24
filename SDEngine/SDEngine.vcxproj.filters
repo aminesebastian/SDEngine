@@ -250,9 +250,6 @@
     <ClCompile Include="Core\Pictorum\EngineUI\TitleBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\Widgets\ConstraintBoxWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -337,16 +334,25 @@
     <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Pictorum\EngineUI\MainViewportUserInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Objects\Entities\Components\BillboardComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\MainEditorViewport\MainViewportUserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumConstraintBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Reflection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -473,7 +479,6 @@
       <Filter>Headers\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Core\Pictorum\EngineUI\TitleBar.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\ConstraintBoxWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
@@ -508,10 +513,16 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
     <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutlinerWidget.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\MainViewportUserInterface.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\EngineWindowUserInterface.h" />
     <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerWidget.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\MainEditorViewport\MainViewportUserInterface.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\WorldOutliner\WorldOutlinerEntry.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
+    <ClInclude Include="Core\Reflection\Reflection.h" />
+    <ClInclude Include="Core\Reflection\TypeResolver.h" />
+    <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
+    <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
