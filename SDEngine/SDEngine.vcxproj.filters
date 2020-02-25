@@ -355,6 +355,15 @@
     <ClCompile Include="Core\Reflection\Reflection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\ReflectionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\ReflectionHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -523,6 +532,8 @@
     <ClInclude Include="Core\Reflection\TypeResolver.h" />
     <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
     <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
+    <ClInclude Include="Test\ReflectionTest.h" />
+    <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

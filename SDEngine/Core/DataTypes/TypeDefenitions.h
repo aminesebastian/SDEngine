@@ -27,6 +27,9 @@ using Vector2D = glm::vec2;
 using Vector3D = glm::vec3;
 using Vector4D = glm::vec4;
 
+using Matrix4 = glm::mat4;
+using Matrix3 = glm::mat3;
+
 static const Vector2D ZERO_VECTOR2D = Vector2D(0.0f, 0.0f);
 static const Vector3D ZERO_VECTOR3D = Vector3D(0.0f, 0.0f, 0.0f);
 static const Vector4D ZERO_VECTOR4D = Vector4D(0.0f, 0.0f, 0.0f, 0.0f);

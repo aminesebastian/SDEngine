@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Objects/Entities/Entity.h"
 #include "Core/Pictorum/EngineUI/EngineWindowUserInterface.h"
 
 class FrameStatisticsWidget;
@@ -14,6 +15,7 @@ public:
 	virtual void OnCreated() override;
 
 	void OnWorldUpdated(World* WorldIn);
+	void OnSelectedEntitesChanged(const SArray<Entity*>& SelectedEntities);
 private:
 	FrameStatisticsWidget* FrameStatistics;
 	FloatingDetailsPanel* DetailsPanel;

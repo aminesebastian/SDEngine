@@ -14,6 +14,7 @@ public:
 	virtual void OnCreated() override;
 	void SetWorld(World* WorldIn);
 
+	Event<void(const SArray<Entity*>&)> SelectedEntitiesUpdatedDelegate;
 protected:
 	PictorumScrollBox* ScrollBox;
 	World* ReferencedWorld;

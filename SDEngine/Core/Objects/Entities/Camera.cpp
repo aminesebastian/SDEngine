@@ -1,57 +1,58 @@
 #include "Camera.h"
+#include "Camera.reflected.h"
 
 
-Camera::Camera(TString Name, const Transform CurrentTransform, float FOV, vec2 Dimensions, float NearClip, float FarClip) : Actor(Name),
-S_NearClip(NearClip),
-S_FarClip(FarClip),
-S_FOV(FOV),
-S_Aspect(Dimensions.x / Dimensions.y) {
+Camera::Camera(const TString& Name, const Transform& CurrentTransform, const float& FOV, const Vector2D& Dimensions, const float& NearClip, const float& FarClip) : Actor(Name),
+NearClipPlane(NearClip),
+FarClipPlane(FarClip),
+FieldOfView(FOV),
+CachedAspectRatio(Dimensions.x / Dimensions.y) {
 	SetTransform(CurrentTransform);
-	S_OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClip, FarClip);
-	S_ProjectionMatrix = perspective(FOV, S_Aspect, NearClip, FarClip);
-	S_UpVector = vec3(0, 0, 1);
+	OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClip, FarClip);
+	ProjectionMatrix = perspective(FOV, CachedAspectRatio, NearClip, FarClip);
+	UpVector = Vector3D(0, 0, 1);
 	RenderTargetDimensions = Dimensions;
 }
 Camera::~Camera() {}
 
 const float& Camera::GetNearClipPlane() const {
-	return S_NearClip;
+	return NearClipPlane;
 }
 const float&  Camera::GetFarClipPlane() const {
-	return S_FarClip;
+	return FarClipPlane;
 }
 
-void Camera::SetRenderTargetDimensions(vec2 Dimensions) {
-	S_Aspect = Dimensions.x / Dimensions.y;
-	S_OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, S_NearClip, S_FarClip);
-	S_ProjectionMatrix = perspective(S_FOV, S_Aspect, S_NearClip, S_FarClip);
+void Camera::SetRenderTargetDimensions(const Vector2D& Dimensions) {
+	CachedAspectRatio = Dimensions.x / Dimensions.y;
+	OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClipPlane, FarClipPlane);
+	ProjectionMatrix = perspective(FieldOfView, CachedAspectRatio, NearClipPlane, FarClipPlane);
 	RenderTargetDimensions = Dimensions;
 }
 vec2 Camera::GetRenderTargetDimensions() const {
 	return RenderTargetDimensions;
 }
 mat4 Camera::GetProjectionMatrix() const {
-	return S_ProjectionMatrix;
+	return ProjectionMatrix;
 }
 mat4 Camera::GetOrthographicMatrix() const {
-	return S_OrthographicMatrix;
+	return OrthographicMatrix;
 }
 mat4 Camera::GetViewMatrix() const {
-	return lookAt(CurrentTransform.GetLocation(), CurrentTransform.GetLocation() + CurrentTransform.GetForwardVector(), S_UpVector);
+	return lookAt(CurrentTransform.GetLocation(), CurrentTransform.GetLocation() + CurrentTransform.GetForwardVector(), UpVector);
 }
 mat4 Camera::GetLastFrameViewMatrix() const {
-	return lookAt(LastFrameTrasnform.GetLocation(), LastFrameTrasnform.GetLocation() + LastFrameTrasnform.GetForwardVector(), S_UpVector);
+	return lookAt(LastFrameTransform.GetLocation(), LastFrameTransform.GetLocation() + LastFrameTransform.GetForwardVector(), UpVector);
 }
 float Camera::GetThetaFOV() const {
-	return (float)glm::tan(S_FOV / 2.0);
+	return (float)glm::tan(FieldOfView / 2.0);
 }
 float Camera::GetFOV() const {
-	return S_FOV;
+	return FieldOfView;
 }
 float Camera::GetAspect() const {
-	return S_Aspect;
+	return CachedAspectRatio;
 }
-void Camera::AddOrbit(float Y, float Z) {
+void Camera::AddOrbit(const float& Y, const float& Z) {
 	if (GetRotation().y + Y > radians<float>(-89.999f)) {
 		AddRotation(0.0f, Y, 0.0f);
 	} else {
@@ -64,4 +65,3 @@ void Camera::AddOrbit(float Y, float Z) {
 	}
 	AddRotation(0.0f, 0.0f, Z);
 }
-void Camera::UpdateCameraPosition(const vec3 NewPosition) { CurrentTransform.SetLocation(NewPosition); }

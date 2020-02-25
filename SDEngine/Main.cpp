@@ -9,10 +9,7 @@
 #include "Core/Objects/CoreTypes/Scene.h"
 #include "Core/Objects/CoreTypes/StaticMesh.h"
 #include "Core/Utilities/Logger.h"
-
-#include "Core/Reflection/Reflection.h"
-
-
+#include "Core/Objects/Entities/Entity.h"
 
 #undef main
 using namespace glm;
@@ -24,25 +21,9 @@ void serializeStaticMesh(TString MeshName, TString MeshPath, TString AssetPath, 
 void serializeAllTextures(AssetManager* Manager);
 void serializeFont(TString FontName, TString FontPath, TString AssetPath, AssetManager* Manager);
 
-SD_STRUCT();
-struct FTest {
-	SD_STRUCT_PROPERTIES();
-
-	SD_PROPERTY();
-	float Test
-};
-
-REFLECT_STRUCT_BEGIN(FTest)
-REFLECT_STRUCT_MEMBER(Test)
-REFLECT_STRUCT_END()
-
 
 int main(int argc, char* argv[]) {
 	S_Engine = Engine::Get();
-
-	FTest* test = new FTest();
-
-	TypeDescriptor* typeDesc = TypeResolver<FTest>::Get();
 
 	AssetManager* manager = Engine::Get()->GetAssetManager();
 	manager->RegisterNewFactory("StaticMesh", new StaticMeshAssetFactory());

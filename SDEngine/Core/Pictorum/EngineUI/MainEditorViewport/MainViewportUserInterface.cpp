@@ -7,7 +7,8 @@
 
 MainViewportUserInterface::MainViewportUserInterface(const TString& Name) : EngineWindowUserInterface(Name) {
 	FrameStatistics = nullptr;
-	DetailsPanel = nullptr;
+	DetailsPanel    = nullptr;
+	WorldOutliner   = nullptr;
 }
 MainViewportUserInterface::~MainViewportUserInterface() {
 
@@ -48,7 +49,12 @@ void MainViewportUserInterface::OnCreated() {
 	rightSlot->Column = 2;
 	rightSlot->Row = 1;
 	rightSlot->RowSpan = 1;
+
+	WorldOutliner->SelectedEntitiesUpdatedDelegate.Add<MainViewportUserInterface, & MainViewportUserInterface::OnSelectedEntitesChanged>(this);
 }
 void MainViewportUserInterface::OnWorldUpdated(World* WorldIn) {
 	WorldOutliner->SetWorld(WorldIn);
+}
+void MainViewportUserInterface::OnSelectedEntitesChanged(const SArray<Entity*>& SelectedEntities) {
+	DetailsPanel->SetSelectedEntity(SelectedEntities[0]);
 }

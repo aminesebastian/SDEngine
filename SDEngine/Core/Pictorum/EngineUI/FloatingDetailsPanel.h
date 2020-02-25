@@ -1,5 +1,6 @@
 #pragma once
-#include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Pictorum/Pictorum.h"
+#include "Core/Objects/Entities/Entity.h"
 #include "Core/DataStructures/Array.h"
 
 class FloatEditWidget;
@@ -10,7 +11,9 @@ public:
 	virtual ~FloatingDetailsPanel();
 	virtual void OnCreated() override;
 
+	void SetSelectedEntity(Entity* SelectedEntity);
 private:
-
+	Entity* DisplayedEntity;
+	PictorumVerticalBox* DetailsPanelListBox;
 };
 

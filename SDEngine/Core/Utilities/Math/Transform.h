@@ -1,12 +1,13 @@
 #pragma once
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
-#include <string>
+#include "Core/Reflection/Reflection.h"
 
 using namespace glm;
 
+SD_STRUCT()
 class Transform {
-
+	SD_STRUCT_BODY();
 public:
 	/*
 	@param Position
@@ -17,67 +18,67 @@ public:
 	+Z -> Up
 	-Z -> Down
 	*/
-	Transform(const vec3 Position = vec3(0.0, 0.0, 0.0), const vec3 Rotation = vec3(0.0, 0.0, 0.0), const vec3 Scale = vec3(1, 1, 1)) :
+	Transform(const Vector3D Position = Vector3D(0.0, 0.0, 0.0), const Vector3D Rotation = Vector3D(0.0, 0.0, 0.0), const Vector3D Scale = Vector3D(1, 1, 1)) :
 		Location(Position),
 		Rotation(Rotation),
 		Scale(Scale) {}
 	virtual ~Transform();
 
-	const vec3& GetLocation() const {
+	const Vector3D& GetLocation() const {
 		return Location;
 	}
-	const vec3& GetRotation() const {
+	const Vector3D& GetRotation() const {
 		return Rotation;
 	}
-	const vec3& GetScale() const {
+	const Vector3D& GetScale() const {
 		return Scale;
 	}
 
 	void SetUniformScale(float ScaleIn);
-	void SetLocation(vec3 LocationIn);
-	void SetRotation(vec3 RotationIn);
-	void SetScale(vec3 ScaleIn);
+	void SetLocation(Vector3D LocationIn);
+	void SetRotation(Vector3D RotationIn);
+	void SetScale(Vector3D ScaleIn);
 
-	void AddLocation(vec3 LocationIn);
-	void AddRotation(vec3 RotationIn);
-	void AddScale(vec3 ScaleIn);
+	void AddLocation(Vector3D LocationIn);
+	void AddRotation(Vector3D RotationIn);
+	void AddScale(Vector3D ScaleIn);
 
-	inline mat4 GetModelMatrix() const {
-		mat4 posMatrix = translate(Location);
-		mat4 rotXMatrix = rotate(Rotation.x, vec3(1, 0, 0));
-		mat4 rotYMatrix = rotate(Rotation.y, vec3(0, 1, 0));
-		mat4 rotZMatrix = rotate(Rotation.z, vec3(0, 0, 1));
-		mat4 scaleMatrix = scale(Scale);
+	inline Matrix4 GetModelMatrix() const {
+		Matrix4 posMatrix = translate(Location);
+		Matrix4 rotXMatrix = rotate(Rotation.x, Vector3D(1, 0, 0));
+		Matrix4 rotYMatrix = rotate(Rotation.y, Vector3D(0, 1, 0));
+		Matrix4 rotZMatrix = rotate(Rotation.z, Vector3D(0, 0, 1));
+		Matrix4 scaleMatrix = scale(Scale);
 
-		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+		Matrix4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 		return posMatrix * combinedRotMatrix * scaleMatrix;
 	}
-	inline vec3 GetProjectedPosition() {
-		mat4 posMatrix = translate(Location);
+	inline Vector3D GetProjectedPosition() {
+		Matrix4 posMatrix = translate(Location);
 		return posMatrix * vec4(Location, 1.0);
 	}
-	inline vec3 GetForwardVector() const {
-		mat4 rotXMatrix = rotate(Rotation.x, vec3(1, 0, 0));
-		mat4 rotYMatrix = rotate(Rotation.y, vec3(0, 1, 0));
-		mat4 rotZMatrix = rotate(Rotation.z, vec3(0, 0, 1));
-		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+	inline Vector3D GetForwardVector() const {
+		Matrix4 rotXMatrix = rotate(Rotation.x, Vector3D(1, 0, 0));
+		Matrix4 rotYMatrix = rotate(Rotation.y, Vector3D(0, 1, 0));
+		Matrix4 rotZMatrix = rotate(Rotation.z, Vector3D(0, 0, 1));
+		Matrix4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 		return  combinedRotMatrix[0];
 	}
-	inline vec3 GetUpVector() const {
-		mat4 rotXMatrix = rotate(Rotation.x, vec3(1, 0, 0));
-		mat4 rotYMatrix = rotate(Rotation.y, vec3(0, 1, 0));
-		mat4 rotZMatrix = rotate(Rotation.z, vec3(0, 0, 1));
-		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+	inline Vector3D GetUpVector() const {
+		Matrix4 rotXMatrix = rotate(Rotation.x, Vector3D(1, 0, 0));
+		Matrix4 rotYMatrix = rotate(Rotation.y, Vector3D(0, 1, 0));
+		Matrix4 rotZMatrix = rotate(Rotation.z, Vector3D(0, 0, 1));
+		Matrix4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 		return  combinedRotMatrix[2];
 	}
-	inline vec3 GetRightVector() const {
-		mat4 rotXMatrix = rotate(Rotation.x, vec3(1, 0, 0));
-		mat4 rotYMatrix = rotate(Rotation.y, vec3(0, 1, 0));
-		mat4 rotZMatrix = rotate(Rotation.z, vec3(0, 0, 1));
-		mat4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+	inline Vector3D GetRightVector() const {
+		Matrix4 rotXMatrix = rotate(Rotation.x, Vector3D(1, 0, 0));
+		Matrix4 rotYMatrix = rotate(Rotation.y, Vector3D(0, 1, 0));
+		Matrix4 rotZMatrix = rotate(Rotation.z, Vector3D(0, 0, 1));
+		Matrix4 combinedRotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
 		return  combinedRotMatrix[1];
 	}
@@ -86,22 +87,6 @@ public:
 		Rotation.y = Yaw;
 		Rotation.z = Roll;
 	}
-	inline std::string LocationToString() { return "X: " + std::to_string(Location.x) + "Y: " + std::to_string(Location.y) + "Z: " + std::to_string(Location.z); }
-	inline std::string RotationToString() { return "P: " + std::to_string(degrees(Rotation.x)) + "Y: " + std::to_string(degrees(Rotation.y)) + "R: " + std::to_string(degrees(Rotation.z)); }
-	inline std::string ScaleToString() { return "X: " + std::to_string(Scale.x) + "Y: " + std::to_string(Scale.y) + "Z: " + std::to_string(Scale.z); }
-	inline std::string ForwardVectorToString() {
-		vec3 tempForward = GetForwardVector();
-		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
-	}
-	inline std::string UpVectorToString() {
-		vec3 tempForward = GetUpVector();
-		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
-	}
-	inline std::string RightVectorToString() {
-		vec3 tempForward = GetRightVector();
-		return "X: " + std::to_string(tempForward.x) + "Y: " + std::to_string(tempForward.y) + "Z: " + std::to_string(tempForward.z);
-	}
-
 	inline Transform operator+(Transform& OtherTransform) {
 		Transform newTrans;
 		newTrans.Location = GetLocation() + OtherTransform.GetLocation();
@@ -131,8 +116,11 @@ public:
 		return newTrans;
 	}
 private:
-	vec3 Location;
-	vec3 Rotation;
-	vec3 Scale;
+	SD_PROPERTY();
+	Vector3D Location;
+	SD_PROPERTY();
+	Vector3D Rotation;
+	SD_PROPERTY();
+	Vector3D Scale;
 };
 

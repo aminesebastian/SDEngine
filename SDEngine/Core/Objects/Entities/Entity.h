@@ -15,44 +15,45 @@ class World;
  * It contains all the definitions necessary to encapsulate transformation.
  * It does not contain nor does it receive gameplay events or functions.
  */
+SD_CLASS()
 class Entity : public EngineObject {
-
+	SD_CLASS_BODY();
 public:
 	Entity(const TString& Name, const TString& Type);
 	virtual ~Entity();
 
 	bool IsVisible() const;
-	void SetVisibility(bool Show);
+	void SetVisibility(const bool& Show);
 	void ToggleVisibility();
 
 	bool IsHiddenInGame() const;
-	void SetHiddenInGame(bool Hidden);
+	void SetHiddenInGame(const bool& Hidden);
 
-	bool ShouldCastShadows() const;
-	void SetCastShadows(bool CastShadows);
+	bool CastsShadows() const;
+	void SetCastShadows(const bool& CastShadows);
 
-	const vec3& GetLocation() const;
-	const vec3& GetRotation() const;
-	const vec3& GetScale() const;
+	const Vector3D& GetLocation() const;
+	const Vector3D& GetRotation() const;
+	const Vector3D& GetScale() const;
 
-	vec3 GetLinearVelocity() const;
-	vec3 GetAngularVelocity() const;
+	const Vector3D GetLinearVelocity() const;
+	const Vector3D GetAngularVelocity() const;
 
-	void AddLocation(vec3 Offset);
-	void AddLocation(float X, float Y, float Z);
-	void SetLocation(vec3 Location);
-	void SetLocation(float X, float Y, float Z);
+	void AddLocation(const Vector3D Offset);
+	void AddLocation(const float& X, const float& Y, const float& Z);
+	void SetLocation(const Vector3D& Location);
+	void SetLocation(const float& X, const float& Y, const float& Z);
 
-	void AddRotation(vec3 RotationDelta);
-	void AddRotation(float X, float Y, float Z);
-	void SetRotation(vec3 Rotation);
-	void SetRotation(float X, float Y, float Z);
+	void AddRotation(const Vector3D& RotationDelta);
+	void AddRotation(const float& X, const float& Y, const float& Z);
+	void SetRotation(const Vector3D& Rotation);
+	void SetRotation(const float& X, const float& Y, const float& Z);
 
-	void AddScale(vec3 ScaleDelta);
-	void AddScale(float X, float Y, float Z);
-	void SetScale(vec3 Scale);
-	void SetScale(float X, float Y, float Z);
-	void SetUniformScale(float Scale);
+	void AddScale(const Vector3D& ScaleDelta);
+	void AddScale(const float& X, const float& Y, const float& Z);
+	void SetScale(const Vector3D& Scale);
+	void SetScale(const float& X, const float& Y, const float& Z);
+	void SetUniformScale(const float& Scale);
 
 	const Transform& GetTransform() const;
 	void SetTransform(const Transform& NewTransform);
@@ -79,12 +80,20 @@ public:
 protected:
 	friend class World;
 
+	SD_PROPERTY();
 	Transform CurrentTransform;
-	Transform LastFrameTrasnform;
+	SD_PROPERTY();
+	Transform LastFrameTransform;
+
+	SD_PROPERTY();
 	bool bVisible;
+	SD_PROPERTY();
 	bool bHiddenInGame;
+	SD_PROPERTY();
 	bool bNeedsTick;
+	SD_PROPERTY();
 	bool bNeedsBeginPlay;
+	SD_PROPERTY();
 	bool bCastShadows;
 
 private:

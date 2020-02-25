@@ -4,15 +4,22 @@
 #include "Core/Objects/CoreTypes/RenderTarget.h"
 #include "Core/Objects/CoreTypes/StaticMesh.h"
 #include "Core/Objects/Entities/Components/BillboardComponent.h"
+#include "COre/Reflection/Reflection.h"
 
 enum ELightType {
 	POINT,
 	DIRECTIONAL
 };
+SD_STRUCT()
 struct FLightInfo {
-	float Intensity;
-	vec3 Color;
-	float Attenuation;
+	SD_STRUCT_BODY();
+
+	SD_PROPERTY()
+		float Intensity;
+	SD_PROPERTY()
+		Vector3D Color;
+	SD_PROPERTY()
+		float Attenuation;
 	ELightType Type = POINT;
 };
 
@@ -20,37 +27,33 @@ class DefferedCompositor;
 
 using namespace glm;
 
+SD_CLASS()
 class Light : public Actor {
+	SD_CLASS_BODY();
 public:
-	Light(TString Name, const Transform IntialTransform, ELightType Type = POINT, float Intensity = 20, vec3 Color = vec3(1, 1, 1), float Attenuation = 25, bool CastShadows = false);
+	Light(const TString& Name, const Transform& IntialTransform, const ELightType& Type = POINT, const float& Intensity = 20, const FColor & Color = FColor(1.0f, 1.0f, 1.0f), const float& Attenuation = 25, const bool& CastShadows = false);
 	~Light();
 
-	FLightInfo& GetLightInfo() { return S_LightInfo; }
-	void SetLightColor(const vec3 Color) { S_LightInfo.Color = Color; }
-	void SetLightIntensity(const float Intensity) { S_LightInfo.Intensity = Intensity; }
-	void SendShaderInformation(Shader* shader, int index);
+	FLightInfo& GetLightInfo();
+	void SetLightColor(const Vector3D& Color);
+	void SetLightIntensity(const float& Intensity);
+	void SendShaderInformation(Shader* shader, const uint8& index);
 	void GenerateShadowTexture(DefferedCompositor* Compositor);
 
-	mat4 GetLightViewMatrix();
-	mat4 GetLightOrthogonalMatrix();
-
-	//virtual bool TraceAgainstRay(vec3 Origin, vec3 Direction, vec3& HitPoint, float& Distance, ECollisionChannel Channel) override;
-
-	bool CastsShadows() { return bCastShadows; }
-	void SetCastsShadows(bool CastsShadows) { bCastShadows = CastsShadows; }
-
+	Matrix4 GetLightViewMatrix();
+	Matrix4 GetLightOrthogonalMatrix();
 	void BlurTexture(RenderTarget* ReadBuffer, RenderTarget* WriteBuffer);
 
+	SD_PROPERTY();
+	int32 testVal = 30;
+protected:
+	SD_PROPERTY();
+	FLightInfo LightInfo;
+
 private:
-	FLightInfo S_LightInfo;
-
-	bool bCastShadows;
-	Material* S_DebugMaterial;
-
-	mat4 S_ShadowOrthoMatrix;
-	mat4 S_ViewMatrix;
-
-	RenderTarget* S_ShadowBuffer;
-	RenderTarget* S_ShadowBufferTemp;
+	Matrix4 OrthographicMatrix;
+	Matrix4 ViewMatrix;
+	RenderTarget* PrimaryShadowBuffer;
+	RenderTarget* SecondaryShadowBuffer;
 };
 

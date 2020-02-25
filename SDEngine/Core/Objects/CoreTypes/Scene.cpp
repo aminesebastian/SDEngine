@@ -51,9 +51,9 @@ void Scene::LoadLights(World* WorldIn) {
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
 				Transform tempTransform;
-				vec3 location = vec3((float)j * 5.5f - 5.5f, (float)i * 5.5f - 5.5f, 9 + (float)k * 6.5f);
+				Vector3D location = Vector3D((float)j * 5.5f - 5.5f, (float)i * 5.5f - 5.5f, 9 + (float)k * 6.5f);
 				tempTransform.SetLocation(location);
-				vec3 tempColor = vec3(r, g, b);
+				FColor tempColor = FColor(r, g, b);
 				float atten = (((float)(rand()) / (float)(RAND_MAX)) + 1) * 20;
 				Light* tempLight = new Light("Light " + std::to_string(count), tempTransform, POINT, 25, tempColor, atten);
 				WorldIn->RegisterActor(tempLight);
@@ -64,8 +64,8 @@ void Scene::LoadLights(World* WorldIn) {
 
 	Transform fillLightTransform;
 	fillLightTransform.SetRotation(0, glm::radians(100.0f), 0);
-	fillLightTransform.SetLocation(vec3(0.0f, 0.0f, 30.0f));
-	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, vec3(0.75, 0.9, 0.8));
-	fillLight->SetCastsShadows(true);
+	fillLightTransform.SetLocation(Vector3D(0.0f, 0.0f, 30.0f));
+	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, FColor(0.75f, 0.9f, 0.8f));
+	fillLight->SetCastShadows(true);
 	WorldIn->RegisterActor(fillLight);
 }

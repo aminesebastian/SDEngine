@@ -52,7 +52,6 @@ public:
 
 	void SetVisibility(EPictorumVisibilityState NewVisibility);
 	EPictorumVisibilityState GetVisibility() const;
-	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents = false) const;
 	PictorumWidget* GetParent() const;
 
 	virtual IWidgetSlot* AddChild(PictorumWidget* Widget);
@@ -61,6 +60,8 @@ public:
 	const bool RemoveChild(PictorumWidget* Widget);
 	const bool RemoveChildAt(const int32& Index);
 	PictorumWidget* GetChildAtIndex(int32 Slot) const;
+	void GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool bIncludeAllDescendents = false) const;
+	const int32 GetChildCount() const;
 	const int32 GetIndexOfChild(PictorumWidget* Widget) const;
 	void ClearChildren();
 	template<typename T>

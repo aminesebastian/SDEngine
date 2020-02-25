@@ -39,4 +39,14 @@ void WorldOutlinerWidget::OnSelectedValuesChanged(PictorumWidget* ScrollBoxWidge
 	if (!SelectedIndices.IsEmpty()) {
 		ReferencedWorld->SetSelectedEntity(ReferencedWorld->GetWorldActors()[SelectedIndices[0]]);
 	}
+
+	SArray<Entity*> entities;
+
+	for (const int32& index : SelectedIndices) {
+		if (index >= 0 && index <= ReferencedWorld->GetWorldActors().Count()) {
+			entities.Add(ReferencedWorld->GetWorldActors()[index]);
+		}
+	}
+
+	SelectedEntitiesUpdatedDelegate.Broadcast(entities);
 }

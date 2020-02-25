@@ -11,38 +11,49 @@
 #include "Core/Pictorum/Containers/PictorumVerticalBox.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
+#include "Core/Reflection/ReflectionHelpers.h"
 
 FloatingDetailsPanel::FloatingDetailsPanel(const TString& Name) : PictorumWidget(Name) {
-
+	DetailsPanelListBox = nullptr;
+	DisplayedEntity     = nullptr;
 }
 FloatingDetailsPanel::~FloatingDetailsPanel() {
 
 }
 
 void FloatingDetailsPanel::OnCreated() {
-	SolidWidget* root = new SolidWidget("Background");
+	AssignNewChildLocal(SolidWidget, root, "DetailsPanelBG")
 	root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	root->SetPadding(8.0f);
-	AddChild(root);
 
-	PictorumVerticalBox* vb = new PictorumVerticalBox("DetailsPanelWidgetsContainer");
-	root->AddChild(vb);
+	AssignNewToChild(root, PictorumVerticalBox, DetailsPanelListBox, "ControlsContainer")	
+}
+void FloatingDetailsPanel::SetSelectedEntity(Entity* SelectedEntity) {
+	DetailsPanelListBox->ClearChildren();
 
-	for (int i = 0; i < 5; i++) {
-		if (i > 0) {
-			SeparatorWidget* sep = new SeparatorWidget("Sep");
-			vb->AddChild(sep);
+	if (!SelectedEntity) {
+		return;
+	}
+
+	SArray<TypeDescriptor_Class::Member> members = ReflectionHelpers::GetAllMembersOfClass(SelectedEntity);
+	for (const TypeDescriptor_Class::Member& member : members) {
+		if (DetailsPanelListBox->GetChildCount() > 0) {
+			SeparatorWidget* sep = new SeparatorWidget("Separator");
+			DetailsPanelListBox->AddChild(sep);
 			sep->SetSize(0.0f, 5.0f);
 		}
-		PictorumHorizontalBox* hbox = new PictorumHorizontalBox("EditWidgetHBox" + to_string(i) + "Label");
-		vb->AddChild(hbox);
 
-		TextWidget* label = new TextWidget("EditWidget" + to_string(i) + "Label");
-		hbox->AddChild(label);
-		label->SetText("Position  ");
+		AssignNewToChildLocal(DetailsPanelListBox, TextWidget, label, (TString(member.Name) + "EditControl"));
+		TString contents = member.Name;
+		if (member.Type == TypeResolver<bool>::Get()) {
+			bool* val = (bool*)(SelectedEntity+member.Offset);
+			if (*val) {
+				contents += ": True";
+			} else {
+				contents += ": False";
+			}
+		}
+		label->SetText(contents);
 		label->SetFontSize(10);
-
-		FloatEditWidget* editWidget = new FloatEditWidget("EditWidget" + to_string(i));
-		hbox->AddChild(editWidget);
 	}
 }

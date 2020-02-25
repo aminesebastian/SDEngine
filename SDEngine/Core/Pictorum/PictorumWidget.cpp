@@ -226,6 +226,9 @@ void PictorumWidget::GetAllChildren(SArray<PictorumWidget*>& ChildrenOut, bool b
 		}
 	}
 }
+const int32 PictorumWidget::GetChildCount() const {
+	return Children.Count();
+}
 PictorumWidget* PictorumWidget::GetParent() const {
 	return Parent;
 }

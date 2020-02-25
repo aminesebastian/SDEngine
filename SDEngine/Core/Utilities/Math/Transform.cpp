@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "Transform.reflected.h"
 
 Transform::~Transform() {}
 
@@ -8,21 +8,21 @@ void Transform::SetUniformScale(float ScaleIn) {
 	Scale.y = ScaleIn;
 	Scale.z = ScaleIn;
 }
-void Transform::SetLocation(vec3 LocationIn) {
+void Transform::SetLocation(Vector3D LocationIn) {
 	Location = LocationIn;
 }
-void Transform::SetRotation(vec3 RotationIn) {
+void Transform::SetRotation(Vector3D RotationIn) {
 	SetRotation(RotationIn.x, RotationIn.y, RotationIn.z);
 }
-void Transform::SetScale(vec3 ScaleIn) {
+void Transform::SetScale(Vector3D ScaleIn) {
 	Scale = ScaleIn;
 }
-void Transform::AddLocation(vec3 LocationIn) {
+void Transform::AddLocation(Vector3D LocationIn) {
 	Location += LocationIn;
 }
-void Transform::AddRotation(vec3 RotationIn) {
+void Transform::AddRotation(Vector3D RotationIn) {
 	Rotation += RotationIn;
 }
-void Transform::AddScale(vec3 ScaleIn) {
+void Transform::AddScale(Vector3D ScaleIn) {
 	Scale += ScaleIn;
 }

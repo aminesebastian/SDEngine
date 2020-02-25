@@ -1,4 +1,5 @@
 #include "EngineObject.h"
+#include "EngineObject.reflected.h"
 
 EngineObject::EngineObject(const TString& Name, const TString& Type) : EngineObjectName(Name), EngineObjectType(Type) {}
 EngineObject::~EngineObject() {}

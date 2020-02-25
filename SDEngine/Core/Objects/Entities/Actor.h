@@ -6,9 +6,10 @@
 #include "Core/Rendering/RenderTypeDefenitions.h"
 
 class Component;
-class DragFloat;
 
+SD_CLASS()
 class Actor : public Entity {
+	SD_CLASS_BODY();
 public:
 	Actor(const TString& Name);
 	~Actor();
@@ -46,7 +47,6 @@ public:
 
 protected:
 	Component* RootComponent;
-	SArray<DragFloat*> DetailsPanelWidgets;
 
 private:
 	SSet<Component*> Children;

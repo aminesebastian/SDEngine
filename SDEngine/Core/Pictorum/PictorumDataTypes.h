@@ -1,5 +1,7 @@
 #pragma once
+#include "Core/DataStructures/Array.h"
 #include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Reflection/Reflection.h"
 #include "Core/Utilities/Logger.h"
 
 enum class EVerticalAlignment : uint8 {
@@ -53,6 +55,7 @@ enum class EFontWeight : uint8 {
 	Bold
 };
 struct FUserInterfaceEvent {
+
 	FUserInterfaceEvent() {
 		bHandled = false;
 		bCaptureMouse = false;
@@ -73,7 +76,10 @@ private:
 	bool bHandled;
 	bool bCaptureMouse;
 };
+SD_STRUCT()
 struct FFillRule {
+	SD_STRUCT_BODY();
+
 	FFillRule() {
 		Ratio = 1.0f;
 		Rule = EFillRule::AUTOMATIC;
@@ -101,7 +107,10 @@ private:
 	float Ratio;
 	EFillRule Rule;
 };
+SD_STRUCT()
 struct FRenderGeometry {
+	SD_STRUCT_BODY();
+
 	FRenderGeometry() {
 		AllotedSpace = vec2(0.0f, 0.0f);
 		Location = vec2(0.0f, 0.0f);
@@ -288,8 +297,15 @@ private:
 	/** Any point to the Right or Top of this line should be clipped. */
 	vec2 MaxClipPoint;
 };
+SD_STRUCT()
 struct FAnchors {
+	SD_STRUCT_BODY();
+
 	FAnchors() {
+		Sides.Add(0.0f);
+		Sides.Add(0.0f);
+		Sides.Add(0.0f);
+		Sides.Add(0.0f);
 		SetTop(1.0f);
 		SetRight(1.0f);
 		SetBottom(0.0f);
@@ -328,12 +344,15 @@ struct FAnchors {
 	}
 
 protected:
-	float Sides[4];
+	SArray<float> Sides;
 };
+SD_STRUCT()
 struct FOffsets {
+	SD_STRUCT_BODY();
+
 	FOffsets() {
-		memset(&Sides[0], 0, sizeof(float) * 4);
-		memset(&Relative[0], false, sizeof(bool) * 4);
+		Sides.Resize(4);
+		Relative.Resize(4, false);
 		PivotOffset = vec2(0.0f, 0.0f);
 	}
 
@@ -413,8 +432,8 @@ struct FOffsets {
 		return Sides[Index];
 	}
 protected:
-	float Sides[4];
-	bool Relative[4];
+	SArray<float> Sides;
+	SArray<bool> Relative;
 	vec2 PivotOffset;
 
 	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
@@ -431,9 +450,12 @@ protected:
 		return 0.0f;
 	}
 };
+SD_STRUCT()
 struct FPadding {
+	SD_STRUCT_BODY();
+
 	FPadding() {
-		memset(&Sides[0], 0, sizeof(float) * 4);
+		Sides.Resize(4);
 	}
 	const float& GetTop() const {
 		return Sides[0];
@@ -467,8 +489,7 @@ struct FPadding {
 		return Sides[Index];
 	}
 protected:
-	float Sides[4];
-	vec2 PivotOffset;
+	SArray<float> Sides;
 
 	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
 		if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
@@ -478,9 +499,12 @@ protected:
 		}
 	}
 };
+SD_STRUCT()
 struct FMargins {
+	SD_STRUCT_BODY();
+
 	FMargins() {
-		memset(&Sides[0], 0, sizeof(float) * 4);
+		Sides.Resize(4);
 	}
 	const float& GetTop() const {
 		return Sides[0];
@@ -514,8 +538,7 @@ struct FMargins {
 		return Sides[Index];
 	}
 protected:
-	float Sides[4];
-	vec2 PivotOffset;
+	SArray<float> Sides;
 
 	float GetSideRelativeValue(const EPictorumSide& Side, const vec2& RenderResolution) const {
 		if (Side == EPictorumSide::BOTTOM || Side == EPictorumSide::TOP) {
@@ -525,7 +548,10 @@ protected:
 		}
 	}
 };
+SD_STRUCT()
 struct FBorderRadius {
+	SD_STRUCT_BODY();
+
 	FBorderRadius() {
 		Radii = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}

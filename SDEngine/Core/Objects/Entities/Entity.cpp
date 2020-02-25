@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "Core/Objects/Entities/Camera.h"
 #include "Core/Engine/World.h"
+#include "Entity.reflected.h"
 
 Entity::Entity(const TString& Name, const TString& Type) : EngineObject(Name, Type) {
 	bVisible        = true;
@@ -16,7 +17,7 @@ Entity::~Entity() {};
 bool Entity::IsVisible() const {
 	return bVisible;
 }
-void Entity::SetVisibility(bool Show) {
+void Entity::SetVisibility(const bool& Show) {
 	bVisible = Show;
 }
 void Entity::ToggleVisibility() {
@@ -25,14 +26,14 @@ void Entity::ToggleVisibility() {
 bool Entity::IsHiddenInGame() const {
 	return bHiddenInGame;
 }
-void Entity::SetHiddenInGame(bool Hidden) {
+void Entity::SetHiddenInGame(const bool& Hidden) {
 	bHiddenInGame = Hidden;
 }
 
-bool Entity::ShouldCastShadows() const {
+bool Entity::CastsShadows() const {
 	return bCastShadows;
 }
-void Entity::SetCastShadows(bool CastShadows) {
+void Entity::SetCastShadows(const bool& CastShadows) {
 	bCastShadows = CastShadows;
 }
 
@@ -46,7 +47,7 @@ bool Entity::ShouldBeDrawn(EDrawType DrawType) {
 			return true;
 		}
 	} else if (DrawType == SHADOW_MAP_RENDER) {
-		return IsVisible() && ShouldCastShadows();
+		return IsVisible() && CastsShadows();
 	}
 	return false;
 }
@@ -58,68 +59,68 @@ void Entity::SetTransform(const Transform& NewTransform) {
 	CurrentTransform = NewTransform;
 }
 const Transform& Entity::GetLastFrameTransform() const {
-	return LastFrameTrasnform;
+	return LastFrameTransform;
 }
 void Entity::SetLastFrameTransform(const Transform& OldTransform) {
-	LastFrameTrasnform = OldTransform;
+	LastFrameTransform = OldTransform;
 }
-vec3 Entity::GetLinearVelocity() const {
-	return CurrentTransform.GetLocation() - LastFrameTrasnform.GetLocation();
+const Vector3D Entity::GetLinearVelocity() const {
+	return CurrentTransform.GetLocation() - LastFrameTransform.GetLocation();
 }
-vec3 Entity::GetAngularVelocity() const {
-	return CurrentTransform.GetRotation() - LastFrameTrasnform.GetRotation();
+const Vector3D Entity::GetAngularVelocity() const {
+	return CurrentTransform.GetRotation() - LastFrameTransform.GetRotation();
 }
 
-const vec3& Entity::GetLocation() const {
+const Vector3D& Entity::GetLocation() const {
 	return CurrentTransform.GetLocation();
 }
-const vec3& Entity::GetRotation() const {
+const Vector3D& Entity::GetRotation() const {
 	return CurrentTransform.GetRotation();
 }
-const vec3& Entity::GetScale() const {
+const Vector3D& Entity::GetScale() const {
 	return CurrentTransform.GetScale();
 }
 
-void Entity::AddLocation(vec3 Offset) {
+void Entity::AddLocation(Vector3D Offset) {
 	CurrentTransform.AddLocation(Offset);
 }
-void Entity::AddLocation(float X, float Y, float Z) {
-	CurrentTransform.AddLocation(vec3(X, Y, Z));
+void Entity::AddLocation(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.AddLocation(Vector3D(X, Y, Z));
 }
-void Entity::SetLocation(vec3 Location) {
+void Entity::SetLocation(const Vector3D& Location) {
 	CurrentTransform.SetLocation(Location);
 }
-void Entity::SetLocation(float X, float Y, float Z) {
-	CurrentTransform.SetLocation(vec3(X, Y, Z));
+void Entity::SetLocation(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.SetLocation(Vector3D(X, Y, Z));
 }
 
-void Entity::AddRotation(vec3 RotationDelta) {
+void Entity::AddRotation(const Vector3D& RotationDelta) {
 	CurrentTransform.AddRotation(RotationDelta);
 }
-void Entity::AddRotation(float X, float Y, float Z) {
-	CurrentTransform.AddRotation(vec3(X, Y, Z));
+void Entity::AddRotation(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.AddRotation(Vector3D(X, Y, Z));
 }
-void Entity::SetRotation(vec3 Rotation) {
+void Entity::SetRotation(const Vector3D& Rotation) {
 	CurrentTransform.SetRotation(Rotation);
 }
-void Entity::SetRotation(float X, float Y, float Z) {
-	CurrentTransform.SetRotation(vec3(X, Y, Z));
+void Entity::SetRotation(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.SetRotation(Vector3D(X, Y, Z));
 }
 
-void Entity::AddScale(vec3 ScaleDelta) {
+void Entity::AddScale(const Vector3D& ScaleDelta) {
 	CurrentTransform.AddScale(ScaleDelta);
 }
-void Entity::AddScale(float X, float Y, float Z) {
-	CurrentTransform.AddScale(vec3(X, Y, Z));
+void Entity::AddScale(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.AddScale(Vector3D(X, Y, Z));
 }
-void Entity::SetScale(vec3 Scale) {
+void Entity::SetScale(const Vector3D& Scale) {
 	CurrentTransform.SetScale(Scale);
 }
-void Entity::SetScale(float X, float Y, float Z) {
-	CurrentTransform.SetScale(vec3(X, Y, Z));
+void Entity::SetScale(const float& X, const float& Y, const float& Z) {
+	CurrentTransform.SetScale(Vector3D(X, Y, Z));
 }
-void Entity::SetUniformScale(float Scale) {
-	CurrentTransform.SetScale(vec3(Scale, Scale, Scale));
+void Entity::SetUniformScale(const float& Scale) {
+	CurrentTransform.SetScale(Vector3D(Scale, Scale, Scale));
 }
 void Entity::SetOwner(Entity* OwnerIn) {
 	Owner = OwnerIn;

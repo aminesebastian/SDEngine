@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\SuburbanDigitalEnginePreprocessor\\SuburbanDigitalEnginePreprocessor.csproj",
+      "projectUniqueName": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\SuburbanDigitalEnginePreprocessor.csproj",
       "projectName": "SuburbanDigitalEnginePreprocessor",
-      "projectPath": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\SuburbanDigitalEnginePreprocessor\\SuburbanDigitalEnginePreprocessor.csproj",
+      "projectPath": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\SuburbanDigitalEnginePreprocessor.csproj",
       "packagesPath": "C:\\Users\\amine\\.nuget\\packages\\",
-      "outputPath": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\SuburbanDigitalEnginePreprocessor\\obj\\",
+      "outputPath": "E:\\Suburban Digital\\SDEngine\\SDEnginePreprocessor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
