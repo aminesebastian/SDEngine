@@ -21,10 +21,19 @@ namespace SuburbanDigitalEnginePreprocessor {
             // Indicate the processing is starting.
             Console.WriteLine($"SuburbanDigitalPreprocessor running and attempting to processing {allFiles.Count() } Files.");
 
+            List<FileProcessor> reflectedFiles = new List<FileProcessor>();
+
             // Process all the files.
             foreach(string filePath in allFiles) {
                 FileProcessor processor = new FileProcessor(filePath, outputFileDirectory);
-                processor.ProcessFile();
+                if(processor.ProcessFile()) {
+                    reflectedFiles.Add(processor);
+                }
+            }
+
+            // Output all the files
+            foreach(FileProcessor proc in reflectedFiles) {
+                proc.GenerateReflectedFile();
             }
 
             //Indicate we have succeeded.

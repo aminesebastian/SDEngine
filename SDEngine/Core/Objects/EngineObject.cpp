@@ -10,6 +10,3 @@ const TString& EngineObject::GetObjectName() const {
 const TString& EngineObject::GetObjectType() const {
 	return EngineObjectType;
 }
-void EngineObject::SetObjectType(const TString& Type) {
-	EngineObjectType = Type;
-}

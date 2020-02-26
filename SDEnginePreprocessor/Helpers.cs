@@ -9,6 +9,9 @@ namespace SuburbanDigitalEnginePreprocessor {
     enum EReflectionTarget {
         CLASS, STRUCT
     }
+    class Globals {
+        public static Dictionary<string, CPPObject> ReflectedObjects = new Dictionary<string, CPPObject>();
+    }
     class Macros {
         private static readonly HashSet<string> VALID_MACROS;
 

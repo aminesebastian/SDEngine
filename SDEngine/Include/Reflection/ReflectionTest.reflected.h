@@ -2,6 +2,7 @@
 #include "Core/Reflection/Reflection.h"
 #include "./Test\ReflectionTest.h"
 
+
 //Reflection for struct FReflectionTest
 REFLECT_STRUCT_BEGIN(FReflectionTest)
 REFLECT_STRUCT_BEGIN_PARENTS()

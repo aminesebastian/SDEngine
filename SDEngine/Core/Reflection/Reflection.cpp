@@ -7,6 +7,11 @@ TypeDescriptor* GetPrimitiveDescriptor<TString>() {
 	return &typeDesc;
 }
 template <>
+TypeDescriptor* GetPrimitiveDescriptor<const TString>() {
+	static TypeDescriptor_TString typeDesc;
+	return &typeDesc;
+}
+template <>
 TypeDescriptor* GetPrimitiveDescriptor<float>() {
 	static TypeDescriptor_Float typeDesc;
 	return &typeDesc;
@@ -76,3 +81,4 @@ TypeDescriptor* GetPrimitiveDescriptor<SArray<bool>>() {
 	static TypeDescriptor_SArray<bool> typeDesc;
 	return &typeDesc;
 }
+

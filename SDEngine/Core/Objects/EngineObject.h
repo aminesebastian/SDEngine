@@ -26,11 +26,9 @@ public:
 	 */
 	virtual const TypeDescriptor_Class* StaticDescriptor() const;
 protected:
-	void SetObjectType(const TString& Type);
-private:
 	SD_PROPERTY();
-	TString EngineObjectType;
+	const TString EngineObjectType;
 	SD_PROPERTY();
-	TString EngineObjectName;
+	const TString EngineObjectName;
 };
 

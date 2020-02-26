@@ -2,11 +2,12 @@
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
 #include "Core/Reflection/Reflection.h"
+#include "Core/Objects/EngineObject.h"
 
 using namespace glm;
 
 SD_STRUCT()
-class Transform {
+struct Transform {
 	SD_STRUCT_BODY();
 public:
 	/*

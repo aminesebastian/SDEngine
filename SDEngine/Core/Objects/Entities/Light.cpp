@@ -10,7 +10,6 @@
 
 
 Light::Light(const TString& Name, const Transform& IntialTransform, const ELightType& Type, const float& Intensity, const FColor& Color, const float& Attenuation, const bool& CastShadows) : Actor(Name) {
-	SetObjectType("Light");
 	SetTransform(IntialTransform);
 	SetCastShadows(CastShadows);
 

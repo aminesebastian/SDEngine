@@ -2,7 +2,8 @@
 #include "Core/Reflection/Reflection.h"
 #include "./Core\Objects\Entities\Actor.h"
 
-//Reflection for struct Actor
+
+//Reflection for class Actor
 REFLECT_CLASS_BEGIN(Actor)
 REFLECT_CLASS_BEGIN_PARENTS()
 REFLECT_CLASS_PARENT(Entity)

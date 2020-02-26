@@ -35,8 +35,9 @@ void FloatEditWidget::OnCreated() {
 	Container = new PictorumHorizontalBox("MainContainer");
 	//Container->SetPadding(4.0f);
 	AddChild(Container);
-
-	SetControlledValue(Values, 3);
+	
+	// For testing 
+	//SetControlledValue(Values, 3);
 }
 void FloatEditWidget::SetControlledValue(float* ValuePointer, uint8 Count) {
 	Values     = ValuePointer;

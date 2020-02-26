@@ -1,27 +1,15 @@
 #pragma once
 #include "Core/Reflection/Reflection.h"
-#include "../../../../SDEngine\Core\Objects\Entities\Light.h"
+#include "../../../../SDEngine\Core\Objects\Entities\Camera.h"
 
 
-//Reflection for struct FLightInfo
-REFLECT_STRUCT_BEGIN(FLightInfo)
-REFLECT_STRUCT_BEGIN_PARENTS()
-REFLECT_STRUCT_PARENT_END()
-RREFLECT_STRUCT_MEMBERS_BEGIN()
-REFLECT_STRUCT_MEMBERS_END(Intensity)
-REFLECT_STRUCT_MEMBERS_END(Color)
-REFLECT_STRUCT_MEMBERS_END(Attenuation)
-RREFLECT_STRUCT_MEMBERS_BEGIN()
-REFLECT_STRUCT_END()
-
-//Reflection for class Light
-REFLECT_CLASS_BEGIN(Light)
+//Reflection for class Camera
+REFLECT_CLASS_BEGIN(Camera)
 REFLECT_CLASS_BEGIN_PARENTS()
 REFLECT_CLASS_PARENT(Actor)
 REFLECT_CLASS_PARENT_END()
 RREFLECT_CLASS_MEMBERS_BEGIN()
-REFLECT_CLASS_MEMBERS_END(testVal)
-REFLECT_CLASS_MEMBERS_END(LightInfo)
+REFLECT_CLASS_MEMBERS_END(FieldOfView)
 REFLECT_CLASS_MEMBERS_END(CurrentTransform)
 REFLECT_CLASS_MEMBERS_END(LastFrameTransform)
 REFLECT_CLASS_MEMBERS_END(bVisible)

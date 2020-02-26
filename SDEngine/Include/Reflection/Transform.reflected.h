@@ -2,6 +2,7 @@
 #include "Core/Reflection/Reflection.h"
 #include "./Core\Utilities\Math\Transform.h"
 
+
 //Reflection for struct Transform
 REFLECT_STRUCT_BEGIN(Transform)
 REFLECT_STRUCT_BEGIN_PARENTS()
