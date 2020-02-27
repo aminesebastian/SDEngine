@@ -14,11 +14,17 @@ TypeDescriptor* GetPrimitiveDescriptor();
 #define SD_PROPERTY(...)
 
 #define SD_STRUCT_BODY() \
+	private: \
     friend struct DefaultResolver; \
     static TypeDescriptor_Struct Reflection; \
     static void InitializeReflection(TypeDescriptor_Struct*); \
+	public: \
+	const TypeDescriptor_Struct* StaticDescriptor() const; \
 
 #define REFLECT_STRUCT_BEGIN(Type) \
+	const TypeDescriptor_Struct* Type::StaticDescriptor() const {\
+		return &Type::Reflection; \
+	}\
     TypeDescriptor_Struct Type::Reflection{Type::InitializeReflection}; \
     void Type::InitializeReflection(TypeDescriptor_Struct* TypeDescriptorIn) { \
         using T = Type; \

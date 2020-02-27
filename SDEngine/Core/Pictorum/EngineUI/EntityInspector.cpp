@@ -54,7 +54,7 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 		TString contents = member.InspectorName + TString(": ");
 
 		if (member.Type == TypeResolver<bool>::Get()) {
-			bool result = *ReflectionHelpers::GetProperty<bool>(member.Name, SelectedEntity);
+			bool result = *ReflectionHelpers::GetProperty<bool>(member, SelectedEntity);
 			if (result) {
 				contents += ": True";
 			} else {
@@ -62,13 +62,13 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 			}	
 		}
 		if (member.Type->Name == TypeResolver<TString>::Get()->Name) {
-			contents += *ReflectionHelpers::GetProperty<TString>(member.Name, SelectedEntity);
+			contents += *ReflectionHelpers::GetProperty<TString>(member, SelectedEntity);
 		}
 		if (member.Type->Name == TypeResolver<int32>::Get()->Name) {
-			contents += to_string(*ReflectionHelpers::GetProperty<int32>(member.Name, SelectedEntity));
+			contents += to_string(*ReflectionHelpers::GetProperty<int32>(member, SelectedEntity));
 		}
 		if (member.Type->Name == TypeResolver<float>::Get()->Name) {
-			contents += to_string(*ReflectionHelpers::GetProperty<float>(member.Name, SelectedEntity));
+			contents += to_string(*ReflectionHelpers::GetProperty<float>(member, SelectedEntity));
 		}
 		if (member.Type->Name == "Transform") {
 			Transform* transform = ReflectionHelpers::GetProperty<Transform>(member.Name, SelectedEntity);
