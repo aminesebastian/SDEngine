@@ -1,7 +1,7 @@
 #include "MainViewportUserInterface.h"
 #include "Core/Pictorum/Containers/PictorumGrid.h"
 #include "Core/Pictorum/EngineUI/FrameStatisticsWidget.h"
-#include "Core/Pictorum/EngineUI/FloatingDetailsPanel.h"
+#include "Core/Pictorum/EngineUI/EntityInspector.h"
 #include "Core/Pictorum/EngineUI/WorldOutliner/WorldOutlinerWidget.h"
 #include "Core/Engine/World.h"
 
@@ -44,7 +44,7 @@ void MainViewportUserInterface::OnCreated() {
 	scrollSlot->Row = 0;
 	scrollSlot->RowSpan = 1;
 
-	DetailsPanel = new FloatingDetailsPanel("DetailsPanel");
+	DetailsPanel = new EntityInspector("DetailsPanel");
 	PictorumGridSlot* rightSlot = grid->AddChild(DetailsPanel);
 	rightSlot->Column = 2;
 	rightSlot->Row = 1;

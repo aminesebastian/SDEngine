@@ -280,9 +280,6 @@
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -362,6 +359,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Reflection\ReflectionHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\EntityInspector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\EngineUI\InspectorPanelHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -502,7 +505,6 @@
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
     <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
@@ -534,12 +536,15 @@
     <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
     <ClInclude Include="Test\ReflectionTest.h" />
     <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EntityInspector.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\InspectorPanelHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
     <None Include="Res\Shaders\UI\UIImageShader.vert" />
     <None Include="Res\Shaders\UI\UISolidShader.frag" />
     <None Include="Res\Shaders\UI\UISolidShader.vert" />
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SDEngine.rc" />

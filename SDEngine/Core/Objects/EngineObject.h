@@ -25,10 +25,11 @@ public:
 	 * This method is overwritten through the reflection system.
 	 */
 	virtual const TypeDescriptor_Class* StaticDescriptor() const;
+
 protected:
-	SD_PROPERTY();
-	const TString EngineObjectType;
-	SD_PROPERTY();
-	const TString EngineObjectName;
+	SD_PROPERTY(InspectorHidden)
+		const TString EngineObjectType;
+	SD_PROPERTY(InspectorHidden)
+		const TString EngineObjectName;
 };
 

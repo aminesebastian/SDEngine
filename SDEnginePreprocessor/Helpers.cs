@@ -17,22 +17,36 @@ namespace SuburbanDigitalEnginePreprocessor {
 
         static Macros() {
             VALID_MACROS = new HashSet<string>();
-            VALID_MACROS.Add("SD_STRUCT()");
-            VALID_MACROS.Add("SD_CLASS()");
-            VALID_MACROS.Add("SD_PROPERTY()");
+            VALID_MACROS.Add("SD_STRUCT");
+            VALID_MACROS.Add("SD_CLASS");
+            VALID_MACROS.Add("SD_PROPERTY");
         }
         public static bool IsValidMacro(string MacroString) {
-            string cleanedMacroString = MacroString.Split(';')[0];
+            if(!MacroString.StartsWith("SD_")) {
+                return false;
+            }
+            string cleanedMacroString = GetMacroNameFromMacroLine(MacroString);
             return VALID_MACROS.Contains(cleanedMacroString);
         }
         public static EToken GetMacroFromMacroString(string MacroString) {
-            string cleanedMacroString = MacroString.Split(';')[0];
+            string cleanedMacroString = GetMacroNameFromMacroLine(MacroString);
             switch(cleanedMacroString) {
-                case "SD_STRUCT()": return EToken.StructDeclaration;
-                case "SD_CLASS()": return EToken.ClassDeclaration;
-                case "SD_PROPERTY()": return EToken.PropertyDeclaration;
+                case "SD_STRUCT": return EToken.StructDeclaration;
+                case "SD_CLASS": return EToken.ClassDeclaration;
+                case "SD_PROPERTY": return EToken.PropertyDeclaration;
                 default: return EToken.INVALID;
             }
+        }
+        private static string GetMacroNameFromMacroLine(string MacroLine) {
+            if (!MacroLine.StartsWith("SD_")) {
+                return "";
+            }
+            string cleanedMacroString = MacroLine.Split(';')[0];
+            int indexOfFirstParen = cleanedMacroString.IndexOf('(');
+            if (indexOfFirstParen > 0) {
+                return cleanedMacroString.Substring(0, indexOfFirstParen);
+            }
+            return "";
         }
     }
 }

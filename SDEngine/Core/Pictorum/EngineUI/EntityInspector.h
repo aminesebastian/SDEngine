@@ -5,10 +5,10 @@
 
 class FloatEditWidget;
 
-class FloatingDetailsPanel : public PictorumWidget {
+class EntityInspector : public PictorumWidget {
 public:
-	FloatingDetailsPanel(const TString& Name);
-	virtual ~FloatingDetailsPanel();
+	EntityInspector(const TString& Name);
+	virtual ~EntityInspector();
 	virtual void OnCreated() override;
 
 	void SetSelectedEntity(Entity* SelectedEntity);

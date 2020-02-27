@@ -235,6 +235,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\InspectorPanelHelpers.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
@@ -292,7 +293,7 @@
     <ClCompile Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.cpp" />
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp" />
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp" />
-    <ClCompile Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.cpp" />
+    <ClCompile Include="Core\Pictorum\EngineUI\EntityInspector.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\FloatEditWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
     <ClInclude Include="Core\Pictorum\EngineUI\EngineUIStyle.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\InspectorPanelHelpers.h" />
     <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
@@ -403,7 +405,7 @@
     <ClInclude Include="Core\Pictorum\EngineUI\FrameStatisticsWidget.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
-    <ClInclude Include="Core\Pictorum\EngineUI\FloatingDetailsPanel.h" />
+    <ClInclude Include="Core\Pictorum\EngineUI\EntityInspector.h" />
     <ClInclude Include="Core\Pictorum\Widgets\FloatEditWidget.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
@@ -442,6 +444,7 @@
     <ClInclude Include="Test\ReflectionTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
     <None Include="Res\Shaders\UI\UIImageShader.vert" />
     <None Include="Res\Shaders\UI\UISolidShader.frag" />

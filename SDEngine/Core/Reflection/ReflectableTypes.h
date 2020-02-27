@@ -64,56 +64,53 @@ struct TypeDescriptor_SArray : public TypeDescriptor {
 	TypeDescriptor* ContainerType;
 };
 
-struct TypeDescriptor_Struct : public TypeDescriptor {
-	struct Member {
-		const char* Name;
-		size_t Offset;
-		TypeDescriptor* Type;
-	};
+struct FProperty {
+	const char* Name;
+	const char* InspectorName;
+	size_t Offset;
+	TypeDescriptor* Type;
+	bool bInspectorHidden;
+};
 
-	std::vector<Member> Members;
+struct TypeDescriptor_Struct : public TypeDescriptor {
+	std::vector<FProperty> Properties;
 
 	TypeDescriptor_Struct(void (*InitializationFunction)(TypeDescriptor_Struct*)) : TypeDescriptor{ "", 0 } {
 		InitializationFunction(this);
 	}
-	TypeDescriptor_Struct(const char* name, size_t size, const std::initializer_list<Member>& InitializationList) : TypeDescriptor{ "", 0 }, Members{ InitializationList } {
+	TypeDescriptor_Struct(const char* name, size_t size, const std::initializer_list<FProperty>& InitializationList) : TypeDescriptor{ "", 0 }, Properties{ InitializationList } {
 	}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		TString result = Name + " {" + '\n';
-		for (const Member& member : Members) {
+		for (const FProperty& member : Properties) {
 			TString memberValue = member.Type->ToString((char*)Instance + member.Offset, Indent + 1);
-			result += std::string(4 * (Indent + 1), ' ') + member.Name + TString(" = ") + memberValue;
+			result += std::string(4 * ((int64)Indent + 1), ' ') + member.Name + TString(" = ") + memberValue;
 			result += '\n';
 		}
-		result += std::string(4 * Indent, ' ') + "}";
+		result += std::string(4 * (int64)Indent, ' ') + "}";
 		return result;
 	}
 };
 
 struct TypeDescriptor_Class : public TypeDescriptor {
-	struct Member {
-		const char* Name;
-		size_t Offset;
-		TypeDescriptor* Type;
-	};
-
-	std::vector<Member> Members;
+	std::vector<FProperty> Properties;
 	std::vector<TypeDescriptor*> ParentDescriptors;
 
 	TypeDescriptor_Class(void (*InitializationFunction)(TypeDescriptor_Class*)) : TypeDescriptor{ "", 0 } {
 		InitializationFunction(this);
 	}
-	TypeDescriptor_Class(const char* name, size_t size, const std::initializer_list<Member>& InitializationList) : TypeDescriptor{ "", 0 }, Members{ InitializationList } {
+	TypeDescriptor_Class(const char* name, size_t size, const std::initializer_list<FProperty>& InitializationList) : TypeDescriptor{ "", 0 }, Properties{ InitializationList } {
 
 	}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		TString result = Name + " {" + '\n';
-		for (const Member& member : Members) {
+		for (const FProperty& member : Properties) {
 			TString memberValue = member.Type->ToString((char*)Instance + member.Offset, Indent + 1);
-			result += std::string(4 * (Indent + 1), ' ') + member.Name + TString(" = ") + memberValue;
+			result += std::string(4 * ((int64)Indent + 1), ' ') + member.Name + TString(" = ") + memberValue;
 			result += '\n';
 		}
-		result += std::string(4 * Indent, ' ') + "}";
+		result += std::string(4 * (int64)Indent, ' ') + "}";
 		return result;
 	}
 };
+

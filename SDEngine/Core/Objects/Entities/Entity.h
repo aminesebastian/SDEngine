@@ -80,9 +80,9 @@ public:
 protected:
 	friend class World;
 
-	SD_PROPERTY();
+	SD_PROPERTY(OverrideInspectorName=("Transform"));
 	Transform CurrentTransform;
-	SD_PROPERTY();
+	SD_PROPERTY(InspectorHidden);
 	Transform LastFrameTransform;
 
 	SD_PROPERTY();

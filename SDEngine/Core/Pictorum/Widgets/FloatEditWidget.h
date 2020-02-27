@@ -19,8 +19,7 @@ private:
 	SArray<TextWidget*> ValueWidgets;
 	SArray<FColor> Colors;
 
-	float* Values;
-	uint8 ValueCount;
+	SArray<float*> Values;
 	int32 MouseDownEntry;
 
 	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
@@ -29,6 +28,6 @@ private:
 	void MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta);
 	void MouseUpAnywhere(const vec2& MouseLocation);
 
-	void AddEntry(const float& InitialValue, const int32& Index);
+	void AddEntry(float* InitialValue, const int32& Index);
 };
 

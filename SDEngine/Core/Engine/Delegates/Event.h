@@ -53,7 +53,7 @@ public:
 	 */
 	template<Ret(*FunctionPointer)(Args...)>
 	bool Add() const {
-		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
+		return const_cast<Event*>(this)->AddInternal(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
 	}
 
 	/**
@@ -65,7 +65,7 @@ public:
 	 */
 	template<Ret(*FunctionPointer)(Args...)>
 	bool Remove() const {
-		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
+		return const_cast<Event*>(this)->RemoveInternal(EventDelegate<Ret(Args...)>::Create<FunctionPointer>());
 	}
 
 	/**
@@ -81,7 +81,7 @@ public:
 	 */
 	template<typename T, Ret(T::* FunctionPointer)(Args...)>
 	bool Add(T* Instance) const {
-		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
+		return const_cast<Event*>(this)->AddInternal(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
 	}
 
 	/**
@@ -97,7 +97,7 @@ public:
 	*/
 	template<typename T, Ret(T::* FunctionPointer)(Args...)>
 	bool Remove(T* Instance) const {
-		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
+		return const_cast<Event*>(this)->RemoveInternal(EventDelegate<Ret(Args...)>::Create<T, FunctionPointer>(Instance));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public:
 	 */
 	template<typename T>
 	bool Add(T* Functor) const {
-		return const_cast<Event*>(this)->Add(EventDelegate<Ret(Args...)>::Create(Functor));
+		return const_cast<Event*>(this)->AddInternal(EventDelegate<Ret(Args...)>::Create(Functor));
 	}
 
 	/**
@@ -123,7 +123,7 @@ public:
 	 */
 	template<typename T>
 	bool Remove(T* Functor) const {
-		return const_cast<Event*>(this)->Remove(EventDelegate<Ret(Args...)>::Create(Functor));
+		return const_cast<Event*>(this)->RemoveInternal(EventDelegate<Ret(Args...)>::Create(Functor));
 	}
 
 	/**
@@ -137,21 +137,21 @@ public:
 		};
 	}
 private:
-	SArray<EventDelegate<Ret(Args...)>> Delegates;
+	std::vector<EventDelegate<Ret(Args...)>> Delegates;
 
 	template<typename Ret, typename ...Args>
-	bool Add(EventDelegate<Ret(Args...)> Delegate) {
+	bool AddInternal(EventDelegate<Ret(Args...)> Delegate) {
 		if (find(Delegates.begin(), Delegates.end(), Delegate) != Delegates.end()) {
 			return false;
 		}
 
 		// This is safer than using AddUnqiue.
-		Delegates.Add(Delegate);
+		Delegates.push_back(Delegate);
 
 		return true;
 	}
 	template<typename Ret, typename ...Args>
-	bool Remove(EventDelegate<Ret(Args...)> Delegate) {
+	bool RemoveInternal(EventDelegate<Ret(Args...)> Delegate) {
 		auto it = find(Delegates.begin(), Delegates.end(), Delegate);
 
 		if (it == Delegates.end()) {

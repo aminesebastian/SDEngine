@@ -184,8 +184,6 @@ void PictorumWidget::AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) 
 	OnCreated();
 }
 void PictorumWidget::RemovedFromParent(PictorumWidget* ParentIn) {
-	Parent = nullptr;
-	ParentSlot = nullptr;
 	OnDestroyed();
 }
 void PictorumWidget::AddedToViewport(PictorumRenderer* Owner) {
@@ -195,7 +193,6 @@ void PictorumWidget::AddedToViewport(PictorumRenderer* Owner) {
 }
 void PictorumWidget::RemovedFromViewport() {
 	OnRemovedFromViewport();
-	OwningRenderer = nullptr;
 	OnDestroyed();
 }
 

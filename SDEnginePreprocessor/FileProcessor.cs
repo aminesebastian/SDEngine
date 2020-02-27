@@ -18,7 +18,7 @@ namespace SuburbanDigitalEnginePreprocessor {
         }
         public bool ProcessFile() {
             List<string> lines = ParseFileIntoLines();
-            List<Tuple<EToken, string>> tokens = TokenizeFile(lines);
+            List<Tuple<EToken, string, string>> tokens = TokenizeFile(lines);
             CreateObjects(tokens);
             if(tokens.Count > 0) {
                 return true;
@@ -26,58 +26,57 @@ namespace SuburbanDigitalEnginePreprocessor {
             return false;
         }
         public void GenerateReflectedFile() {
-            //ResolveParentClasses();
             WriteReflectedHeaderOut();
         }
         private void ResolveParentClasses() {
             foreach (CPPObject encapsulator in Objects.Values) {
-                List<string> propertiesToAdd = new List<string>();
+                List<FProperty> propertiesToAdd = new List<FProperty>();
                 foreach (string parentClass in encapsulator.ParentClasses) {
                     ResolveParentsWorker(parentClass, propertiesToAdd);
                 }
-                foreach(string prop in propertiesToAdd) {
+                foreach(FProperty prop in propertiesToAdd) {
                     encapsulator.AddProperty(prop);
                 }
             }
         }
-        private void ResolveParentsWorker(string ParentClass, List<string> Properties) {
-            if(!Globals.ReflectedObjects.ContainsKey(ParentClass)) {
-                return;
-            }
-            foreach(string property in Globals.ReflectedObjects[ParentClass].Properties) {
-                Properties.Add(property);
-            }
-            foreach(string parentClass in Globals.ReflectedObjects[ParentClass].ParentClasses) {
-                ResolveParentsWorker(parentClass, Properties);
-            }
+        private void ResolveParentsWorker(string ParentClass, List<FProperty> Properties) {
+            //if(!Globals.ReflectedObjects.ContainsKey(ParentClass)) {
+            //    return;
+            //}
+            //foreach(string property in Globals.ReflectedObjects[ParentClass].Properties) {
+            //    Properties.Add(property);
+            //}
+            //foreach(string parentClass in Globals.ReflectedObjects[ParentClass].ParentClasses) {
+            //    ResolveParentsWorker(parentClass, Properties);
+            //}
         }
-        private void CreateObjects(List<Tuple<EToken, string>> Tokens) {
+        private void CreateObjects(List<Tuple<EToken, string, string>> Tokens) {
             CPPObject current = null;
-            foreach (Tuple<EToken, string> token in Tokens) {
+            foreach (Tuple<EToken, string, string> token in Tokens) {
                 switch (token.Item1) {
                     case EToken.ClassDeclaration:
                         if(current != null) {
                             Globals.ReflectedObjects.Add(current.Name, current.GetCopy());
                             Objects.Add(current.Name, current);
                         }
-                        current = new CPPObject(EReflectionTarget.CLASS, token.Item2);
+                        current = new CPPObject(EReflectionTarget.CLASS, token.Item3);
                         break;
                     case EToken.StructDeclaration:
                         if (current != null) {
                             Globals.ReflectedObjects.Add(current.Name, current.GetCopy());
                             Objects.Add(current.Name, current);
                         }
-                        current = new CPPObject(EReflectionTarget.STRUCT, token.Item2);
+                        current = new CPPObject(EReflectionTarget.STRUCT, token.Item3);
                         break;
                     case EToken.ParentClassDeclaration:
-                        current.AddParentClass(token.Item2);
+                        current.AddParentClass(token.Item3);
                         break;
                     case EToken.PropertyDeclaration:
-                        string[] split = token.Item2.Split(' ');
+                        string[] split = token.Item3.Split(' ');
                         if(split[0].Trim() == "const") {
-                            current.AddProperty(split[2]); // const int32 variableName = 10;
+                            current.AddProperty(new FProperty(split[2], token.Item2)); // const int32 variableName = 10;
                         } else {
-                            current.AddProperty(split[1]); // int32 variableName = 10;
+                            current.AddProperty(new FProperty(split[1], token.Item2)); // int32 variableName = 10;
                         }
                         break;
                     default: break;
@@ -88,8 +87,8 @@ namespace SuburbanDigitalEnginePreprocessor {
                 Objects.Add(current.Name, current);
             }
         }
-        private List<Tuple<EToken, string>> TokenizeFile(List<string> ParsedLines) {
-            List<Tuple<EToken, string>> tokens = new List<Tuple<EToken, string>>();
+        private List<Tuple<EToken, string, string>> TokenizeFile(List<string> ParsedLines) {
+            List<Tuple<EToken, string, string>> tokens = new List<Tuple<EToken, string, string>>();
 
             for (int i = 0; i < ParsedLines.Count; i++) {
                 string line = ParsedLines[i];
@@ -102,16 +101,16 @@ namespace SuburbanDigitalEnginePreprocessor {
 
                     if (token == EToken.ClassDeclaration || token == EToken.StructDeclaration) {
                         string[] declarationAndParents = followingLine.Split(':');
-                        tokens.Add(new Tuple<EToken, string>(token, declarationAndParents[0].Split(' ')[1]));
+                        tokens.Add(new Tuple<EToken, string, string>(token, line, declarationAndParents[0].Split(' ')[1]));
 
                         if (declarationAndParents.Length > 1) {
                             for (int j = 1; j < declarationAndParents.Length; j += 2) {
                                 string candidate = declarationAndParents[j].Trim();
-                                tokens.Add(new Tuple<EToken, string>(EToken.ParentClassDeclaration, candidate.Split(' ')[1]));
+                                tokens.Add(new Tuple<EToken, string, string>(EToken.ParentClassDeclaration, line, candidate.Split(' ')[1]));
                             }
                         }
                     } else {
-                        tokens.Add(new Tuple<EToken, string>(token, followingLine));
+                        tokens.Add(new Tuple<EToken, string, string>(token, line, followingLine));
                     }
                 }
             }
@@ -146,8 +145,8 @@ namespace SuburbanDigitalEnginePreprocessor {
                     }
                     fileContents.Add($"REFLECT_CLASS_PARENT_END()");
                     fileContents.Add($"REFLECT_CLASS_MEMBERS_BEGIN()");
-                    foreach (string property in enc.Properties) {
-                        fileContents.Add($"REFLECT_CLASS_MEMBER({property})");
+                    foreach (FProperty property in enc.Properties.Values) {
+                        fileContents.Add($"REFLECT_CLASS_MEMBER({property.GetMacroInternals()})");
                     }
                     fileContents.Add($"REFLECT_CLASS_MEMBERS_END()");
                     fileContents.Add($"REFLECT_CLASS_END()");
@@ -160,8 +159,8 @@ namespace SuburbanDigitalEnginePreprocessor {
                     }
                     fileContents.Add($"REFLECT_STRUCT_PARENT_END()");
                     fileContents.Add($"REFLECT_STRUCT_MEMBERS_BEGIN()");
-                    foreach (string property in enc.Properties) {
-                        fileContents.Add($"REFLECT_STRUCT_MEMBER({property})");
+                    foreach (FProperty property in enc.Properties.Values) {
+                        fileContents.Add($"REFLECT_STRUCT_MEMBER({property.GetMacroInternals()})");
                     }
                     fileContents.Add($"REFLECT_STRUCT_MEMBERS_END()");
                     fileContents.Add($"REFLECT_STRUCT_END()");

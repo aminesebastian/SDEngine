@@ -4,7 +4,7 @@
 #include "Core/Pictorum/EngineUI/EngineWindowUserInterface.h"
 
 class FrameStatisticsWidget;
-class FloatingDetailsPanel;
+class EntityInspector;
 class WorldOutlinerWidget;
 class World;
 
@@ -18,7 +18,7 @@ public:
 	void OnSelectedEntitesChanged(const SArray<Entity*>& SelectedEntities);
 private:
 	FrameStatisticsWidget* FrameStatistics;
-	FloatingDetailsPanel* DetailsPanel;
+	EntityInspector* DetailsPanel;
 	WorldOutlinerWidget* WorldOutliner;
 };
 
