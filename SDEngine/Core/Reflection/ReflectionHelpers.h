@@ -21,9 +21,9 @@ public:
 	static T* GetProperty(const FProperty& Property, const class EngineObject* Object) {
 		return (T*)((char*)Object + Property.Offset);
 	}
-	template<typename T>
-	static T* GetProperty(const TString& Name, const void* Struct) {
-		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<T>::Get());
+	template<typename T, typename K>
+	static T* GetProperty(const TString& Name, const K* Struct) {
+		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<K>::Get());
 		for (FProperty& prop : structType->Properties) {
 			if (prop.Name == Name) {
 				return (T*)((char*)Struct + prop.Offset);

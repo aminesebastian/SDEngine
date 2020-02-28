@@ -1,8 +1,8 @@
 #include "MainViewportUserInterface.h"
 #include "Core/Pictorum/Containers/PictorumGrid.h"
-#include "Core/Pictorum/EngineUI/FrameStatisticsWidget.h"
-#include "Core/Pictorum/EngineUI/EntityInspector.h"
-#include "Core/Pictorum/EngineUI/WorldOutliner/WorldOutlinerWidget.h"
+#include "Editor/EngineUI/FrameStatisticsWidget.h"
+#include "Editor/EngineUI/Inspector/EntityInspector.h"
+#include "Editor/EngineUI/WorldOutliner/WorldOutlinerWidget.h"
 #include "Core/Engine/World.h"
 
 MainViewportUserInterface::MainViewportUserInterface(const TString& Name) : EngineWindowUserInterface(Name) {

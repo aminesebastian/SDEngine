@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Pictorum/Pictorum.h"
-#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
+#include "Editor/EngineUI/EngineUIStyle.h"
 
 class TitleBar;
 

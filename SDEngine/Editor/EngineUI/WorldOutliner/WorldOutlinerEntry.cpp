@@ -15,7 +15,7 @@ WorldOutlinerEntry::~WorldOutlinerEntry() {
 
 void WorldOutlinerEntry::OnCreated() {
 	AssignNewChildLocal(PictorumHorizontalBox, hBox, "EntryHBox");
-	hBox->SetPadding(8.0f);
+	//hBox->SetPadding(8.0f);
 
 	AssignNewToChild(hBox, ImageWidget, VisibilityWidget, "VisbilityIcon");
 	AssignNewToChild(hBox, TextWidget, EntityNameWidget, "EntityName");

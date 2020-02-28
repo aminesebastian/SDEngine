@@ -1,4 +1,4 @@
-#include "FloatEditWidget.h"
+#include "VectorInspectorWidget.h"
 #include "Core/Engine/Window.h"
 #include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
@@ -6,11 +6,11 @@
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
+#include "Editor/EngineUI/EngineUIStyle.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
 
-FloatEditWidget::FloatEditWidget(const TString& Name) : PictorumWidget(Name) {
+VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : PictorumWidget(Name) {
 	Colors.Add(FColor(0.7f, 0.0f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.7f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.0f, 0.7f));
@@ -18,27 +18,27 @@ FloatEditWidget::FloatEditWidget(const TString& Name) : PictorumWidget(Name) {
 
 	MouseDownEntry = -1;
 }
-FloatEditWidget::~FloatEditWidget() {
-	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Remove<FloatEditWidget, & FloatEditWidget::MouseUpAnywhere>(this);
-	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Remove<FloatEditWidget, & FloatEditWidget::MouseMoveAnywhere>(this);
+VectorInspectorWidget::~VectorInspectorWidget() {
+	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
+	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
 }
 
-void FloatEditWidget::OnCreated() {
-	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseUpAnywhere>(this);
-	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatEditWidget, & FloatEditWidget::MouseMoveAnywhere>(this);
+void VectorInspectorWidget::OnCreated() {
+	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
+	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
 
 	Container = new PictorumHorizontalBox("MainContainer");
 	//Container->SetPadding(4.0f);
 	AddChild(Container);
 }
-void FloatEditWidget::SetControlledValue(float* ValuePointer, uint8 Count) {
+void VectorInspectorWidget::SetControlledValue(float* ValuePointer, uint8 Count) {
 	Values.Clear();
 
 	for (uint8 i = 0; i < Count; i++) {
 		AddEntry(&ValuePointer[i], i);
 	}
 }
-void FloatEditWidget::AddEntry(float* InitialValue, const int32& Index) {
+void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
 	Values.Add(InitialValue);
 	if (Index > 0) {
 		SeparatorWidget* separator = new SeparatorWidget("Entry" + to_string(Index) + "Separator");
@@ -61,9 +61,9 @@ void FloatEditWidget::AddEntry(float* InitialValue, const int32& Index) {
 	value->SetFontSize(11);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
-	valueBg->OnMouseDownDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueMouseDown>(this);
-	valueBg->OnHoveredDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueHovered>(this);
-	valueBg->OnUnhoveredDelegate.Add<FloatEditWidget, &FloatEditWidget::ValueUnhovered>(this);
+	valueBg->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
+	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueHovered>(this);
+	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueUnhovered>(this);
 	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
 	valueBg->SetPadding(2.0f);
 	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
@@ -76,7 +76,7 @@ void FloatEditWidget::AddEntry(float* InitialValue, const int32& Index) {
 	ValueBackgroundWidgets.Add(valueBg);
 	ValueWidgets.Add(value);
 }
-void FloatEditWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
+void VectorInspectorWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
 	for (int i = 0; i < ValueBackgroundWidgets.Count(); i++) {
 		if (ValueBackgroundWidgets[i] == Widget) {
 			MouseDownEntry = i;
@@ -85,18 +85,18 @@ void FloatEditWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLo
 		}
 	}
 }
-void FloatEditWidget::ValueHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {
+void VectorInspectorWidget::ValueHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {
 	Engine::GetInputSubsystem()->SetMouseCursorStyle(EMouseCursorStyle::SizeHorizontal);
 }
-void FloatEditWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {
+void VectorInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {
 	Engine::GetInputSubsystem()->SetMouseCursorStyle(EMouseCursorStyle::Arrow);
 }
-void FloatEditWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
+void VectorInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (MouseDownEntry >= 0) {
 		*Values[MouseDownEntry] += Delta.x / 10.0f;
 		ValueWidgets[MouseDownEntry]->SetText(StringUtilities::ToStringWithPrecision(*Values[MouseDownEntry], 2));
 	}
 }
-void FloatEditWidget::MouseUpAnywhere(const vec2& MouseLocation) {
+void VectorInspectorWidget::MouseUpAnywhere(const vec2& MouseLocation) {
 	MouseDownEntry = -1;
 }

@@ -33,12 +33,14 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 	}
 
 	vec2 scale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
+	LastFrameMinBounds = scale * (TextBlockCache->MinPosition) * RenderTargetResolution;
+	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
 
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
 	Font->BindAtlas(fontShader, "Atlas", 0);
 
-	fontShader->SetShaderVector2("LOCATION", Position);
+	fontShader->SetShaderVector2("LOCATION", Position + (scale * (TextBlockCache->MinPosition)));
 	fontShader->SetShaderVector2("SCALE", scale);
 	fontShader->SetShaderVector4("COLOR", Color);
 	fontShader->SetShaderVector2("RENDER_TARGET_RESOLUTION", RenderTargetResolution);
@@ -47,8 +49,7 @@ void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution
 
 	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
 
-	LastFrameMinBounds = scale * (TextBlockCache->MinPosition) * RenderTargetResolution;
-	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
+
 }
 void TextRenderer::SetText(const TString& Text) {
 	this->Text = Text;

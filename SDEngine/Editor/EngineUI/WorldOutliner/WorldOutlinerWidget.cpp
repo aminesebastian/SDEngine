@@ -3,7 +3,7 @@
 #include "Core/Objects/Entities/Actor.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
-#include "Core/Pictorum/EngineUI/EngineUIStyle.h"
+#include "Editor/EngineUI/EngineUIStyle.h"
 #include "Core/Pictorum/Containers/PictorumScrollBox.h"
 
 WorldOutlinerWidget::WorldOutlinerWidget(const TString& Name) : PictorumWidget(Name) {

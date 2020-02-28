@@ -3,7 +3,7 @@
 #include "Core/Objects/Entities/Entity.h"
 #include "Core/DataStructures/Array.h"
 
-class FloatEditWidget;
+class VectorInspectorWidget;
 
 class EntityInspector : public PictorumWidget {
 public:

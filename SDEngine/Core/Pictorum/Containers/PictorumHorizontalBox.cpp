@@ -22,7 +22,7 @@ void PictorumHorizontalBox::CalculateChildRenderGeometry(const FRenderGeometry& 
 		float ratio = GetFillRatioForChild(ChildIndex);
 		vec2 space = CurrentRenderGeometry.GetAllotedSpace();
 		space.x -= GetNonFillSpaceRequirements(CurrentRenderGeometry);
-		space.x /= ratio;
+		space.x *= ratio;
 		OutputGeometry.SetAllotedSpace(space);
 	}
 

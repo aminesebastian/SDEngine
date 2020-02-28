@@ -5,10 +5,10 @@ class TextWidget;
 class SolidWidget;
 class PictorumHorizontalBox;
 
-class FloatEditWidget : public PictorumWidget {
+class VectorInspectorWidget : public PictorumWidget {
 public:
-	FloatEditWidget(const TString& Name);
-	virtual ~FloatEditWidget();
+	VectorInspectorWidget(const TString& Name);
+	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
 	void SetControlledValue(float* ValuePointer, uint8 Count);
 

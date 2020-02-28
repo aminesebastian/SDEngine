@@ -32,7 +32,7 @@ private:
 		if (Character.GetCharacter() != ' ') {
 			if (CharacterCount == 0) {
 				FirstCharacterOffset.x = Character.GetOffsets().x;
-				FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
+				//FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
 			}
 			
 			// Extend allocation if needed.
@@ -41,7 +41,7 @@ private:
 			}
 
 			// Only generate new geometry if the character in that index has changed.
-			if (Character.GetCharacter() != Characters[CharacterCount]) {
+			//if (Character.GetCharacter() != Characters[CharacterCount]) {
 				// Capture the indices of the first and last changed character.
 				if (FirstChangedIndex == 0) {
 					FirstChangedIndex = CharacterCount;
@@ -67,7 +67,7 @@ private:
 					Verticies[VertexCount + i] = vec2(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
 				}
 				bChanged = true;
-			}
+			//}
 
 			// Increment the counts for all state tracking values.
 			IncrementCounts();
