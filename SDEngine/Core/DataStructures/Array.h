@@ -58,6 +58,10 @@ public:
 		Add(Data);
 		return true;
 	}
+	template <typename Type>
+	void AddAfter(int32 Index, Type Value) {
+		insert(begin() + Index, Value);
+	}
 	template <class... _Valty>
 	Type Emplace(_Valty&& ... _Val) {
 		return vector::emplace_back(std::forward<_Valty>(_Val)...);

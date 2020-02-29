@@ -1,9 +1,6 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
-
-class TextWidget;
-class SolidWidget;
-class PictorumHorizontalBox;
+#include "Core/Pictorum/Pictorum.h"
 
 class VectorInspectorWidget : public PictorumWidget {
 public:
@@ -16,7 +13,7 @@ private:
 	PictorumHorizontalBox* Container;
 
 	SArray<SolidWidget*> ValueBackgroundWidgets;
-	SArray<TextWidget*> ValueWidgets;
+	SArray<EditableTextWidget*> ValueWidgets;
 	SArray<FColor> Colors;
 
 	SArray<float*> Values;

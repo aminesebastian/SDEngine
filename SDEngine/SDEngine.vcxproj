@@ -235,6 +235,7 @@
   <ItemGroup>
     <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp" />
     <ClCompile Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.cpp" />
     <ClCompile Include="Editor\EngineUI\Inspector\InspectorPanelBuilder.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
     <ClInclude Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\EngineUI\EngineUIStyle.h" />
     <ClInclude Include="Editor\EngineUI\Inspector\InspectorPanelBuilder.h" />

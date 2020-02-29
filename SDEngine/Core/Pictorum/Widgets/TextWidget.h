@@ -1,8 +1,7 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
-
-class TextRenderer;
-class DistanceFieldFont;
+#include "Core/Pictorum/Utilities/TextRenderer.h"
+#include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 
 class TextWidget : public PictorumWidget {
 public:
@@ -10,6 +9,7 @@ public:
 	virtual ~TextWidget();
 
 	void SetText(const TString& Text);
+	const TString& GetText() const;
 	void SetTextColor(const FColor& Color);
 	const FColor& GetTextColor() const;
 	void SetFontSize(const int32& FontSize);

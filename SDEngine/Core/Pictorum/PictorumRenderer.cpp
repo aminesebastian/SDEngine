@@ -5,7 +5,8 @@
 #include "Core/Utilities/Logger.h"
 
 PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWindow) : EngineObject(ViewportName, "PictorumRenderer"), OwningWindow(OwningWindow) {
-	ShapeDrawer = new PictorumShapeDrawer(ViewportName + "_ShapeDrawer");
+	ShapeDrawer   = new PictorumShapeDrawer(ViewportName + "_ShapeDrawer");
+	FocusedWidget = nullptr;
 
 	// Initialize render geometry.
 	TopLevelRenderGeometry.SetRenderResolution(OwningWindow->GetDimensions());
@@ -34,12 +35,21 @@ PictorumRenderer::~PictorumRenderer() {
 
 void PictorumRenderer::Tick(float DeltaTime) {
 	CacheMouseOverWidgets(Engine::GetInputSubsystem()->GetMousePosition());
-	for (PictorumWidget* candidate : WidgetsUnderMouse) {
-		// Raise mouse enter and exit events.
-		if (LastFrameWidgetsUnderMouse.Contains(candidate) && !WidgetsUnderMouse.Contains(candidate)) {
+
+	// Raise mouse exit events.
+	for (int32 i = LastFrameWidgetsUnderMouse.LastIndex(); i >= 0; i--) {
+		PictorumWidget* mouseOver = LastFrameWidgetsUnderMouse[i];
+		if (!WidgetsUnderMouse.Contains(mouseOver)) {
 			FUserInterfaceEvent eventHandle;
-			candidate->MouseExit(Engine::GetInputSubsystem()->GetMousePosition(), eventHandle);
-		} else if (!LastFrameWidgetsUnderMouse.Contains(candidate) && WidgetsUnderMouse.Contains(candidate)) {
+			mouseOver->MouseExit(Engine::GetInputSubsystem()->GetMousePosition(), eventHandle);
+			LastFrameWidgetsUnderMouse.Remove(mouseOver);
+		}
+	}
+
+	// Raise mouse enter events.
+	for (int32 i = 0; i < WidgetsUnderMouse.Count(); i++) {
+		PictorumWidget* candidate = WidgetsUnderMouse[i];
+		if (!LastFrameWidgetsUnderMouse.Contains(candidate) && WidgetsUnderMouse.Contains(candidate)) {
 			FUserInterfaceEvent eventHandle;
 			candidate->MouseEnter(Engine::GetInputSubsystem()->GetMousePosition(), eventHandle);
 		}
@@ -65,19 +75,38 @@ void PictorumRenderer::Draw(float DeltaTime) {
 }
 
 void PictorumRenderer::OnKeyDown(SDL_Scancode KeyCode) {
-
+	if (FocusedWidget) {
+		FocusedWidget->KeyDown(KeyCode);
+	}
 }
 void PictorumRenderer::OnKeyUp(SDL_Scancode KeyCode) {
-
+	if (FocusedWidget) {
+		FocusedWidget->KeyUp(KeyCode);
+	}
 }
 void PictorumRenderer::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {
-
+	if (FocusedWidget) {
+		FocusedWidget->KeyHeld(KeyCode, HeldTime);
+	}
 }
 void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) {
 	OnMouseDownAnywhereDelegate.Broadcast(ScreenPosition);
 
+	bool focusChanged = false;
+
 	FUserInterfaceEvent eventHandle;
 	for (PictorumWidget* candidate : WidgetsUnderMouse) {
+		if (!focusChanged) {
+			if (candidate->bFocusable) {
+				if (FocusedWidget) {
+					FocusedWidget->FocusLost();
+				}
+				candidate->RecievedFocus();
+				FocusedWidget = candidate;
+				focusChanged = true;
+			}
+		}
+
 		candidate->MouseDown(ScreenPosition, Button, eventHandle);
 		if (eventHandle.bCaptureMouse) {
 			Engine::GetInputSubsystem()->CaptureMouseCursor();
@@ -154,9 +183,8 @@ void PictorumRenderer::CacheMouseOverWidgets(const Vector2D& MousePosition) {
 
 	// Capture the widgets that were under the mouse the previous frame. This is used to detect
 	// when widgets have just been hovered or unhovered.
-	LastFrameWidgetsUnderMouse.Clear();
 	for (PictorumWidget* lastFrame : WidgetsUnderMouse) {
-		LastFrameWidgetsUnderMouse.Add(lastFrame);
+		LastFrameWidgetsUnderMouse.AddUnique(lastFrame);
 	}
 
 	// Clear the widgets under the mouse.
@@ -175,7 +203,7 @@ void PictorumRenderer::CacheMouseOverWidgets(const Vector2D& MousePosition) {
 
 		// Add all widgets under the cursor to the list of widgets.
 		if (MousePosition.x >= min.x && MousePosition.x <= max.x && MousePosition.y >= min.y && MousePosition.y <= max.y) {
-			WidgetsUnderMouse.Add(child);
+			WidgetsUnderMouse.AddUnique(child);
 		}
 	}
 }

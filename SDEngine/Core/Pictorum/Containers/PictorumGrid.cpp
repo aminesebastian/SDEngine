@@ -51,14 +51,14 @@ void PictorumGrid::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	}
 }
 void PictorumGrid::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
-	TString debugLine = "Hovered Column: " + to_string(HoveredColumnIndex);
-	debugLine += "\n";
-	debugLine += "Hovered Row: " + to_string(HoveredRowIndex);
-	debugLine += "\n";
-	debugLine += "Distance To Wall: " + MathLibrary::LocationToString(DistanceToNearestEntry);
-	debugLine += "\n";
-	debugLine += "Cell Relative: " + MathLibrary::LocationToString(CellRelativePosition);
-	FrameStatisticsWidget::SetExtraDebugString(debugLine);
+	//TString debugLine = "Hovered Column: " + to_string(HoveredColumnIndex);
+	//debugLine += "\n";
+	//debugLine += "Hovered Row: " + to_string(HoveredRowIndex);
+	//debugLine += "\n";
+	//debugLine += "Distance To Wall: " + MathLibrary::LocationToString(DistanceToNearestEntry);
+	//debugLine += "\n";
+	//debugLine += "Cell Relative: " + MathLibrary::LocationToString(CellRelativePosition);
+	//FrameStatisticsWidget::SetExtraDebugString(debugLine);
 
 	// Keep this information cached and updated per frame.
 	for (int i = 0; i < Columns.Count(); i++) {

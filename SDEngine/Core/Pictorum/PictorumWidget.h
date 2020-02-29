@@ -44,6 +44,8 @@ public:
 	PictorumWidget(const TString& Name);
 	virtual ~PictorumWidget();
 
+	bool bFocusable;
+
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const;
@@ -75,6 +77,7 @@ public:
 		return Cast<T>(ParentSlot);
 	}
 
+	const bool& HasFocus() const;
 	const float GetRenderRotation() const;
 	const float GetRotation() const;
 	const float GetParentRotation() const;
@@ -85,7 +88,12 @@ public:
 	Event<void(PictorumWidget*, const vec2&, FUserInterfaceEvent&)> OnUnhoveredDelegate;
 	Event<void(PictorumWidget*, const vec2&, const vec2&, FUserInterfaceEvent&)> OnMouseMoveDelegate;
 	Event<void(PictorumWidget*, const float&, FUserInterfaceEvent&)> OnMouseScrollDelegate;
+	Event<void(PictorumWidget*)> OnRecievedFocusDelegate;
+	Event<void(PictorumWidget*)> OnFocusLostDelegate;
 
+	Event<void(PictorumWidget*, SDL_Scancode)> OnKeyDownDelegate;
+	Event<void(PictorumWidget*, SDL_Scancode)> OnKeyUpDelegate;
+	Event<void(PictorumWidget*, SDL_Scancode, float)> OnKeyHeldDelegate;
 protected:
 	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
@@ -159,6 +167,12 @@ protected:
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	virtual void OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
+	virtual void OnKeyDown(SDL_Scancode KeyCode);
+	virtual void OnKeyUp(SDL_Scancode KeyCode);
+	virtual void OnKeyHeld(SDL_Scancode KeyCode, float HeldTime);
+
+	virtual void OnRecievedFocus();
+	virtual void OnFocusLost();
 
 	void DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
@@ -170,15 +184,21 @@ private:
 	friend class PictorumRenderer;
 	bool bWasClickInside;
 	bool bIsBeginHovered;
+	bool bIsFocused;
 
-	virtual void AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot);
-	virtual void RemovedFromParent(PictorumWidget* ParentIn);
-	virtual void AddedToViewport(PictorumRenderer* Owner);
-	virtual void RemovedFromViewport();
-	virtual void MouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
-	virtual void MouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
-	virtual void MouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
-	virtual void MouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
-	virtual void MouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
-	virtual void MouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
+	void AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot);
+	void RemovedFromParent(PictorumWidget* ParentIn);
+	void AddedToViewport(PictorumRenderer* Owner);
+	void RemovedFromViewport();
+	void MouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	void MouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn);
+	void MouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn);
+	void MouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	void MouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	void MouseScroll(const float Delta, FUserInterfaceEvent& EventIn);
+	void KeyDown(SDL_Scancode KeyCode);
+	void KeyUp(SDL_Scancode KeyCode);
+	void KeyHeld(SDL_Scancode KeyCode, float HeldTime);
+	void RecievedFocus();
+	void FocusLost();
 };

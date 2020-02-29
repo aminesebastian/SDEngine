@@ -13,6 +13,7 @@
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
+#include "Core/Pictorum/Widgets/EditableTextWidget.h"
 
 #include "Core/Pictorum/Slots/ConstraintBoxSlot.h"
 #include "Core/Pictorum/Slots/HorizontalBoxSlot.h"

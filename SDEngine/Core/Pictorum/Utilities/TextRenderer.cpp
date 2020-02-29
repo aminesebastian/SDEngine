@@ -1,6 +1,7 @@
 #include "TextRenderer.h"
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Objects/CoreTypes/Shader.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 
 
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
@@ -27,35 +28,37 @@ TextRenderer::~TextRenderer() {
 	delete TextBlockCache;
 }
 
-void TextRenderer::Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI) {
+void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetResolution, const Vector2D& DisplayDPI) {
 	if (!bBoundToGPU) {
 		BindToGPU();
 	}
 
-	vec2 scale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
-	LastFrameMinBounds = scale * (TextBlockCache->MinPosition) * RenderTargetResolution;
-	LastFrameMaxBounds = scale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
+	LastFrameScale          = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
+	LastFrameMinBounds      = LastFrameScale * (TextBlockCache->MinPosition) * RenderTargetResolution;
+	LastFrameMaxBounds      = LastFrameScale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
+	LastFrameRenderPosition = Position + (LastFrameScale * (TextBlockCache->MinPosition));
 
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
 	Font->BindAtlas(fontShader, "Atlas", 0);
 
-	fontShader->SetShaderVector2("LOCATION", Position + (scale * (TextBlockCache->MinPosition)));
-	fontShader->SetShaderVector2("SCALE", scale);
+	fontShader->SetShaderVector2("LOCATION", LastFrameRenderPosition);
+	fontShader->SetShaderVector2("SCALE", LastFrameScale);
 	fontShader->SetShaderVector4("COLOR", Color);
 	fontShader->SetShaderVector2("RENDER_TARGET_RESOLUTION", RenderTargetResolution);
 	fontShader->SetShaderFloat("WIDTH", DistanceFieldWidth);
 	fontShader->SetShaderFloat("EDGE", DistanceFieldEdge);
 
 	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
-
-
 }
 void TextRenderer::SetText(const TString& Text) {
 	this->Text = Text;
 	Flush();
 	AddLine(Text);
 	TextBlockCache->Finalize();
+}
+const TString& TextRenderer::GetText() const {
+	return Text;
 }
 void TextRenderer::AddLine(const TString& Line) {
 	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
@@ -119,11 +122,23 @@ void TextRenderer::SetTextAlignment(const ETextAlignment& AlignmentIn) {
 const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
 }
-const void TextRenderer::GetTextBoundingBoxDimensions(vec2& MinBounds, vec2& MaxBounds) const {
+const FTextBlock* TextRenderer::GetInternalDataStructure() const {
+	return TextBlockCache;
+}
+const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const {
 	MinBounds = LastFrameMinBounds;
 	MaxBounds = LastFrameMaxBounds;
 }
-
+const Vector2D TextRenderer::GetCursorLocationForCharacterIndex(const int32& Index) {
+	int32 internalIndex = MathLibrary::Clamp(Index, 0, (int32)Text.length());
+	Vector2D vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4)-1)];
+	if (internalIndex > 0) {
+		vertPos.x += Tracking;
+	}
+	vertPos *= LastFrameScale;
+	vertPos += LastFrameRenderPosition;
+	return vertPos;
+}
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.
 	if (TextBlockCache->Verticies.Count() == 0 || TextBlockCache->TexCoords.Count() == 0 || TextBlockCache->Indices.Count() == 0) {

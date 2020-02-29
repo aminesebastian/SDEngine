@@ -1,20 +1,22 @@
 #include "VectorInspectorWidget.h"
 #include "Core/Engine/Window.h"
-#include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
+#include "Core/Pictorum/PictorumRenderer.h"
 #include "Core/Pictorum/Widgets/ImageWidget.h"
+#include "Core/Pictorum/Widgets/SeparatorWidget.h"
 #include "Core/Pictorum/Widgets/SolidWidget.h"
 #include "Core/Pictorum/Widgets/TextWidget.h"
-#include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Editor/EngineUI/EngineUIStyle.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
+#include "Editor/EngineUI/EngineUIStyle.h"
 
 VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : PictorumWidget(Name) {
 	Colors.Add(FColor(0.7f, 0.0f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.7f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.0f, 0.7f));
 	Colors.Add(FColor(0.94f, 0.7f, 1.0f));
+
+	Container = nullptr;
 
 	MouseDownEntry = -1;
 }
@@ -56,12 +58,12 @@ void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
 	labelBg->AddChild(label);
 	labelBg->SetBorderRadius(5.0f, 0.0f, 5.0f, 0.0f);
 
-	TextWidget* value = new TextWidget("Entry" + to_string(Index) + "Value");
+	EditableTextWidget* value = new EditableTextWidget("Entry" + to_string(Index) + "Value");
 	value->SetText(StringUtilities::ToStringWithPrecision(*InitialValue, 2));
 	value->SetFontSize(11);
+	value->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
-	valueBg->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
 	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueHovered>(this);
 	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueUnhovered>(this);
 	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
@@ -78,7 +80,7 @@ void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
 }
 void VectorInspectorWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
 	for (int i = 0; i < ValueBackgroundWidgets.Count(); i++) {
-		if (ValueBackgroundWidgets[i] == Widget) {
+		if (ValueWidgets[i] == Widget) {
 			MouseDownEntry = i;
 			EventIn.CaptureMouse();
 			break;

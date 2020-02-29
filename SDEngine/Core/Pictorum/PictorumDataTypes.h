@@ -555,6 +555,9 @@ struct FBorderRadius {
 	FBorderRadius() {
 		Radii = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
+	FBorderRadius(const float& Radius) {
+		Radii = vec4(Radius, Radius, Radius, Radius);
+	}
 	void SetAllRadii(const float& Radius) {
 		Radii.x = Radius;
 		Radii.y = Radius;

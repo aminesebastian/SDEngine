@@ -46,7 +46,7 @@ private:
 	SArray<PictorumWidget*> Widgets;
 	SArray<PictorumWidget*> WidgetsUnderMouse;
 	SArray<PictorumWidget*> LastFrameWidgetsUnderMouse;
-
+	PictorumWidget* FocusedWidget;
 	PictorumShapeDrawer* ShapeDrawer;
 	Window* OwningWindow;
 	GPUVertexBufferArray* VertexArrayBuffer;

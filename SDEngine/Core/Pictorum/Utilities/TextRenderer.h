@@ -28,8 +28,11 @@ private:
 		}
 	}
 	void AddCharacter(const FDistanceFieldCharacter& Character) {
+		if (&Character == nullptr) {
+			return;
+		}
 		// If the character is a space, skip it and just advance.
-		if (Character.GetCharacter() != ' ') {
+
 			if (CharacterCount == 0) {
 				FirstCharacterOffset.x = Character.GetOffsets().x;
 				//FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
@@ -63,8 +66,8 @@ private:
 
 				// Set the vertices.
 				for (int32 i = 0; i < Character.GetVerticies().Count(); i++) {
-					const vec2& vert = Character.GetVerticies()[i];
-					Verticies[VertexCount + i] = vec2(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
+					const Vector2D& vert = Character.GetVerticies()[i];
+					Verticies[VertexCount + i] = Vector2D(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
 				}
 				bChanged = true;
 			//}
@@ -76,7 +79,7 @@ private:
 			if (Character.GetOffsets().y < MaxYBaselineOffset) {
 				MaxYBaselineOffset = Character.GetOffsets().y;
 			}
-		}
+
 
 		// Advance the cursor.
 		CursorPosition += Character.GetAdvance() + Tracking;
@@ -114,7 +117,7 @@ private:
 		TexCoordCount += 4;
 		IndexCount += 6;
 	}
-	vec2 FirstCharacterOffset;
+	Vector2D FirstCharacterOffset;
 	float Tracking;
 	int32 CurrentIndex;
 	float CursorPosition;
@@ -124,9 +127,9 @@ private:
 	int32 CharacterCount;
 	SArray<char> Characters;
 	int32 VertexCount;
-	SArray<vec2> Verticies;
+	SArray<Vector2D> Verticies;
 	int32 TexCoordCount;
-	SArray<vec2> TexCoords;
+	SArray<Vector2D> TexCoords;
 	int32 IndexCount;
 	SArray<int32> Indices;
 	bool bChanged;
@@ -145,8 +148,27 @@ private:
 		Flush();
 	}
 
-	FTextLine* GetCurrentLine() {
+	FTextLine* GetCurrentLine() const {
 		return Lines[UsedLines];
+	}
+	void GetChangedIndices(int32& FirstChanged, int32& LastChanged) const {
+		FirstChanged = FirstChangedIndex;
+		LastChanged = LastChangedIndex;
+	}
+	const bool HasChanged() const {
+		return FirstChangedIndex >= 0;
+	}
+	const SArray<FTextLine*>& GetLines() const {
+		return Lines;
+	}
+	const SArray<Vector2D>& GetVerticies() const {
+		return Verticies;
+	}
+	const SArray<Vector2D>& GetTextureCoordinates() const {
+		return TexCoords;
+	}
+	const SArray<int32>& GetInidices() const {
+		return Indices;
 	}
 	void CompleteLine() {
 		UsedLines++;
@@ -200,8 +222,8 @@ private:
 
 			// Add vertices and offset for the alignment.
 			for (int32 i = line->VertexCount - 1; i >= 0; i--) {
-				const vec2& vert = line->Verticies[i];
-				vec2& blockVert  = Verticies[VertexCount + i];
+				const Vector2D& vert = line->Verticies[i];
+				Vector2D& blockVert  = Verticies[VertexCount + i];
 
 				if (Alignment == ETextAlignment::LEFT) {
 					blockVert.x = vert.x;
@@ -247,8 +269,8 @@ private:
 	}
 	void Flush() {
 		UsedLines = 0;
-		MaxPosition = vec2(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
-		MinPosition = vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+		MaxPosition = Vector2D(-FLT_MAX, -FLT_MAX);
+		MinPosition = Vector2D(FLT_MAX, FLT_MAX);
 		CurrentYPosition = 0.0f;
 		CurrentIndex = 0;
 		VertexCount = 0;
@@ -268,14 +290,6 @@ private:
 			line->Tracking = TrackingIn;
 		}
 	}
-	void GetChangedIndices(int32& FirstChanged, int32& LastChanged) {
-		FirstChanged = FirstChangedIndex;
-		LastChanged = LastChangedIndex;
-	}
-	bool HasChanged() {
-		return FirstChangedIndex >= 0;
-	}
-
 private:
 	void ExtendAllocation(const int32& CharacterCount) {
 		const int32 allocationAmount = CharacterCount * 2;
@@ -292,16 +306,16 @@ private:
 	SArray<FTextLine*> Lines;
 	int32 UsedLines;
 
-	vec2 MaxPosition;
-	vec2 MinPosition;
+	Vector2D MaxPosition;
+	Vector2D MinPosition;
 
 	int32 AllocatedCharacterSpace;
 	int32 CurrentlyUsedCharacterSpace;
 
 	int32 VertexCount;
-	SArray<vec2> Verticies;
+	SArray<Vector2D> Verticies;
 	int32 TexCoordCount;
-	SArray<vec2> TexCoords;
+	SArray<Vector2D> TexCoords;
 	int32 IndexCount;
 	SArray<int32> Indices;
 
@@ -334,11 +348,11 @@ public:
 	 * Draws the text to the screen at the provided NDC position. Automatically adjusts for the
 	 * provided render target resolution.
 	 *
-	 * @param 	{const vec2&}	Position			  	The position of the text in NDC coordinates.
-	 * @param 	{const vec2&}	RenderTargetResolution	The render target resolution.
-	 * @param 	{const vec2&}	DisplayDPI			  	The display DPI.
+	 * @param 	{const Vector2D&}	Position			  	The position of the text in NDC coordinates.
+	 * @param 	{const Vector2D&}	RenderTargetResolution	The render target resolution.
+	 * @param 	{const Vector2D&}	DisplayDPI			  	The display DPI.
 	 */
-	void Draw(const vec2& Position, const vec2& RenderTargetResolution, const vec2& DisplayDPI);
+	void Draw(const Vector2D& Position, const Vector2D& RenderTargetResolution, const Vector2D& DisplayDPI);
 
 	/**
 	 * Sets the text lines for this text renderer to render.
@@ -347,6 +361,12 @@ public:
 	 * @param 	{const TString&}	Text	The text to render.
 	 */
 	void SetText(const TString& Text);
+	/**
+	 * Gets the text
+	 *
+	 * @returns	The text.
+	 */
+	const TString& GetText() const;
 
 	/**
 	 * Sets the font size.
@@ -422,8 +442,14 @@ public:
 	 * @returns	{const ETextAlignment&}	The alignment.
 	 */
 	const ETextAlignment& GetTextAlignment() const;
-
-	const void GetTextBoundingBoxDimensions(vec2& MinBounds, vec2& MaxBounds) const;
+	/**
+	 * Gets the internal data structure responsible for caching and calculating the text geometry.
+	 *
+	 * @returns	Null if it fails, else the internal data structure.
+	 */
+	const FTextBlock* GetInternalDataStructure() const;
+	const Vector2D GetCursorLocationForCharacterIndex(const int32& Index);
+	const void GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const;
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
@@ -445,14 +471,16 @@ private:
 	/*State Properties*/
 	/*****************/
 	const DistanceFieldFont* Font;
-	vec2 LastFrameMinBounds;
-	vec2 LastFrameMaxBounds;
+	Vector2D LastFrameMinBounds;
+	Vector2D LastFrameMaxBounds;
 	TString Text;
 
 	/*****************/
 	/*Render Properties*/
 	/*****************/
 	bool bBoundToGPU;
+	Vector2D LastFrameScale;
+	Vector2D LastFrameRenderPosition;
 	FTextBlock* TextBlockCache;
 	GPUVertexBufferArray* VertexArrayBuffer;
 };

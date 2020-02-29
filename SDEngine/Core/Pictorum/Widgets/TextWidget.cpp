@@ -18,7 +18,9 @@ TextWidget::~TextWidget() {
 void TextWidget::SetText(const TString& Text) {
 	Renderer->SetText(Text);
 }
-
+const TString& TextWidget::GetText() const {
+	return Renderer->GetText();
+}
 void TextWidget::SetTextColor(const FColor& Color) {
 	Renderer->SetColor(Color);
 }

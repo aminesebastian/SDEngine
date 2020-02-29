@@ -9,11 +9,13 @@
 #include "Core/Pictorum/Utilities/PictorumShapeDrawer.h"
 
 PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name, "UIWidget") {
-	Rotation = 0.0f; // 0 Degrees
-	Parent = nullptr;
-	OwningRenderer = nullptr;
+	Rotation        = 0.0f; // 0 Degrees
+	Parent          = nullptr;
+	OwningRenderer  = nullptr;
 	bWasClickInside = false;
 	bIsBeginHovered = false;
+	bFocusable      = false;
+	bIsFocused      = false;
 
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
@@ -178,6 +180,18 @@ void PictorumWidget::MouseScroll(const float Delta, FUserInterfaceEvent& EventIn
 		OnMouseScroll(Delta, EventIn);
 	}
 }
+void PictorumWidget::KeyDown(SDL_Scancode KeyCode) {
+	OnKeyDownDelegate.Broadcast(this, KeyCode);
+	OnKeyDown(KeyCode);
+}
+void PictorumWidget::KeyUp(SDL_Scancode KeyCode) {
+	OnKeyUpDelegate.Broadcast(this, KeyCode);
+	OnKeyUp(KeyCode);
+}
+void PictorumWidget::KeyHeld(SDL_Scancode KeyCode, float HeldTime) {
+	OnKeyHeldDelegate.Broadcast(this, KeyCode, HeldTime);
+	OnKeyHeld(KeyCode, HeldTime);
+}
 void PictorumWidget::AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
 	Parent = ParentIn;
 	ParentSlot = Slot;
@@ -195,6 +209,16 @@ void PictorumWidget::RemovedFromViewport() {
 	OnRemovedFromViewport();
 	OnDestroyed();
 }
+void PictorumWidget::RecievedFocus() {
+	bIsFocused = true;
+	OnRecievedFocusDelegate.Broadcast(this);
+	OnRecievedFocus();
+}
+void PictorumWidget::FocusLost() {
+	bIsFocused = false;
+	OnFocusLostDelegate.Broadcast(this);
+	OnFocusLost();
+}
 
 void PictorumWidget::SetVisibility(EPictorumVisibilityState NewVisibility) {
 	Visibility = NewVisibility;
@@ -203,6 +227,9 @@ EPictorumVisibilityState PictorumWidget::GetVisibility() const {
 	return Visibility;
 }
 
+const bool& PictorumWidget::HasFocus() const {
+	return bIsFocused;
+}
 const float PictorumWidget::GetRenderRotation() const {
 	return GetRotation() + GetParentRotation();
 }
@@ -272,3 +299,8 @@ void PictorumWidget::OnMouseMove(const vec2& MousePosition, const vec2& MouseDel
 void PictorumWidget::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& Event) {}
 void PictorumWidget::OnMouseScroll(const float Delta, FUserInterfaceEvent& EventIn) {}
+void PictorumWidget::OnKeyDown(SDL_Scancode KeyCode) {}
+void PictorumWidget::OnKeyUp(SDL_Scancode KeyCode) {}
+void PictorumWidget::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {}
+void PictorumWidget::OnRecievedFocus() {}
+void PictorumWidget::OnFocusLost() {}

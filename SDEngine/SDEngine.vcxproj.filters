@@ -370,6 +370,9 @@
     <ClCompile Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -543,6 +546,7 @@
     <ClInclude Include="Editor\EngineUI\Inspector\InspectorPanelGenerator.h" />
     <ClInclude Include="Editor\EngineUI\Inspector\InspectorPanelBuilder.h" />
     <ClInclude Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
