@@ -13,10 +13,10 @@ PictorumShapeDrawer::PictorumShapeDrawer(const TString& Name) : EngineObject(Nam
 	verticies.Emplace(1.0f, 0.0f, 0.0f);
 
 	SArray<Vector2D> texCoords;
-	texCoords.Emplace(0.0f, 1.0f);
 	texCoords.Emplace(0.0f, 0.0f);
-	texCoords.Emplace(1.0f, 1.0f);
+	texCoords.Emplace(0.0f, 1.0f);
 	texCoords.Emplace(1.0f, 0.0f);
+	texCoords.Emplace(1.0f, 1.0f);
 
 	QuadVertexBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
 	QuadVertexBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);

@@ -19,54 +19,54 @@ VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : PictorumWidg
 	Container = nullptr;
 
 	MouseDownEntry = -1;
+	ContentPadding = 3.0f;
 }
 VectorInspectorWidget::~VectorInspectorWidget() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
-}
-void VectorInspectorWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	int x = 6;
 }
 void VectorInspectorWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
 
 	Container = new PictorumHorizontalBox("MainContainer");
-	//Container->SetPadding(4.0f);
+	Container->SetPadding(4.0f);
 	AddChild(Container);
 }
-void VectorInspectorWidget::SetControlledValue(float* ValuePointer, uint8 Count) {
+void VectorInspectorWidget::SetControlledValue(const SArray<TString>& Labels, float* ValuePointer, uint8 Count) {
 	Values.Clear();
 
 	for (uint8 i = 0; i < Count; i++) {
-		AddEntry(&ValuePointer[i], i);
+		AddEntry(Labels[i], &ValuePointer[i], i);
 	}
 }
-void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
+void VectorInspectorWidget::AddEntry(const TString& Label, float* InitialValue, const int32& Index) {
 	Values.Add(InitialValue);
 	if (Index > 0) {
 		SeparatorWidget* separator = new SeparatorWidget("Entry" + to_string(Index) + "Separator");
-		separator->SetSize(5.0f, 0.0f);
+		separator->SetSize(3.0f, 0.0f);
 		Container->AddChild(separator);
 	}
-	float padding = 20.0f;
 
 	AssignNewToChildLocal(Container, PictorumHorizontalBox, hBox, "ValueContainer"+to_string(Index));
 	hBox->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 
 	TextWidget* label = new TextWidget("Entry" + to_string(Index) + "Label");
-	label->SetText("X");
+	label->SetText(Label);
 	label->SetFontSize(10);
+	label->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
 
 	SolidWidget* labelBg = new SolidWidget("Entry" + to_string(Index) + "LabelBG");
 	labelBg->SetBackgroundColor(Colors[Index]);
-	labelBg->SetPadding(padding);
+	labelBg->SetPadding(ContentPadding);
 	labelBg->AddChild(label);
 	labelBg->SetBorderRadius(5.0f, 0.0f, 5.0f, 0.0f);
 
 	EditableTextWidget* value = new EditableTextWidget("Entry" + to_string(Index) + "Value");
 	value->SetText(StringUtilities::ToStringWithPrecision(*InitialValue, 2));
 	value->SetFontSize(9);
+	value->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
+	value->SetFontWeight(EFontWeight::Bold);
 	value->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
 	value->OnMouseMoveDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseMove>(this);
 
@@ -74,7 +74,7 @@ void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
 	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueHovered>(this);
 	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueUnhovered>(this);
 	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
-	valueBg->SetPadding(padding);
+	valueBg->SetPadding(ContentPadding);
 	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
 	valueBg->SetVisibility(EPictorumVisibilityState::VISIBLE);
 	valueBg->AddChild(value);

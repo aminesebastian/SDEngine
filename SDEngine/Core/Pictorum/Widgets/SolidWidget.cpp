@@ -26,6 +26,8 @@ void SolidWidget::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRen
 
 	OutputGeometry.AddLocation(Padding.GetLeft(), Padding.GetBottom());
 	OutputGeometry.AddAllotedSpace(-(Padding.GetLeft() + Padding.GetRight()), -(Padding.GetBottom() + Padding.GetTop()));
+	OutputGeometry.SetMinimumClipPoint(OutputGeometry.GetLocation());
+	OutputGeometry.SetMaximumClipPoint(OutputGeometry.GetAllotedSpace());
 }
 vec2 SolidWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 output = PictorumWidget::GetDesiredDrawSpace(Geometry);

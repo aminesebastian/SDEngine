@@ -3,8 +3,8 @@
 #include "Core/Pictorum/Slots/PictorumGridSlot.h"
 
 struct FGridRule {
-	FGridRule(const float& Value, const bool& bRelative, const bool& bResizeable, const bool& bIsRow) : Value(Value), bRelative(bRelative), bResizeable(bResizeable), bIsRow(bIsRow) {
-		MinSize = 0.0f;
+	FGridRule(const float& Value, const float& MinSize, const bool& bRelative, const bool& bResizeable, const bool& bIsRow) : Value(Value), MinSize(MinSize), bRelative(bRelative), bResizeable(bResizeable), bIsRow(bIsRow) {
+
 	}
 	const float GetValue(const FRenderGeometry& Geometry) {
 		if (bRelative) {
@@ -13,9 +13,10 @@ struct FGridRule {
 			return Value;
 		}
 	}
-	float AddRelativeValue(const float& ValueIn) {
+	float AddValue(const float& ValueIn, const FRenderGeometry& Geometry, bool bValueInRelative = true) {
 		float initialValue = Value;
-		Value = MathLibrary::Clamp(Value + ValueIn, MinSize, 1.0f);
+		float adjustedMinSize = bIsRow ? MinSize / Geometry.GetRenderResolution().y : MinSize / Geometry.GetRenderResolution().x;
+		Value = MathLibrary::Clamp(Value + ValueIn, adjustedMinSize, 1.0f);
 		return initialValue - Value;
 	}
 private:
@@ -29,11 +30,14 @@ private:
 
 class PictorumGrid : public PictorumWidget {
 public:
+
+	/** The minimum size of the grid space in absolute pixels. */
+	float MinimumGridSpaceSize;
+
 	PictorumGrid(const TString& Name);
 	virtual ~PictorumGrid();
 
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
-	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual PictorumGridSlot* AddChild(PictorumWidget* Widget) override;
 

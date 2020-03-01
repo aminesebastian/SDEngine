@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
-#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
+
 
 class ImageWidget : public PictorumWidget {
 public:

@@ -7,8 +7,7 @@ public:
 	VectorInspectorWidget(const TString& Name);
 	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
-	void SetControlledValue(float* ValuePointer, uint8 Count);
-	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
+	void SetControlledValue(const SArray<TString>& Labels, float* ValuePointer, uint8 Count);
 private:
 	PictorumHorizontalBox* Container;
 
@@ -18,6 +17,7 @@ private:
 
 	SArray<float*> Values;
 	int32 MouseDownEntry;
+	float ContentPadding;
 
 	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
 	void ValueMouseMove(PictorumWidget* Widget, const Vector2D& MouseLocation, const Vector2D& Delta, FUserInterfaceEvent& EventIn);
@@ -26,6 +26,6 @@ private:
 	void MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta);
 	void MouseUpAnywhere(const vec2& MouseLocation);
 
-	void AddEntry(float* InitialValue, const int32& Index);
+	void AddEntry(const TString& Label, float* InitialValue, const int32& Index);
 };
 

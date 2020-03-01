@@ -53,6 +53,7 @@ void serializeAllTextures(AssetManager* Manager) {
 	serializeTexture("maximize_icon", "./Res/Textures/Editor/UI/MaximizeIcon.png", "./Res/Assets/Editor/Textures/UI/MaximizeIcon.sasset", Manager);
 	serializeTexture("eye_open", "./Res/Textures/Editor/UI/EyeOpenIcon.png", "./Res/Assets/Editor/Textures/UI/EyeOpenIcon.sasset", Manager);
 	serializeTexture("eye_closed", "./Res/Textures/Editor/UI/EyeClosedIcon.png", "./Res/Assets/Editor/Textures/UI/EyeClosedIcon.sasset", Manager);
+	serializeTexture("checkmark", "./Res/Textures/Editor/UI/CheckmarkIcon.png", "./Res/Assets/Editor/Textures/UI/CheckmarkIcon.sasset", Manager);
 }
 void serializeTexture(TString TextureName, TString TexturePath, TString AssetPath, AssetManager* Manager) {
 	ByteBuffer buffer;

@@ -185,8 +185,8 @@ protected:
 private:
 	friend class PictorumRenderer;
 	bool bWasClickInside;
-	bool bIsBeginHovered;
-	bool bIsFocused;
+	bool bHovered;
+	bool bFocused;
 
 	void AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot);
 	void RemovedFromParent(PictorumWidget* ParentIn);

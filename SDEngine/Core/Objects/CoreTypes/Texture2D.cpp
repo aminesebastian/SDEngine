@@ -10,7 +10,7 @@ Texture2D::Texture2D(const TString& TextureName) : EngineObject(TextureName, "Te
 	bSentToGPU = false;
 	ExpectedComponents = 4;
 	WrapBehaviour = GL_REPEAT;
-	FilterBehaviour = GL_LINEAR;
+	FilterBehaviour = GL_LINEAR_MIPMAP_LINEAR;
 	Texture = 0;
 }
 Texture2D::Texture2D(const TString& TextureName, int32 Width, int32 Height) : Texture2D(TextureName) {
@@ -18,11 +18,12 @@ Texture2D::Texture2D(const TString& TextureName, int32 Width, int32 Height) : Te
 	glGenTextures(1, &Texture);
 	glBindTexture(GL_TEXTURE_2D, Texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 Texture2D::~Texture2D() {
 	if (bSentToGPU) {

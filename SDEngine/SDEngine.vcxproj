@@ -233,6 +233,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Pictorum\Widgets\CheckboxWidget.cpp" />
     <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp" />
@@ -333,6 +334,7 @@
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Pictorum\Widgets\CheckboxWidget.h" />
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
     <ClInclude Include="Core\Engine\WindowDataTypes.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />

@@ -8,13 +8,13 @@ const bool PictorumHorizontalBox::CanAddChild() const {
 	return true;
 }
 void PictorumHorizontalBox::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
-	float xOffset = CalculateXOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
+	float xOffset     = CalculateXOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
 	vec2 desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
-	desiredSpace.x = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
-	desiredSpace.y = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
+	desiredSpace.x    = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
+	desiredSpace.y    = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
 
 	// Capture the current variables.
-	vec2 size = desiredSpace;
+	vec2 size     = desiredSpace;
 	vec2 location = CurrentRenderGeometry.GetLocation();
 
 	// Handle left to right offset in the HBox and set the alloted height.
@@ -76,10 +76,7 @@ float PictorumHorizontalBox::CalculateChildWidth(const FRenderGeometry& CurrentR
 		return desiredX;
 	} else {
 		float ratio = GetFillRatioForChild(ChildIndex);
-		float filledXSpace = CurrentRenderGeometry.GetAllotedSpace().x;
-		filledXSpace -= GetNonFillSpaceRequirements(CurrentRenderGeometry);
-		filledXSpace *= ratio;
-		return filledXSpace;
+		return ratio * (CurrentRenderGeometry.GetAllotedSpace().x - GetNonFillSpaceRequirements(CurrentRenderGeometry));
 	}
 	return 0.0f;
 }

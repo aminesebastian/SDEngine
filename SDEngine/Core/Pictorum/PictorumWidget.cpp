@@ -13,9 +13,9 @@ PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name, "UIWidg
 	Parent          = nullptr;
 	OwningRenderer  = nullptr;
 	bWasClickInside = false;
-	bIsBeginHovered = false;
+	bHovered = false;
 	bFocusable      = false;
-	bIsFocused      = false;
+	bFocused      = false;
 
 	SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 }
@@ -137,15 +137,15 @@ void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry&
 }
 
 void PictorumWidget::MouseEnter(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {
-	bIsBeginHovered = true;
+	bHovered = true;
 	OnHoveredDelegate.Broadcast(this, MousePosition, EventIn);
 	if (EventIn.ShouldContinuePropragating()) {
 		OnMouseEnter(MousePosition, EventIn);
 	}
 }
 void PictorumWidget::MouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {
-	if (bIsBeginHovered) {
-		bIsBeginHovered = false;
+	if (bHovered) {
+		bHovered = false;
 		OnUnhoveredDelegate.Broadcast(this, MousePosition, EventIn);
 		if (EventIn.ShouldContinuePropragating()) {
 			OnMouseExit(MousePosition, EventIn);
@@ -214,12 +214,12 @@ void PictorumWidget::RemovedFromViewport() {
 	OnDestroyed();
 }
 void PictorumWidget::RecievedFocus() {
-	bIsFocused = true;
+	bFocused = true;
 	OnRecievedFocusDelegate.Broadcast(this);
 	OnRecievedFocus();
 }
 void PictorumWidget::FocusLost() {
-	bIsFocused = false;
+	bFocused = false;
 	OnFocusLostDelegate.Broadcast(this);
 	OnFocusLost();
 }
@@ -232,7 +232,7 @@ EPictorumVisibilityState PictorumWidget::GetVisibility() const {
 }
 
 const bool& PictorumWidget::HasFocus() const {
-	return bIsFocused;
+	return bFocused;
 }
 const float PictorumWidget::GetRenderRotation() const {
 	return GetRotation() + GetParentRotation();
@@ -271,7 +271,7 @@ const PictorumRenderer* PictorumWidget::GetOwningRenderer() const {
 	}
 }
 const bool& PictorumWidget::IsHovered() const {
-	return bIsBeginHovered;
+	return bHovered;
 }
 const bool& PictorumWidget::WasClickedInside() const {
 	return bWasClickInside;
