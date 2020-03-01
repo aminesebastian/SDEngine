@@ -47,6 +47,12 @@ const EFontWeight& TextWidget::GetWeight() const {
 }
 
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
+	//FBoxDrawInstruction instruction;
+	//instruction.Location = Geometry.GetLocation();
+	//instruction.Size = Geometry.GetAllotedSpace();
+	//instruction.BackgroundColor = FColor(0.7f, 0.1f, 1.0f, 0.25f);
+	//DrawBox(Geometry, instruction);
+
 	// Reposition such that the text always renders from the top.
 	vec2 location = Geometry.GetLocation();
 	location.y += Geometry.GetAllotedSpace().y;
@@ -72,7 +78,7 @@ void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 min, max;
 	Renderer->GetTextBoundingBoxDimensions(min, max);
-	return max - min;
+	return max + min;
 }
 void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
@@ -86,11 +92,11 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	MaxBounds.x = MathLibrary::Min(MaxBounds.x,  LastRenderedGeometry.GetMinimumClipPoint().x + LastRenderedGeometry.GetMaximumClipPoint().x);
 	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y + LastRenderedGeometry.GetMaximumClipPoint().y);
 
-	vec2 min, max;
+	/*vec2 min, max;
 	Renderer->GetTextBoundingBoxDimensions(min, max);
 
 	MinBounds.y -= min.y;
-	MaxBounds.y -= min.y;
+	MaxBounds.y -= min.y;*/
 }
 const bool TextWidget::CanAddChild() const {
 	return false;

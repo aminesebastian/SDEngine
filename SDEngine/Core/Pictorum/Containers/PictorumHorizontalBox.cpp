@@ -8,39 +8,44 @@ const bool PictorumHorizontalBox::CanAddChild() const {
 	return true;
 }
 void PictorumHorizontalBox::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
-	float xOffset           = CalculateXOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
-	vec2 desiredSpace       = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
-	desiredSpace.x          = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
-	desiredSpace.y          = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
+	float xOffset = CalculateXOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
+	vec2 desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
+	desiredSpace.x = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
+	desiredSpace.y = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
 
-	OutputGeometry.AddLocation(xOffset, 0.0f);
+	// Capture the current variables.
+	vec2 size = desiredSpace;
+	vec2 location = CurrentRenderGeometry.GetLocation();
 
+	// Handle left to right offset in the HBox and set the alloted height.
+	location.x += xOffset;
+
+	// Handle the width of the child.
 	HorizontalBoxSlot* slot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
-	if (slot->GetFillRule() == EFillRule::AUTOMATIC) {
-		OutputGeometry.SetAllotedSpace(desiredSpace);
-	} else {
+	if (slot->GetFillRule() == EFillRule::FILL) {
 		float ratio = GetFillRatioForChild(ChildIndex);
-		vec2 space = CurrentRenderGeometry.GetAllotedSpace();
-		space.x -= GetNonFillSpaceRequirements(CurrentRenderGeometry);
-		space.x *= ratio;
-		OutputGeometry.SetAllotedSpace(space);
+		size.x = ratio * (CurrentRenderGeometry.GetAllotedSpace().x - GetNonFillSpaceRequirements(CurrentRenderGeometry));
 	}
 
-	vec2 location = OutputGeometry.GetLocation();
+	// Handle vertical alignment and spacing.
 	switch (slot->GetVerticalAlignment()) {
 		case EVerticalAlignment::TOP:
-			location.y = (CurrentRenderGeometry.GetLocation().y + CurrentRenderGeometry.GetAllotedSpace().y) - desiredSpace.y;
+			location.y = (CurrentRenderGeometry.GetLocation().y + CurrentRenderGeometry.GetAllotedSpace().y) - size.y;
 			break;
 		case EVerticalAlignment::CENTER:
-			location.y = OutputGeometry.GetLocation().y - desiredSpace.y / 2.0f;
+			location.y = location.y + (CurrentRenderGeometry.GetAllotedSpace().y / 2.0f) - (size.y / 2.0f);
 			break;
 		case EVerticalAlignment::BOTTOM:
+			// Nothing
 			break;
 		case EVerticalAlignment::STRETCH:
+			location.y = CurrentRenderGeometry.GetLocation().y;
+			size.y = CurrentRenderGeometry.GetAllotedSpace().y;
 			break;
 	}
 
 	OutputGeometry.SetLocation(location);
+	OutputGeometry.SetAllotedSpace(size);
 }
 vec2 PictorumHorizontalBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;
@@ -62,10 +67,10 @@ float PictorumHorizontalBox::CalculateXOffsetForChild(const FRenderGeometry& Cur
 
 	return offset;
 }
-float PictorumHorizontalBox::CalculateChildWidth(const FRenderGeometry& CurrentRenderGeometry,const int32 ChildIndex) const {
+float PictorumHorizontalBox::CalculateChildWidth(const FRenderGeometry& CurrentRenderGeometry, const int32 ChildIndex) const {
 	HorizontalBoxSlot* slot = GetChildSlotAtIndex<HorizontalBoxSlot>(ChildIndex);
-	float desiredX          = Children[ChildIndex]->GetDesiredDrawSpace(CurrentRenderGeometry).x;
-	desiredX                = MathLibrary::Min(desiredX, CurrentRenderGeometry.GetAllotedSpace().x);
+	float desiredX = Children[ChildIndex]->GetDesiredDrawSpace(CurrentRenderGeometry).x;
+	desiredX = MathLibrary::Min(desiredX, CurrentRenderGeometry.GetAllotedSpace().x);
 
 	if (slot->GetFillRule() == EFillRule::AUTOMATIC) {
 		return desiredX;

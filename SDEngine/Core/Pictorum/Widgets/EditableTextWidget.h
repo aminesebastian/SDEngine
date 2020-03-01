@@ -11,7 +11,9 @@ public:
 
 protected:
 	void DrawCursor(const FRenderGeometry& Geometry);
+	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 	virtual void OnKeyDown(SDL_Scancode KeyCode) override;
+	virtual void OnTextInput(const TString& Text) override;
 	virtual void OnRecievedFocus() override;
 	virtual void OnFocusLost() override;
 private:

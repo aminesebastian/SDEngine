@@ -23,7 +23,7 @@ public:
 	virtual void OnKeyDown(SDL_Scancode KeyCode) override;
 	virtual void OnKeyUp(SDL_Scancode KeyCode) override;
 	virtual void OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) override;
-
+	virtual void OnTextInput(const TString& Input) override;
 	virtual void OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) override;
 	virtual void OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) override;
 	virtual void OnMouseAxis(vec2 ScreenPosition, vec2 Delta) override;
@@ -56,5 +56,8 @@ private:
 	void CacheMouseOverWidgets(const Vector2D& MousePosition);
 	void OnWindowResized(Window* WindowIn, const FDisplayState& State);
 	void GetAllInteractableWidgets(SArray<PictorumWidget*>& Widgets, PictorumWidget* Root);
+
+	void SetFocusedWidget(PictorumWidget* Widget);
+	void ClearFocusedWidget();
 };
 

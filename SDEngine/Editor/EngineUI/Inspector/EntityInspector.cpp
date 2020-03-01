@@ -17,8 +17,8 @@ EntityInspector::~EntityInspector() {
 }
 
 void EntityInspector::OnCreated() {
-	AssignNewChildLocal(SolidWidget, root, "DetailsPanelBG")
-		root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
+	AssignNewChildLocal(SolidWidget, root, "DetailsPanelBG");
+	root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	root->SetPadding(8.0f);
 
 	AssignNewToChild(root, PictorumVerticalBox, DetailsPanelListBox, "ControlsContainer")

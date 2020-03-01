@@ -8,6 +8,7 @@ public:
 	virtual void OnKeyDown(SDL_Scancode KeyCode) {}
 	virtual void OnKeyUp(SDL_Scancode KeyCode) {}
 	virtual void OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {}
+	virtual void OnTextInput(const TString& Input) {}
 
 	virtual void OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) {}
 	virtual void OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) {}

@@ -89,21 +89,25 @@ void PictorumRenderer::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {
 		FocusedWidget->KeyHeld(KeyCode, HeldTime);
 	}
 }
+void PictorumRenderer::OnTextInput(const TString& Input) {
+	if (FocusedWidget) {
+		FocusedWidget->OnTextInput(Input);
+	}
+}
 void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Button) {
 	OnMouseDownAnywhereDelegate.Broadcast(ScreenPosition);
 
 	bool focusChanged = false;
-
+	bool isFocusableValid = false;
 	FUserInterfaceEvent eventHandle;
 	for (PictorumWidget* candidate : WidgetsUnderMouse) {
 		if (!focusChanged) {
 			if (candidate->bFocusable) {
-				if (FocusedWidget) {
-					FocusedWidget->FocusLost();
+				if (candidate != FocusedWidget) {
+					SetFocusedWidget(candidate);
+					focusChanged = true;
 				}
-				candidate->RecievedFocus();
-				FocusedWidget = candidate;
-				focusChanged = true;
+				isFocusableValid = true;
 			}
 		}
 
@@ -115,6 +119,10 @@ void PictorumRenderer::OnMouseButtonDown(vec2 ScreenPosition, EMouseButton Butto
 		if (!eventHandle.ShouldContinuePropragating()) {
 			break;
 		}
+	}
+
+	if (!isFocusableValid) {
+		ClearFocusedWidget();
 	}
 }
 void PictorumRenderer::OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button) {
@@ -237,4 +245,15 @@ void PictorumRenderer::OnWindowResized(Window* WindowIn, const FDisplayState& St
 	TopLevelRenderGeometry.SetAllotedSpace(State.GetResolution());
 	TopLevelRenderGeometry.SetLocation(vec2(0.0f, 0.0f));
 	TopLevelRenderGeometry.SetMaximumClipPoint(State.GetResolution());
+}
+void PictorumRenderer::SetFocusedWidget(PictorumWidget* Widget) {
+	ClearFocusedWidget();
+	FocusedWidget = Widget;
+	Widget->RecievedFocus();
+}
+void PictorumRenderer::ClearFocusedWidget() {
+	if(FocusedWidget) {
+		FocusedWidget->FocusLost();
+		FocusedWidget = nullptr;
+	}
 }

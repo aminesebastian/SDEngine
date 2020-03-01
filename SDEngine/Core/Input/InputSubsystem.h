@@ -41,6 +41,9 @@ public:
 	vec2 GetMousePosition();
 	vec2 GetMouseDelta();
 
+	void SetFocusedReciever(IUserInputReciever* Reciever);
+	IUserInputReciever* GetFocusedReciever();
+
 	void SetMouseCursorStyle(const EMouseCursorStyle& Cursor);
 	const EMouseCursorStyle& GetMouseCursorStyle() const;
 	void CaptureMouseCursor();
@@ -51,7 +54,7 @@ public:
 	const bool IsMouseCursorHidden() const;
 private:
 	SArray<IUserInputReciever*> InputRecievers;
-
+	IUserInputReciever* FocusedReciever;
 	SArray<FInputKey*> InputKeyStates;
 	SArray<FInputKey*> MouseButtonStates;
 
@@ -73,6 +76,7 @@ private:
 
 	void ProcessKeyDown(SDL_Scancode KeyCode);
 	void ProcessKeyUp(SDL_Scancode KeyCode);
+	void ProcessTextInput(const TString& Input);
 
 	void ProcessInputHeldEvents(float DeltaTime);
 };

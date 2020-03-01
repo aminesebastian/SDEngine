@@ -33,9 +33,9 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 		BindToGPU();
 	}
 
-	LastFrameScale          = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
-	LastFrameMinBounds      = LastFrameScale * (TextBlockCache->MinPosition) * RenderTargetResolution;
-	LastFrameMaxBounds      = LastFrameScale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
+	LastFrameScale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
+	LastFrameMinBounds = LastFrameScale * (TextBlockCache->MinPosition) * RenderTargetResolution;
+	LastFrameMaxBounds = LastFrameScale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
 	LastFrameRenderPosition = Position + (LastFrameScale * (TextBlockCache->MinPosition));
 
 	Shader* fontShader = EngineStatics::GetFontShader();
@@ -131,13 +131,37 @@ const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vecto
 }
 const Vector2D TextRenderer::GetCursorLocationForCharacterIndex(const int32& Index) {
 	int32 internalIndex = MathLibrary::Clamp(Index, 0, (int32)Text.length());
-	Vector2D vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4)-1)];
+	Vector2D vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) - 1)];
 	if (internalIndex > 0) {
 		vertPos.x += Tracking;
 	}
 	vertPos *= LastFrameScale;
 	vertPos += LastFrameRenderPosition;
-	return vertPos;
+	return (vertPos + 1.0f) / 2.0f;
+}
+const int32 TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution) const {
+	Vector2D mouseLocationAdjusted = MouseLocation / ScreenResolution;
+	mouseLocationAdjusted = (mouseLocationAdjusted - 0.5f) * 2.0f;
+
+	for (int32 i = 0; i < Text.length(); i++) {
+		if (Text[i] == '\n') {
+			continue;
+		}
+		Vector2D bottomLeft = TextBlockCache->Verticies[i * 4];
+		bottomLeft *= LastFrameScale;
+		bottomLeft += LastFrameRenderPosition;
+
+		Vector2D topRight = TextBlockCache->Verticies[(i * 4) + 2];
+		topRight *= LastFrameScale;
+		topRight += LastFrameRenderPosition;
+
+		if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
+			if (mouseLocationAdjusted.y >= bottomLeft.y && mouseLocationAdjusted.y <= topRight.y) {
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.

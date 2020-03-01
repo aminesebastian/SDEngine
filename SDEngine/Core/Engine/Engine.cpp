@@ -65,6 +65,7 @@ void Engine::MainLoop() {
 }
 void Engine::InputLoop() {
 	SDL_Event e;
+	SDL_StartTextInput();
 	while (SDL_PollEvent(&e)) {
 		_InputSubsystem->ProcessInputEvent(e);
 		switch (e.type) {

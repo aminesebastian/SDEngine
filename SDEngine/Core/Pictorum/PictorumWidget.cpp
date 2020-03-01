@@ -192,6 +192,10 @@ void PictorumWidget::KeyHeld(SDL_Scancode KeyCode, float HeldTime) {
 	OnKeyHeldDelegate.Broadcast(this, KeyCode, HeldTime);
 	OnKeyHeld(KeyCode, HeldTime);
 }
+void PictorumWidget::TextInput(const TString& Text) {
+	OnTextInputDelegate.Broadcast(this, Text);
+	OnTextInput(Text);
+}
 void PictorumWidget::AddedToParent(PictorumWidget* ParentIn, IWidgetSlot* Slot) {
 	Parent = ParentIn;
 	ParentSlot = Slot;
@@ -302,5 +306,6 @@ void PictorumWidget::OnMouseScroll(const float Delta, FUserInterfaceEvent& Event
 void PictorumWidget::OnKeyDown(SDL_Scancode KeyCode) {}
 void PictorumWidget::OnKeyUp(SDL_Scancode KeyCode) {}
 void PictorumWidget::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {}
+void PictorumWidget::OnTextInput(const TString& Text) {}
 void PictorumWidget::OnRecievedFocus() {}
 void PictorumWidget::OnFocusLost() {}

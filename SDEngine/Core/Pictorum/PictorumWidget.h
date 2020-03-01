@@ -81,6 +81,8 @@ public:
 	const float GetRenderRotation() const;
 	const float GetRotation() const;
 	const float GetParentRotation() const;
+	const bool& IsHovered() const;
+	const bool& WasClickedInside() const;
 
 	Event<void(PictorumWidget*, const vec2&, const EMouseButton&, FUserInterfaceEvent&)> OnMouseDownDelegate;
 	Event<void(PictorumWidget*, const vec2&, const EMouseButton&, FUserInterfaceEvent&)> OnMouseUpDelegate;
@@ -94,6 +96,7 @@ public:
 	Event<void(PictorumWidget*, SDL_Scancode)> OnKeyDownDelegate;
 	Event<void(PictorumWidget*, SDL_Scancode)> OnKeyUpDelegate;
 	Event<void(PictorumWidget*, SDL_Scancode, float)> OnKeyHeldDelegate;
+	Event<void(PictorumWidget*, const TString&)> OnTextInputDelegate;
 protected:
 	/** All the children of this widget. To get the slot for a particular child, you must find that child and then query it for the slot. */
 	SArray<PictorumWidget*> Children;
@@ -170,6 +173,7 @@ protected:
 	virtual void OnKeyDown(SDL_Scancode KeyCode);
 	virtual void OnKeyUp(SDL_Scancode KeyCode);
 	virtual void OnKeyHeld(SDL_Scancode KeyCode, float HeldTime);
+	virtual void OnTextInput(const TString& Text);
 
 	virtual void OnRecievedFocus();
 	virtual void OnFocusLost();
@@ -177,8 +181,6 @@ protected:
 	void DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
 
-	const bool& IsHovered() const;
-	const bool& WasClickedInside() const;
 	const PictorumRenderer* GetOwningRenderer() const;
 private:
 	friend class PictorumRenderer;
@@ -199,6 +201,7 @@ private:
 	void KeyDown(SDL_Scancode KeyCode);
 	void KeyUp(SDL_Scancode KeyCode);
 	void KeyHeld(SDL_Scancode KeyCode, float HeldTime);
+	void TextInput(const TString& Text);
 	void RecievedFocus();
 	void FocusLost();
 };

@@ -8,7 +8,7 @@ public:
 	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
 	void SetControlledValue(float* ValuePointer, uint8 Count);
-
+	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 private:
 	PictorumHorizontalBox* Container;
 
@@ -20,6 +20,7 @@ private:
 	int32 MouseDownEntry;
 
 	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn);
+	void ValueMouseMove(PictorumWidget* Widget, const Vector2D& MouseLocation, const Vector2D& Delta, FUserInterfaceEvent& EventIn);
 	void ValueHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
 	void ValueUnhovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn);
 	void MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta);

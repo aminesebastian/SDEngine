@@ -151,6 +151,9 @@ private:
 	FTextLine* GetCurrentLine() const {
 		return Lines[UsedLines];
 	}
+	const int32 GetLineCount() {
+		return UsedLines+1;
+	}
 	void GetChangedIndices(int32& FirstChanged, int32& LastChanged) const {
 		FirstChanged = FirstChangedIndex;
 		LastChanged = LastChangedIndex;
@@ -253,7 +256,7 @@ private:
 
 			// Offset the cursor to the next line.
 			CurrentYPosition -= Leading;
-			CurrentYPosition -= line->MaxYBaselineOffset;
+			//CurrentYPosition -= line->MaxYBaselineOffset;
 
 			// Increment state keeping values.
 			CurrentIndex                += (maxIndex + 1);
@@ -448,7 +451,31 @@ public:
 	 * @returns	Null if it fails, else the internal data structure.
 	 */
 	const FTextBlock* GetInternalDataStructure() const;
+	/**
+	 * Gets the relative cursor location for character index.
+	 *
+	 * @param 	Index	Zero-based index of the.
+	 *
+	 * @returns	The relative cursor location for character index.
+	 */
 	const Vector2D GetCursorLocationForCharacterIndex(const int32& Index);
+	/**
+	 * Gets character index at mouse location
+	 *
+	 * @param 	MouseLocation   	The mouse location in absolute coordinates.
+	 * @param 	ScreenResolution	The screen resolution.
+	 *
+	 * @returns	The character index at mouse location, -1 if mouse it outside string.
+	 */
+	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution) const;
+	/**
+	 * Gets text bounding box dimensions
+	 *
+	 * @param [in,out]	MinBounds	The minimum bounds.
+	 * @param [in,out]	MaxBounds	The maximum bounds.
+	 *
+	 * @returns	The text bounding box dimensions.
+	 */
 	const void GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const;
 protected:
 	virtual void BindToGPU();

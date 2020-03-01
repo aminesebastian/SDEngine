@@ -92,12 +92,6 @@ bool InputSubsystem::DeregisterInputReciever(IUserInputReciever* Reciever) {
 }
 
 void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
-	//ImGuiIO& io = ImGui::GetIO();
-	//if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-	//	ImGui_ImplSDL2_ProcessEvent(&Event);
-	//	return;
-	//}
-
 	switch (Event.type) {
 		case SDL_KEYDOWN:
 			ProcessKeyDown(Event.key.keysym.scancode);
@@ -121,6 +115,9 @@ void InputSubsystem::ProcessInputEvent(SDL_Event Event) {
 			break;
 		case SDL_MOUSEWHEEL:
 			ProcessMouseScroll((float)Event.wheel.y);
+			break;
+		case SDL_TEXTINPUT:
+			ProcessTextInput(Event.text.text);
 			break;
 		default:
 			break;
@@ -164,6 +161,11 @@ void InputSubsystem::ProcessKeyUp(SDL_Scancode KeyCode) {
 	}
 	InputKeyStates[KeyCode]->HeldTime = 0.0f;
 }
+void InputSubsystem::ProcessTextInput(const TString& Input) {
+	for (IUserInputReciever* reciever : InputRecievers) {
+		reciever->OnTextInput(Input);
+	}
+}
 void InputSubsystem::ProcessInputHeldEvents(float DeltaTime) {
 	for (int i = 0; i < InputKeyStates.Count(); i++) {
 		FInputKey* key = InputKeyStates[i];
@@ -177,4 +179,13 @@ void InputSubsystem::ProcessInputHeldEvents(float DeltaTime) {
 	for (FInputKey* mouseKey : MouseButtonStates) {
 		mouseKey->HeldTime += DeltaTime;
 	}
+}
+void InputSubsystem::SetFocusedReciever(IUserInputReciever* Reciever) {
+	FocusedReciever = Reciever;
+}
+IUserInputReciever* InputSubsystem::GetFocusedReciever() {
+	if (!FocusedReciever) {
+		FocusedReciever = InputRecievers[0];
+	}
+	return FocusedReciever;
 }

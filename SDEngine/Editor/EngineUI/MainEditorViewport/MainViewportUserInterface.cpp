@@ -39,10 +39,10 @@ void MainViewportUserInterface::OnCreated() {
 	middleSlot->RowSpan = 2;
 
 	WorldOutliner = new WorldOutlinerWidget("WorldOutliner");
-	PictorumGridSlot* scrollSlot = grid->AddChild(WorldOutliner);
-	scrollSlot->Column = 2;
-	scrollSlot->Row = 0;
-	scrollSlot->RowSpan = 1;
+	//PictorumGridSlot* scrollSlot = grid->AddChild(WorldOutliner);
+	//scrollSlot->Column = 2;
+	//scrollSlot->Row = 0;
+	//scrollSlot->RowSpan = 1;
 
 	DetailsPanel = new EntityInspector("DetailsPanel");
 	PictorumGridSlot* rightSlot = grid->AddChild(DetailsPanel);
@@ -53,7 +53,10 @@ void MainViewportUserInterface::OnCreated() {
 	WorldOutliner->SelectedEntitiesUpdatedDelegate.Add<MainViewportUserInterface, & MainViewportUserInterface::OnSelectedEntitesChanged>(this);
 }
 void MainViewportUserInterface::OnWorldUpdated(World* WorldIn) {
-	WorldOutliner->SetWorld(WorldIn);
+	//WorldOutliner->SetWorld(WorldIn);
+	if (WorldIn->GetSelectedEntity()) {
+		DetailsPanel->SetSelectedEntity(WorldIn->GetSelectedEntity());
+	}
 }
 void MainViewportUserInterface::OnSelectedEntitesChanged(const SArray<Entity*>& SelectedEntities) {
 	DetailsPanel->SetSelectedEntity(SelectedEntities[0]);

@@ -64,19 +64,25 @@ public:
 		b = 0.0f;
 		a = 1.0f;
 	}
-	FColor(Vector4D Color) {
+	FColor(const Vector4D& Color) {
 		r = Color.x;
 		g = Color.y;
 		b = Color.z;
 		a = Color.w;
 	}
-	FColor(float R, float G, float B, float A = 1.0f) {
+	FColor(const float& R, const float& G, const float& B, const float& A = 1.0f) {
 		r = R;
 		g = G;
 		b = B;
 		a = A;
 	}
-	FColor(Vector3D Color) {
+	FColor(const float& Brightness) {
+		r = Brightness;
+		g = Brightness;
+		b = Brightness;
+		a = 1.0f;
+	}
+	FColor(const Vector3D& Color) {
 		r = Color.x;
 		g = Color.y;
 		b = Color.z;

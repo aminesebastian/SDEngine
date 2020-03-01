@@ -24,7 +24,9 @@ VectorInspectorWidget::~VectorInspectorWidget() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
 }
-
+void VectorInspectorWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
+	int x = 6;
+}
 void VectorInspectorWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::MouseMoveAnywhere>(this);
@@ -44,36 +46,41 @@ void VectorInspectorWidget::AddEntry(float* InitialValue, const int32& Index) {
 	Values.Add(InitialValue);
 	if (Index > 0) {
 		SeparatorWidget* separator = new SeparatorWidget("Entry" + to_string(Index) + "Separator");
-		separator->SetSize(10.0f, 0.0f);
+		separator->SetSize(5.0f, 0.0f);
 		Container->AddChild(separator);
 	}
+	float padding = 20.0f;
+
+	AssignNewToChildLocal(Container, PictorumHorizontalBox, hBox, "ValueContainer"+to_string(Index));
+	hBox->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 
 	TextWidget* label = new TextWidget("Entry" + to_string(Index) + "Label");
 	label->SetText("X");
-	label->SetFontSize(11);
+	label->SetFontSize(10);
 
 	SolidWidget* labelBg = new SolidWidget("Entry" + to_string(Index) + "LabelBG");
 	labelBg->SetBackgroundColor(Colors[Index]);
-	labelBg->SetPadding(2.0f);
+	labelBg->SetPadding(padding);
 	labelBg->AddChild(label);
 	labelBg->SetBorderRadius(5.0f, 0.0f, 5.0f, 0.0f);
 
 	EditableTextWidget* value = new EditableTextWidget("Entry" + to_string(Index) + "Value");
 	value->SetText(StringUtilities::ToStringWithPrecision(*InitialValue, 2));
-	value->SetFontSize(11);
+	value->SetFontSize(9);
 	value->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
+	value->OnMouseMoveDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseMove>(this);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
 	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueHovered>(this);
 	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueUnhovered>(this);
 	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
-	valueBg->SetPadding(2.0f);
+	valueBg->SetPadding(padding);
 	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
 	valueBg->SetVisibility(EPictorumVisibilityState::VISIBLE);
 	valueBg->AddChild(value);
 
-	Container->AddChild(labelBg);
-	Container->AddChild(valueBg);
+	hBox->AddChild(labelBg)->SetVerticalAlignment(EVerticalAlignment::STRETCH);
+	hBox->AddChild(valueBg)->SetVerticalAlignment(EVerticalAlignment::STRETCH).SetFillAvilableSpace(1.0f);
 
 	ValueBackgroundWidgets.Add(valueBg);
 	ValueWidgets.Add(value);
@@ -82,9 +89,13 @@ void VectorInspectorWidget::ValueMouseDown(PictorumWidget* Widget, const vec2& M
 	for (int i = 0; i < ValueBackgroundWidgets.Count(); i++) {
 		if (ValueWidgets[i] == Widget) {
 			MouseDownEntry = i;
-			EventIn.CaptureMouse();
 			break;
 		}
+	}
+}
+void VectorInspectorWidget::ValueMouseMove(PictorumWidget* Widget, const Vector2D& MouseLocation, const Vector2D& Delta, FUserInterfaceEvent& EventIn) {
+	if (Widget->WasClickedInside()) {
+		EventIn.CaptureMouse();
 	}
 }
 void VectorInspectorWidget::ValueHovered(PictorumWidget* Widget, const vec2& MouseLocation, FUserInterfaceEvent& EventIn) {

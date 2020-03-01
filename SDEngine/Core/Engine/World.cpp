@@ -26,6 +26,9 @@ void World::UpdateFrameTime(const float& DeltaTime) {
 	LastFrameTime = DeltaTime;
 }
 void World::RegisterActor(Actor* ActorToRegister) {
+	if (!SelectedEntity) {
+		SelectedEntity = ActorToRegister;
+	}
 	ActorList.Add(ActorToRegister);
 	if (IsA<Light>(ActorToRegister)) {
 		LightList.Add(Cast<Light>(ActorToRegister));
