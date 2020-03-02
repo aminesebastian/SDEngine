@@ -67,6 +67,7 @@ struct TypeDescriptor_SArray : public TypeDescriptor {
 struct FProperty {
 	const char* Name;
 	const char* InspectorName;
+	const char* Category;
 	size_t Offset;
 	TypeDescriptor* Type;
 	bool bInspectorHidden;

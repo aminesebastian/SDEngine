@@ -2,7 +2,8 @@
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Pictorum/Pictorum.h"
 #include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Core/Pictorum/Widgets/VectorInspectorWidget.h"
+#include "Editor/UserInterface/Inspector/TypeInspectors/VectorInspectorWidget.h"
+#include "Editor/UserInterface/Inspector/TypeInspectors/FloatInspectorWidget.h"
 #include "Core/Pictorum/Widgets/CheckboxWidget.h"
 #include "Core/Pictorum/Pictorum.h"
 #include "Core/Reflection/ReflectionHelpers.h"
@@ -86,7 +87,19 @@ void InspectorPanelBuilder::AddControlForPropertyInternal(const TString& Name, b
 
 	AssignNewToChildLocal(hBox, CheckboxWidget, checkbox, "CheckboxWidget");
 	checkbox->Bind(Property);
-	checkbox->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
+}
+template<>
+void InspectorPanelBuilder::AddControlForPropertyInternal(const TString& Name, float* Property) {
+	AssignNewToChildLocal(Parent, PictorumHorizontalBox, hBox, "PropertyHBox");
+	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
+	label->SetText(Name);
+	label->SetFontSize(10);
+	label->SetFontWeight(EFontWeight::Bold);
+	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
+
+	AssignNewToChildLocal(hBox, FloatInspectorWidget, floatInspector, "FloatWidget");
+	floatInspector->SetTarget(Property, Target);
+	floatInspector->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 }
 void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
 	if (AddedPropertyCount > 0) {
@@ -104,6 +117,8 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
 		AddControlForPropertyInternal(Property.InspectorName, ReflectionHelpers::GetProperty<Transform>(Property, Target));
 	} else if (typeName == "bool") {
 		AddControlForPropertyInternal(Property.InspectorName, ReflectionHelpers::GetProperty<bool>(Property, Target));
+	} else if (typeName == "float") {
+		AddControlForPropertyInternal(Property.InspectorName, ReflectionHelpers::GetProperty<float>(Property, Target));
 	}
 	AddedPropertyCount++;
 }

@@ -20,7 +20,4 @@ private:
 	PictorumVerticalBox* Parent;
 	EngineObject* Target;
 	int32 AddedPropertyCount;
-
-	template<typename T>
-	void AddControlForPropertyInternal(const TString& Name, T* Property);
 };

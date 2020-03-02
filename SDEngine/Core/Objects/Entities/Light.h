@@ -10,19 +10,6 @@ enum ELightType {
 	POINT,
 	DIRECTIONAL
 };
-SD_STRUCT()
-struct FLightInfo {
-	SD_STRUCT_BODY();
-
-	SD_PROPERTY()
-		float Intensity;
-	SD_PROPERTY()
-		Vector3D Color;
-	SD_PROPERTY()
-		float Attenuation;
-	ELightType Type = POINT;
-};
-
 class DefferedCompositor;
 
 using namespace glm;
@@ -34,7 +21,6 @@ public:
 	Light(const TString& Name, const Transform& IntialTransform, const ELightType& Type = POINT, const float& Intensity = 20, const FColor & Color = FColor(1.0f, 1.0f, 1.0f), const float& Attenuation = 25, const bool& CastShadows = false);
 	~Light();
 
-	FLightInfo& GetLightInfo();
 	void SetLightColor(const Vector3D& Color);
 	void SetLightIntensity(const float& Intensity);
 	void SendShaderInformation(Shader* shader, const uint8& index);
@@ -44,12 +30,14 @@ public:
 	Matrix4 GetLightOrthogonalMatrix();
 	void BlurTexture(RenderTarget* ReadBuffer, RenderTarget* WriteBuffer);
 
-	SD_PROPERTY();
-	int32 testVal = 30;
 protected:
-	SD_PROPERTY();
-	FLightInfo LightInfo;
-
+	SD_PROPERTY(Category="Light")
+		float Intensity;
+	SD_PROPERTY(Category="Light")
+		float Attenuation;
+	SD_PROPERTY(Category="Light")
+		Vector3D Color;
+	ELightType Type;
 private:
 	Matrix4 OrthographicMatrix;
 	Matrix4 ViewMatrix;

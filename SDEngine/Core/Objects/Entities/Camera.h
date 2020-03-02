@@ -27,10 +27,12 @@ public:
 	float GetFOV() const;
 	float GetAspect() const;
 	Vector2D GetRenderTargetDimensions() const;
-
+	void OnPropertyUpdated(FProperty* Property);
 protected:
 	SD_PROPERTY();
 	float FieldOfView;
+
+	void UpdateMatricies();
 private:
 	Matrix4 ProjectionMatrix;
 	Matrix4 OrthographicMatrix;

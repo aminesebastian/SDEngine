@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 
 namespace SuburbanDigitalEnginePreprocessor {
     class FileProcessor {
@@ -20,7 +20,7 @@ namespace SuburbanDigitalEnginePreprocessor {
             List<string> lines = ParseFileIntoLines();
             List<Tuple<EToken, string, string>> tokens = TokenizeFile(lines);
             CreateObjects(tokens);
-            if(tokens.Count > 0) {
+            if (tokens.Count > 0) {
                 return true;
             }
             return false;
@@ -34,7 +34,7 @@ namespace SuburbanDigitalEnginePreprocessor {
                 foreach (string parentClass in encapsulator.ParentClasses) {
                     ResolveParentsWorker(parentClass, propertiesToAdd);
                 }
-                foreach(FProperty prop in propertiesToAdd) {
+                foreach (FProperty prop in propertiesToAdd) {
                     encapsulator.AddProperty(prop);
                 }
             }
@@ -55,7 +55,7 @@ namespace SuburbanDigitalEnginePreprocessor {
             foreach (Tuple<EToken, string, string> token in Tokens) {
                 switch (token.Item1) {
                     case EToken.ClassDeclaration:
-                        if(current != null) {
+                        if (current != null) {
                             Globals.ReflectedObjects.Add(current.Name, current.GetCopy());
                             Objects.Add(current.Name, current);
                         }
@@ -73,7 +73,7 @@ namespace SuburbanDigitalEnginePreprocessor {
                         break;
                     case EToken.PropertyDeclaration:
                         string[] split = token.Item3.Split(' ');
-                        if(split[0].Trim() == "const") {
+                        if (split[0].Trim() == "const") {
                             current.AddProperty(new FProperty(split[2], token.Item2)); // const int32 variableName = 10;
                         } else {
                             current.AddProperty(new FProperty(split[1], token.Item2)); // int32 variableName = 10;
@@ -140,17 +140,17 @@ namespace SuburbanDigitalEnginePreprocessor {
                     fileContents.Add($"//Reflection for class {enc.Name}");
                     fileContents.Add($"REFLECT_CLASS_BEGIN({enc.Name})");
                     fileContents.Add($"REFLECT_CLASS_BEGIN_PARENTS()");
-                    foreach(string parent in enc.ParentClasses) {
+                    foreach (string parent in enc.ParentClasses) {
                         fileContents.Add($"REFLECT_CLASS_PARENT({parent})");
                     }
                     fileContents.Add($"REFLECT_CLASS_PARENT_END()");
                     fileContents.Add($"REFLECT_CLASS_MEMBERS_BEGIN()");
-                    foreach (FProperty property in enc.Properties.Values) {
+                    foreach (FProperty property in enc.Properties.Values.OrderBy(i => i.GetCategory())) {
                         fileContents.Add($"REFLECT_CLASS_MEMBER({property.GetMacroInternals()})");
                     }
                     fileContents.Add($"REFLECT_CLASS_MEMBERS_END()");
                     fileContents.Add($"REFLECT_CLASS_END()");
-                } else if(enc.Type == EReflectionTarget.STRUCT) {
+                } else if (enc.Type == EReflectionTarget.STRUCT) {
                     fileContents.Add($"//Reflection for struct {enc.Name}");
                     fileContents.Add($"REFLECT_STRUCT_BEGIN({enc.Name})");
                     fileContents.Add($"REFLECT_STRUCT_BEGIN_PARENTS()");
@@ -159,7 +159,7 @@ namespace SuburbanDigitalEnginePreprocessor {
                     }
                     fileContents.Add($"REFLECT_STRUCT_PARENT_END()");
                     fileContents.Add($"REFLECT_STRUCT_MEMBERS_BEGIN()");
-                    foreach (FProperty property in enc.Properties.Values) {
+                    foreach (FProperty property in enc.Properties.Values.OrderBy(i => i.GetCategory())) {
                         fileContents.Add($"REFLECT_STRUCT_MEMBER({property.GetMacroInternals()})");
                     }
                     fileContents.Add($"REFLECT_STRUCT_MEMBERS_END()");

@@ -44,6 +44,7 @@ void PictorumHorizontalBox::CalculateChildRenderGeometry(const FRenderGeometry& 
 			break;
 	}
 
+
 	OutputGeometry.SetLocation(location);
 	OutputGeometry.SetAllotedSpace(size);
 }

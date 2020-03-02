@@ -8,10 +8,9 @@ FarClipPlane(FarClip),
 FieldOfView(FOV),
 CachedAspectRatio(Dimensions.x / Dimensions.y) {
 	SetTransform(CurrentTransform);
-	OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClip, FarClip);
-	ProjectionMatrix = perspective(FOV, CachedAspectRatio, NearClip, FarClip);
 	UpVector = Vector3D(0, 0, 1);
 	RenderTargetDimensions = Dimensions;
+	UpdateMatricies();
 }
 Camera::~Camera() {}
 
@@ -24,9 +23,8 @@ const float&  Camera::GetFarClipPlane() const {
 
 void Camera::SetRenderTargetDimensions(const Vector2D& Dimensions) {
 	CachedAspectRatio = Dimensions.x / Dimensions.y;
-	OrthographicMatrix = ortho(0.0f, Dimensions.x, Dimensions.y, 0.0f, NearClipPlane, FarClipPlane);
-	ProjectionMatrix = perspective(FieldOfView, CachedAspectRatio, NearClipPlane, FarClipPlane);
 	RenderTargetDimensions = Dimensions;
+	UpdateMatricies();
 }
 vec2 Camera::GetRenderTargetDimensions() const {
 	return RenderTargetDimensions;
@@ -64,4 +62,13 @@ void Camera::AddOrbit(const float& Y, const float& Z) {
 		SetRotation(GetTransform().GetRotation().x, radians<float>(89.999f), GetTransform().GetRotation().z);
 	}
 	AddRotation(0.0f, 0.0f, Z);
+}
+void Camera::UpdateMatricies() {
+	OrthographicMatrix = ortho(0.0f, RenderTargetDimensions.x, RenderTargetDimensions.y, 0.0f, NearClipPlane, FarClipPlane);
+	ProjectionMatrix = perspective(glm::radians(FieldOfView), CachedAspectRatio, NearClipPlane, FarClipPlane);
+}
+void Camera::OnPropertyUpdated(FProperty* Property) {
+	if (Property->Name == "FieldOfView") {
+		UpdateMatricies();
+	}
 }

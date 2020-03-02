@@ -8,7 +8,7 @@
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
-#include "Editor/EngineUI/EngineUIStyle.h"
+#include "Editor/UserInterface/EngineUIStyle.h"
 
 VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : PictorumWidget(Name) {
 	Colors.Add(FColor(0.7f, 0.0f, 0.0f));

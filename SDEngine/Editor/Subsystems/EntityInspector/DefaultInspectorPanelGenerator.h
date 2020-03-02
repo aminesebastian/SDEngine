@@ -1,6 +1,6 @@
 #pragma once
-#include "Editor/EngineUI/Inspector/InspectorPanelGenerator.h"
-#include "Editor/EngineUI/Inspector/InspectorPanelBuilder.h"
+#include "Editor/Subsystems/EntityInspector/InspectorPanelGenerator.h"
+#include "Editor/Subsystems/EntityInspector/InspectorPanelBuilder.h"
 #include "Core/Reflection/Reflection.h"
 
 class DefaultInspectorPanelGenerator : public IInspectorPanelGenerator{

@@ -10,6 +10,8 @@
 #include "Core/Objects/CoreTypes/StaticMesh.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Objects/Entities/Entity.h"
+#include "Core/Objects/IEngineModule.h"
+#include "Editor/EditorModule.h"
 
 #undef main
 using namespace glm;
@@ -38,6 +40,9 @@ int main(int argc, char* argv[]) {
 	if (!S_Engine->Initialize()) {
 		return 0;
 	}
+
+	EditorModule* editorModule = new EditorModule();
+	editorModule->Startup();
 
 	SD_ENGINE_INFO("Engine Launched!");
 

@@ -9,20 +9,20 @@
 #include "Light.reflected.h"
 
 
-Light::Light(const TString& Name, const Transform& IntialTransform, const ELightType& Type, const float& Intensity, const FColor& Color, const float& Attenuation, const bool& CastShadows) : Actor(Name) {
+Light::Light(const TString& Name, const Transform& IntialTransform, const ELightType& TypeIn, const float& IntensityIn, const FColor& ColorIn, const float& AttenuationIn, const bool& CastShadows) : Actor(Name) {
 	SetTransform(IntialTransform);
 	SetCastShadows(CastShadows);
 
-	LightInfo.Type = Type;
-	LightInfo.Intensity = Intensity;
-	LightInfo.Color = Color;
-	LightInfo.Attenuation = Attenuation;
+	Type = TypeIn;
+	Intensity = IntensityIn;
+	Color = ColorIn;
+	Attenuation = AttenuationIn;
 
 	RegisterComponent(new BillboardComponent("PointLightSprite", Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), Color));
 
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 
-	if (LightInfo.Type == DIRECTIONAL) {
+	if (Type == DIRECTIONAL) {
 		OrthographicMatrix = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -40.0f, 40.0f);
 
 		PrimaryShadowBuffer = new RenderTarget(vec2(2048, 2048));
@@ -38,27 +38,24 @@ Light::Light(const TString& Name, const Transform& IntialTransform, const ELight
 }
 Light::~Light() {}
 
-FLightInfo& Light::GetLightInfo() {
-	return LightInfo;
+void Light::SetLightColor(const Vector3D& ColorIn) {
+	Color = ColorIn;
 }
-void Light::SetLightColor(const Vector3D& Color) {
-	LightInfo.Color = Color;
-}
-void Light::SetLightIntensity(const float& Intensity) {
-	LightInfo.Intensity = Intensity;
+void Light::SetLightIntensity(const float& IntensityIn) {
+	Intensity = IntensityIn;
 }
 
 void Light::SendShaderInformation(Shader* shader, const uint8& index) {
-	shader->SetShaderInteger("lights[" + std::to_string(index) + "].Type", GetLightInfo().Type);
-	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Intensity", GetLightInfo().Intensity);
-	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Attenuation", GetLightInfo().Attenuation);
-	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Color", GetLightInfo().Color);
+	shader->SetShaderInteger("lights[" + std::to_string(index) + "].Type", Type);
+	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Intensity", Intensity);
+	shader->SetShaderFloat("lights[" + std::to_string(index) + "].Attenuation", Attenuation);
+	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Color", Color);
 	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Position", GetTransform().GetLocation());
 	shader->SetShaderVector3("lights[" + std::to_string(index) + "].Direction", GetTransform().GetForwardVector());
 	shader->SetShaderInteger("lights[" + std::to_string(index) + "].CastsShadow", CastsShadows());
 	shader->SetShaderMatrix4("lights[" + std::to_string(index) + "].VPMatrix", GetLightOrthogonalMatrix() * GetLightViewMatrix());
 
-	if (LightInfo.Type == DIRECTIONAL && CastsShadows()) {
+	if (Type == DIRECTIONAL && CastsShadows()) {
 		glActiveTexture(GL_TEXTURE0 + 9);
 		glBindTexture(GL_TEXTURE_2D, PrimaryShadowBuffer->GetTexture(0));
 		glUniform1i(glGetUniformLocation(shader->GetProgram(), PrimaryShadowBuffer->GetTextureName(0).c_str()), 9);

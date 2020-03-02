@@ -233,12 +233,14 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\CheckboxWidget.cpp" />
     <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp" />
-    <ClCompile Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.cpp" />
-    <ClCompile Include="Editor\EngineUI\Inspector\InspectorPanelBuilder.cpp" />
+    <ClCompile Include="Editor\EditorModule.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\DefaultInspectorPanelGenerator.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.cpp" />
     <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
@@ -285,20 +287,21 @@
     <ClCompile Include="Core\Engine\Window.cpp" />
     <ClCompile Include="Core\Rendering\Utilities\Downsampler.cpp" />
     <ClCompile Include="Core\Engine\EngineStatics.cpp" />
-    <ClCompile Include="Editor\EngineUI\TitleBar.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\TitleBar.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
     <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp" />
     <ClCompile Include="Core\Engine\Delegates\Event.cpp" />
-    <ClCompile Include="Editor\EngineUI\EngineWindowUserInterface.cpp" />
+    <ClCompile Include="Editor\UserInterface\EngineWindowUserInterface.cpp" />
     <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp" />
     <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp" />
-    <ClCompile Include="Editor\EngineUI\FrameStatisticsWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\FrameStatisticsWidget.cpp" />
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp" />
     <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp" />
-    <ClCompile Include="Editor\EngineUI\Inspector\EntityInspector.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\EntityInspectorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp" />
-    <ClCompile Include="Core\Pictorum\Widgets\VectorInspectorWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp" />
@@ -309,6 +312,7 @@
     <ClCompile Include="Core\Rendering\GBuffer.cpp" />
     <ClCompile Include="Core\Objects\Entities\Actors\Grid.cpp" />
     <ClCompile Include="Core\Objects\Entities\Light.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\Engine\Engine.cpp" />
     <ClCompile Include="Core\Objects\CoreTypes\Material.cpp" />
@@ -327,13 +331,15 @@
     <ClCompile Include="Core\Utilities\Math\Transform.cpp" />
     <ClCompile Include="Core\Engine\World.cpp" />
     <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp" />
-    <ClCompile Include="Editor\EngineUI\WorldOutliner\WorldOutlinerWidget.cpp" />
-    <ClCompile Include="Editor\EngineUI\MainEditorViewport\MainViewportUserInterface.cpp" />
-    <ClCompile Include="Editor\EngineUI\WorldOutliner\WorldOutlinerEntry.cpp" />
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.cpp" />
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.cpp" />
     <ClCompile Include="Core\Reflection\ReflectionHelpers.cpp" />
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
+    <ClInclude Include="Core\Objects\IEngineModule.h" />
     <ClInclude Include="Core\Pictorum\Widgets\CheckboxWidget.h" />
     <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
     <ClInclude Include="Core\Engine\WindowDataTypes.h" />
@@ -341,9 +347,10 @@
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
     <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
-    <ClInclude Include="Editor\EngineUI\Inspector\DefaultInspectorPanelGenerator.h" />
-    <ClInclude Include="Editor\EngineUI\EngineUIStyle.h" />
-    <ClInclude Include="Editor\EngineUI\Inspector\InspectorPanelBuilder.h" />
+    <ClInclude Include="Editor\EditorModule.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\DefaultInspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\UserInterface\EngineUIStyle.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.h" />
     <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
@@ -400,27 +407,29 @@
     <ClInclude Include="Core\Rendering\Utilities\Downsampler.h" />
     <ClInclude Include="Core\Engine\Engine.h" />
     <ClInclude Include="Core\Engine\EngineStatics.h" />
-    <ClInclude Include="Editor\EngineUI\TitleBar.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\TitleBar.h" />
     <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
     <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
     <ClInclude Include="Core\Engine\Delegates\Event.h" />
-    <ClInclude Include="Editor\EngineUI\EngineWindowUserInterface.h" />
+    <ClInclude Include="Editor\UserInterface\EngineWindowUserInterface.h" />
     <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
     <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
     <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
-    <ClInclude Include="Editor\EngineUI\FrameStatisticsWidget.h" />
+    <ClInclude Include="Editor\UserInterface\FrameStatisticsWidget.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
     <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
-    <ClInclude Include="Editor\EngineUI\Inspector\EntityInspector.h" />
-    <ClInclude Include="Core\Pictorum\Widgets\VectorInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\EntityInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
     <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
     <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
-    <ClInclude Include="Editor\EngineUI\MainEditorViewport\MainViewportUserInterface.h" />
+    <ClInclude Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.h" />
     <ClInclude Include="Core\Reflection\Reflection.h" />
     <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
-    <ClInclude Include="Editor\EngineUI\Inspector\InspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />
@@ -445,8 +454,8 @@
     <ClInclude Include="Core\Utilities\Math\Transform.h" />
     <ClInclude Include="Core\Engine\World.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
-    <ClInclude Include="Editor\EngineUI\WorldOutliner\WorldOutlinerWidget.h" />
-    <ClInclude Include="Editor\EngineUI\WorldOutliner\WorldOutlinerEntry.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.h" />
     <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
     <ClInclude Include="Test\ReflectionTest.h" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include "EngineWindowUserInterface.h"
 #include "Core/Pictorum/Containers/PictorumCanvas.h"
-#include "Editor/EngineUI/TitleBar.h"
+#include "Editor/UserInterface/TitleBar.h"
 
 EngineWindowUserInterface::EngineWindowUserInterface(const TString& Name) : PictorumWidget(Name) {
 	MainContainer   = nullptr;

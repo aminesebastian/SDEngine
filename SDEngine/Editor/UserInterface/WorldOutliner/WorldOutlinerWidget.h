@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
-#include "Editor/EngineUI/WorldOutliner/WorldOutlinerEntry.h"
+#include "Editor/UserInterface/WorldOutliner/WorldOutlinerEntry.h"
 #include "Core/Engine/World.h"
 
 class PictorumScrollBox;

@@ -25,7 +25,12 @@ public:
 	 * This method is overwritten through the reflection system.
 	 */
 	virtual const TypeDescriptor_Class* StaticDescriptor() const;
-
+	/**
+	 * Executes the property updated action when a property has been updated in the editor.
+	 *
+	 * @param [in,out]	Property	If non-null, the property.
+	 */
+	void OnPropertyUpdated(FProperty* Property);
 protected:
 	SD_PROPERTY(InspectorHidden)
 		const TString EngineObjectType;

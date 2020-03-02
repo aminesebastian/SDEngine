@@ -3,7 +3,7 @@
 #include "Core/Engine/World.h"
 #include "Core/Input/InputSubsystem.h"
 #include "Core/Objects/Entities/Camera.h"
-#include "Editor/EngineUI/MainEditorViewport/MainViewportUserInterface.h"
+#include "Editor/UserInterface/MainEditorViewport/MainViewportUserInterface.h"
 #include "GLM/glm.hpp"
 
 MainEditorWindow::MainEditorWindow(const vec2& Size) : EditorWindow("MainEditorViewport", Size) {
@@ -16,7 +16,7 @@ MainEditorWindow::MainEditorWindow(const vec2& Size) : EditorWindow("MainEditorV
 	Transform cameraTransform;
 	cameraTransform.SetRotation(0, glm::radians(50.0f), glm::radians(-180.0f));
 	cameraTransform.AddLocation(vec3(35.0f, 0.0f, 35.0f));
-	_Camera = new Camera("MainEditorWindowCamera", cameraTransform, radians(50.0f), GetDimensions(), 0.01f, 100000.0f);
+	_Camera = new Camera("MainEditorWindowCamera", cameraTransform, 50.0f, GetDimensions(), 0.01f, 100000.0f);
 
 	_World->RegisterActor(_Camera);
 }

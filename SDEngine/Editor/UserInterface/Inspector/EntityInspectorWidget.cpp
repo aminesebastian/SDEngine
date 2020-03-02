@@ -1,12 +1,13 @@
-#include "EntityInspector.h"
+#include "EntityInspectorWidget.h"
 #include "Core/Engine/Window.h"
 #include "Core/Reflection/ReflectionHelpers.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/StringUtilities.h"
-#include "Editor/EngineUI/EngineUIStyle.h"
-#include "Editor/EngineUI/Inspector/DefaultInspectorPanelGenerator.h"
-#include "Core/Pictorum/Widgets/VectorInspectorWidget.h"
+#include "Editor/Subsystems/EntityInspector/DefaultInspectorPanelGenerator.h"
+#include "Editor/Subsystems/EntityInspector/InspectorPanelManager.h"
+#include "Editor/UserInterface/EngineUIStyle.h"
+#include "Editor/UserInterface/Inspector/TypeInspectors/VectorInspectorWidget.h"
 
 EntityInspector::EntityInspector(const TString& Name) : PictorumWidget(Name) {
 	DetailsPanelListBox = nullptr;
@@ -31,6 +32,6 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 	}
 
 	InspectorPanelBuilder builder(DetailsPanelListBox, SelectedEntity);
-	DefaultInspectorPanelGenerator generator;
-	generator.GenerateInspector(builder);
+	IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(SelectedEntity->StaticDescriptor());
+	generator->GenerateInspector(builder);
 }

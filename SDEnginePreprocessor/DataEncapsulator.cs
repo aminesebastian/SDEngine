@@ -21,7 +21,7 @@ namespace SuburbanDigitalEnginePreprocessor {
                 string[] arguments = adjustedMacroLine.Split(',');
                 foreach (string arg in arguments) {
                     string trimmedArg = arg.Trim();
-                    if(trimmedArg.Contains('=')) {
+                    if (trimmedArg.Contains('=')) {
                         string[] splitArgs = trimmedArg.Split('=');
                         Modifiers.Add(splitArgs[0].Trim());
                         ModifierValues.Add(splitArgs[0].Trim(), splitArgs[1].Trim());
@@ -32,29 +32,54 @@ namespace SuburbanDigitalEnginePreprocessor {
             }
         }
         public string GetMacroInternals() {
-            return $"{Name}, {GetInspectorName()}, {HideInInspector()}";
+            return $"{Name}, \"{GetInspectorName()}\", {HideInInspector()}, \"{GetCategory()}\"";
         }
-        private string GetInspectorName() {
-            if(Modifiers.Contains("OverrideInspectorName")) {
+        public string GetInspectorName() {
+            if (Modifiers.Contains("OverrideInspectorName")) {
                 string containedName = ModifierValues["OverrideInspectorName"];
                 containedName = containedName.Replace("(", "");
                 containedName = containedName.Replace(")", "");
                 containedName = containedName.Replace("\"", "");
                 return containedName;
             } else {
+                string adjustedName = Name;
                 // Strip out leading b if this was a boolean value. Carryover from Unreal Engine habits.
-                if(Name.StartsWith("b")) {
-                    if(Name.Length > 1) {
-                        if(Char.IsUpper(Name[1])) {
-                            return Name.Substring(1);
+                if (Name.StartsWith("b")) {
+                    if (Name.Length > 1) {
+                        if (Char.IsUpper(Name[1])) {
+                            adjustedName = Name.Substring(1);
                         }
                     }
                 }
-                return Name;
+
+                string splitString = "";
+                bool prevWasLower = false;
+                for (int i = 0; i < adjustedName.Length; i++) {
+                    if(char.IsUpper(adjustedName[i]) && prevWasLower) {
+                        splitString += " ";
+                        splitString += adjustedName[i];
+                        prevWasLower = false;
+                    } else {
+                        prevWasLower = true;
+                        splitString += adjustedName[i];
+                    }
+                }
+
+                return splitString;
             }
         }
-        private string HideInInspector() {
+        public string HideInInspector() {
             return Modifiers.Contains("InspectorHidden").ToString().ToLower();
+        }
+        public string GetCategory() {
+            string category = "Default";
+            if(ModifierValues.ContainsKey("Category")) {
+                category = ModifierValues["Category"];
+            }
+            category = category.Replace("(", "");
+            category = category.Replace(")", "");
+            category = category.Replace("\"", "");
+            return category;
         }
     }
     class CPPObject {

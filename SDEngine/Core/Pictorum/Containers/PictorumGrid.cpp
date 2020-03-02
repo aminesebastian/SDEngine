@@ -1,5 +1,4 @@
 #include "PictorumGrid.h"
-#include "Editor/EngineUI/FrameStatisticsWidget.h"
 
 PictorumGrid::PictorumGrid(const TString& Name) : PictorumWidget(Name) {
 	bCanResize = false;

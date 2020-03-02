@@ -8,6 +8,7 @@ TypeDescriptor* GetPrimitiveDescriptor();
 
 #define OverrideInspectorName = 0;
 #define InspectorHidden = 0;
+#define Category = 0;
 
 #define SD_STRUCT()
 #define SD_CLASS()
@@ -38,8 +39,8 @@ TypeDescriptor* GetPrimitiveDescriptor();
 #define REFLECT_STRUCT_MEMBERS_BEGIN() \
         TypeDescriptorIn->Properties = { \
 
-#define REFLECT_STRUCT_MEMBER(Name, InspectorName, InspectorHiddenIn) \
-            {#Name, #InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
+#define REFLECT_STRUCT_MEMBER(Name, InspectorName, InspectorHiddenIn, Category) \
+            {#Name, #InspectorName, #Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
 
 #define REFLECT_STRUCT_MEMBERS_END() \
 	    }; \
@@ -78,8 +79,8 @@ TypeDescriptor* GetPrimitiveDescriptor();
 #define REFLECT_CLASS_MEMBERS_BEGIN() \
         TypeDescriptorIn->Properties = { \
 
-#define REFLECT_CLASS_MEMBER(Name, InspectorName, InspectorHiddenIn) \
-            {#Name, #InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
+#define REFLECT_CLASS_MEMBER(Name, InspectorName, InspectorHiddenIn, Category) \
+            {#Name, InspectorName, Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
 
 #define REFLECT_CLASS_MEMBERS_END() \
 	    }; \

@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Objects/Entities/Entity.h"
-#include "Editor/EngineUI/EngineWindowUserInterface.h"
+#include "Editor/UserInterface/EngineWindowUserInterface.h"
 
 class FrameStatisticsWidget;
 class EntityInspector;

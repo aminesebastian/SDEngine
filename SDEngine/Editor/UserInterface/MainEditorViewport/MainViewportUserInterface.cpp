@@ -1,9 +1,9 @@
 #include "MainViewportUserInterface.h"
-#include "Core/Pictorum/Containers/PictorumGrid.h"
-#include "Editor/EngineUI/FrameStatisticsWidget.h"
-#include "Editor/EngineUI/Inspector/EntityInspector.h"
-#include "Editor/EngineUI/WorldOutliner/WorldOutlinerWidget.h"
 #include "Core/Engine/World.h"
+#include "Core/Pictorum/Containers/PictorumGrid.h"
+#include "Editor/UserInterface/FrameStatisticsWidget.h"
+#include "Editor/UserInterface/Inspector/EntityInspectorWidget.h"
+#include "Editor/UserInterface/WorldOutliner/WorldOutlinerWidget.h"
 
 MainViewportUserInterface::MainViewportUserInterface(const TString& Name) : EngineWindowUserInterface(Name) {
 	FrameStatistics = nullptr;

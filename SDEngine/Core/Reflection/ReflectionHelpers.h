@@ -3,6 +3,7 @@
 #include "Core/Reflection/ReflectableTypes.h"
 #include "Core/Reflection/TypeResolver.h"
 
+
 class ReflectionHelpers {
 public:
 	static const void GetAllMembersOfClass(SArray<FProperty>& Properties, const class EngineObject* Object);

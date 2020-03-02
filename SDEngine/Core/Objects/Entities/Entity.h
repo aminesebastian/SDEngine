@@ -80,20 +80,20 @@ public:
 protected:
 	friend class World;
 
-	SD_PROPERTY(OverrideInspectorName=("Transform"));
+	SD_PROPERTY(Category=("Transform"), OverrideInspectorName=("Transform"));
 	Transform CurrentTransform;
 	SD_PROPERTY(InspectorHidden);
 	Transform LastFrameTransform;
 
-	SD_PROPERTY();
+	SD_PROPERTY(Category=("Entity"));
 	bool bVisible;
-	SD_PROPERTY();
+	SD_PROPERTY(Category=("Entity"));
 	bool bHiddenInGame;
-	SD_PROPERTY();
+	SD_PROPERTY(Category=("Entity"));
 	bool bNeedsTick;
-	SD_PROPERTY();
+	SD_PROPERTY(Category=("Entity"));
 	bool bNeedsBeginPlay;
-	SD_PROPERTY();
+	SD_PROPERTY(Category=("Entity"));
 	bool bCastShadows;
 
 private:
