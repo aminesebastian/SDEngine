@@ -1,20 +1,22 @@
 #pragma once
-#include "Core/Pictorum/PictorumWidget.h"
+#include "Editor/UserInterface/Inspector/BaseInspectorWidget.h"
 #include "Core/Pictorum/Pictorum.h"
 
-class VectorInspectorWidget : public PictorumWidget {
+class VectorInspectorWidget : public BaseInspectorWidget {
 public:
 	VectorInspectorWidget(const TString& Name);
 	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
-	void SetControlledValue(const SArray<TString>& Labels, float* ValuePointer, uint8 Count);
+	virtual void SetLabels(SArray<TString> LabelsIn);
+	virtual void OnTargetSet(const FProperty& TargetProperty, EngineObject* TargetObject) override;
+
 private:
 	PictorumHorizontalBox* Container;
 
 	SArray<SolidWidget*> ValueBackgroundWidgets;
 	SArray<EditableTextWidget*> ValueWidgets;
 	SArray<FColor> Colors;
-
+	SArray<TString> Labels;
 	SArray<float*> Values;
 	int32 MouseDownEntry;
 	float ContentPadding;

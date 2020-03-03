@@ -23,7 +23,7 @@ public:
 		return (T*)((char*)Object + Property.Offset);
 	}
 	template<typename T, typename K>
-	static T* GetProperty(const TString& Name, const K* Struct) {
+	static T* GetPropertyFromStruct(const TString& Name, const K* Struct) {
 		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<K>::Get());
 		for (FProperty& prop : structType->Properties) {
 			if (prop.Name == Name) {
@@ -33,8 +33,28 @@ public:
 		return nullptr;
 	}
 	template<typename T>
-	static T* GetProperty(const FProperty& Property, const void* Struct) {
+	static T* GetPropertyFromStruct(const FProperty& Property, const void* Struct) {
 		return (T*)((char*)Struct + Property.Offset);
+	}
+	static const FProperty* GetPropertyHandle(const TString& Name, const class EngineObject* Object) {
+		SArray<FProperty> properties;
+		GetAllMembersOfClass(properties, Object);
+		for (FProperty& prop : properties) {
+			if (prop.Name == Name) {
+				return &prop;
+			}
+		}
+		nullptr;
+	}
+	template<typename T>
+	static const FProperty* GetPropertyHandleFromStruct(const TString& Name, const T* Struct) {
+		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<T>::Get());
+		for (FProperty& prop : structType->Properties) {
+			if (prop.Name == Name) {
+				return &prop;
+			}
+		}
+		return nullptr;
 	}
 private:
 	static void worker_GetAllMembersOfClass(const TypeDescriptor_Class* CurrentNode, SArray<FProperty>& Output);

@@ -8,9 +8,10 @@
 #include "Core/Pictorum/Widgets/TextWidget.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
+#include "Core/Reflection/ReflectionHelpers.h"
 #include "Editor/UserInterface/EngineUIStyle.h"
 
-VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : PictorumWidget(Name) {
+VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : BaseInspectorWidget(Name) {
 	Colors.Add(FColor(0.7f, 0.0f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.7f, 0.0f));
 	Colors.Add(FColor(0.0f, 0.0f, 0.7f));
@@ -33,11 +34,23 @@ void VectorInspectorWidget::OnCreated() {
 	Container->SetPadding(4.0f);
 	AddChild(Container);
 }
-void VectorInspectorWidget::SetControlledValue(const SArray<TString>& Labels, float* ValuePointer, uint8 Count) {
+void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
+	Labels = LabelsIn;
+}
+void VectorInspectorWidget::OnTargetSet(const FProperty& TargetProperty, EngineObject* TargetObject) {
 	Values.Clear();
-
-	for (uint8 i = 0; i < Count; i++) {
-		AddEntry(Labels[i], &ValuePointer[i], i);
+	if (TargetProperty.Type == TypeResolver<Vector2D>::Get()) {
+		for (uint8 i = 0; i < 2; i++) {
+			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector2D>(TargetProperty, TargetObject))[i], i);
+		}
+	} else if (TargetProperty.Type == TypeResolver<Vector3D>::Get()) {
+		for (uint8 i = 0; i < 3; i++) {
+			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector3D>(TargetProperty, TargetObject))[i], i);
+		}
+	} else if (TargetProperty.Type == TypeResolver<Vector4D>::Get()) {
+		for (uint8 i = 0; i < 4; i++) {
+			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector4D>(TargetProperty, TargetObject))[i], i);
+		}
 	}
 }
 void VectorInspectorWidget::AddEntry(const TString& Label, float* InitialValue, const int32& Index) {

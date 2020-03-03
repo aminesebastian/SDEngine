@@ -22,7 +22,7 @@ void FloatInspectorWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseMoveAnywhere>(this);
 }
-void FloatInspectorWidget::OnTargetSet(FProperty* TargetProperty, EngineObject* TargetObject) {
+void FloatInspectorWidget::OnTargetSet(const FProperty& TargetProperty, EngineObject* TargetObject) {
 	AssignNewToChild(this, SolidWidget, ValueBackgroundWidget, "ValueBg");
 	ValueBackgroundWidget->OnHoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueHovered>(this);
 	ValueBackgroundWidget->OnUnhoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueUnhovered>(this);

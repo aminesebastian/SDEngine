@@ -7,7 +7,7 @@ public:
 	FloatInspectorWidget(const TString& Name);
 	virtual ~FloatInspectorWidget();
 	virtual void OnCreated() override;
-	virtual void OnTargetSet(FProperty* TargetProperty, EngineObject* TargetObject) override;
+	virtual void OnTargetSet(const FProperty& TargetProperty, EngineObject* TargetObject) override;
 
 private:
 	SolidWidget* ValueBackgroundWidget;
