@@ -1,18 +1,20 @@
 #pragma once
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/Containers/PictorumVerticalBox.h"
+#include "Editor/UserInterface/CollapsingCategoryWidget.h"
 #include "Core/Reflection/Reflection.h"
 
 class PictorumWidget;
 
 class InspectorPanelBuilder {
 public:
-	InspectorPanelBuilder(PictorumVerticalBox* Owner, EngineObject* CustomizationTarget);
+	InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget);
 
 	template<typename T>
 	const T* GetTarget() const {
-		return Cast<T>(Target);
+		return (T*)Target;
 	}
+	const TypeDescriptor* GetTypeDescriptor() const;
 	void AddControlForProperty(const FProperty& Property);
 
 protected:
@@ -24,6 +26,8 @@ protected:
 	virtual void AddControlForTransformProperty(const FProperty& Property);
 private:
 	PictorumVerticalBox* Parent;
-	EngineObject* Target;
+	CollapsingCategoryWidget* CurrentCategory;
+	void* Target;
+	const TypeDescriptor* TargetType;
 	int32 AddedPropertyCount;
 };

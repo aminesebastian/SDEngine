@@ -37,6 +37,7 @@ void PictorumVerticalBox::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 		case EHorizontalAlignment::RIGHT:
 			break;
 		case EHorizontalAlignment::STRETCH:
+			OutputGeometry.SetAllotedSpace(Vector2D(CurrentRenderGeometry.GetAllotedSpace().x, OutputGeometry.GetAllotedSpace().y));
 			break;
 	}
 

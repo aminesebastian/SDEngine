@@ -40,7 +40,7 @@ TypeDescriptor* GetPrimitiveDescriptor();
         TypeDescriptorIn->Properties = { \
 
 #define REFLECT_STRUCT_MEMBER(Name, InspectorName, InspectorHiddenIn, Category) \
-            {#Name, #InspectorName, #Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
+            {#Name, InspectorName, Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
 
 #define REFLECT_STRUCT_MEMBERS_END() \
 	    }; \

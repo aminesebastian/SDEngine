@@ -4,7 +4,6 @@
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/StringUtilities.h"
-#include "Editor/Subsystems/EntityInspector/DefaultInspectorPanelGenerator.h"
 #include "Editor/Subsystems/EntityInspector/InspectorPanelManager.h"
 #include "Editor/UserInterface/EngineUIStyle.h"
 #include "Editor/UserInterface/Inspector/TypeInspectors/VectorInspectorWidget.h"
@@ -22,7 +21,8 @@ void EntityInspector::OnCreated() {
 	root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	root->SetPadding(8.0f);
 
-	AssignNewToChild(root, PictorumVerticalBox, DetailsPanelListBox, "ControlsContainer")
+	AssignNewToChildLocal(root, PictorumScrollBox, scrollBox, "ControlsScrollBox");
+	AssignNewToChild(scrollBox, PictorumVerticalBox, DetailsPanelListBox, "ControlsContainer");
 }
 void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 	DetailsPanelListBox->ClearChildren();
@@ -31,7 +31,7 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 		return;
 	}
 
-	InspectorPanelBuilder builder(DetailsPanelListBox, SelectedEntity);
+	InspectorPanelBuilder builder(DetailsPanelListBox, SelectedEntity->StaticDescriptor(), SelectedEntity);
 	IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(SelectedEntity->StaticDescriptor());
 	generator->GenerateInspector(builder);
 }

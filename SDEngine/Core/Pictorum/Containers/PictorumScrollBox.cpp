@@ -1,21 +1,22 @@
 #include "PictorumScrollBox.h"
 
 PictorumScrollBox::PictorumScrollBox(const TString& Name) : PictorumWidget(Name) {
-	ScrollOffset                              = 0.0f;
-	ScrollSpeed                               = 25.0f;
-	bWasRightClickedIn                        = false;
-	bSelectionEnabled                         = true;
-	ScrollDampening                           = 150.0f;
-	ScrollEnergy                              = 0.0f;
-	ScrollBarSideOffset                       = 15.0f;
-	MinScrollBarHeight                        = 15.0f;
-	ScrollBarThickness                        = 5.0f;
-	ScrollBarPadding                          = 5.0f;
-	HoveredIndex                              = -1;
-	ScrollBarColor                            = FColor(0.5f, 0.5f, 0.5f);
-	ScrollBarHoveredColor                     = FColor(0.65f, 0.65f, 0.654f);
+	ScrollOffset               = 0.0f;
+	ScrollSpeed                = 15.0f;
+	bWasRightClickedIn         = false;
+	bIsScrollingUsingScrollBar = false;
+	bSelectionEnabled          = true;
+	ScrollDampening            = 150.0f;
+	ScrollEnergy               = 0.0f;
+	ScrollBarSideOffset        = 10.0f;
+	MinScrollBarHeight         = 15.0f;
+	ScrollBarThickness         = 5.0f;
+	ScrollBarPadding           = 5.0f;
+	HoveredIndex               = -1;
+	ScrollBarColor             = FColor(0.5f, 0.5f, 0.5f);
+	ScrollBarHoveredColor      = FColor(0.65f, 0.65f, 0.654f);
 
-	ScrollBarDrawInstruction                  = new FBoxDrawInstruction();
+	ScrollBarDrawInstruction = new FBoxDrawInstruction();
 	ScrollBarDrawInstruction->BackgroundColor = ScrollBarColor;
 	ScrollBarDrawInstruction->BorderRadius.SetAllRadii(4.0f);
 
@@ -30,7 +31,6 @@ PictorumScrollBox::PictorumScrollBox(const TString& Name) : PictorumWidget(Name)
 PictorumScrollBox::~PictorumScrollBox() {
 
 }
-
 void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	// Draw the selection and hovered highlights if selection is enabled.
 	if (bSelectionEnabled) {
@@ -41,7 +41,8 @@ void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 			DrawEntryBackground(Geometry, selectedIndex, FColor(0.4f, 0.4f, 0.5f, 0.5f));
 		}
 	}
-
+}
+void PictorumScrollBox::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
 	if (ShouldRenderScrollBar()) {
 		// Draw the line behind the scroll bar.
 		ScrollBarLineDrawInstruction->Size.y = Geometry.GetAllotedSpace().y - 10.0f;
@@ -150,7 +151,7 @@ void PictorumScrollBox::OnMouseDown(const vec2& MousePosition, const EMouseButto
 }
 void PictorumScrollBox::OnMouseUp(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
 	if (bWasRightClickedIn) {
-		ScrollEnergy = LastMouseDelta.y  * 10.0f;
+		ScrollEnergy = LastMouseDelta.y * 10.0f;
 		bWasRightClickedIn = false;
 	}
 	if (bIsScrollingUsingScrollBar) {

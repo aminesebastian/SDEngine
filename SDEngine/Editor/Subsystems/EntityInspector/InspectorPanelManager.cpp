@@ -1,5 +1,5 @@
 #include "InspectorPanelManager.h"
-#include "Editor/Subsystems/EntityInspector/DefaultInspectorPanelGenerator.h"
+#include "Editor/Subsystems/EntityInspector/Generators/DefaultInspectorPanelGenerator.h"
 
 InspectorPanelManager::InspectorPanelManager() {
 	Default = new DefaultInspectorPanelGenerator();

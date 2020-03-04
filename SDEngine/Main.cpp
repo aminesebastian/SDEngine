@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 	editorModule->Startup();
 
 	SD_ENGINE_INFO("Engine Launched!");
-
+	
 	S_Engine->StartEngine();
 
 	return 0;
@@ -59,6 +59,7 @@ void serializeAllTextures(AssetManager* Manager) {
 	serializeTexture("eye_open", "./Res/Textures/Editor/UI/EyeOpenIcon.png", "./Res/Assets/Editor/Textures/UI/EyeOpenIcon.sasset", Manager);
 	serializeTexture("eye_closed", "./Res/Textures/Editor/UI/EyeClosedIcon.png", "./Res/Assets/Editor/Textures/UI/EyeClosedIcon.sasset", Manager);
 	serializeTexture("checkmark", "./Res/Textures/Editor/UI/CheckmarkIcon.png", "./Res/Assets/Editor/Textures/UI/CheckmarkIcon.sasset", Manager);
+	serializeTexture("category_twirl_icon", "./Res/Textures/Editor/UI/CategoryTwirlIcon.png", "./Res/Assets/Editor/Textures/UI/CategoryTwirlIcon.sasset", Manager);
 }
 void serializeTexture(TString TextureName, TString TexturePath, TString AssetPath, AssetManager* Manager) {
 	ByteBuffer buffer;

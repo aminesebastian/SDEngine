@@ -113,6 +113,9 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 
 	for (int i = 0; i < Children.Count(); i++) {
 		PictorumWidget* widget = Children[i];
+		if (widget->Visibility == EPictorumVisibilityState::COLLAPSED || widget->Visibility == EPictorumVisibilityState::HIDDEN) {
+			continue;
+		}
 		FRenderGeometry childGeometry(Geometry);
 		CalculateChildRenderGeometry(Geometry, childGeometry, i);
 		glScissor((GLuint)childGeometry.GetMinimumClipPoint().x, (GLuint)childGeometry.GetMinimumClipPoint().y, (GLuint)childGeometry.GetMaximumClipPoint().x, (GLuint)childGeometry.GetMaximumClipPoint().y);
@@ -120,6 +123,8 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		widget->DrawContents(DeltaTime, childGeometry);
 		OnChildDrawn(DeltaTime, Geometry, widget);
 	}
+
+	PostChildrenDraw(DeltaTime, Geometry);
 	OnDrawCompleted(DeltaTime, Geometry);
 	glScissor((GLuint)Geometry.GetMinimumClipPoint().x, (GLuint)Geometry.GetMinimumClipPoint().y, (GLuint)Geometry.GetMaximumClipPoint().x, (GLuint)Geometry.GetMaximumClipPoint().y);
 }
@@ -286,6 +291,7 @@ void PictorumWidget::DrawImage(const FRenderGeometry& Geometry, const FImageDraw
 
 void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {}
 void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {}
+void PictorumWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {}
 void PictorumWidget::OnCreated() {}
 void PictorumWidget::OnDestroyed() {}
 void PictorumWidget::OnAddedToViewport(PictorumRenderer* Owner) {}

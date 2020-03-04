@@ -37,7 +37,7 @@ void VectorInspectorWidget::OnCreated() {
 void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 	Labels = LabelsIn;
 }
-void VectorInspectorWidget::OnTargetSet(const FProperty& TargetProperty, EngineObject* TargetObject) {
+void VectorInspectorWidget::OnTargetSet(const FProperty& TargetProperty, void* TargetObject) {
 	Values.Clear();
 	if (TargetProperty.Type == TypeResolver<Vector2D>::Get()) {
 		for (uint8 i = 0; i < 2; i++) {

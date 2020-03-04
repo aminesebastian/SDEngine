@@ -370,9 +370,6 @@
     <ClCompile Include="Editor\UserInterface\TitleBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Editor\Subsystems\EntityInspector\DefaultInspectorPanelGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -386,6 +383,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -561,13 +564,14 @@
     <ClInclude Include="Editor\UserInterface\EngineWindowUserInterface.h" />
     <ClInclude Include="Editor\UserInterface\FrameStatisticsWidget.h" />
     <ClInclude Include="Editor\UserInterface\TitleBar.h" />
-    <ClInclude Include="Editor\Subsystems\EntityInspector\DefaultInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

@@ -48,6 +48,7 @@ public:
 
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry);
+	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry);
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const;
 	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const;

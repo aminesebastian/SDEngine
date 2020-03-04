@@ -5,8 +5,6 @@ class PictorumScrollBox : public PictorumWidget {
 public:
 	PictorumScrollBox(const TString& Name);
 	virtual ~PictorumScrollBox();
-
-	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
@@ -47,6 +45,9 @@ protected:
 	int32 HoveredIndex;
 	vec2 LastMouseDelta;
 	SArray<int32> SelectedIndices;
+
+	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
+	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) override;
 
 	const float GetOffsetForChild(const int32& ChildIndex) const;
 	const vec2 CalculateSizeOfContents(const FRenderGeometry& Geometry) const;
