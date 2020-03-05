@@ -33,9 +33,19 @@ void CollapsingCategoryWidget::PostChildrenDraw(float DeltaTime, const FRenderGe
 
 	DrawImage(Geometry, *CollapseIconDrawInstruction);
 }
+Vector2D CollapsingCategoryWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
+	if (bCollapsed) {
+		return Vector2D(Geometry.GetAllotedSpace().x, GetHeaderHeight());
+	} else {
+		return PictorumWidget::GetDesiredDrawSpace(Geometry);
+	}
+}
 void CollapsingCategoryWidget::SetCategoryLabel(const TString& LabelIn) {
 	Label = LabelIn;
 	CategoryLabel->SetText(Label);
+}
+const TString& CollapsingCategoryWidget::GetLabel() const {
+	return Label;
 }
 void CollapsingCategoryWidget::AddToContainer(PictorumWidget* Widget) {
 	InternalContainer->AddChild(Widget);
@@ -50,4 +60,7 @@ void CollapsingCategoryWidget::CategoryClicked(PictorumWidget* Widget, const Vec
 	} else {
 		InternalContainer->SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
 	}
+}
+const float CollapsingCategoryWidget::GetHeaderHeight() const {
+	return CategoryBackground->GetDesiredDrawSpace(LastRenderedGeometry).y;
 }

@@ -18,16 +18,23 @@ InspectorPanelBuilder::InspectorPanelBuilder(PictorumVerticalBox* Owner, const T
 	Parent             = Owner;
 	Target             = CustomizationTarget;
 	TargetType         = CustomizationType;
-	AddedPropertyCount = 0;
-
-	AssignNewToChild(Parent, CollapsingCategoryWidget, CurrentCategory, "DefaultCategory");
-	CurrentCategory->SetCategoryLabel("Default");
+	CurrentCategory    = nullptr;
 }
 void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
-	if (AddedPropertyCount > 0) {
+	// Skip if duplicate.
+	if (AddedProperties.Contains(Property)) {
+		return;
+	}
+	CurrentCategory = GetCategoryWidget(Property.Category);
+	if (CurrentCategory == nullptr) {
+		CurrentCategory = GetCategoryWidget("Default");
+	}
+
+	if (AddedProperties.Count() > 0) {
 		AssignNewToChildLocal(CurrentCategory->GetContainer(), SeparatorWidget, sep, "Separator");
 		sep->SetSize(0.0f, 5.0f);
 	}
+
 	const TString& typeName = Property.Type->Name;
 	if (typeName == "Vector4D") {
 		AddControlForVector4DProperty(Property);
@@ -44,7 +51,7 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
 		InspectorPanelBuilder propertyBuilder(CurrentCategory->GetContainer(), Property.Type, ReflectionHelpers::GetProperty<void>(Property, Target));
 		generator->GenerateInspector(propertyBuilder);
 	}
-	AddedPropertyCount++;
+	AddedProperties.Add(Property);
 }
 void InspectorPanelBuilder::AddControlForVector4DProperty(const FProperty& Property) {
 	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
@@ -133,4 +140,12 @@ void InspectorPanelBuilder::AddControlForFloatProperty(const FProperty& Property
 
 const TypeDescriptor* InspectorPanelBuilder::GetTypeDescriptor() const {
 	return TargetType;
+}
+CollapsingCategoryWidget* InspectorPanelBuilder::GetCategoryWidget(const TString& Category) {
+	if (Categories.find(Category) == Categories.end()) {
+		AssignNewToChildLocal(Parent, CollapsingCategoryWidget, currentCat, Category);
+		currentCat->SetCategoryLabel(Category);
+		Categories.emplace(Category, currentCat);
+	}
+	return Categories.at(Category);
 }

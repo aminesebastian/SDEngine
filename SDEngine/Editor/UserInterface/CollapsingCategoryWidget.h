@@ -9,11 +9,13 @@ public:
 	void AddToContainer(PictorumWidget* Widget);
 	void SetCategoryLabel(const TString& LabelIn);
 	PictorumVerticalBox* GetContainer() const;
-
+	const TString& GetLabel() const;
 protected:
 	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void OnCreated() override;
+	virtual Vector2D GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 	void CategoryClicked(PictorumWidget* Widget, const Vector2D& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& Event);
+	const float GetHeaderHeight() const;
 private:
 	TextWidget* CategoryLabel;
 	SolidWidget* CategoryBackground;

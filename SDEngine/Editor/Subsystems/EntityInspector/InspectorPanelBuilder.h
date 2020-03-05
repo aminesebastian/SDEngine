@@ -29,5 +29,8 @@ private:
 	CollapsingCategoryWidget* CurrentCategory;
 	void* Target;
 	const TypeDescriptor* TargetType;
-	int32 AddedPropertyCount;
+	SHashMap<TString, CollapsingCategoryWidget*> Categories;
+	SArray<FProperty> AddedProperties;
+
+	CollapsingCategoryWidget* GetCategoryWidget(const TString& Category);
 };

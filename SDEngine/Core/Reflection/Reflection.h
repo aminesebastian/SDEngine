@@ -6,10 +6,6 @@
 template <typename T>
 TypeDescriptor* GetPrimitiveDescriptor();
 
-#define OverrideInspectorName = 0;
-#define InspectorHidden = 0;
-#define Category = 0;
-
 #define SD_STRUCT()
 #define SD_CLASS()
 #define SD_PROPERTY(...)

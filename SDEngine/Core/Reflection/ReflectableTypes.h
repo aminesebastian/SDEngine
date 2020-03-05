@@ -71,6 +71,27 @@ struct FProperty {
 	size_t Offset;
 	TypeDescriptor* Type;
 	bool bInspectorHidden;
+
+	const TString GetCategory() const {
+		return TString(Category);
+	}
+
+	bool operator==(const FProperty& Other) const {
+		if (Name == Other.Name) {
+			if (InspectorName == Other.InspectorName) {
+				if (Category == Other.Category) {
+					if (Offset == Other.Offset) {
+						if (Type == Other.Type) {
+							if (bInspectorHidden == Other.bInspectorHidden) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 };
 
 struct TypeDescriptor_Struct : public TypeDescriptor {
