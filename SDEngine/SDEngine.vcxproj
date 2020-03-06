@@ -233,6 +233,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp" />
     <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp" />
     <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp" />
     <ClCompile Include="Core\Pictorum\Widgets\CheckboxWidget.cpp" />
@@ -339,6 +340,7 @@
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
     <ClInclude Include="Core\Objects\IEngineModule.h" />

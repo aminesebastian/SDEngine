@@ -391,6 +391,9 @@
     <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -572,6 +575,7 @@
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
