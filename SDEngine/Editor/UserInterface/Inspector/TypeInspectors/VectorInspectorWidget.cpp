@@ -37,17 +37,17 @@ void VectorInspectorWidget::OnCreated() {
 void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 	Labels = LabelsIn;
 }
-void VectorInspectorWidget::OnTargetSet(const FProperty& TargetProperty, void* TargetObject) {
+void VectorInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* TargetObject) {
 	Values.Clear();
-	if (TargetProperty.Type == TypeResolver<Vector2D>::Get()) {
+	if (TargetProperty->Type == TypeResolver<Vector2D>::Get()) {
 		for (uint8 i = 0; i < 2; i++) {
 			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector2D>(TargetProperty, TargetObject))[i], i);
 		}
-	} else if (TargetProperty.Type == TypeResolver<Vector3D>::Get()) {
+	} else if (TargetProperty->Type == TypeResolver<Vector3D>::Get()) {
 		for (uint8 i = 0; i < 3; i++) {
 			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector3D>(TargetProperty, TargetObject))[i], i);
 		}
-	} else if (TargetProperty.Type == TypeResolver<Vector4D>::Get()) {
+	} else if (TargetProperty->Type == TypeResolver<Vector4D>::Get()) {
 		for (uint8 i = 0; i < 4; i++) {
 			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector4D>(TargetProperty, TargetObject))[i], i);
 		}

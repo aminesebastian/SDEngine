@@ -67,7 +67,7 @@ TypeDescriptor* GetPrimitiveDescriptor();
 		TypeDescriptorIn->ParentDescriptors = { 
 
 #define REFLECT_CLASS_PARENT(Parent) \
-			{TypeResolver<Parent>::Get()},
+			{(TypeDescriptor_Class*)TypeResolver<Parent>::Get()},
 
 #define REFLECT_CLASS_PARENT_END() \
         }; \

@@ -11,9 +11,10 @@ public:
 	void RegisterCustomization(TypeDescriptor* Descriptor, IInspectorPanelGenerator* Customization);
 	IInspectorPanelGenerator* GetGenerator(const TypeDescriptor* Descriptor) const;
 private:
-	InspectorPanelManager();
-
 	SHashMap<const TypeDescriptor*, IInspectorPanelGenerator*> Generators;
 	IInspectorPanelGenerator* Default;
+
+	InspectorPanelManager();
+	IInspectorPanelGenerator* GetClosestMatchingGeneratorForClass(const TypeDescriptor_Class* Type) const;
 };
 

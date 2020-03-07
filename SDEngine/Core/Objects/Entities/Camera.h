@@ -11,7 +11,7 @@ SD_CLASS()
 class Camera : public Actor {
 	SD_CLASS_BODY()
 public:
-	Camera(const TString& Name, const Transform& CurrentTransform, const float& FOV, const Vector2D& Dimensions, const float& NearClip, const float& FarClip);
+	Camera(const TString& Name, const FTransform& CurrentTransform, const float& FOV, const Vector2D& Dimensions, const float& NearClip, const float& FarClip);
 	virtual ~Camera();
 
 	void SetRenderTargetDimensions(const Vector2D& Dimensions);

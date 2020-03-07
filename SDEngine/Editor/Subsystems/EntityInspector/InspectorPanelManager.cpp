@@ -18,5 +18,28 @@ IInspectorPanelGenerator* InspectorPanelManager::GetGenerator(const TypeDescript
 	if (Generators.find(Descriptor) != Generators.end()) {
 		return Generators.at(Descriptor);
 	}
+
+	// Recursively check parents if this is a class.
+	if (IsA<const TypeDescriptor_Class>(Descriptor)) {
+		const TypeDescriptor_Class* classDescriptor = Cast<const TypeDescriptor_Class>(Descriptor);
+		IInspectorPanelGenerator* classGen = GetClosestMatchingGeneratorForClass(classDescriptor);
+		if (classGen) {
+			return classGen;
+		}
+	} 
+
+	// If no matches are found, return the default.
 	return Default;
+}
+IInspectorPanelGenerator* InspectorPanelManager::GetClosestMatchingGeneratorForClass(const TypeDescriptor_Class* Type) const {
+	if (Generators.find(Type) != Generators.end()) {
+		return Generators.at(Type);
+	}
+	for (TypeDescriptor_Class* desc : Type->ParentDescriptors) {
+		IInspectorPanelGenerator* parentGen = GetClosestMatchingGeneratorForClass(desc);
+		if (parentGen) {
+			return parentGen;
+		}
+	}
+	return nullptr;
 }

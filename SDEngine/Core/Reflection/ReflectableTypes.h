@@ -116,7 +116,7 @@ struct TypeDescriptor_Struct : public TypeDescriptor {
 
 struct TypeDescriptor_Class : public TypeDescriptor {
 	std::vector<FProperty> Properties;
-	std::vector<TypeDescriptor*> ParentDescriptors;
+	std::vector<TypeDescriptor_Class*> ParentDescriptors;
 
 	TypeDescriptor_Class(void (*InitializationFunction)(TypeDescriptor_Class*)) : TypeDescriptor{ "", 0 } {
 		InitializationFunction(this);

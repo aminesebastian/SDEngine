@@ -58,8 +58,8 @@ public:
 
 	bool SetShaderModel(EShaderModel Model);
 	EShaderModel GetShaderModel() { return S_ShaderModel; }
-	void BindMaterial(const Transform& RenderTransform, const Camera* RenderCamera);
-	void BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, const Camera* RenderCamera);
+	void BindMaterial(const FTransform& RenderTransform, const Camera* RenderCamera);
+	void BindMaterial(const FTransform& RenderTransform, const FTransform& LastFrameTransform, const Camera* RenderCamera);
 
 	bool ImportAsset(const TString& FilePath) override { return true; }
 	bool SerializeToBuffer(SerializationStream& Stream) const override;

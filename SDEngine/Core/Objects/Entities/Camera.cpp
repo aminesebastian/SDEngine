@@ -2,7 +2,7 @@
 #include "Camera.reflected.h"
 
 
-Camera::Camera(const TString& Name, const Transform& CurrentTransform, const float& FOV, const Vector2D& Dimensions, const float& NearClip, const float& FarClip) : Actor(Name),
+Camera::Camera(const TString& Name, const FTransform& CurrentTransform, const float& FOV, const Vector2D& Dimensions, const float& NearClip, const float& FarClip) : Actor(Name),
 NearClipPlane(NearClip),
 FarClipPlane(FarClip),
 FieldOfView(FOV),
@@ -36,7 +36,7 @@ mat4 Camera::GetOrthographicMatrix() const {
 	return OrthographicMatrix;
 }
 mat4 Camera::GetViewMatrix() const {
-	return lookAt(CurrentTransform.GetLocation(), CurrentTransform.GetLocation() + CurrentTransform.GetForwardVector(), UpVector);
+	return lookAt(Transform.GetLocation(), Transform.GetLocation() + Transform.GetForwardVector(), UpVector);
 }
 mat4 Camera::GetLastFrameViewMatrix() const {
 	return lookAt(LastFrameTransform.GetLocation(), LastFrameTransform.GetLocation() + LastFrameTransform.GetForwardVector(), UpVector);

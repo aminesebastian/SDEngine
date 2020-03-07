@@ -58,10 +58,10 @@ vec3 Actor::GetWorldRotation() {
 vec3 Actor::GetWorldScale() {
 	return GetScale();
 }
-Transform Actor::GetWorldTransform() {
+FTransform Actor::GetWorldTransform() {
 	return GetTransform();
 }
-Transform Actor::GetLastFrameWorldTransform() {
+FTransform Actor::GetLastFrameWorldTransform() {
 	return GetLastFrameTransform();
 }
 

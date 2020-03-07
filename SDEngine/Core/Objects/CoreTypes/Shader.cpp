@@ -138,10 +138,10 @@ bool Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const 
 void Shader::Bind() {
 	glUseProgram(Program);
 }
-void Shader::Update(const Transform& RenderTransform, const Camera* RenderCamera) {
+void Shader::Update(const FTransform& RenderTransform, const Camera* RenderCamera) {
 	Update(RenderTransform, RenderTransform, RenderCamera);
 }
-void Shader::Update(const Transform& RenderTransform,  const Transform& LastFrameTransform, const Camera* RenderCamera) {
+void Shader::Update(const FTransform& RenderTransform,  const FTransform& LastFrameTransform, const Camera* RenderCamera) {
 	mat4 lastFrameMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetLastFrameViewMatrix() * LastFrameTransform.GetModelMatrix();
 	mat4 tempMVP = RenderCamera->GetProjectionMatrix() * RenderCamera->GetViewMatrix() * RenderTransform.GetModelMatrix();
 

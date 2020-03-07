@@ -26,6 +26,8 @@ void CollapsingCategoryWidget::OnCreated() {
 	CategoryBackground->OnMouseUpDelegate.Add<CollapsingCategoryWidget, & CollapsingCategoryWidget::CategoryClicked>(this);
 	CategoryBackground->SetVisibility(EPictorumVisibilityState::VISIBLE);
 	AssignNewToChild(OverallContainer, PictorumVerticalBox, InternalContainer, "CategoryBackground");
+	AssignNewToChild(OverallContainer, SeparatorWidget, separator, "BottomSeparator");
+	separator->SetSize(0.0f, 5.0f);
 }
 void CollapsingCategoryWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
 	CollapseIconDrawInstruction->Location.x = Geometry.GetLocation().x;

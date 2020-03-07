@@ -4,11 +4,14 @@
 
 void ActorInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Builder) {
 	const Actor* target = Builder.GetTarget<Actor>();
-	SArray<FProperty> properties;
+
+	Builder.AddControlForProperty(ReflectionHelpers::GetPropertyHandle("Transform", target));
+
+	SArray<FProperty*> properties;
 	ReflectionHelpers::GetAllMembersOfClass(properties, target);
 
-	for (const FProperty& prop : properties) {
-		if (prop.bInspectorHidden) {
+	for (const FProperty* prop : properties) {
+		if (prop->bInspectorHidden) {
 			continue;
 		}
 		Builder.AddControlForProperty(prop);

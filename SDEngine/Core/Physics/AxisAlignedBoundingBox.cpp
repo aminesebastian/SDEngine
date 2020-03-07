@@ -45,14 +45,14 @@ vec3 AxisAlignedBoundingBox::GetMinExtent() {
 vec3 AxisAlignedBoundingBox::GetMaxExtent() {
 	return MaxExtent;
 }
-bool AxisAlignedBoundingBox::IntersectWithRay(vec3 RayOrigin, vec3 RayDirection, Transform OwnerTransform, vec3& HitLocation, float& IntersectionDistance) {
+bool AxisAlignedBoundingBox::IntersectWithRay(vec3 RayOrigin, vec3 RayDirection, FTransform OwnerTransform, vec3& HitLocation, float& IntersectionDistance) {
 	mat4 ModelMatrix = OwnerTransform.GetModelMatrix();
 	vec4 aabbMin = ModelMatrix * vec4(MinExtent, 1.0f);
 	vec4 aabbMax = ModelMatrix * vec4(MaxExtent, 1.0f);
 
 	return MathLibrary::LineTraceAgainstAABB(RayOrigin, RayDirection, aabbMin, aabbMax, HitLocation, IntersectionDistance);
 }
-void AxisAlignedBoundingBox::DrawDebug(vec3 Color, Camera* Camera, Transform OwnerTransform) {
+void AxisAlignedBoundingBox::DrawDebug(vec3 Color, Camera* Camera, FTransform OwnerTransform) {
 	glLineWidth(2);
 	EngineStatics::GetLineShader()->Bind();
 	EngineStatics::GetLineShader()->SetShaderVector3("COLOR", Color);

@@ -96,10 +96,10 @@ bool Material::SetShaderModel(EShaderModel Model) {
 	S_ShaderModel = Model;
 	return true;
 }
-void Material::BindMaterial(const Transform& RenderTransform, const Camera* RenderCamera) {
+void Material::BindMaterial(const FTransform& RenderTransform, const Camera* RenderCamera) {
 	BindMaterial(RenderTransform, RenderTransform, RenderCamera);
 }
-void Material::BindMaterial(const Transform& RenderTransform, const Transform& LastFrameTransform, const Camera* RenderCamera) {
+void Material::BindMaterial(const FTransform& RenderTransform, const FTransform& LastFrameTransform, const Camera* RenderCamera) {
 	S_Shader->Bind();
 	S_Shader->Update(RenderTransform, LastFrameTransform, RenderCamera);
 	glEnable(GL_TEXTURE_2D);

@@ -6,21 +6,21 @@
 
 class ReflectionHelpers {
 public:
-	static const void GetAllMembersOfClass(SArray<FProperty>& Properties, const class EngineObject* Object);
+	static const void GetAllMembersOfClass(SArray<FProperty*>& Properties, const class EngineObject* Object);
 	template<typename T>
 	static T* GetProperty(const TString& Name, const class EngineObject* Object) {
-		SArray<FProperty> properties;
+		SArray<FProperty*> properties;
 		GetAllMembersOfClass(properties, Object);
-		for (FProperty& prop : properties) {
-			if (prop.Name == Name) {
-				return (T*)((char*)Object + prop.Offset);
+		for (FProperty* prop : properties) {
+			if (prop->Name == Name) {
+				return (T*)((char*)Object + prop->Offset);
 			}
 		}
 		return nullptr;
 	}
 	template<typename T>
-	static T* GetProperty(const FProperty& Property, const class EngineObject* Object) {
-		return (T*)((char*)Object + Property.Offset);
+	static T* GetProperty(const FProperty* Property, const class EngineObject* Object) {
+		return (T*)((char*)Object + Property->Offset);
 	}
 	template<typename T, typename K>
 	static T* GetProperty(const TString& Name, const K* Struct) {
@@ -33,18 +33,18 @@ public:
 		return nullptr;
 	}
 	template<typename T>
-	static T* GetProperty(const FProperty& Property, const void* Struct) {
-		return (T*)((char*)Struct + Property.Offset);
+	static T* GetProperty(const FProperty* Property, const void* Struct) {
+		return (T*)((char*)Struct + Property->Offset);
 	}
 	static const FProperty* GetPropertyHandle(const TString& Name, const class EngineObject* Object) {
-		SArray<FProperty> properties;
+		SArray<FProperty*> properties;
 		GetAllMembersOfClass(properties, Object);
-		for (FProperty& prop : properties) {
-			if (prop.Name == Name) {
-				return &prop;
+		for (FProperty* prop : properties) {
+			if (prop->Name == Name) {
+				return prop;
 			}
 		}
-		nullptr;
+		return nullptr;
 	}
 	template<typename T>
 	static const FProperty* GetPropertyHandleFromStruct(const TString& Name, const T* Struct) {
@@ -57,6 +57,6 @@ public:
 		return nullptr;
 	}
 private:
-	static void worker_GetAllMembersOfClass(const TypeDescriptor_Class* CurrentNode, SArray<FProperty>& Output);
+	static void worker_GetAllMembersOfClass(const TypeDescriptor_Class* CurrentNode, SArray<FProperty*>& Output);
 };
 

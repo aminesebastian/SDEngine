@@ -52,75 +52,75 @@ bool Entity::ShouldBeDrawn(EDrawType DrawType) {
 	return false;
 }
 
-const Transform& Entity::GetTransform() const {
-	return CurrentTransform;
+const FTransform& Entity::GetTransform() const {
+	return Transform;
 }
-void Entity::SetTransform(const Transform& NewTransform) {
-	CurrentTransform = NewTransform;
+void Entity::SetTransform(const FTransform& NewTransform) {
+	Transform = NewTransform;
 }
-const Transform& Entity::GetLastFrameTransform() const {
+const FTransform& Entity::GetLastFrameTransform() const {
 	return LastFrameTransform;
 }
-void Entity::SetLastFrameTransform(const Transform& OldTransform) {
+void Entity::SetLastFrameTransform(const FTransform& OldTransform) {
 	LastFrameTransform = OldTransform;
 }
 const Vector3D Entity::GetLinearVelocity() const {
-	return CurrentTransform.GetLocation() - LastFrameTransform.GetLocation();
+	return Transform.GetLocation() - LastFrameTransform.GetLocation();
 }
 const Vector3D Entity::GetAngularVelocity() const {
-	return CurrentTransform.GetRotation() - LastFrameTransform.GetRotation();
+	return Transform.GetRotation() - LastFrameTransform.GetRotation();
 }
 
 const Vector3D& Entity::GetLocation() const {
-	return CurrentTransform.GetLocation();
+	return Transform.GetLocation();
 }
 const Vector3D& Entity::GetRotation() const {
-	return CurrentTransform.GetRotation();
+	return Transform.GetRotation();
 }
 const Vector3D& Entity::GetScale() const {
-	return CurrentTransform.GetScale();
+	return Transform.GetScale();
 }
 
 void Entity::AddLocation(Vector3D Offset) {
-	CurrentTransform.AddLocation(Offset);
+	Transform.AddLocation(Offset);
 }
 void Entity::AddLocation(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.AddLocation(Vector3D(X, Y, Z));
+	Transform.AddLocation(Vector3D(X, Y, Z));
 }
 void Entity::SetLocation(const Vector3D& Location) {
-	CurrentTransform.SetLocation(Location);
+	Transform.SetLocation(Location);
 }
 void Entity::SetLocation(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.SetLocation(Vector3D(X, Y, Z));
+	Transform.SetLocation(Vector3D(X, Y, Z));
 }
 
 void Entity::AddRotation(const Vector3D& RotationDelta) {
-	CurrentTransform.AddRotation(RotationDelta);
+	Transform.AddRotation(RotationDelta);
 }
 void Entity::AddRotation(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.AddRotation(Vector3D(X, Y, Z));
+	Transform.AddRotation(Vector3D(X, Y, Z));
 }
 void Entity::SetRotation(const Vector3D& Rotation) {
-	CurrentTransform.SetRotation(Rotation);
+	Transform.SetRotation(Rotation);
 }
 void Entity::SetRotation(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.SetRotation(Vector3D(X, Y, Z));
+	Transform.SetRotation(Vector3D(X, Y, Z));
 }
 
 void Entity::AddScale(const Vector3D& ScaleDelta) {
-	CurrentTransform.AddScale(ScaleDelta);
+	Transform.AddScale(ScaleDelta);
 }
 void Entity::AddScale(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.AddScale(Vector3D(X, Y, Z));
+	Transform.AddScale(Vector3D(X, Y, Z));
 }
 void Entity::SetScale(const Vector3D& Scale) {
-	CurrentTransform.SetScale(Scale);
+	Transform.SetScale(Scale);
 }
 void Entity::SetScale(const float& X, const float& Y, const float& Z) {
-	CurrentTransform.SetScale(Vector3D(X, Y, Z));
+	Transform.SetScale(Vector3D(X, Y, Z));
 }
 void Entity::SetUniformScale(const float& Scale) {
-	CurrentTransform.SetScale(Vector3D(Scale, Scale, Scale));
+	Transform.SetScale(Vector3D(Scale, Scale, Scale));
 }
 void Entity::SetOwner(Entity* OwnerIn) {
 	Owner = OwnerIn;
@@ -132,7 +132,7 @@ void Entity::PreFrameRendered() {
 
 }
 void Entity::PostFrameRendered() {
-	SetLastFrameTransform(CurrentTransform);
+	SetLastFrameTransform(Transform);
 }
 void Entity::Draw(const Camera* RenderCamera) {
 	DrawAdvanced(RenderCamera, SCENE_RENDER);

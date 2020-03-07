@@ -13,7 +13,7 @@ MainEditorWindow::MainEditorWindow(const vec2& Size) : EditorWindow("MainEditorV
 	CameraLookSpeed = 200.0f;
 	_CurrentScene = nullptr;
 
-	Transform cameraTransform;
+	FTransform cameraTransform;
 	cameraTransform.SetRotation(0, glm::radians(50.0f), glm::radians(-180.0f));
 	cameraTransform.AddLocation(vec3(35.0f, 0.0f, 35.0f));
 	_Camera = new Camera("MainEditorWindowCamera", cameraTransform, 50.0f, GetDimensions(), 0.01f, 100000.0f);

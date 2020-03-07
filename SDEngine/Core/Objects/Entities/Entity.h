@@ -55,10 +55,10 @@ public:
 	void SetScale(const float& X, const float& Y, const float& Z);
 	void SetUniformScale(const float& Scale);
 
-	const Transform& GetTransform() const;
-	void SetTransform(const Transform& NewTransform);
-	const Transform& GetLastFrameTransform() const;
-	void SetLastFrameTransform(const Transform& OldTransform);
+	const FTransform& GetTransform() const;
+	void SetTransform(const FTransform& NewTransform);
+	const FTransform& GetLastFrameTransform() const;
+	void SetLastFrameTransform(const FTransform& OldTransform);
 
 	void SetOwner(Entity* OwnerIn);
 	Entity* GetOwner();
@@ -80,10 +80,10 @@ public:
 protected:
 	friend class World;
 
-	SD_PROPERTY(Category=("Transform"), OverrideInspectorName=("Transform"));
-	Transform CurrentTransform;
+	SD_PROPERTY(Category=("Transform"));
+	FTransform Transform;
 	SD_PROPERTY(InspectorHidden);
-	Transform LastFrameTransform;
+	FTransform LastFrameTransform;
 
 	SD_PROPERTY(Category=("Entity"));
 	bool bVisible;

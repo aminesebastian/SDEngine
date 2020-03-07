@@ -7,7 +7,7 @@
 using namespace glm;
 
 SD_STRUCT()
-struct Transform {
+struct FTransform {
 	SD_STRUCT_BODY();
 public:
 	/*
@@ -19,11 +19,11 @@ public:
 	+Z -> Up
 	-Z -> Down
 	*/
-	Transform(const Vector3D Position = Vector3D(0.0, 0.0, 0.0), const Vector3D Rotation = Vector3D(0.0, 0.0, 0.0), const Vector3D Scale = Vector3D(1, 1, 1)) :
+	FTransform(const Vector3D Position = Vector3D(0.0, 0.0, 0.0), const Vector3D Rotation = Vector3D(0.0, 0.0, 0.0), const Vector3D Scale = Vector3D(1, 1, 1)) :
 		Location(Position),
 		Rotation(Rotation),
 		Scale(Scale) {}
-	virtual ~Transform();
+	virtual ~FTransform();
 
 	const Vector3D& GetLocation() const {
 		return Location;
@@ -88,29 +88,29 @@ public:
 		Rotation.y = Yaw;
 		Rotation.z = Roll;
 	}
-	inline Transform operator+(Transform& OtherTransform) {
-		Transform newTrans;
+	inline FTransform operator+(FTransform& OtherTransform) {
+		FTransform newTrans;
 		newTrans.Location = GetLocation() + OtherTransform.GetLocation();
 		newTrans.Rotation = GetRotation() + OtherTransform.GetRotation();
 		newTrans.Scale = GetScale() * OtherTransform.GetScale();
 		return newTrans;
 	}
-	inline Transform operator+(const Transform& OtherTransform) {
-		Transform newTrans;
+	inline FTransform operator+(const FTransform& OtherTransform) {
+		FTransform newTrans;
 		newTrans.Location = GetLocation() + OtherTransform.GetLocation();
 		newTrans.Rotation = GetRotation() + OtherTransform.GetRotation();
 		newTrans.Scale = GetScale() * OtherTransform.GetScale();
 		return newTrans;
 	}
-	inline Transform operator+(Transform& OtherTransform) const {
-		Transform newTrans;
+	inline FTransform operator+(FTransform& OtherTransform) const {
+		FTransform newTrans;
 		newTrans.Location = GetLocation() + OtherTransform.GetLocation();
 		newTrans.Rotation = GetRotation() + OtherTransform.GetRotation();
 		newTrans.Scale = GetScale() * OtherTransform.GetScale();
 		return newTrans;
 	}
-	inline Transform operator+(const Transform& OtherTransform) const {
-		Transform newTrans;
+	inline FTransform operator+(const FTransform& OtherTransform) const {
+		FTransform newTrans;
 		newTrans.Location = GetLocation() + OtherTransform.GetLocation();
 		newTrans.Rotation = GetRotation() + OtherTransform.GetRotation();
 		newTrans.Scale = GetScale() * OtherTransform.GetScale();

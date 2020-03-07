@@ -43,7 +43,7 @@ vec3 Component::GetWorldRotation() {
 vec3 Component::GetWorldScale() {
 	return GetScale();
 }
-Transform Component::GetWorldTransform() {
+FTransform Component::GetWorldTransform() {
 	if (OwningComponent) {
 		return GetTransform() + OwningComponent->GetWorldTransform();
 	}
@@ -52,7 +52,7 @@ Transform Component::GetWorldTransform() {
 	}
 	return GetTransform();
 }
-Transform Component::GetLastFrameWorldTransform() {
+FTransform Component::GetLastFrameWorldTransform() {
 	if (OwningComponent) {
 		return GetLastFrameTransform() + OwningComponent->GetLastFrameWorldTransform();
 	}

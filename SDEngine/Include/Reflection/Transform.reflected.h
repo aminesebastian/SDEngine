@@ -3,8 +3,8 @@
 #include "./Core\Utilities\Math\Transform.h"
 
 
-//Reflection for struct Transform
-REFLECT_STRUCT_BEGIN(Transform)
+//Reflection for struct FTransform
+REFLECT_STRUCT_BEGIN(FTransform)
 REFLECT_STRUCT_BEGIN_PARENTS()
 REFLECT_STRUCT_PARENT_END()
 REFLECT_STRUCT_MEMBERS_BEGIN()

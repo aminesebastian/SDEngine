@@ -18,24 +18,33 @@ InspectorPanelBuilder::InspectorPanelBuilder(PictorumVerticalBox* Owner, const T
 	Parent             = Owner;
 	Target             = CustomizationTarget;
 	TargetType         = CustomizationType;
-	CurrentCategory    = nullptr;
+
+	AssignNewToChild(Parent, PictorumVerticalBox, DefaultCategory, "DefaultCategory");
+
+	CurrentCategoryContainer    = DefaultCategory;
 }
-void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
+void InspectorPanelBuilder::AddControlForProperty(const FProperty* Property) {
+	// Skip if null.
+	if (&Property == nullptr) {
+		return;
+	}
 	// Skip if duplicate.
 	if (AddedProperties.Contains(Property)) {
 		return;
 	}
-	CurrentCategory = GetCategoryWidget(Property.Category);
-	if (CurrentCategory == nullptr) {
-		CurrentCategory = GetCategoryWidget("Default");
+
+	if (Property->Category == "Default") {
+		CurrentCategoryContainer = DefaultCategory;
+	} else {
+		CurrentCategoryContainer = GetCategoryWidget(Property->Category)->GetContainer();
 	}
 
 	if (AddedProperties.Count() > 0) {
-		AssignNewToChildLocal(CurrentCategory->GetContainer(), SeparatorWidget, sep, "Separator");
+		AssignNewToChildLocal(CurrentCategoryContainer, SeparatorWidget, sep, "Separator");
 		sep->SetSize(0.0f, 5.0f);
 	}
 
-	const TString& typeName = Property.Type->Name;
+	const TString& typeName = Property->Type->Name;
 	if (typeName == "Vector4D") {
 		AddControlForVector4DProperty(Property);
 	} else if (typeName == "Vector3D") {
@@ -47,16 +56,16 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty& Property) {
 	} else if (typeName == "float") {
 		AddControlForFloatProperty(Property);
 	} else {
-		IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(Property.Type);
-		InspectorPanelBuilder propertyBuilder(CurrentCategory->GetContainer(), Property.Type, ReflectionHelpers::GetProperty<void>(Property, Target));
+		IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(Property->Type);
+		InspectorPanelBuilder propertyBuilder(CurrentCategoryContainer, Property->Type, ReflectionHelpers::GetProperty<void>(Property, Target));
 		generator->GenerateInspector(propertyBuilder);
 	}
-	AddedProperties.Add(Property);
+	AddedProperties.Add(RemoveConst(Property));
 }
-void InspectorPanelBuilder::AddControlForVector4DProperty(const FProperty& Property) {
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
+void InspectorPanelBuilder::AddControlForVector4DProperty(const FProperty* Property) {
+	AssignNewToChildLocal(CurrentCategoryContainer, PictorumHorizontalBox, hBox, "PropertyHBox");
 	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
-	label->SetText(Property.InspectorName);
+	label->SetText(Property->InspectorName);
 	label->SetFontSize(10);
 	label->SetFontWeight(EFontWeight::Bold);
 	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
@@ -68,13 +77,13 @@ void InspectorPanelBuilder::AddControlForVector4DProperty(const FProperty& Prope
 	labels.Add("Z");
 	labels.Add("W");
 	floatEditor->SetLabels(labels);
-	floatEditor->SetTarget(Property, Property.Type, Target);
+	floatEditor->SetTarget(Property, Property->Type, Target);
 	floatEditor->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 }
-void InspectorPanelBuilder::AddControlForVector3DProperty(const FProperty& Property) {
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
+void InspectorPanelBuilder::AddControlForVector3DProperty(const FProperty* Property) {
+	AssignNewToChildLocal(CurrentCategoryContainer, PictorumHorizontalBox, hBox, "PropertyHBox");
 	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
-	label->SetText(Property.InspectorName);
+	label->SetText(Property->InspectorName);
 	label->SetFontSize(10);
 	label->SetFontWeight(EFontWeight::Bold);
 	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
@@ -85,13 +94,13 @@ void InspectorPanelBuilder::AddControlForVector3DProperty(const FProperty& Prope
 	labels.Add("Y");
 	labels.Add("Z");
 	floatEditor->SetLabels(labels);
-	floatEditor->SetTarget(Property, Property.Type, Target);
+	floatEditor->SetTarget(Property, Property->Type, Target);
 	floatEditor->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 }
-void InspectorPanelBuilder::AddControlForVector2DProperty(const FProperty& Property) {
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
+void InspectorPanelBuilder::AddControlForVector2DProperty(const FProperty* Property) {
+	AssignNewToChildLocal(CurrentCategoryContainer, PictorumHorizontalBox, hBox, "PropertyHBox");
 	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
-	label->SetText(Property.InspectorName);
+	label->SetText(Property->InspectorName);
 	label->SetFontSize(10);
 	label->SetFontWeight(EFontWeight::Bold);
 	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
@@ -101,23 +110,23 @@ void InspectorPanelBuilder::AddControlForVector2DProperty(const FProperty& Prope
 	labels.Add("X");
 	labels.Add("Y");
 	floatEditor->SetLabels(labels);
-	floatEditor->SetTarget(Property, Property.Type, Target);
+	floatEditor->SetTarget(Property, Property->Type, Target);
 	floatEditor->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 }
-void InspectorPanelBuilder::AddControlForTransformProperty(const FProperty& Property) {
-	Transform* trans = ReflectionHelpers::GetProperty<Transform>(Property, Target);
-	AddControlForVector3DProperty(*ReflectionHelpers::GetPropertyHandleFromStruct("Location", trans));
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), SeparatorWidget, sep1, "Separator");
+void InspectorPanelBuilder::AddControlForTransformProperty(const FProperty* Property) {
+	FTransform* trans = ReflectionHelpers::GetProperty<FTransform>(Property, Target);
+	AddControlForVector3DProperty(ReflectionHelpers::GetPropertyHandleFromStruct("Location", trans));
+	AssignNewToChildLocal(CurrentCategoryContainer, SeparatorWidget, sep1, "Separator");
 	sep1->SetSize(0.0f, 5.0f);
-	AddControlForVector3DProperty(*ReflectionHelpers::GetPropertyHandleFromStruct("Rotation", trans));
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), SeparatorWidget, sep2, "Separator");
+	AddControlForVector3DProperty(ReflectionHelpers::GetPropertyHandleFromStruct("Rotation", trans));
+	AssignNewToChildLocal(CurrentCategoryContainer, SeparatorWidget, sep2, "Separator");
 	sep2->SetSize(0.0f, 5.0f);
-	AddControlForVector3DProperty(*ReflectionHelpers::GetPropertyHandleFromStruct("Scale", trans));
+	AddControlForVector3DProperty(ReflectionHelpers::GetPropertyHandleFromStruct("Scale", trans));
 }
-void InspectorPanelBuilder::AddControlForBoolProperty(const FProperty& Property) {
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
+void InspectorPanelBuilder::AddControlForBoolProperty(const FProperty* Property) {
+	AssignNewToChildLocal(CurrentCategoryContainer, PictorumHorizontalBox, hBox, "PropertyHBox");
 	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
-	label->SetText(Property.InspectorName);
+	label->SetText(Property->InspectorName);
 	label->SetFontSize(10);
 	label->SetFontWeight(EFontWeight::Bold);
 	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
@@ -125,16 +134,16 @@ void InspectorPanelBuilder::AddControlForBoolProperty(const FProperty& Property)
 	AssignNewToChildLocal(hBox, CheckboxWidget, checkbox, "CheckboxWidget");
 	checkbox->Bind(ReflectionHelpers::GetProperty<bool>(Property, Target));
 }
-void InspectorPanelBuilder::AddControlForFloatProperty(const FProperty& Property) {
-	AssignNewToChildLocal(CurrentCategory->GetContainer(), PictorumHorizontalBox, hBox, "PropertyHBox");
+void InspectorPanelBuilder::AddControlForFloatProperty(const FProperty* Property) {
+	AssignNewToChildLocal(CurrentCategoryContainer, PictorumHorizontalBox, hBox, "PropertyHBox");
 	AssignNewToChildLocal(hBox, TextWidget, label, "PropertyLabel");
-	label->SetText(Property.InspectorName);
+	label->SetText(Property->InspectorName);
 	label->SetFontSize(10);
 	label->SetFontWeight(EFontWeight::Bold);
 	label->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f).SetVerticalAlignment(EVerticalAlignment::CENTER);
 
 	AssignNewToChildLocal(hBox, FloatInspectorWidget, floatInspector, "FloatWidget");
-	floatInspector->SetTarget(Property, Property.Type, Target);
+	floatInspector->SetTarget(Property, Property->Type, Target);
 	floatInspector->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 }
 

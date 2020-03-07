@@ -18,7 +18,7 @@ SD_CLASS()
 class Light : public Actor {
 	SD_CLASS_BODY();
 public:
-	Light(const TString& Name, const Transform& IntialTransform, const ELightType& Type = POINT, const float& Intensity = 20, const FColor & Color = FColor(1.0f, 1.0f, 1.0f), const float& Attenuation = 25, const bool& CastShadows = false);
+	Light(const TString& Name, const FTransform& IntialTransform, const ELightType& Type = POINT, const float& Intensity = 20, const FColor & Color = FColor(1.0f, 1.0f, 1.0f), const float& Attenuation = 25, const bool& CastShadows = false);
 	~Light();
 
 	void SetLightColor(const Vector3D& Color);

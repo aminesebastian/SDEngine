@@ -9,7 +9,7 @@
 #include "Light.reflected.h"
 
 
-Light::Light(const TString& Name, const Transform& IntialTransform, const ELightType& TypeIn, const float& IntensityIn, const FColor& ColorIn, const float& AttenuationIn, const bool& CastShadows) : Actor(Name) {
+Light::Light(const TString& Name, const FTransform& IntialTransform, const ELightType& TypeIn, const float& IntensityIn, const FColor& ColorIn, const float& AttenuationIn, const bool& CastShadows) : Actor(Name) {
 	SetTransform(IntialTransform);
 	SetCastShadows(CastShadows);
 
@@ -62,7 +62,7 @@ void Light::SendShaderInformation(Shader* shader, const uint8& index) {
 	}
 }
 Matrix4 Light::GetLightViewMatrix() {
-	return lookAt(vec3(0, 0, 0), CurrentTransform.GetForwardVector(), vec3(0, 0, 1));
+	return lookAt(vec3(0, 0, 0), Transform.GetForwardVector(), vec3(0, 0, 1));
 }
 Matrix4 Light::GetLightOrthogonalMatrix() {
 	return OrthographicMatrix;

@@ -34,8 +34,8 @@ public:
 	vec3 GetWorldLocation();
 	vec3 GetWorldRotation();
 	vec3 GetWorldScale();
-	Transform GetWorldTransform();
-	Transform GetLastFrameWorldTransform();
+	FTransform GetWorldTransform();
+	FTransform GetLastFrameWorldTransform();
 
 	//////////////
 	//COMPONENTS//

@@ -34,7 +34,7 @@ void Scene::LoadPlane(World* WorldIn) {
 	//SD_ENGINE_INFO("Plane Loaded!");
 }
 void Scene::LoadHead(World* WorldIn) {
-	Transform headTransform;
+	FTransform headTransform;
 	headTransform.SetLocation(vec3(0.0f, 0.0f, 7.0f));
 	HeadActor* head = new HeadActor("TestHead");
 	head->SetTransform(headTransform);
@@ -50,7 +50,7 @@ void Scene::LoadLights(World* WorldIn) {
 				float r = (float)(rand()) / (float)(RAND_MAX);
 				float g = (float)(rand()) / (float)(RAND_MAX);
 				float b = (float)(rand()) / (float)(RAND_MAX);
-				Transform tempTransform;
+				FTransform tempTransform;
 				Vector3D location = Vector3D((float)j * 5.5f - 5.5f, (float)i * 5.5f - 5.5f, 9 + (float)k * 6.5f);
 				tempTransform.SetLocation(location);
 				FColor tempColor = FColor(r, g, b);
@@ -62,7 +62,7 @@ void Scene::LoadLights(World* WorldIn) {
 		}
 	}
 
-	Transform fillLightTransform;
+	FTransform fillLightTransform;
 	fillLightTransform.SetRotation(0, glm::radians(100.0f), 0);
 	fillLightTransform.SetLocation(Vector3D(0.0f, 0.0f, 30.0f));
 	Light* fillLight = new Light("Directional Light", fillLightTransform, DIRECTIONAL, 6, FColor(0.75f, 0.9f, 0.8f));

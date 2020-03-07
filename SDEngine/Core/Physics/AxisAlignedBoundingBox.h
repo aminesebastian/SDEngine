@@ -19,9 +19,9 @@ public:
 	vec3 GetMinExtent();
 	vec3 GetMaxExtent();
 
-	bool IntersectWithRay(vec3 RayOrigin, vec3 RayDirection, Transform OwnerTransform, vec3& HitLocation, float& IntersectionDistance);
+	bool IntersectWithRay(vec3 RayOrigin, vec3 RayDirection, FTransform OwnerTransform, vec3& HitLocation, float& IntersectionDistance);
 
-	void DrawDebug(vec3 Color, Camera* CameraIn, Transform OwnerTransform);
+	void DrawDebug(vec3 Color, Camera* CameraIn, FTransform OwnerTransform);
 private:
 	vec3 MinExtent;
 	vec3 MaxExtent;
