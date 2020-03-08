@@ -61,7 +61,7 @@ void VectorInspectorWidget::AddEntry(const TString& Label, float* InitialValue, 
 		Container->AddChild(separator);
 	}
 
-	AssignNewToChildLocal(Container, PictorumHorizontalBox, hBox, "ValueContainer"+to_string(Index));
+	AssignNewToChildLocal(Container, PictorumHorizontalBox, hBox, "ValueContainer" + to_string(Index));
 	hBox->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(1.0f);
 
 	TextWidget* label = new TextWidget("Entry" + to_string(Index) + "Label");
@@ -80,13 +80,16 @@ void VectorInspectorWidget::AddEntry(const TString& Label, float* InitialValue, 
 	value->SetFontSize(9);
 	value->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
 	value->SetFontWeight(EFontWeight::Bold);
-	value->OnMouseDownDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseDown>(this);
-	value->OnMouseMoveDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueMouseMove>(this);
+	value->SetInputFormatter(new DecimalInputTextFormatter(2));
+
+	value->OnTextSubmittedDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::ValueSubmitted>(this);
+	value->OnMouseDownDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::ValueMouseDown>(this);
+	value->OnMouseMoveDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::ValueMouseMove>(this);
 
 	SolidWidget* valueBg = new SolidWidget("Entry" + to_string(Index) + "ValueBG");
-	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueHovered>(this);
-	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, &VectorInspectorWidget::ValueUnhovered>(this);
-	valueBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	valueBg->OnHoveredDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::ValueHovered>(this);
+	valueBg->OnUnhoveredDelegate.Add<VectorInspectorWidget, & VectorInspectorWidget::ValueUnhovered>(this);
+	valueBg->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	valueBg->SetPadding(ContentPadding);
 	valueBg->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
 	valueBg->SetVisibility(EPictorumVisibilityState::VISIBLE);
@@ -125,4 +128,14 @@ void VectorInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const v
 }
 void VectorInspectorWidget::MouseUpAnywhere(const vec2& MouseLocation) {
 	MouseDownEntry = -1;
+}
+void VectorInspectorWidget::ValueSubmitted(PictorumWidget* Widget, const TString& Value) {
+	const char* cString = Value.c_str();
+	char* endCharacter = nullptr;
+	for (int32 i = 0; i < ValueWidgets.Count(); i++) {
+		if (ValueWidgets[i] == Widget) {
+			*Values[i] = strtof(cString, &endCharacter);
+			break;
+		}
+	}
 }

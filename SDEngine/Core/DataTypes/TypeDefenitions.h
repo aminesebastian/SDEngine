@@ -56,7 +56,9 @@ using namespace glm;
 
 struct FColor : Vector4D {
 
-public:
+	static FColor FromIntegerRGB(const int32& R, const int32& G, const int32& B, const int32& A = 255) {
+		return FColor((float)R / 255, (float)G / 255, (float)B / 255, (float)A / 255);
+	}
 
 	FColor() {
 		r = 0.0f;
@@ -80,12 +82,6 @@ public:
 		r = Brightness;
 		g = Brightness;
 		b = Brightness;
-		a = 1.0f;
-	}
-	FColor(const Vector3D& Color) {
-		r = Color.x;
-		g = Color.y;
-		b = Color.z;
 		a = 1.0f;
 	}
 

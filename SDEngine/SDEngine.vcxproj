@@ -315,6 +315,7 @@
     <ClCompile Include="Core\Objects\Entities\Actors\Grid.cpp" />
     <ClCompile Include="Core\Objects\Entities\Light.cpp" />
     <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.cpp" />
+    <ClCompile Include="Core\DataStructures\HashMap.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\Engine\Engine.cpp" />
     <ClCompile Include="Core\Objects\CoreTypes\Material.cpp" />
@@ -340,6 +341,9 @@
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
@@ -434,6 +438,7 @@
     <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
+    <ClInclude Include="Core\DataStructures\HashMap.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />

@@ -11,7 +11,34 @@ void StringUtilities::SplitString(const TString& String, const char& Delimeter, 
 void StringUtilities::SplitStringByWhitespace(const TString& String, SArray<TString>& Output) {
 	std::istringstream iss(String);
 	std::vector<std::string> ret((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
-	for (std::string val : ret) {
+	for (const std::string& val : ret) {
 		Output.Add(val);
 	}
+}
+const TString StringUtilities::LeftTrim(const TString& String) {
+	string copy = String;
+	copy.erase(copy.begin(), std::find_if(copy.begin(), copy.end(), [](int ch) {
+		return !std::isspace(ch);
+		}));
+
+	return copy;
+}
+const TString StringUtilities::RightTrim(const TString& String) {
+	string copy = String;
+	copy.erase(std::find_if(copy.rbegin(), copy.rend(), [](int ch) {
+		return !std::isspace(ch);
+		}).base(), copy.end());
+
+	return copy;
+}
+const TString StringUtilities::Trim(const TString& String) {
+	string copy = String;
+	copy.erase(copy.begin(), std::find_if(copy.begin(), copy.end(), [](int ch) {
+		return !std::isspace(ch);
+		}));
+	copy.erase(std::find_if(copy.rbegin(), copy.rend(), [](int ch) {
+		return !std::isspace(ch);
+		}).base(), copy.end());
+
+	return copy;
 }

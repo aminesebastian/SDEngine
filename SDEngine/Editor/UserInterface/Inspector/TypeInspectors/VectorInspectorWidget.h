@@ -29,5 +29,7 @@ private:
 	void MouseUpAnywhere(const vec2& MouseLocation);
 
 	void AddEntry(const TString& Label, float* InitialValue, const int32& Index);
+
+	void ValueSubmitted(PictorumWidget* Widget, const TString& Value);
 };
 

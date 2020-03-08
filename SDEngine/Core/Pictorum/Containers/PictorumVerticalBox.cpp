@@ -9,11 +9,14 @@ const bool PictorumVerticalBox::CanAddChild() const {
 }
 void PictorumVerticalBox::CalculateChildRenderGeometry(const FRenderGeometry& CurrentRenderGeometry, FRenderGeometry& OutputGeometry, int32 ChildIndex) const {
 	float yOffset = CalculateYOffsetForChild(CurrentRenderGeometry, ChildIndex - 1);
-	OutputGeometry.AddLocation(0.0f, OutputGeometry.GetAllotedSpace().y-yOffset);
+	OutputGeometry.AddLocation(0.0f, OutputGeometry.GetAllotedSpace().y-yOffset-Padding.GetTop());
 
+	// Capture the desired space of the child and ensure it is kept smaller than the allocated space.
 	vec2 desiredSpace = Children[ChildIndex]->GetDesiredDrawSpace(OutputGeometry);
 	desiredSpace.x = MathLibrary::Min(desiredSpace.x, CurrentRenderGeometry.GetAllotedSpace().x);
 	desiredSpace.y = MathLibrary::Min(desiredSpace.y, CurrentRenderGeometry.GetAllotedSpace().y);
+
+	// Move the location to BOTTOM of where the child will render.
 	OutputGeometry.AddLocation(0.0f, -desiredSpace.y);
 
 	VerticalBoxSlot* slot = GetChildSlotAtIndex<VerticalBoxSlot>(ChildIndex);
@@ -27,17 +30,18 @@ void PictorumVerticalBox::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 		OutputGeometry.SetAllotedSpace(space);
 	}
 
-	vec2 location = OutputGeometry.GetLocation();
+	Vector2D location = OutputGeometry.GetLocation();
+	Vector2D space = OutputGeometry.GetAllotedSpace();
 	switch (slot->GetHorizontalAlignment()) {
 		case EHorizontalAlignment::LEFT:
 			break;
 		case EHorizontalAlignment::CENTER:
-			location.x = OutputGeometry.GetLocation().x - desiredSpace.x / 2.0f;
+			location.x = OutputGeometry.GetLocation().x - space.x / 2.0f;
 			break;
 		case EHorizontalAlignment::RIGHT:
 			break;
 		case EHorizontalAlignment::STRETCH:
-			OutputGeometry.SetAllotedSpace(Vector2D(CurrentRenderGeometry.GetAllotedSpace().x, OutputGeometry.GetAllotedSpace().y));
+			OutputGeometry.SetAllotedSpace(Vector2D(CurrentRenderGeometry.GetAllotedSpace().x, space.y));
 			break;
 	}
 
@@ -46,6 +50,9 @@ void PictorumVerticalBox::CalculateChildRenderGeometry(const FRenderGeometry& Cu
 	// Apply the padding.
 	OutputGeometry.AddLocation(slot->GetPadding().GetLeft(), slot->GetPadding().GetBottom());
 	OutputGeometry.AddAllotedSpace(slot->GetPadding().GetRight(), slot->GetPadding().GetTop());
+
+	OutputGeometry.AddLocation(Padding.GetLeft(), Padding.GetBottom());
+	OutputGeometry.AddAllotedSpace(-Padding.GetLeft() - Padding.GetRight(), 0.0f);
 }
 vec2 PictorumVerticalBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 desiredSize = ZERO_VECTOR2D;
@@ -55,7 +62,7 @@ vec2 PictorumVerticalBox::GetDesiredDrawSpace(const FRenderGeometry& Geometry) c
 		desiredSize.x = MathLibrary::Max(desiredSize.x, childSpace.x);
 		desiredSize.y += CalculateChildHeight(Geometry, i);
 	}
-	return desiredSize;
+	return desiredSize + Vector2D(Padding.GetLeft() + Padding.GetRight(), Padding.GetTop() + Padding.GetBottom());
 }
 
 float PictorumVerticalBox::CalculateYOffsetForChild(const FRenderGeometry& CurrentRenderGeometry, const int32& ChildIndex) const {
@@ -89,6 +96,28 @@ VerticalBoxSlot* PictorumVerticalBox::CreateSlotForWidget(PictorumWidget* Widget
 }
 VerticalBoxSlot* PictorumVerticalBox::AddChild(PictorumWidget* Widget) {
 	return Cast<VerticalBoxSlot>(AddChildInternal(Widget));
+}
+
+const FPadding& PictorumVerticalBox::GetPadding() const {
+	return Padding;
+}
+void PictorumVerticalBox::SetPadding(const float& AllPadding) {
+	Padding.SetTop(AllPadding);
+	Padding.SetBottom(AllPadding);
+	Padding.SetRight(AllPadding);
+	Padding.SetLeft(AllPadding);
+}
+void PictorumVerticalBox::SetPadding(const float& TopBottomPadding, const float& RightLeftPadding) {
+	Padding.SetTop(TopBottomPadding);
+	Padding.SetBottom(TopBottomPadding);
+	Padding.SetRight(RightLeftPadding);
+	Padding.SetLeft(RightLeftPadding);
+}
+void PictorumVerticalBox::SetPadding(const float& Top, const float& Right, const float& Bottom, const float& Left) {
+	Padding.SetTop(Top);
+	Padding.SetBottom(Bottom);
+	Padding.SetRight(Right);
+	Padding.SetLeft(Left);
 }
 
 float PictorumVerticalBox::GetFillRatioForChild(int32 ChildIndex) const {

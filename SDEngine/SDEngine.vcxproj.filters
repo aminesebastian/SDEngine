@@ -394,6 +394,9 @@
     <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\DataStructures\HashMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -576,6 +579,10 @@
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
+    <ClInclude Include="Core\DataStructures\HashMap.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

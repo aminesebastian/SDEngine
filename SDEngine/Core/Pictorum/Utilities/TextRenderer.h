@@ -12,6 +12,24 @@
 
 struct FTextLine {
 private:
+	Vector2D FirstCharacterOffset;
+	float Tracking;
+	int32 CurrentIndex;
+	float CursorPosition;
+	float MaxYBaselineOffset;
+	int32 FirstChangedIndex;
+	int32 LastChangedIndex;
+	int32 CharacterCount;
+	SArray<char> Characters;
+	int32 VertexCount;
+	SArray<Vector2D> Verticies;
+	int32 TexCoordCount;
+	SArray<Vector2D> TexCoords;
+	int32 IndexCount;
+	SArray<int32> Indices;
+	bool bChanged;
+
+
 	friend class TextRenderer;
 	friend struct FTextBlock;
 	FTextLine(const float& Tracking) : Tracking(Tracking) {
@@ -98,11 +116,10 @@ private:
 		LastChangedIndex      = -1;
 		bChanged              = false;
 	}
-	bool HasChanged() {
+	const bool HasChanged() {
 		return FirstChangedIndex >= 0;
 	}
 
-private:
 	void ExtendAllocation(int32 CharactersToAllocate) {
 		const int32 allocationAmount = CharactersToAllocate;
 		Characters.Resize(Characters.Count() + allocationAmount, -1);
@@ -117,26 +134,36 @@ private:
 		TexCoordCount += 4;
 		IndexCount += 6;
 	}
-	Vector2D FirstCharacterOffset;
+};
+
+struct FTextBlock {
+private:
+	ETextAlignment Alignment;
+	float Leading;
 	float Tracking;
-	int32 CurrentIndex;
-	float CursorPosition;
-	float MaxYBaselineOffset;
-	int32 FirstChangedIndex;
-	int32 LastChangedIndex;
-	int32 CharacterCount;
-	SArray<char> Characters;
+
+	SArray<FTextLine*> Lines;
+	int32 UsedLines;
+
+	Vector2D MaxPosition;
+	Vector2D MinPosition;
+
+	int32 AllocatedCharacterSpace;
+	int32 CurrentlyUsedCharacterSpace;
+
 	int32 VertexCount;
 	SArray<Vector2D> Verticies;
 	int32 TexCoordCount;
 	SArray<Vector2D> TexCoords;
 	int32 IndexCount;
 	SArray<int32> Indices;
-	bool bChanged;
-};
 
-struct FTextBlock {
-private:
+	int32 FirstChangedIndex;
+	int32 LastChangedIndex;
+
+	float CurrentYPosition;
+	int32 CurrentIndex;
+
 	friend class TextRenderer;
 	FTextBlock(const float& Leading, const float& Tracking, const ETextAlignment& Alignment) : Leading(Leading), Tracking(Tracking), Alignment(Alignment) {
 		Flush();
@@ -293,7 +320,13 @@ private:
 			line->Tracking = TrackingIn;
 		}
 	}
-private:
+	const void GetLines(SArray<FTextLine*>& LinesOut) {
+		if (VertexCount > 0) {
+			for (int32 i = 0; i <= UsedLines; i++) {
+				LinesOut.Add(Lines[i]);
+			}
+		}
+	}
 	void ExtendAllocation(const int32& CharacterCount) {
 		const int32 allocationAmount = CharacterCount * 2;
 
@@ -302,31 +335,6 @@ private:
 		TexCoords.Resize(TexCoords.Count() + allocationAmount * 4);
 		Indices.Resize(Indices.Count() + allocationAmount * 6);
 	}
-	ETextAlignment Alignment;
-	float Leading;
-	float Tracking;
-
-	SArray<FTextLine*> Lines;
-	int32 UsedLines;
-
-	Vector2D MaxPosition;
-	Vector2D MinPosition;
-
-	int32 AllocatedCharacterSpace;
-	int32 CurrentlyUsedCharacterSpace;
-
-	int32 VertexCount;
-	SArray<Vector2D> Verticies;
-	int32 TexCoordCount;
-	SArray<Vector2D> TexCoords;
-	int32 IndexCount;
-	SArray<int32> Indices;
-
-	int32 FirstChangedIndex;
-	int32 LastChangedIndex;
-
-	float CurrentYPosition;
-	int32 CurrentIndex;
 };
 
 /**
@@ -451,23 +459,31 @@ public:
 	 * @returns	Null if it fails, else the internal data structure.
 	 */
 	const FTextBlock* GetInternalDataStructure() const;
+
 	/**
 	 * Gets the relative cursor location for character index.
 	 *
-	 * @param 	Index	Zero-based index of the.
+	 * @param 	Index   	Zero-based index of the.
+	 * @param 	LeftSide	True to left side.
 	 *
 	 * @returns	The relative cursor location for character index.
 	 */
-	const Vector2D GetCursorLocationForCharacterIndex(const int32& Index);
+
+	const Vector2D GetCursorLocationForCharacterIndex(const int32& Index, const bool& LeftSide);
+
 	/**
 	 * Gets character index at mouse location
 	 *
-	 * @param 	MouseLocation   	The mouse location in absolute coordinates.
-	 * @param 	ScreenResolution	The screen resolution.
+	 * @param 		  	MouseLocation   	The mouse location in absolute coordinates.
+	 * @param 		  	ScreenResolution	The screen resolution.
+	 * @param [in,out]	Index				The character index at mouse location, -1 if mouse it
+	 * 										outside string.
+	 * @param [in,out]	LeftSide			True to left side.
 	 *
-	 * @returns	The character index at mouse location, -1 if mouse it outside string.
+	 * @returns	the character index at mouse location, -1 if mouse it outside string.
 	 */
-	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution) const;
+
+	const void GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& LeftSide) const;
 	/**
 	 * Gets text bounding box dimensions
 	 *
@@ -477,6 +493,7 @@ public:
 	 * @returns	The text bounding box dimensions.
 	 */
 	const void GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const;
+	const void GetAbsoluteCharacterBounds(const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const;
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();

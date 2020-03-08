@@ -5,10 +5,9 @@
 #include "Core/Pictorum/Utilities/TextRenderer.h"
 
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
-	Font = Engine::GetAssetManager()->FindAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
-	Renderer = new TextRenderer(24, Font);
+	Font                         = Engine::GetAssetManager()->FindAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
+	Renderer                     = new TextRenderer(24, Font);
 	LastRenderedAbsoluteLocation = vec2(0.0f, 0.0f);
-
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 TextWidget::~TextWidget() {
@@ -45,7 +44,6 @@ void TextWidget::SetFontWeight(const EFontWeight& Weight) {
 const EFontWeight& TextWidget::GetWeight() const {
 	return Renderer->GetFontWeight();
 }
-
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	//FBoxDrawInstruction instruction;
 	//instruction.Location = Geometry.GetLocation();

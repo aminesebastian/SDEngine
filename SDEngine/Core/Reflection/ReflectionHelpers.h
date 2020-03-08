@@ -44,7 +44,8 @@ public:
 				return prop;
 			}
 		}
-		return nullptr;
+		return 
+			nullptr;
 	}
 	template<typename T>
 	static const FProperty* GetPropertyHandleFromStruct(const TString& Name, const T* Struct) {

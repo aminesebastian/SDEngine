@@ -14,14 +14,12 @@
 #include "Editor/UserInterface/Inspector/TypeInspectors/VectorInspectorWidget.h"
 
 
-InspectorPanelBuilder::InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget) {
+InspectorPanelBuilder::InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget, bool IsNested) {
 	Parent             = Owner;
 	Target             = CustomizationTarget;
 	TargetType         = CustomizationType;
-
-	AssignNewToChild(Parent, PictorumVerticalBox, DefaultCategory, "DefaultCategory");
-
-	CurrentCategoryContainer    = DefaultCategory;
+	bIsNested          = IsNested;
+	DefaultCategory    = nullptr;
 }
 void InspectorPanelBuilder::AddControlForProperty(const FProperty* Property) {
 	// Skip if null.
@@ -33,17 +31,16 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty* Property) {
 		return;
 	}
 
-	if (Property->Category == "Default") {
-		CurrentCategoryContainer = DefaultCategory;
-	} else {
-		CurrentCategoryContainer = GetCategoryWidget(Property->Category)->GetContainer();
-	}
+	// Update the current category.
+	CurrentCategoryContainer = GetCategoryWidgetContainer(Property->Category);
 
-	if (AddedProperties.Count() > 0) {
+	// Add the separator.
+	if (CurrentCategoryContainer->GetChildCount() > 0) {
 		AssignNewToChildLocal(CurrentCategoryContainer, SeparatorWidget, sep, "Separator");
 		sep->SetSize(0.0f, 5.0f);
 	}
 
+	// Raise the appropriate method for the property (if it is a simple data type, raise the simple data type method, otherwise raise the property builder.
 	const TString& typeName = Property->Type->Name;
 	if (typeName == "Vector4D") {
 		AddControlForVector4DProperty(Property);
@@ -57,7 +54,7 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty* Property) {
 		AddControlForFloatProperty(Property);
 	} else {
 		IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(Property->Type);
-		InspectorPanelBuilder propertyBuilder(CurrentCategoryContainer, Property->Type, ReflectionHelpers::GetProperty<void>(Property, Target));
+		InspectorPanelBuilder propertyBuilder(CurrentCategoryContainer, Property->Type, ReflectionHelpers::GetProperty<void>(Property, Target), true);
 		generator->GenerateInspector(propertyBuilder);
 	}
 	AddedProperties.Add(RemoveConst(Property));
@@ -150,11 +147,27 @@ void InspectorPanelBuilder::AddControlForFloatProperty(const FProperty* Property
 const TypeDescriptor* InspectorPanelBuilder::GetTypeDescriptor() const {
 	return TargetType;
 }
-CollapsingCategoryWidget* InspectorPanelBuilder::GetCategoryWidget(const TString& Category) {
-	if (Categories.find(Category) == Categories.end()) {
+PictorumVerticalBox* InspectorPanelBuilder::GetCategoryWidgetContainer(const TString& Category) {
+	if (Category == "Default") {
+		if (!DefaultCategory) {
+			// If this is a nested class, simply allocate a vertical box and add default properties to that.
+			// If this is a top level class, make a 'Default' collapsible category.
+			if (bIsNested) {
+				AssignNewToChild(Parent, PictorumVerticalBox, DefaultCategory, "DefaultCategory");
+				Categories.emplace(Category, DefaultCategory);
+			} else {
+				AssignNewToChildLocal(Parent, CollapsingCategoryWidget, defaultCat, "DefaultCategory");
+				defaultCat->SetCategoryLabel(Category);
+				Categories.emplace(Category, defaultCat->GetContainer());
+				DefaultCategory = defaultCat->GetContainer();
+			}
+		}
+		return DefaultCategory;
+	}
+	if (Categories.count(Category) == 0) {
 		AssignNewToChildLocal(Parent, CollapsingCategoryWidget, currentCat, Category);
 		currentCat->SetCategoryLabel(Category);
-		Categories.emplace(Category, currentCat);
+		Categories.emplace(Category, currentCat->GetContainer());
 	}
 	return Categories.at(Category);
 }

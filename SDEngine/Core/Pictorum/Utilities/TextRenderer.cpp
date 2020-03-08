@@ -2,6 +2,7 @@
 #include "Core/Engine/EngineStatics.h"
 #include "Core/Objects/CoreTypes/Shader.h"
 #include "Core/Utilities/Math/MathLibrary.h"
+#include "Core/Utilities/StringUtilities.h"
 
 
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
@@ -129,39 +130,79 @@ const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vecto
 	MinBounds = LastFrameMinBounds;
 	MaxBounds = LastFrameMaxBounds;
 }
-const Vector2D TextRenderer::GetCursorLocationForCharacterIndex(const int32& Index) {
+const Vector2D TextRenderer::GetCursorLocationForCharacterIndex(const int32& Index, const bool& LeftSide) {
 	int32 internalIndex = MathLibrary::Clamp(Index, 0, (int32)Text.length());
-	Vector2D vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) - 1)];
-	if (internalIndex > 0) {
+	Vector2D vertPos;
+
+	if (LeftSide) {
+		vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) - 1)];
+	} else {
+		vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) + 3)];
+	}
+
+	if (internalIndex > 0 || (internalIndex == 0 && !LeftSide)) {
 		vertPos.x += Tracking;
 	}
 	vertPos *= LastFrameScale;
 	vertPos += LastFrameRenderPosition;
 	return (vertPos + 1.0f) / 2.0f;
 }
-const int32 TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution) const {
+const void TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& LeftSide) const {
 	Vector2D mouseLocationAdjusted = MouseLocation / ScreenResolution;
-	mouseLocationAdjusted = (mouseLocationAdjusted - 0.5f) * 2.0f;
+	mouseLocationAdjusted          = (mouseLocationAdjusted - 0.5f) * 2.0f;
+	Index                          = -1;
+	LeftSide                       = true;
 
-	for (int32 i = 0; i < Text.length(); i++) {
-		if (Text[i] == '\n') {
-			continue;
-		}
-		Vector2D bottomLeft = TextBlockCache->Verticies[i * 4];
-		bottomLeft *= LastFrameScale;
-		bottomLeft += LastFrameRenderPosition;
+	Vector2D bottomLeft, topRight;
+	int32 lineStartIndex = 0;
+	bool wasInLine = false;
 
-		Vector2D topRight = TextBlockCache->Verticies[(i * 4) + 2];
-		topRight *= LastFrameScale;
-		topRight += LastFrameRenderPosition;
+	SArray<FTextLine*> Lines;
+	TextBlockCache->GetLines(Lines);
 
-		if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
+
+
+	for (const FTextLine* line : Lines) {
+		for (int32 i = 0; i < line->CharacterCount; i++) {
+			const char character = line->Characters[i];
+
+			GetAbsoluteCharacterBounds(lineStartIndex + i, bottomLeft, topRight);
 			if (mouseLocationAdjusted.y >= bottomLeft.y && mouseLocationAdjusted.y <= topRight.y) {
-				return i;
+				wasInLine = true;
+				if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
+					float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
+					if (mouseLocationAdjusted.x >= xMidpoint) {
+						LeftSide = false;
+					} else {
+						LeftSide = true;
+					}
+					Index = lineStartIndex + i;
+					return;
+				}
 			}
 		}
+		if (wasInLine) {
+			if (mouseLocationAdjusted.x > topRight.x) {
+				Index = lineStartIndex + line->CharacterCount - 1;
+				LeftSide = false;
+				return;
+			} else {
+				Index = lineStartIndex;
+				LeftSide = true;
+				return;
+			}
+		}
+		lineStartIndex = lineStartIndex + line->CharacterCount;
 	}
-	return -1;
+}
+const void TextRenderer::GetAbsoluteCharacterBounds(const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const {
+	BottomLeft = TextBlockCache->Verticies[Index * 4];
+	BottomLeft *= LastFrameScale;
+	BottomLeft += LastFrameRenderPosition;
+
+	TopRight = TextBlockCache->Verticies[(Index * 4) + 2];
+	TopRight *= LastFrameScale;
+	TopRight += LastFrameRenderPosition;
 }
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.

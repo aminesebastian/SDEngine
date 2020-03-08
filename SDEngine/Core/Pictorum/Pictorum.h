@@ -20,3 +20,7 @@
 #include "Core/Pictorum/Slots/PictorumCanvasSlot.h"
 #include "Core/Pictorum/Slots/PictorumGridSlot.h"
 #include "Core/Pictorum/Slots/VerticalBoxSlot.h"
+
+#include "Core/Pictorum/Utilities/TextFormatters/ITextInputFormatter.h"
+#include "Core/Pictorum/Utilities/TextFormatters/DecimalInputTextFormatter.h"
+#include "Core/Pictorum/Utilities/TextFormatters/IntegerInputTextFormatter.h"

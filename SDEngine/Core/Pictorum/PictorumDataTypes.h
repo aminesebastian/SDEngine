@@ -269,8 +269,15 @@ struct FRenderGeometry {
 	void SetRenderResolution(const vec2& Resolution) {
 		RenderResolution = Resolution;
 	}
-
-
+	const Vector2D GetTopLeft() const {
+		return Vector2D(Location.x, Location.y + AllotedSpace.y);
+	}
+	const Vector2D GetTopRight() const {
+		return Vector2D(Location.x + AllotedSpace.x, Location.y + AllotedSpace.y);
+	}
+	const Vector2D GetBottomRight() const {
+		return Vector2D(Location.x + AllotedSpace.x, Location.y);
+	}
 	const float GetAllotedSpaceAspectRatio() const {
 		return AllotedSpace.x / AllotedSpace.y;
 	}

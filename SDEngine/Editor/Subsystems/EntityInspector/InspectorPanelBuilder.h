@@ -8,7 +8,7 @@ class PictorumWidget;
 
 class InspectorPanelBuilder {
 public:
-	InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget);
+	InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget, bool IsNested = false);
 
 	template<typename T>
 	const T* GetTarget() const {
@@ -24,14 +24,19 @@ protected:
 	virtual void AddControlForVector4DProperty(const FProperty* Property);
 	virtual void AddControlForBoolProperty(const FProperty* Property);
 	virtual void AddControlForTransformProperty(const FProperty* Property);
+
 private:
 	PictorumVerticalBox* Parent;
 	PictorumVerticalBox* DefaultCategory;
 	PictorumVerticalBox* CurrentCategoryContainer;
+	SHashMap<TString, PictorumVerticalBox*> Categories;
+
 	void* Target;
 	const TypeDescriptor* TargetType;
-	SHashMap<TString, CollapsingCategoryWidget*> Categories;
+
 	SArray<FProperty*> AddedProperties;
 
-	CollapsingCategoryWidget* GetCategoryWidget(const TString& Category);
+	bool bIsNested;
+
+	PictorumVerticalBox* GetCategoryWidgetContainer(const TString& Category);
 };

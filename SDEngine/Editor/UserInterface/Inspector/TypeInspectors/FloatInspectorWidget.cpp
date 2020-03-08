@@ -26,7 +26,7 @@ void FloatInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* Ta
 	AssignNewToChild(this, SolidWidget, ValueBackgroundWidget, "ValueBg");
 	ValueBackgroundWidget->OnHoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueHovered>(this);
 	ValueBackgroundWidget->OnUnhoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueUnhovered>(this);
-	ValueBackgroundWidget->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	ValueBackgroundWidget->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
 	ValueBackgroundWidget->SetPadding(ContentPadding);
 	ValueBackgroundWidget->SetBorderRadius(0.0f, 5.0f, 0.0f, 5.0f);
 	ValueBackgroundWidget->SetVisibility(EPictorumVisibilityState::VISIBLE);
@@ -36,6 +36,7 @@ void FloatInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* Ta
 	ValueWidget->SetFontSize(9);
 	ValueWidget->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
 	ValueWidget->SetFontWeight(EFontWeight::Bold);
+	ValueWidget->SetInputFormatter(new DecimalInputTextFormatter(2));
 	ValueWidget->OnMouseDownDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueMouseDown>(this);
 	ValueWidget->OnMouseMoveDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueMouseMove>(this);
 }

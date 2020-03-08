@@ -1,7 +1,8 @@
 #pragma once
-#include "Core/Pictorum/PictorumWidget.h"
-#include "Core/Pictorum/Utilities/TextRenderer.h"
 #include "Core/Objects/CoreTypes/DistanceFieldFont.h"
+#include "Core/Pictorum/PictorumWidget.h"
+#include "Core/Pictorum/Utilities/TextFormatters/ITextInputFormatter.h"
+#include "Core/Pictorum/Utilities/TextRenderer.h"
 
 class TextWidget : public PictorumWidget {
 public:

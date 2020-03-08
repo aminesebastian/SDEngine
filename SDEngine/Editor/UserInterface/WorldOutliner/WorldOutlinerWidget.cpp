@@ -15,12 +15,15 @@ WorldOutlinerWidget::~WorldOutlinerWidget() {
 }
 
 void WorldOutlinerWidget::OnCreated() {
-	SolidWidget* bg = new SolidWidget("WorldOutlinerBackground");
-	AddChild(bg);
-	bg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	AssignNewChildLocal(SolidWidget, root, "WorldOutlinerBackground");
+	root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
+	root->SetPadding(4.0f);
 
-	ScrollBox = new PictorumScrollBox("WorldOutlinerScrollBox");
-	bg->AddChild(ScrollBox);
+	AssignNewToChildLocal(root, SolidWidget, contentBg, "ContentBackground");
+	contentBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	contentBg->SetPadding(8.0f, 4.0f, 4.0f, 0.0f);
+
+	AssignNewToChild(contentBg, PictorumScrollBox, ScrollBox, "WorldOutlinerScrollBox");
 	ScrollBox->SelectionUpdated.Add<WorldOutlinerWidget, &WorldOutlinerWidget::OnSelectedValuesChanged>(this);
 }
 void WorldOutlinerWidget::SetWorld(World* WorldIn) {

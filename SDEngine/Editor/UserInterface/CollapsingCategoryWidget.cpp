@@ -4,9 +4,17 @@
 CollapsingCategoryWidget::CollapsingCategoryWidget(const TString& Name) : PictorumWidget(Name) {
 	CollapseImage                        = Engine::GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/UI/CategoryTwirlIcon.sasset");
 	CollapseIconDrawInstruction          = new FImageDrawInstruction();
+	CollapseIconDrawInstruction->Tint    = EngineUIStyles::DIM_ICON_TINT;
 	CollapseIconDrawInstruction->Texture = CollapseImage;
-	CollapseIconDrawInstruction->Size    = Vector2D(16.0f, 16.0f);
+	CollapseIconDrawInstruction->Size    = Vector2D(12.0f, 12.0f);
 	bCollapsed                           = false;
+
+	SeparatorLineHeight = 1.0f;
+	SeparatorLine = new FBoxDrawInstruction();
+	SeparatorLine->BackgroundColor = EngineUIStyles::SEPARATOR_COLOR;
+
+	ContentBackground = new FBoxDrawInstruction();
+	ContentBackground->BackgroundColor = EngineUIStyles::LIGHT_BACKGROUND_COLOR;
 }
 CollapsingCategoryWidget::~CollapsingCategoryWidget() {
 	delete CollapseIconDrawInstruction;
@@ -17,23 +25,40 @@ void CollapsingCategoryWidget::OnCreated() {
 	AssignNewToChildLocal(OverallContainer, SeparatorWidget, separator, "Separator");
 	AssignNewToChild(CategoryBackground, TextWidget, CategoryLabel, "CategoryLabel");
 	CategoryLabel->SetFontSize(10);
+	CategoryLabel->SetText("ERROR");
 
 	separator->SetSize(0.0f, 5.0f);
 
 	CategoryBackground->GetParentSlot<VerticalBoxSlot>()->SetHorizontalAlignment(EHorizontalAlignment::STRETCH);
-	CategoryBackground->SetPadding(2.0f, 0.0f, 2.0f, 20.0f);
-	CategoryBackground->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	CategoryBackground->SetPadding(8.0f, 0.0f, 8.0f, 20.0f);
+	if (bCollapsed) {
+		CategoryBackground->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+	} else {
+		CategoryBackground->SetBackgroundColor(EngineUIStyles::LIGHT_BACKGROUND_COLOR);
+	}
+
 	CategoryBackground->OnMouseUpDelegate.Add<CollapsingCategoryWidget, & CollapsingCategoryWidget::CategoryClicked>(this);
 	CategoryBackground->SetVisibility(EPictorumVisibilityState::VISIBLE);
 	AssignNewToChild(OverallContainer, PictorumVerticalBox, InternalContainer, "CategoryBackground");
+	InternalContainer->SetPadding(0.0f, 8.0f, 2.0f, 8.0f);
 	AssignNewToChild(OverallContainer, SeparatorWidget, separator, "BottomSeparator");
 	separator->SetSize(0.0f, 5.0f);
 }
+void CollapsingCategoryWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
+	if (!bCollapsed) {
+		ContentBackground->Location = Geometry.GetLocation();
+		ContentBackground->Size = Geometry.GetAllotedSpace();
+		DrawBox(Geometry, *ContentBackground);
+	}
+}
 void CollapsingCategoryWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
-	CollapseIconDrawInstruction->Location.x = Geometry.GetLocation().x;
-	CollapseIconDrawInstruction->Location.y = Geometry.GetLocation().y + Geometry.GetAllotedSpace().y - CollapseIconDrawInstruction->Size.y;
-
+	CollapseIconDrawInstruction->Location.x = Geometry.GetLocation().x + 4.0f;
+	CollapseIconDrawInstruction->Location.y = Geometry.GetTopLeft().y - CollapseIconDrawInstruction->Size.y - GetHeaderHeight() / 4.0f;
 	DrawImage(Geometry, *CollapseIconDrawInstruction);
+
+	SeparatorLine->Location = Vector2D( Geometry.GetLocation());
+	SeparatorLine->Size = Vector2D(Geometry.GetAllotedSpace().x, SeparatorLineHeight);
+	DrawBox(Geometry, *SeparatorLine);
 }
 Vector2D CollapsingCategoryWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	if (bCollapsed) {
@@ -59,8 +84,10 @@ void CollapsingCategoryWidget::CategoryClicked(PictorumWidget* Widget, const Vec
 	bCollapsed = !bCollapsed;
 	if (bCollapsed) {
 		InternalContainer->SetVisibility(EPictorumVisibilityState::COLLAPSED);
+		CategoryBackground->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
 	} else {
 		InternalContainer->SetVisibility(EPictorumVisibilityState::SELF_HIT_TEST_INVISIBLE);
+		CategoryBackground->SetBackgroundColor(EngineUIStyles::LIGHT_BACKGROUND_COLOR);
 	}
 }
 const float CollapsingCategoryWidget::GetHeaderHeight() const {

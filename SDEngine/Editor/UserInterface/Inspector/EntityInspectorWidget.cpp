@@ -17,11 +17,14 @@ EntityInspector::~EntityInspector() {
 }
 
 void EntityInspector::OnCreated() {
-	AssignNewChildLocal(SolidWidget, root, "DetailsPanelBG");
+	AssignNewChildLocal(SolidWidget, root, "InspectorBG");
 	root->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
-	root->SetPadding(8.0f);
+	root->SetPadding(0.0f, 4.0f, 0.0f, 4.0f);
 
-	AssignNewToChildLocal(root, PictorumScrollBox, scrollBox, "ControlsScrollBox");
+	AssignNewToChildLocal(root, SolidWidget, contentBg, "ContentBackground");
+	contentBg->SetBackgroundColor(EngineUIStyles::BACKGROUND_COLOR);
+
+	AssignNewToChildLocal(contentBg, PictorumScrollBox, scrollBox, "ControlsScrollBox");
 	AssignNewToChild(scrollBox, PictorumVerticalBox, DetailsPanelListBox, "ControlsContainer");
 }
 void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {

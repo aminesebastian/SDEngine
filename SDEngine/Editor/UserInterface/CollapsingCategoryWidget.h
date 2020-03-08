@@ -11,6 +11,7 @@ public:
 	PictorumVerticalBox* GetContainer() const;
 	const TString& GetLabel() const;
 protected:
+	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void OnCreated() override;
 	virtual Vector2D GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
@@ -22,8 +23,13 @@ private:
 	PictorumVerticalBox* OverallContainer;
 	PictorumVerticalBox* InternalContainer;
 	Texture2D* CollapseImage;
-	FImageDrawInstruction* CollapseIconDrawInstruction;
 	TString Label;
 	bool bCollapsed;
+
+
+	FImageDrawInstruction* CollapseIconDrawInstruction;
+	FBoxDrawInstruction* SeparatorLine;
+	float SeparatorLineHeight;
+	FBoxDrawInstruction* ContentBackground;
 };
 

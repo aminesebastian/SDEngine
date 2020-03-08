@@ -18,7 +18,7 @@ Light::Light(const TString& Name, const FTransform& IntialTransform, const ELigh
 	Color = ColorIn;
 	Attenuation = AttenuationIn;
 
-	RegisterComponent(new BillboardComponent("PointLightSprite", Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), Color));
+	RegisterComponent(new BillboardComponent("PointLightSprite", Engine::Get()->GetAssetManager()->FindAsset<Texture2D>("./Res/Assets/Editor/Textures/PointLightSprite.sasset"), FColor(Color.x, Color.y, Color.z)));
 
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));
 
