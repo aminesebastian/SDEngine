@@ -1,3 +1,4 @@
+//LastModifiedTime:504911232000000000
 #pragma once
 #include "Core/Reflection/Reflection.h"
 #include "../../../../SDEngine\Core\Objects\Entities\Actor.h"

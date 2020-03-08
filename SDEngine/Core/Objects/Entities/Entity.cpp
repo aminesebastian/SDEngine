@@ -3,7 +3,7 @@
 #include "Core/Engine/World.h"
 #include "Entity.reflected.h"
 
-Entity::Entity(const TString& Name, const TString& Type) : EngineObject(Name, Type) {
+Entity::Entity(const TString& Name) : EngineObject(Name) {
 	bVisible        = true;
 	bHiddenInGame   = false;
 	bNeedsTick      = true;

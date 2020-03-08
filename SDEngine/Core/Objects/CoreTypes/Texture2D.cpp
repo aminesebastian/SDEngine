@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include <cassert>
 
-Texture2D::Texture2D(const TString& TextureName) : EngineObject(TextureName, "Texture2D") {
+Texture2D::Texture2D(const TString& TextureName) : EngineObject(TextureName) {
 	bSentToGPU = false;
 	ExpectedComponents = 4;
 	WrapBehaviour = GL_REPEAT;

@@ -1,7 +1,7 @@
 #include "Component.h"
 #include "Core/Objects/Entities/Actor.h"
 
-Component::Component(const TString& Name, const TString& Type) : Entity(Name, Type) {
+Component::Component(const TString& Name) : Entity(Name) {
 	OwningActor = nullptr;
 	OwningComponent = nullptr;
 }

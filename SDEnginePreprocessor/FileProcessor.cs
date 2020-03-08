@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace SuburbanDigitalEnginePreprocessor {
     class FileProcessor {
-        public string FilePath { get; private set; }
+        public string SourceFilePath { get; private set; }
         public string FileName { get; private set; }
         public string OutputFilePath { get; private set; }
         public Dictionary<string, CPPObject> Objects { get; private set; }
 
         public FileProcessor(string FilePath, string DestinationPath) {
-            this.FilePath = FilePath;
+            this.SourceFilePath = FilePath;
             FileName = Path.GetFileName(FilePath);
             OutputFilePath = Path.Combine(DestinationPath, FileName.Split('.')[0] + ".reflected.h");
             Objects = new Dictionary<string, CPPObject>();
@@ -26,7 +26,32 @@ namespace SuburbanDigitalEnginePreprocessor {
             return false;
         }
         public void GenerateReflectedFile() {
-            WriteReflectedHeaderOut();
+            // Only write a new file if the source file had changed. We still have to do the Processing of
+            // the file in case other source files that DID change depend on the contents of this once.
+            if (HasSourceFileChanged() && ContainsReflectableContents()) {
+                WriteReflectedHeaderOut();
+            }
+        }
+        public bool ContainsReflectableContents() {
+            return Objects.Count > 0;
+        }
+        public bool HasSourceFileChanged() {
+            // Check to see if both the reflected and source files exist. If true, check the cached last
+            // modified time of the source file that was recorded in the reflected file. If the modified
+            // time of the source file is greater than the cached time stored in the reflected file, we
+            // assume the source file is dirty and we must re-reflect.
+            if (File.Exists(OutputFilePath) && File.Exists(SourceFilePath)) {
+                string[] lines = File.ReadAllLines(OutputFilePath);
+                if (lines[0].StartsWith("//LastModifiedTime:")) {
+                    string[] split = lines[0].Split("//LastModifiedTime:");
+                    if (split.Length > 1) {
+                        string lastModified = split[1].Trim();
+                        long lastModifiedTicks = Convert.ToInt64(lastModified);
+                        return File.GetLastWriteTime(SourceFilePath).Ticks > lastModifiedTicks;
+                    }
+                }
+            }
+            return true;
         }
         private void ResolveParentClasses() {
             foreach (CPPObject encapsulator in Objects.Values) {
@@ -117,21 +142,23 @@ namespace SuburbanDigitalEnginePreprocessor {
             return tokens;
         }
         private List<string> ParseFileIntoLines() {
-            StreamReader reader = File.OpenText(FilePath);
+            StreamReader reader = File.OpenText(SourceFilePath);
             string fileLine;
             List<string> lines = new List<string>();
             while ((fileLine = reader.ReadLine()) != null) {
-                if (!string.IsNullOrWhiteSpace(fileLine) && !fileLine.StartsWith("/")) {
+                if (!string.IsNullOrWhiteSpace(fileLine) && !fileLine.StartsWith("//")) {
                     lines.Add(fileLine.Trim());
                 }
             }
             return lines;
         }
         private void WriteReflectedHeaderOut() {
+            DateTime lastWriteTime = File.GetLastWriteTimeUtc(OutputFilePath);
             List<string> fileContents = new List<string>();
+            fileContents.Add("//LastModifiedTime:" + lastWriteTime.Ticks.ToString());
             fileContents.Add("#pragma once");
             fileContents.Add("#include \"Core/Reflection/Reflection.h\"");
-            fileContents.Add("#include \"" + FilePath + "\"");
+            fileContents.Add("#include \"" + SourceFilePath + "\"");
             fileContents.Add("");
 
             foreach (CPPObject enc in Objects.Values) {

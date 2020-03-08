@@ -9,7 +9,7 @@ BillboardComponent::BillboardComponent(const TString& Name, Texture2D* Sprite, c
 	this->Sprite = Sprite;
 	Tint = Color;
 }
-BillboardComponent::BillboardComponent(const TString& Name) : Component(Name, "BillboardComponent") {
+BillboardComponent::BillboardComponent(const TString& Name) : Component(Name) {
 	SpriteVertexArray = 0;
 	SpriteVertexBuffer = 0;
 	//S_AABB = new AxisAlignedBoundingBox(vec3(0.0f, -1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f));

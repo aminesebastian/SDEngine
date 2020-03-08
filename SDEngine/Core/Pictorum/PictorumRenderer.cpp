@@ -4,7 +4,7 @@
 #include "Core/Pictorum/PictorumWidget.h"
 #include "Core/Utilities/Logger.h"
 
-PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWindow) : EngineObject(ViewportName, "PictorumRenderer"), OwningWindow(OwningWindow) {
+PictorumRenderer::PictorumRenderer(const TString& ViewportName, Window* OwningWindow) : EngineObject(ViewportName), OwningWindow(OwningWindow) {
 	ShapeDrawer   = new PictorumShapeDrawer(ViewportName + "_ShapeDrawer");
 	FocusedWidget = nullptr;
 

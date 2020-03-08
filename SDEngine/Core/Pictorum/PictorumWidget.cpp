@@ -8,7 +8,7 @@
 #include "Core/Utilities/Math/MathLibrary.h"
 #include "Core/Pictorum/Utilities/PictorumShapeDrawer.h"
 
-PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name, "UIWidget") {
+PictorumWidget::PictorumWidget(const TString& Name) : EngineObject(Name) {
 	Rotation        = 0.0f; // 0 Degrees
 	Parent          = nullptr;
 	OwningRenderer  = nullptr;

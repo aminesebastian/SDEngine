@@ -19,7 +19,7 @@ SD_CLASS()
 class Entity : public EngineObject {
 	SD_CLASS_BODY();
 public:
-	Entity(const TString& Name, const TString& Type);
+	Entity(const TString& Name);
 	virtual ~Entity();
 
 	bool IsVisible() const;

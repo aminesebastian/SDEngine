@@ -7,7 +7,7 @@
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 
-StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name, "StaticMesh") {
+StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name) {
 	bSentToGPU = false;
 }
 StaticMesh::~StaticMesh() {

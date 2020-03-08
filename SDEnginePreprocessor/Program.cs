@@ -9,9 +9,7 @@ namespace SuburbanDigitalEnginePreprocessor {
         static void Main(string[] args) {
             // Capture the output file directory.
             string outputFileDirectory = args[0];
-            if(Directory.Exists(outputFileDirectory)) {
-                Directory.Delete(outputFileDirectory, true);
-            }
+
             Thread.Sleep(100);
             Directory.CreateDirectory(outputFileDirectory);
 
@@ -19,15 +17,18 @@ namespace SuburbanDigitalEnginePreprocessor {
             List<string> allFiles = Directory.GetFiles(args[1], "*.h", SearchOption.AllDirectories).ToList();
 
             // Indicate the processing is starting.
-            Console.WriteLine($"SuburbanDigitalPreprocessor running and attempting to processing {allFiles.Count() } Files.");
+            Console.WriteLine($"SuburbanDigitalPreprocessor running and attempting to processing {allFiles.Count() } files.");
 
             List<FileProcessor> reflectedFiles = new List<FileProcessor>();
-
+            int changedFileCount = 0;
             // Process all the files.
             foreach(string filePath in allFiles) {
                 FileProcessor processor = new FileProcessor(filePath, outputFileDirectory);
                 if(processor.ProcessFile()) {
                     reflectedFiles.Add(processor);
+                    if (processor.HasSourceFileChanged()) {
+                        changedFileCount++;
+                    }
                 }
             }
 
@@ -35,6 +36,9 @@ namespace SuburbanDigitalEnginePreprocessor {
             foreach(FileProcessor proc in reflectedFiles) {
                 proc.GenerateReflectedFile();
             }
+
+            // Indicate the processing is starting.
+            Console.WriteLine($"SuburbanDigitalPreprocessor generated reflection files for {changedFileCount} modified sources files.");
 
             //Indicate we have succeeded.
             Console.WriteLine("SuburbanDigitalPreprocessor successfully executed.");

@@ -4,7 +4,7 @@
 #include "Core/Objects/Entities/Entity.h"
 #include "Actor.reflected.h"
 
-Actor::Actor(const TString& Name) : Entity(Name, "Actor") {
+Actor::Actor(const TString& Name) : Entity(Name) {
 	RootComponent = nullptr;
 }
 Actor::~Actor() {}

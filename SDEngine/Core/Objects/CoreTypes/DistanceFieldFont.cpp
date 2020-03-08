@@ -5,7 +5,7 @@
 #include "Core/Utilities/Logger.h"
 #include <fstream>
 
-DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : EngineObject(DistanceFieldFontName, "DistanceFieldFont") {
+DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : EngineObject(DistanceFieldFontName) {
 	DistanceFieldTexture = nullptr;
 	SupportedCharacterCount = 0;
 	OfflineFontSize = 0;
