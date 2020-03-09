@@ -42,6 +42,11 @@ TypeDescriptor* GetPrimitiveDescriptor<bool>() {
 	static TypeDescriptor_Bool typeDesc;
 	return &typeDesc;
 }
+template <>
+TypeDescriptor* GetPrimitiveDescriptor<void>() {
+	static TypeDescriptor_Void typeDesc;
+	return &typeDesc;
+}
 
 /****************************************************************************/
 /* Array Type Descriptors. There should be one of these for every one above */

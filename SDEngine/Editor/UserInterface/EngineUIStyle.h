@@ -11,4 +11,9 @@ namespace EngineUIStyles {
 
 	static const FColor LIGHT_TEXT_COLOR(1.0f, 1.0f, 1.0f);
 	static const FColor DARK_TEXT_COLOR(0.0f, 0.0f, 0.0f);
+
+	static const FColor X_COLOR = FColor::FromIntegerRGB(174, 29, 49);
+	static const FColor Y_COLOR = FColor::FromIntegerRGB(19, 164, 30);
+	static const FColor Z_COLOR = FColor::FromIntegerRGB(34, 44, 172);
+	static const FColor W_COLOR = FColor::FromIntegerRGB(172, 102, 34);
 }

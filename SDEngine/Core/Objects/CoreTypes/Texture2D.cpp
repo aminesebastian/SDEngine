@@ -3,6 +3,7 @@
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 #include "Core/Utilities/stbi.h"
+#include "Reflection/Texture2D.reflected.h"
 #include "Shader.h"
 #include <cassert>
 

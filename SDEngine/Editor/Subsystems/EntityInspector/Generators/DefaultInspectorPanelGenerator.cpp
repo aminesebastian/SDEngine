@@ -8,7 +8,7 @@ void DefaultInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Bu
 		ReflectionHelpers::GetAllMembersOfClass(properties, target);
 
 		for (FProperty* prop : properties) {
-			if (prop->bInspectorHidden) {
+			if (prop->GetMetadata().GetHiddenInInspector()) {
 				continue;
 			}
 			Builder.AddControlForProperty(prop);
@@ -17,7 +17,7 @@ void DefaultInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Bu
 		TypeDescriptor* typeDesc = RemoveConst(Builder.GetTypeDescriptor());
 		TypeDescriptor_Struct* classTypeDesc = Cast<TypeDescriptor_Struct>(typeDesc);
 		for (FProperty& prop : classTypeDesc->Properties) {
-			if (prop.bInspectorHidden) {
+			if (prop.GetMetadata().GetHiddenInInspector()) {
 				continue;
 			}
 			Builder.AddControlForProperty(&prop);

@@ -4,7 +4,7 @@
 #include "Core/DataTypes/TypeDefenitions.h"
 #include <iostream>
 
-struct TypeDescriptor_Vector4D: public TypeDescriptor {
+struct TypeDescriptor_Vector4D : public TypeDescriptor {
 	TypeDescriptor_Vector4D() : TypeDescriptor{ "Vector4D", sizeof(Vector4D) } {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		Vector4D vec = *(const Vector4D*)Instance;
@@ -47,6 +47,13 @@ struct TypeDescriptor_Bool : public TypeDescriptor {
 	}
 };
 
+struct TypeDescriptor_Void : public TypeDescriptor {
+	TypeDescriptor_Void() : TypeDescriptor{ "void", 0 } {}
+	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
+		return Name + "{VOID}";
+	}
+};
+
 struct TypeDescriptor_TString : public TypeDescriptor {
 	TypeDescriptor_TString() : TypeDescriptor{ "String", sizeof(TString) } {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
@@ -63,26 +70,122 @@ struct TypeDescriptor_SArray : public TypeDescriptor {
 	}
 	TypeDescriptor* ContainerType;
 };
+enum class ETypeMemoryType : uint8 {
+	VALUE, REFERENCE, POINTER
+};
+struct FPropertyMetadata {
+	FPropertyMetadata() {}
+	FPropertyMetadata(const char* Category, bool bInspectorHidden) : Category(Category), bInspectorHidden(bInspectorHidden) {}
 
-struct FProperty {
-	const char* Name;
-	const char* InspectorName;
-	const char* Category;
-	size_t Offset;
-	TypeDescriptor* Type;
+	const char* GetCategory() const {
+		return Category;
+	}
+	const bool& GetHiddenInInspector() const {
+		return bInspectorHidden;
+	}
+	bool operator==(const FPropertyMetadata& Other) const {
+		if (bInspectorHidden == Other.bInspectorHidden) {
+			if (Category == Other.Category) {
+				return true;
+			}
+		}
+		return false;
+	}
+private:
 	bool bInspectorHidden;
+	const char* Category;
+};
+struct FProperty {
+	FProperty(const char* Name, const char* InspectorName, const size_t& Offset, TypeDescriptor* Type, const FPropertyMetadata& Metadata) {
+		this->Name = Name;
+		this->InspectorName = InspectorName;
+		this->Offset = Offset;
+		this->Type = Type;
+		this->Metadata = Metadata;
+	}
 
-	const TString GetCategory() const {
-		return TString(Category);
+	const FPropertyMetadata& GetMetadata() const {
+		return Metadata;
 	}
 
 	bool operator==(const FProperty& Other) const {
 		if (Name == Other.Name) {
 			if (InspectorName == Other.InspectorName) {
-				if (Category == Other.Category) {
-					if (Offset == Other.Offset) {
-						if (Type == Other.Type) {
-							if (bInspectorHidden == Other.bInspectorHidden) {
+				if (Offset == Other.Offset) {
+					if (Type == Other.Type) {
+						if (Metadata == Other.Metadata) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	const char* Name;
+	const char* InspectorName;
+	size_t Offset;
+	TypeDescriptor* Type;
+	FPropertyMetadata Metadata;
+};
+struct FFunctionParameter {
+	const char* Name;
+	TypeDescriptor* Type;
+	bool Const;
+	ETypeMemoryType MemoryType;
+	FFunctionParameter() {}
+	FFunctionParameter(const char* Name, TypeDescriptor* Type, const bool& Const, const ETypeMemoryType& MemoryType) {
+		this->Name = Name;
+		this->Type = Type;
+		this->Const = Const;
+		this->MemoryType = MemoryType;
+	}
+	bool operator==(const FFunctionParameter& Other) const {
+		if (Name == Other.Name) {
+			if (Type == Other.Type) {
+				if (Const == Other.Const) {
+					if (MemoryType == Other.MemoryType) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	bool operator!=(const FFunctionParameter& Other) const {
+		return !(*this == Other);
+	}
+};
+struct FFunction {
+	const char* Name;
+	bool ReturnConst;
+	TypeDescriptor* ReturnType;
+	ETypeMemoryType ReturnMemoryType;
+	bool ConstFunction;
+	std::vector<FFunctionParameter> Parameters;
+
+	FFunction(const char* Name, const bool& ReturnConst, TypeDescriptor* ReturnType, const ETypeMemoryType& ReturnMemoryType, const bool& ConstFunction, const std::initializer_list<FFunctionParameter>& InitializationList) {
+		this->Name = Name;
+		this->ReturnConst = ReturnConst;
+		this->ReturnType = ReturnType;
+		this->ReturnMemoryType = ReturnMemoryType;
+		this->ConstFunction = ConstFunction;
+		this->Parameters = InitializationList;
+	}
+
+	bool operator==(const FFunction& Other) const {
+		if (Name == Other.Name) {
+			if (ReturnConst == Other.ReturnConst) {
+				if (ReturnType == Other.ReturnType) {
+					if (ReturnMemoryType == Other.ReturnMemoryType) {
+						if (ConstFunction == Other.ConstFunction) {
+							if (Parameters.size() == Other.Parameters.size()) {
+								for (int i = 0; i < Parameters.size(); i++) {
+									if (Parameters[i] != Other.Parameters[i]) {
+										return false;
+									}
+								}
 								return true;
 							}
 						}
@@ -101,6 +204,7 @@ struct TypeDescriptor_Struct : public TypeDescriptor {
 		InitializationFunction(this);
 	}
 	TypeDescriptor_Struct(const char* name, size_t size, const std::initializer_list<FProperty>& InitializationList) : TypeDescriptor{ "", 0 }, Properties{ InitializationList } {
+
 	}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		TString result = Name + " {" + '\n';
@@ -116,12 +220,13 @@ struct TypeDescriptor_Struct : public TypeDescriptor {
 
 struct TypeDescriptor_Class : public TypeDescriptor {
 	std::vector<FProperty> Properties;
+	std::vector<FFunction> Functions;
 	std::vector<TypeDescriptor_Class*> ParentDescriptors;
 
 	TypeDescriptor_Class(void (*InitializationFunction)(TypeDescriptor_Class*)) : TypeDescriptor{ "", 0 } {
 		InitializationFunction(this);
 	}
-	TypeDescriptor_Class(const char* name, size_t size, const std::initializer_list<FProperty>& InitializationList) : TypeDescriptor{ "", 0 }, Properties{ InitializationList } {
+	TypeDescriptor_Class(const char* name, size_t size, const std::initializer_list<FProperty>& PropertyList, const std::initializer_list<FFunction>& FunctionList) : TypeDescriptor{ "", 0 }, Properties{ PropertyList }, Functions{ FunctionList }{
 
 	}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {

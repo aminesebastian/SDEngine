@@ -9,7 +9,7 @@ class Component;
 
 SD_CLASS()
 class Actor : public Entity {
-	SD_CLASS_BODY();
+	SD_CLASS_BODY()
 public:
 	Actor(const TString& Name);
 	~Actor();
@@ -25,11 +25,16 @@ public:
 	////////////
 	//LOCATION//
 	////////////
-	vec3 GetWorldLocation();
-	vec3 GetWorldRotation();
-	vec3 GetWorldScale();
-	FTransform GetWorldTransform();
-	FTransform GetLastFrameWorldTransform();
+	SD_FUNCTION()
+		const Vector3D GetWorldLocation() const;
+	SD_FUNCTION()
+		const Vector3D GetWorldRotation() const;
+	SD_FUNCTION()
+		const Vector3D GetWorldScale() const;
+	SD_FUNCTION()
+		const FTransform GetWorldTransform() const;
+	SD_FUNCTION()
+		const FTransform GetLastFrameWorldTransform() const;
 
 	//////////////
 	//COMPONENTS//

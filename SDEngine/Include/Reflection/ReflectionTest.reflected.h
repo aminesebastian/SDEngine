@@ -1,21 +1,21 @@
-//LastModifiedTime:637193049626713078
+//LastModifiedTime:637193338161159222
 #pragma once
 #include "Core/Reflection/Reflection.h"
 #include "./Test\ReflectionTest.h"
 
 
-//Reflection for struct FReflectionTest
-REFLECT_STRUCT_BEGIN(FReflectionTest)
-REFLECT_STRUCT_BEGIN_PARENTS()
-REFLECT_STRUCT_PARENT_END()
-REFLECT_STRUCT_MEMBERS_BEGIN()
-REFLECT_STRUCT_MEMBER(testFloat, "test Float", false, "Default")
-REFLECT_STRUCT_MEMBER(testString, "test String", false, "Default")
-REFLECT_STRUCT_MEMBER(testInt, "test Int", false, "Default")
-REFLECT_STRUCT_MEMBER(testVector4D, "test Vector4 D", false, "Default")
-REFLECT_STRUCT_MEMBER(testVector3D, "test Vector3 D", false, "Default")
-REFLECT_STRUCT_MEMBER(testVector2D, "test Vector2 D", false, "Default")
-REFLECT_STRUCT_MEMBER(testBool, "test Bool", false, "Default")
-REFLECT_STRUCT_MEMBER(boolArray, "bool Array", false, "Default")
-REFLECT_STRUCT_MEMBERS_END()
-REFLECT_STRUCT_END()
+//Reflection for class FReflectionTest
+REFLECT_CLASS_BEGIN(FReflectionTest)
+REFLECT_CLASS_BEGIN_PARENTS()
+REFLECT_CLASS_PARENT(EngineObject)
+REFLECT_CLASS_PARENT_END()
+REFLECT_CLASS_MEMBER(testFloat, "test Float",  "Default", false)
+REFLECT_CLASS_MEMBER(testString, "test String",  "Default", false)
+REFLECT_CLASS_MEMBER(testInt, "test Int",  "Default", false)
+REFLECT_CLASS_MEMBER(testVector4d, "test Vector4d",  "Default", false)
+REFLECT_CLASS_MEMBER(testVector3d, "test Vector3d",  "Default", false)
+REFLECT_CLASS_MEMBER(testVector2d, "test Vector2d",  "Default", false)
+REFLECT_CLASS_MEMBER(testBool, "test Bool",  "Default", false)
+REFLECT_CLASS_MEMBER(boolArray, "bool Array",  "Default", false)
+REFLECT_CLASS_FUNCTION(THISisATesat, true, int32, 1, true, {test, bool, True, 1}, {test2, bool, False, 0}, {test3, int32, False, 2})
+REFLECT_CLASS_END()

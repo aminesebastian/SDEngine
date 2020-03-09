@@ -12,10 +12,10 @@
 #include "Editor/UserInterface/EngineUIStyle.h"
 
 VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : BaseInspectorWidget(Name) {
-	Colors.Add(FColor(0.7f, 0.0f, 0.0f));
-	Colors.Add(FColor(0.0f, 0.7f, 0.0f));
-	Colors.Add(FColor(0.0f, 0.0f, 0.7f));
-	Colors.Add(FColor(0.94f, 0.7f, 1.0f));
+	Colors.Add(EngineUIStyles::X_COLOR);
+	Colors.Add(EngineUIStyles::Y_COLOR);
+	Colors.Add(EngineUIStyles::Z_COLOR);
+	Colors.Add(EngineUIStyles::W_COLOR);
 
 	Container = nullptr;
 

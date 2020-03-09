@@ -10,7 +10,12 @@ namespace SuburbanDigitalEnginePreprocessor {
             // Capture the output file directory.
             string outputFileDirectory = args[0];
 
-            Thread.Sleep(100);
+#if DEBUG
+            if (Directory.Exists(outputFileDirectory)) {
+                Directory.Delete(outputFileDirectory, true);
+            }
+            Thread.Sleep(100);  // Wait for the delete.
+#endif
             Directory.CreateDirectory(outputFileDirectory);
 
             // Capture a list of all the header files we can process.
@@ -22,19 +27,24 @@ namespace SuburbanDigitalEnginePreprocessor {
             List<FileProcessor> reflectedFiles = new List<FileProcessor>();
             int changedFileCount = 0;
             // Process all the files.
-            foreach(string filePath in allFiles) {
+            foreach (string filePath in allFiles) {
                 FileProcessor processor = new FileProcessor(filePath, outputFileDirectory);
-                if(processor.ProcessFile()) {
+                if (processor.ProcessFile()) {
                     reflectedFiles.Add(processor);
-                    if (processor.HasSourceFileChanged()) {
-                        changedFileCount++;
-                    }
                 }
             }
 
             // Output all the files
-            foreach(FileProcessor proc in reflectedFiles) {
-                proc.GenerateReflectedFile();
+            foreach (FileProcessor proc in reflectedFiles) {
+                if (!proc.ContainsReflectableContents()) {
+                    continue;
+                }
+                // Only write a new file if the source file had changed. We still have to do the Processing of
+                // the file in case other source files that DID change depend on the contents of this once.
+                //if (proc.HasSourceFileChanged()) {
+                    changedFileCount++;
+                    proc.GenerateReflectedFile();
+                //}
             }
 
             // Indicate the processing is starting.

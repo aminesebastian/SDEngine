@@ -1,14 +1,14 @@
 #pragma once
-#include <GLM/glm.hpp>
-#include <GLEW/glew.h>
-#include "Core/Objects/EngineObject.h"
+#include "Core/Assets/ISerializeableAsset.h"
+#include "Core/DataStructures/DataStructures.h"
 #include "Core/Objects/CoreTypes/Material.h"
 #include "Core/Objects/CoreTypes/Texture2D.h"
+#include "Core/Objects/EngineObject.h"
 #include <ASSIMP/Importer.hpp>
-#include <ASSIMP/scene.h>
 #include <ASSIMP/postprocess.h>
-#include "Core/DataStructures/DataStructures.h"
-#include "Core/Assets/ISerializeableAsset.h"
+#include <ASSIMP/scene.h>
+#include <GLEW/glew.h>
+#include <GLM/glm.hpp>
 
 using namespace glm;
 
@@ -64,9 +64,9 @@ struct FSubMesh {
 		return count;
 	}
 };
-
+SD_CLASS()
 class StaticMesh : public EngineObject, public ISerializeableAsset {
-
+	SD_CLASS_BODY();
 public:
 	StaticMesh(const TString& Name);
 	virtual ~StaticMesh();

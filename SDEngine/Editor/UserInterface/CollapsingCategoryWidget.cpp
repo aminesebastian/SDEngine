@@ -53,7 +53,7 @@ void CollapsingCategoryWidget::Draw(float DeltaTime, const FRenderGeometry& Geom
 }
 void CollapsingCategoryWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
 	CollapseIconDrawInstruction->Location.x = Geometry.GetLocation().x + 4.0f;
-	CollapseIconDrawInstruction->Location.y = Geometry.GetTopLeft().y - CollapseIconDrawInstruction->Size.y - GetHeaderHeight() / 4.0f;
+	CollapseIconDrawInstruction->Location.y = Geometry.GetTopLeft().y - CollapseIconDrawInstruction->Size.y - GetHeaderHeight() / 4.0f - 2.0f;
 	DrawImage(Geometry, *CollapseIconDrawInstruction);
 
 	SeparatorLine->Location = Vector2D( Geometry.GetLocation());

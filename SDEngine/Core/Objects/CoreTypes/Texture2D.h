@@ -6,8 +6,9 @@
 
 class Shader;
 
+SD_CLASS()
 class Texture2D : public EngineObject, public ISerializeableAsset {
-
+	SD_CLASS_BODY();
 public:
 	/*Wrap Behavior: GL_REPEAT or GL_CLAMP. Filter Behavior: GL_LINEAR or GL_NEAREST*/
 	Texture2D(const TString& TextureName);

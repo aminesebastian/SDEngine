@@ -292,8 +292,6 @@
     <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.cpp" />
     <ClCompile Include="Editor\UserInterface\TitleBar.cpp" />
     <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
-    <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp" />
-    <ClCompile Include="Core\Engine\Delegates\Event.cpp" />
     <ClCompile Include="Editor\UserInterface\EngineWindowUserInterface.cpp" />
     <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp" />
     <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
@@ -481,8 +479,6 @@
   <ItemGroup>
     <Image Include="..\..\Assets\MainIcon.ico" />
     <Image Include="..\..\Assets\MainLogo.png" />
-    <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
-    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,43 +22,72 @@ public:
 	Entity(const TString& Name);
 	virtual ~Entity();
 
-	bool IsVisible() const;
-	void SetVisibility(const bool& Show);
-	void ToggleVisibility();
+	SD_FUNCTION()
+		bool IsVisible() const;
+	SD_FUNCTION()
+		void SetVisibility(const bool& Show);
+	SD_FUNCTION()
+		void ToggleVisibility();
 
-	bool IsHiddenInGame() const;
-	void SetHiddenInGame(const bool& Hidden);
+	SD_FUNCTION()
+		bool IsHiddenInGame() const;
+	SD_FUNCTION()
+		void SetHiddenInGame(const bool& Hidden);
 
-	bool CastsShadows() const;
-	void SetCastShadows(const bool& CastShadows);
+	SD_FUNCTION()
+		bool CastsShadows() const;
+	SD_FUNCTION()
+		void SetCastShadows(const bool& CastShadows);
 
-	const Vector3D& GetLocation() const;
-	const Vector3D& GetRotation() const;
-	const Vector3D& GetScale() const;
+	SD_FUNCTION()
+		const Vector3D& GetLocation() const;
+	SD_FUNCTION()
+		const Vector3D& GetRotation() const;
+	SD_FUNCTION()
+		const Vector3D& GetScale() const;
 
-	const Vector3D GetLinearVelocity() const;
-	const Vector3D GetAngularVelocity() const;
+	SD_FUNCTION()
+		const Vector3D GetLinearVelocity() const;
+	SD_FUNCTION()
+		const Vector3D GetAngularVelocity() const;
 
-	void AddLocation(const Vector3D Offset);
-	void AddLocation(const float& X, const float& Y, const float& Z);
-	void SetLocation(const Vector3D& Location);
-	void SetLocation(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void AddLocation(const Vector3D Offset);
+	SD_FUNCTION()
+		void AddLocation(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void SetLocation(const Vector3D& Location);
+	SD_FUNCTION()
+		void SetLocation(const float& X, const float& Y, const float& Z);
 
-	void AddRotation(const Vector3D& RotationDelta);
-	void AddRotation(const float& X, const float& Y, const float& Z);
-	void SetRotation(const Vector3D& Rotation);
-	void SetRotation(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void AddRotation(const Vector3D& RotationDelta);
+	SD_FUNCTION()
+		void AddRotation(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void SetRotation(const Vector3D& Rotation);
+	SD_FUNCTION()
+		void SetRotation(const float& X, const float& Y, const float& Z);
 
-	void AddScale(const Vector3D& ScaleDelta);
-	void AddScale(const float& X, const float& Y, const float& Z);
-	void SetScale(const Vector3D& Scale);
-	void SetScale(const float& X, const float& Y, const float& Z);
-	void SetUniformScale(const float& Scale);
+	SD_FUNCTION()
+		void AddScale(const Vector3D& ScaleDelta);
+	SD_FUNCTION()
+		void AddScale(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void SetScale(const Vector3D& Scale);
+	SD_FUNCTION()
+		void SetScale(const float& X, const float& Y, const float& Z);
+	SD_FUNCTION()
+		void SetUniformScale(const float& Scale);
 
-	const FTransform& GetTransform() const;
-	void SetTransform(const FTransform& NewTransform);
-	const FTransform& GetLastFrameTransform() const;
-	void SetLastFrameTransform(const FTransform& OldTransform);
+	SD_FUNCTION()
+		const FTransform& GetTransform() const;
+	SD_FUNCTION()
+		void SetTransform(const FTransform& NewTransform);
+	SD_FUNCTION()
+		const FTransform& GetLastFrameTransform() const;
+	SD_FUNCTION()
+		void SetLastFrameTransform(const FTransform& OldTransform);
 
 	void SetOwner(Entity* OwnerIn);
 	Entity* GetOwner();
@@ -80,20 +109,20 @@ public:
 protected:
 	friend class World;
 
-	SD_PROPERTY(Category=("Transform"));
+	SD_PROPERTY(Category = ("Transform"));
 	FTransform Transform;
 	SD_PROPERTY(InspectorHidden);
 	FTransform LastFrameTransform;
 
-	SD_PROPERTY(Category=("Entity"));
+	SD_PROPERTY(Category = ("Entity"));
 	bool bVisible;
-	SD_PROPERTY(Category=("Entity"));
+	SD_PROPERTY(Category = ("Entity"));
 	bool bHiddenInGame;
-	SD_PROPERTY(Category=("Entity"));
+	SD_PROPERTY(Category = ("Entity"));
 	bool bNeedsTick;
-	SD_PROPERTY(Category=("Entity"));
+	SD_PROPERTY(Category = ("Entity"));
 	bool bNeedsBeginPlay;
-	SD_PROPERTY(Category=("Entity"));
+	SD_PROPERTY(Category = ("Entity"));
 	bool bCastShadows;
 
 private:

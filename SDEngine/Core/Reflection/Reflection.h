@@ -8,7 +8,8 @@ TypeDescriptor* GetPrimitiveDescriptor();
 
 #define SD_STRUCT()
 #define SD_CLASS()
-#define SD_PROPERTY(...)
+#define SD_PROPERTY(...) 
+#define SD_FUNCTION(...) 
 
 #define SD_STRUCT_BODY() \
 	private: \
@@ -35,8 +36,8 @@ TypeDescriptor* GetPrimitiveDescriptor();
 #define REFLECT_STRUCT_MEMBERS_BEGIN() \
         TypeDescriptorIn->Properties = { \
 
-#define REFLECT_STRUCT_MEMBER(Name, InspectorName, InspectorHiddenIn, Category) \
-            {#Name, InspectorName, Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
+#define REFLECT_STRUCT_MEMBER(Name, InspectorName, Category, InspectorHidden) \
+            FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), FPropertyMetadata(Category, InspectorHidden)), \
 
 #define REFLECT_STRUCT_MEMBERS_END() \
 	    }; \
@@ -72,14 +73,12 @@ TypeDescriptor* GetPrimitiveDescriptor();
 #define REFLECT_CLASS_PARENT_END() \
         }; \
 
-#define REFLECT_CLASS_MEMBERS_BEGIN() \
-        TypeDescriptorIn->Properties = { \
+#define REFLECT_CLASS_MEMBER(Name, InspectorName, Category, InspectorHidden) \
+		FPropertyMetadata metadata##Name(Category, InspectorHidden); \
+        TypeDescriptorIn->Properties.push_back(FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), metadata##Name)); \
 
-#define REFLECT_CLASS_MEMBER(Name, InspectorName, InspectorHiddenIn, Category) \
-            {#Name, InspectorName, Category, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), InspectorHiddenIn}, \
-
-#define REFLECT_CLASS_MEMBERS_END() \
-	    }; \
+#define REFLECT_CLASS_FUNCTION(MethodName, ConstReturn, ReturnType, ReturnMemoryType, ConstFunction, ...) \
+		TypeDescriptorIn->Functions.push_back(FFunction(#MethodName, ConstReturn, TypeResolver<ReturnType>::Get(), static_cast<ETypeMemoryType>(ReturnMemoryType), ConstFunction, { })); \
 
 #define REFLECT_CLASS_END() \
     }

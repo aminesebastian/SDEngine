@@ -49,19 +49,19 @@ void Actor::DrawAdvanced(const Camera* RenderCamera, const EDrawType& DrawType) 
 	}
 }
 
-vec3 Actor::GetWorldLocation() {
+const Vector3D Actor::GetWorldLocation() const {
 	return GetLocation();
 }
-vec3 Actor::GetWorldRotation() {
+const Vector3D Actor::GetWorldRotation() const {
 	return GetRotation();
 }
-vec3 Actor::GetWorldScale() {
+const Vector3D Actor::GetWorldScale() const {
 	return GetScale();
 }
-FTransform Actor::GetWorldTransform() {
+const FTransform Actor::GetWorldTransform() const {
 	return GetTransform();
 }
-FTransform Actor::GetLastFrameWorldTransform() {
+const FTransform Actor::GetLastFrameWorldTransform() const {
 	return GetLastFrameTransform();
 }
 

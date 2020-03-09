@@ -250,12 +250,6 @@
     <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Engine\Delegates\EventDelegate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Engine\Delegates\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Engine\Window.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -595,8 +589,6 @@
     <ResourceCompile Include="SDEngine.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\Assets\SuburbanDigitalLogoPurple (1).ico" />
-    <Image Include="icon1.ico" />
     <Image Include="..\..\Assets\MainLogo.png" />
     <Image Include="..\..\Assets\MainIcon.ico" />
   </ItemGroup>

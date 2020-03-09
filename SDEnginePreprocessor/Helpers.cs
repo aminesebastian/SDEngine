@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SuburbanDigitalEnginePreprocessor {
     enum EToken {
-        StructDeclaration, ClassDeclaration, ParentClassDeclaration, PropertyDeclaration, INVALID
+        StructDeclaration, ClassDeclaration, ParentClassDeclaration, PropertyDeclaration, FunctionDeclaration, INVALID
     }
     enum EReflectionTarget {
         CLASS, STRUCT
@@ -20,6 +18,7 @@ namespace SuburbanDigitalEnginePreprocessor {
             VALID_MACROS.Add("SD_STRUCT");
             VALID_MACROS.Add("SD_CLASS");
             VALID_MACROS.Add("SD_PROPERTY");
+            VALID_MACROS.Add("SD_FUNCTION");
         }
         public static bool IsValidMacro(string MacroString) {
             if(!MacroString.StartsWith("SD_")) {
@@ -34,6 +33,7 @@ namespace SuburbanDigitalEnginePreprocessor {
                 case "SD_STRUCT": return EToken.StructDeclaration;
                 case "SD_CLASS": return EToken.ClassDeclaration;
                 case "SD_PROPERTY": return EToken.PropertyDeclaration;
+                case "SD_FUNCTION": return EToken.FunctionDeclaration;
                 default: return EToken.INVALID;
             }
         }

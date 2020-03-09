@@ -26,11 +26,7 @@ namespace SuburbanDigitalEnginePreprocessor {
             return false;
         }
         public void GenerateReflectedFile() {
-            // Only write a new file if the source file had changed. We still have to do the Processing of
-            // the file in case other source files that DID change depend on the contents of this once.
-            if (HasSourceFileChanged() && ContainsReflectableContents()) {
-                WriteReflectedHeaderOut();
-            }
+            WriteReflectedHeaderOut();
         }
         public bool ContainsReflectableContents() {
             return Objects.Count > 0;
@@ -97,12 +93,15 @@ namespace SuburbanDigitalEnginePreprocessor {
                         current.AddParentClass(token.Item3);
                         break;
                     case EToken.PropertyDeclaration:
-                        string[] split = token.Item3.Split(' ');
+                        string[] split = token.Item3.Split(' ', StringSplitOptions.RemoveEmptyEntries); ;
                         if (split[0].Trim() == "const") {
                             current.AddProperty(new FProperty(split[2], token.Item2)); // const int32 variableName = 10;
                         } else {
                             current.AddProperty(new FProperty(split[1], token.Item2)); // int32 variableName = 10;
                         }
+                        break;
+                    case EToken.FunctionDeclaration:
+                        current.AddFunction(new FFunction(token.Item3, token.Item2));
                         break;
                     default: break;
                 }
@@ -118,20 +117,37 @@ namespace SuburbanDigitalEnginePreprocessor {
             for (int i = 0; i < ParsedLines.Count; i++) {
                 string line = ParsedLines[i];
                 if (Macros.IsValidMacro(line)) {
+                    // Determine what kind of token this is and then perform a lookahead.
                     EToken token = Macros.GetMacroFromMacroString(line);
-                    string followingLine = ParsedLines[i + 1];
-                    followingLine = followingLine.Replace("{", "");
-                    followingLine = followingLine.Replace("}", "");
-                    followingLine = followingLine.Replace(";", "");
+                    string followingLine = RemoveUnparseableTokens(ParsedLines[i + 1]);
 
+                    // If this is a declaration token, we must perform some additional parsing.
                     if (token == EToken.ClassDeclaration || token == EToken.StructDeclaration) {
-                        string[] declarationAndParents = followingLine.Split(':');
-                        tokens.Add(new Tuple<EToken, string, string>(token, line, declarationAndParents[0].Split(' ')[1]));
+                        //Split the line along the color (ie. class Test : 'public Parent1, public Parent2, Parent3, private Parent4').
+                        string[] declarationAndParents = followingLine.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
+                        // Capture the declaration name (ie. 'class EntityName' turns into 'EntityName').
+                        string declaringName = declarationAndParents[0].Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Trim();
+                        tokens.Add(new Tuple<EToken, string, string>(token, line, declaringName));
+
+                        // Capture any parent declarations as well. Split the parent portion of the declaration by comma.
                         if (declarationAndParents.Length > 1) {
-                            for (int j = 1; j < declarationAndParents.Length; j += 2) {
-                                string candidate = declarationAndParents[j].Trim();
-                                tokens.Add(new Tuple<EToken, string, string>(EToken.ParentClassDeclaration, line, candidate.Split(' ')[1]));
+                            // Split the parent declarations into tokens in the form of either 'public Parent' or just 'Parent'.
+                            string[] parents = declarationAndParents[1].Trim().Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                            // Iterate through all parents and remove any leading or trailing spaces. Then see if there is
+                            // a space inside the declaration. If there is, this is a parent declaration in the form of
+                            // 'public Parent', otherwise this is just a 'Parent'.
+                            for (int j = 0; j < parents.Length; j++) {
+                                // Check to see if this is a two keyword or single keyword declaration.
+                                string parentPair = parents[j].Trim();
+                                string parent = "";
+                                if (parentPair.Contains(' ')) {
+                                    parent = parentPair.Split(' ', StringSplitOptions.RemoveEmptyEntries)[1];
+                                } else {
+                                    parent = parentPair;
+                                }
+                                tokens.Add(new Tuple<EToken, string, string>(EToken.ParentClassDeclaration, line, parent));
                             }
                         }
                     } else {
@@ -166,23 +182,34 @@ namespace SuburbanDigitalEnginePreprocessor {
                 if (enc.Type == EReflectionTarget.CLASS) {
                     fileContents.Add($"//Reflection for class {enc.Name}");
                     fileContents.Add($"REFLECT_CLASS_BEGIN({enc.Name})");
+                    // Parent Classes
                     fileContents.Add($"REFLECT_CLASS_BEGIN_PARENTS()");
                     foreach (string parent in enc.ParentClasses) {
-                        fileContents.Add($"REFLECT_CLASS_PARENT({parent})");
+                        if (Globals.ReflectedObjects.ContainsKey(parent)) {
+                            fileContents.Add($"REFLECT_CLASS_PARENT({parent})");
+                        }
                     }
                     fileContents.Add($"REFLECT_CLASS_PARENT_END()");
-                    fileContents.Add($"REFLECT_CLASS_MEMBERS_BEGIN()");
+
+                    // Members
                     foreach (FProperty property in enc.Properties.Values.OrderBy(i => i.GetCategory())) {
                         fileContents.Add($"REFLECT_CLASS_MEMBER({property.GetMacroInternals()})");
                     }
-                    fileContents.Add($"REFLECT_CLASS_MEMBERS_END()");
+
+                    // Functions
+                    foreach (FFunction function in enc.Functions.OrderBy(i => i.GetCategory())) {
+                        fileContents.Add($"REFLECT_CLASS_FUNCTION({function.GetMacroInternals()})");
+                    }
+
                     fileContents.Add($"REFLECT_CLASS_END()");
                 } else if (enc.Type == EReflectionTarget.STRUCT) {
                     fileContents.Add($"//Reflection for struct {enc.Name}");
                     fileContents.Add($"REFLECT_STRUCT_BEGIN({enc.Name})");
                     fileContents.Add($"REFLECT_STRUCT_BEGIN_PARENTS()");
                     foreach (string parent in enc.ParentClasses) {
-                        fileContents.Add($"REFLECT_STRUCT_PARENT({parent})");
+                        if (Globals.ReflectedObjects.ContainsKey(parent)) {
+                            fileContents.Add($"REFLECT_STRUCT_PARENT({parent})");
+                        }
                     }
                     fileContents.Add($"REFLECT_STRUCT_PARENT_END()");
                     fileContents.Add($"REFLECT_STRUCT_MEMBERS_BEGIN()");
@@ -195,6 +222,12 @@ namespace SuburbanDigitalEnginePreprocessor {
             }
 
             File.WriteAllLines(OutputFilePath, fileContents);
+        }
+        private string RemoveUnparseableTokens(string Line) {
+            Line = Line.Replace("{", "");
+            Line = Line.Replace("}", "");
+            Line = Line.Replace(";", "");
+            return Line;
         }
     }
 }

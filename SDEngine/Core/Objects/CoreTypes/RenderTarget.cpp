@@ -92,7 +92,7 @@ void RenderTarget::BindTextures(Shader* Shader, int32 Offset, bool bIncludeDepth
 	}
 }
 void RenderTarget::BindTexture(Shader* Shader, int32 Index, int32 Offset, TString Name) {
-	TString name = Name == "" ? GetTextureName(Index) : Name;
+	TString name = Name.empty() ? GetTextureName(Index) : Name;
 	glActiveTexture(GL_TEXTURE0 + Offset);
 	glBindTexture(GL_TEXTURE_2D, GetTexture(Index));
 	glUniform1i(glGetUniformLocation(Shader->GetProgram(), name.c_str()), Offset);

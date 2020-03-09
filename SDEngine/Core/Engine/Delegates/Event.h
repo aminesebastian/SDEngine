@@ -14,19 +14,6 @@ class Event;
  */
 #define EVENT(EventName, Signature) Event<Signature> EventName;
 
-/**
- * Creates a usable lambda event listener.
- *
- * @tparam	T	Generic type parameter.
- * @tparam	L	Type of the l.
- * @param [in,out]	{T &&}	t	A T to process.
- *
- * @returns	{L}	A L.
- */
-template <typename T, typename L = typename std::decay<T>::type>
-L lambda_delegate(T && t) {
-	return L(forward<T>(t));
-}
 
 /**
  * A listenable event. Objects can register listeners with this event to receive updates

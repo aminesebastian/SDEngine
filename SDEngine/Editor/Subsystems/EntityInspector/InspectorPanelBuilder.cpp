@@ -32,7 +32,7 @@ void InspectorPanelBuilder::AddControlForProperty(const FProperty* Property) {
 	}
 
 	// Update the current category.
-	CurrentCategoryContainer = GetCategoryWidgetContainer(Property->Category);
+	CurrentCategoryContainer = GetCategoryWidgetContainer(Property->GetMetadata().GetCategory());
 
 	// Add the separator.
 	if (CurrentCategoryContainer->GetChildCount() > 0) {

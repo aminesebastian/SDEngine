@@ -6,6 +6,7 @@
 #include "Core/Utilities/Math/MathLibrary.h"
 #include "Core/Utilities/Serialization/DeserializationStream.h"
 #include "Core/Utilities/Serialization/DeserializationStream.h"
+#include "Reflection/StaticMesh.reflected.h"
 
 StaticMesh::StaticMesh(const TString& Name)  : EngineObject(Name) {
 	bSentToGPU = false;

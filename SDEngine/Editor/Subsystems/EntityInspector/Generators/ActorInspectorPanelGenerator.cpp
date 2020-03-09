@@ -11,7 +11,7 @@ void ActorInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Buil
 	ReflectionHelpers::GetAllMembersOfClass(properties, target);
 
 	for (const FProperty* prop : properties) {
-		if (prop->bInspectorHidden) {
+		if (prop->GetMetadata().GetHiddenInInspector()) {
 			continue;
 		}
 		Builder.AddControlForProperty(prop);

@@ -1,4 +1,5 @@
 #include "WorldOutlinerEntry.h"
+#include "Editor/UserInterface/EngineUIStyle.h"
 
 WorldOutlinerEntry::WorldOutlinerEntry(const TString& Name) : PictorumWidget(Name) {
 	VisibilityWidget = nullptr;
@@ -27,6 +28,7 @@ void WorldOutlinerEntry::OnCreated() {
 	EntityTypeWidget->GetParentSlot<HorizontalBoxSlot>()->SetFillAvilableSpace(0.5f);
 
 	VisibilityWidget->SetSize(Vector2D(16.0f, 16.0f));
+	VisibilityWidget->SetTint(EngineUIStyles::DIM_ICON_TINT);
 }
 void WorldOutlinerEntry::Initialize(Entity* EntityIn) {
 	EntityNameWidget->SetText(EntityIn->GetObjectName());
