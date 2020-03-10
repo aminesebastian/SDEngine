@@ -1,14 +1,15 @@
 #pragma once
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/Containers/PictorumVerticalBox.h"
-#include "Editor/UserInterface/CollapsingCategoryWidget.h"
 #include "Core/Reflection/Reflection.h"
+#include "Core/Reflection/ReflectionWrapper.h"
+#include "Editor/UserInterface/CollapsingCategoryWidget.h"
 
 class PictorumWidget;
 
 class InspectorPanelBuilder {
 public:
-	InspectorPanelBuilder(PictorumVerticalBox* Owner, const TypeDescriptor* CustomizationType, void* CustomizationTarget, bool IsNested = false);
+	InspectorPanelBuilder(PictorumVerticalBox* Owner, const ReflectionWrapper* Target, bool IsNested = false);
 
 	template<typename T>
 	const T* GetTarget() const {
@@ -23,7 +24,6 @@ protected:
 	virtual void AddControlForVector3DProperty(const FProperty* Property);
 	virtual void AddControlForVector4DProperty(const FProperty* Property);
 	virtual void AddControlForBoolProperty(const FProperty* Property);
-	virtual void AddControlForTransformProperty(const FProperty* Property);
 
 private:
 	PictorumVerticalBox* Parent;
@@ -31,8 +31,7 @@ private:
 	PictorumVerticalBox* CurrentCategoryContainer;
 	SHashMap<TString, PictorumVerticalBox*> Categories;
 
-	void* Target;
-	const TypeDescriptor* TargetType;
+	const ReflectionWrapper* TargetWrapper;
 
 	SArray<FProperty*> AddedProperties;
 

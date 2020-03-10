@@ -8,7 +8,7 @@ void ActorInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Buil
 	Builder.AddControlForProperty(ReflectionHelpers::GetPropertyHandle("Transform", target));
 
 	SArray<FProperty*> properties;
-	ReflectionHelpers::GetAllMembersOfClass(properties, target);
+	ReflectionHelpers::GetPropertiesOfClass(properties, target);
 
 	for (const FProperty* prop : properties) {
 		if (prop->GetMetadata().GetHiddenInInspector()) {

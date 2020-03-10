@@ -22,7 +22,7 @@ void FloatInspectorWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseMoveAnywhere>(this);
 }
-void FloatInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* TargetObject) {
+void FloatInspectorWidget::OnTargetSet(const FProperty* TargetProperty, const void* TargetObject) {
 	AssignNewToChild(this, SolidWidget, ValueBackgroundWidget, "ValueBg");
 	ValueBackgroundWidget->OnHoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueHovered>(this);
 	ValueBackgroundWidget->OnUnhoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueUnhovered>(this);
@@ -32,7 +32,7 @@ void FloatInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* Ta
 	ValueBackgroundWidget->SetVisibility(EPictorumVisibilityState::VISIBLE);
 
 	AssignNewToChild(ValueBackgroundWidget, EditableTextWidget, ValueWidget, "Value");
-	ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*GetInternalTargetProperty<float>(), 2));
+	ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*InspectedProperty->GetValue<float>(InspectionObject), 2));
 	ValueWidget->SetFontSize(9);
 	ValueWidget->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
 	ValueWidget->SetFontWeight(EFontWeight::Bold);
@@ -56,8 +56,9 @@ void FloatInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& Mo
 }
 void FloatInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (bMouseWasDownInside) {
-		*GetInternalTargetProperty<float>() += Delta.x / 10.0f;
-		ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*GetInternalTargetProperty<float>(), 2));
+		float originalValue = *InspectedProperty->GetValue<float>(InspectionObject) + Delta.x / 10.0f;
+		InspectedProperty->SetValue(InspectionObject, originalValue);
+		ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*InspectedProperty->GetValue<float>(InspectionObject), 2));
 	}
 }
 void FloatInspectorWidget::MouseUpAnywhere(const vec2& MouseLocation) {

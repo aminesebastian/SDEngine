@@ -5,7 +5,7 @@ void DefaultInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Bu
 	if (IsA<const TypeDescriptor_Class>(Builder.GetTypeDescriptor())) {
 		const EngineObject* target = Builder.GetTarget<EngineObject>();
 		SArray<FProperty*> properties;
-		ReflectionHelpers::GetAllMembersOfClass(properties, target);
+		ReflectionHelpers::GetPropertiesOfClass(properties, target);
 
 		for (FProperty* prop : properties) {
 			if (prop->GetMetadata().GetHiddenInInspector()) {

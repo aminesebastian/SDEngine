@@ -68,7 +68,7 @@ void Camera::UpdateMatricies() {
 	ProjectionMatrix = perspective(glm::radians(FieldOfView), CachedAspectRatio, NearClipPlane, FarClipPlane);
 }
 void Camera::OnPropertyUpdated(FProperty* Property) {
-	if (Property->Name == "FieldOfView") {
+	if (Property->GetName() == "FieldOfView") {
 		UpdateMatricies();
 	}
 }

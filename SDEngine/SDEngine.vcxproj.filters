@@ -577,6 +577,9 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
+    <ClInclude Include="Core\Reflection\ReflectionDataTypes.h" />
+    <ClInclude Include="Core\Reflection\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\ReflectionWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

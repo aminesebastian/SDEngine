@@ -37,8 +37,8 @@ void CheckboxWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 Vector2D CheckboxWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	return BackgroundDrawInstruction.Size;
 }
-void CheckboxWidget::Bind(bool* BoundTarget) {
-	bWatchedValue = BoundTarget;
+void CheckboxWidget::Bind(const bool* BoundTarget) {
+	bWatchedValue = const_cast<bool*>(BoundTarget);
 }
 void CheckboxWidget::Unbind() {
 	bWatchedValue = nullptr;

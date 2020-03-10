@@ -10,7 +10,7 @@ public:
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual Vector2D GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 
-	void Bind(bool* BoundTarget);
+	void Bind(const bool* BoundTarget);
 	void Unbind();
 	void SetChcecked();
 	void SetUnchecked();

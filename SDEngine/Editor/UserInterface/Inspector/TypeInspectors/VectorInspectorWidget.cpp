@@ -37,23 +37,23 @@ void VectorInspectorWidget::OnCreated() {
 void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 	Labels = LabelsIn;
 }
-void VectorInspectorWidget::OnTargetSet(const FProperty* TargetProperty, void* TargetObject) {
+void VectorInspectorWidget::OnTargetSet(const FProperty* TargetProperty, const void* TargetObject) {
 	Values.Clear();
-	if (TargetProperty->Type == TypeResolver<Vector2D>::Get()) {
+	if (TargetProperty->GetType() == TypeResolver<Vector2D>::Get()) {
 		for (uint8 i = 0; i < 2; i++) {
-			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector2D>(TargetProperty, TargetObject))[i], i);
+			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector2D>(TargetObject))[i], i);
 		}
-	} else if (TargetProperty->Type == TypeResolver<Vector3D>::Get()) {
+	} else if (TargetProperty->GetType() == TypeResolver<Vector3D>::Get()) {
 		for (uint8 i = 0; i < 3; i++) {
-			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector3D>(TargetProperty, TargetObject))[i], i);
+			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector3D>(TargetObject))[i], i);
 		}
-	} else if (TargetProperty->Type == TypeResolver<Vector4D>::Get()) {
+	} else if (TargetProperty->GetType() == TypeResolver<Vector4D>::Get()) {
 		for (uint8 i = 0; i < 4; i++) {
-			AddEntry(Labels[i], &(*ReflectionHelpers::GetProperty<Vector4D>(TargetProperty, TargetObject))[i], i);
+			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector4D>(TargetObject))[i], i);
 		}
 	}
 }
-void VectorInspectorWidget::AddEntry(const TString& Label, float* InitialValue, const int32& Index) {
+void VectorInspectorWidget::AddEntry(const TString& Label, const float* InitialValue, const int32& Index) {
 	Values.Add(InitialValue);
 	if (Index > 0) {
 		SeparatorWidget* separator = new SeparatorWidget("Entry" + to_string(Index) + "Separator");
@@ -122,7 +122,9 @@ void VectorInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& M
 }
 void VectorInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (MouseDownEntry >= 0) {
-		*Values[MouseDownEntry] += Delta.x / 10.0f;
+		Vector3D vec = *InspectedProperty->GetValue<Vector3D>(InspectionObject);
+		vec[MouseDownEntry] += Delta.x / 10.0f;
+		InspectedProperty->SetValue(InspectionObject, vec);
 		ValueWidgets[MouseDownEntry]->SetText(StringUtilities::ToStringWithPrecision(*Values[MouseDownEntry], 2));
 	}
 }
@@ -134,7 +136,9 @@ void VectorInspectorWidget::ValueSubmitted(PictorumWidget* Widget, const TString
 	char* endCharacter = nullptr;
 	for (int32 i = 0; i < ValueWidgets.Count(); i++) {
 		if (ValueWidgets[i] == Widget) {
-			*Values[i] = strtof(cString, &endCharacter);
+			Vector3D vec = *InspectedProperty->GetValue<Vector3D>(InspectedProperty);
+			vec[i] = strtof(cString, &endCharacter);
+			InspectedProperty->SetValue(InspectionObject, vec);
 			break;
 		}
 	}

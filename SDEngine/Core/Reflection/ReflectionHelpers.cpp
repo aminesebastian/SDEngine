@@ -1,7 +1,7 @@
 #include "ReflectionHelpers.h"
 #include "Core/Objects/EngineObject.h"
 
-const void ReflectionHelpers::GetAllMembersOfClass(SArray<FProperty*>& Properties, const EngineObject* Object) {
+const void ReflectionHelpers::GetPropertiesOfClass(SArray<FProperty*>& Properties, const EngineObject* Object) {
 	worker_GetAllMembersOfClass(Object->StaticDescriptor(), Properties);
 }
 void ReflectionHelpers::worker_GetAllMembersOfClass(const TypeDescriptor_Class* CurrentNode, SArray<FProperty*>& Output) {

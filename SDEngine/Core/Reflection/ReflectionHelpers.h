@@ -1,46 +1,16 @@
 #pragma once
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Core/Reflection/ReflectableTypes.h"
-#include "Core/Reflection/TypeResolver.h"
-
+#include "Core/Reflection/Reflection.h"
 
 class ReflectionHelpers {
 public:
-	static const void GetAllMembersOfClass(SArray<FProperty*>& Properties, const class EngineObject* Object);
-	template<typename T>
-	static T* GetProperty(const TString& Name, const class EngineObject* Object) {
-		SArray<FProperty*> properties;
-		GetAllMembersOfClass(properties, Object);
-		for (FProperty* prop : properties) {
-			if (prop->Name == Name) {
-				return (T*)((char*)Object + prop->Offset);
-			}
-		}
-		return nullptr;
-	}
-	template<typename T>
-	static T* GetProperty(const FProperty* Property, const class EngineObject* Object) {
-		return (T*)((char*)Object + Property->Offset);
-	}
-	template<typename T, typename K>
-	static T* GetProperty(const TString& Name, const K* Struct) {
-		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<K>::Get());
-		for (FProperty& prop : structType->Properties) {
-			if (prop.Name == Name) {
-				return (T*)((char*)Struct + prop.Offset);
-			}
-		}
-		return nullptr;
-	}
-	template<typename T>
-	static T* GetProperty(const FProperty* Property, const void* Struct) {
-		return (T*)((char*)Struct + Property->Offset);
-	}
+	static const void GetPropertiesOfClass(SArray<FProperty*>& Properties, const class EngineObject* Object);
+
 	static const FProperty* GetPropertyHandle(const TString& Name, const class EngineObject* Object) {
 		SArray<FProperty*> properties;
-		GetAllMembersOfClass(properties, Object);
+		GetPropertiesOfClass(properties, Object);
 		for (FProperty* prop : properties) {
-			if (prop->Name == Name) {
+			if (prop->GetName() == Name) {
 				return prop;
 			}
 		}
@@ -51,7 +21,7 @@ public:
 	static const FProperty* GetPropertyHandleFromStruct(const TString& Name, const T* Struct) {
 		TypeDescriptor_Struct* structType = Cast<TypeDescriptor_Struct>(TypeResolver<T>::Get());
 		for (FProperty& prop : structType->Properties) {
-			if (prop.Name == Name) {
+			if (prop.GetName() == Name) {
 				return &prop;
 			}
 		}

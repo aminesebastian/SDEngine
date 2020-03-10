@@ -342,7 +342,10 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
+    <ClInclude Include="Core\Reflection\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\ReflectionDataTypes.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
+    <ClInclude Include="Core\Reflection\ReflectionWrapper.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
     <ClInclude Include="Core\Objects\IEngineModule.h" />

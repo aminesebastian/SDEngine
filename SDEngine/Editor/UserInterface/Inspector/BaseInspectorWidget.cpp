@@ -11,7 +11,7 @@ BaseInspectorWidget::~BaseInspectorWidget() {
 const FProperty* BaseInspectorWidget::GetInspectedProperty() const {
 	return InspectedProperty;
 }
-void BaseInspectorWidget::SetTarget(const FProperty* TargetProperty, TypeDescriptor* InspectionTargetType, void* TargetObject) {
+void BaseInspectorWidget::SetTarget(const FProperty* TargetProperty, const TypeDescriptor* InspectionTargetType, const void* TargetObject) {
 	InspectedProperty = TargetProperty;
 	InspectionObject  = TargetObject;
 	InspectionType    = InspectionTargetType;

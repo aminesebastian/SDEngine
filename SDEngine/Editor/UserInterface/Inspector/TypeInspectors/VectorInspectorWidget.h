@@ -8,7 +8,7 @@ public:
 	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
 	virtual void SetLabels(SArray<TString> LabelsIn);
-	virtual void OnTargetSet(const FProperty* TargetProperty, void* TargetObject) override;
+	virtual void OnTargetSet(const FProperty* TargetProperty, const void* TargetObject) override;
 
 private:
 	PictorumHorizontalBox* Container;
@@ -17,7 +17,7 @@ private:
 	SArray<EditableTextWidget*> ValueWidgets;
 	SArray<FColor> Colors;
 	SArray<TString> Labels;
-	SArray<float*> Values;
+	SArray<const float*> Values;
 	int32 MouseDownEntry;
 	float ContentPadding;
 
@@ -28,7 +28,7 @@ private:
 	void MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta);
 	void MouseUpAnywhere(const vec2& MouseLocation);
 
-	void AddEntry(const TString& Label, float* InitialValue, const int32& Index);
+	void AddEntry(const TString& Label, const float* InitialValue, const int32& Index);
 
 	void ValueSubmitted(PictorumWidget* Widget, const TString& Value);
 };

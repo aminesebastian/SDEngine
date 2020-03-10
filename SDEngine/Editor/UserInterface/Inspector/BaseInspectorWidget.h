@@ -8,23 +8,21 @@ class BaseInspectorWidget : public PictorumWidget {
 public:
 	BaseInspectorWidget(const TString& Name);
 	virtual ~BaseInspectorWidget();
-	virtual void OnTargetSet(const FProperty* TargetProperty, void* TargetObject) = 0;
+	virtual void OnTargetSet(const FProperty* TargetProperty, const void* TargetObject) = 0;
 
-	template<typename T>
-	T* GetInternalTargetProperty() {
-		return ReflectionHelpers::GetProperty<T>(InspectedProperty, InspectionObject);
-	}
 	template<typename T>
 	const T* GetInspectedObject() const {
 		return Cast<T>(InspectionObject);
 	}
-	void SetTarget(const FProperty* TargetProperty, TypeDescriptor* InspectionTargetType, void* TargetObject);
+	void SetTarget(const FProperty* TargetProperty, const TypeDescriptor* InspectionTargetType, const void* TargetObject);
 	const FProperty* GetInspectedProperty() const;
 
-private:
+protected:
 	const FProperty* InspectedProperty;
-	void* InspectionObject;
-	TypeDescriptor* InspectionType;
+	const void* InspectionObject;
+	const TypeDescriptor* InspectionType;
+
+private:
 	bool bInitialized;
 };
 
