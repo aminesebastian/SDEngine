@@ -3,15 +3,28 @@
 #include "Core/Objects/EngineObject.h"
 
 class ReflectionWrapper {
-	ReflectionWrapper(const EngineObject* Object) {
-		bIsObject = true;
-		Target = (const void*)Object;
-		Type = Object->StaticDescriptor();
-	}
-	ReflectionWrapper(const void* Struct, const TypeDescriptor* StructType) {
+public:
+	ReflectionWrapper() {
+		Target = nullptr;
+		Type = nullptr;
+		bIsValid = false;
 		bIsObject = false;
-		Target = Struct;
-		Type = StructType;
+	}
+	ReflectionWrapper(const EngineObject* Object) : ReflectionWrapper() {
+		if (Object) {
+			bIsValid = true;
+			bIsObject = true;
+			Target = (const void*)Object;
+			Type = Object->StaticDescriptor();
+		}
+	}
+	ReflectionWrapper(const void* Struct, const TypeDescriptor* StructType): ReflectionWrapper(){
+		if (Struct) {
+			bIsValid = true;
+			bIsObject = false;
+			Target = Struct;
+			Type = StructType;
+		}
 	}
 	const bool& IsObject() const {
 		return bIsObject;
@@ -19,8 +32,15 @@ class ReflectionWrapper {
 	const TypeDescriptor* GetType() const {
 		return Type;
 	}
-	template<typename T> 
-	T* GetPropertyValue(const FProperty* Property) {
+	const bool& IsValid() const {
+		return bIsValid;
+	}
+	template<typename T>
+	const T* Get() const {
+		return (T*)Target;
+	}
+	template<typename T>
+	const T* GetPropertyValue(const FProperty* Property) const {
 		if (bIsObject) {
 			return Property->GetValue<T>((EngineObject*)Target);
 		} else {
@@ -44,6 +64,7 @@ class ReflectionWrapper {
 		}
 	}
 private:
+	bool bIsValid;
 	bool bIsObject;
 	const void* Target;
 	const TypeDescriptor* Type;

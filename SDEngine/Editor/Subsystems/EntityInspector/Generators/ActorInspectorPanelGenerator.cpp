@@ -3,7 +3,7 @@
 #include "Core/Reflection/ReflectionHelpers.h"
 
 void ActorInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Builder) {
-	const Actor* target = Builder.GetTarget<Actor>();
+	const Actor* target = Builder.GetTarget().Get<Actor>();
 
 	Builder.AddControlForProperty(ReflectionHelpers::GetPropertyHandle("Transform", target));
 

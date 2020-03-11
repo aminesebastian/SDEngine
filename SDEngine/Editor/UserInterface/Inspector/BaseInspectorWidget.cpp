@@ -1,20 +1,18 @@
 #include "BaseInspectorWidget.h"
 
 BaseInspectorWidget::BaseInspectorWidget(const TString& Name) : PictorumWidget(Name) {
-	InspectionObject  = nullptr;
-	InspectedProperty = nullptr;
 	bInitialized      = false;
+	InspectedProperty = nullptr;
 }
 BaseInspectorWidget::~BaseInspectorWidget() {
 
 }
-const FProperty* BaseInspectorWidget::GetInspectedProperty() const {
-	return InspectedProperty;
-}
-void BaseInspectorWidget::SetTarget(const FProperty* TargetProperty, const TypeDescriptor* InspectionTargetType, const void* TargetObject) {
+void BaseInspectorWidget::SetTarget(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) {
+	InspectionTarget  = Wrapper;
 	InspectedProperty = TargetProperty;
-	InspectionObject  = TargetObject;
-	InspectionType    = InspectionTargetType;
 	bInitialized      = true;
-	OnTargetSet(TargetProperty, TargetObject);
+	OnTargetSet(InspectionTarget, InspectedProperty);
+}
+const bool& BaseInspectorWidget::IsInitialized() const {
+	return bInitialized;
 }

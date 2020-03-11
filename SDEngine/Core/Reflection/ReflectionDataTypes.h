@@ -55,15 +55,48 @@ struct FProperty {
 	const FPropertyMetadata& GetMetadata() const {
 		return Metadata;
 	}
+
+	bool operator==(const FProperty& Other) const {
+		if (Name == Other.Name) {
+			if (InspectorName == Other.InspectorName) {
+				if (Offset == Other.Offset) {
+					if (Type == Other.Type) {
+						if (Metadata == Other.Metadata) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+private:
+	friend struct TypeDescriptor_Struct;
+	friend struct TypeDescriptor_Class;
+	friend class ReflectionWrapper;
+
+	const char* Name;
+	const char* InspectorName;
+	size_t Offset;
+	TypeDescriptor* Type;
+	FPropertyMetadata Metadata;
+
 	template<typename T>
 	const T* GetValue(const EngineObject* Object) const {
-		return GetInternalValue(Object);
+		return GetInternalValue<T>(Object);
 	}
 	template<typename T>
 	const T* GetValue(const void* Struct) const {
 		return GetInternalValue<T>(Struct);
 	}
-
+	template<typename T>
+	const T* GetValue(EngineObject* Object) const {
+		return GetInternalValue<T>(Object);
+	}
+	template<typename T>
+	const T* GetValue(void* Struct) const {
+		return GetInternalValue<T>(Struct);
+	}
 	template<typename T>
 	void SetValue(const EngineObject* Object, const T& Value) const {
 		T* target = GetInternalValue<T>(Object);
@@ -85,34 +118,12 @@ struct FProperty {
 		T* target = GetInternalValue<T>(Struct);
 		target = Value;
 	}
-
-	bool operator==(const FProperty& Other) const {
-		if (Name == Other.Name) {
-			if (InspectorName == Other.InspectorName) {
-				if (Offset == Other.Offset) {
-					if (Type == Other.Type) {
-						if (Metadata == Other.Metadata) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-private:
-	friend struct TypeDescriptor_Struct;
-	friend struct TypeDescriptor_Class;
-
-	const char* Name;
-	const char* InspectorName;
-	size_t Offset;
-	TypeDescriptor* Type;
-	FPropertyMetadata Metadata;
-
 	template<typename T>
 	T* GetInternalValue(const void* Object) const {
+		return (T*)((char*)Object + Offset);
+	}
+	template<typename T>
+	T* GetInternalValue(void* Object) const {
 		return (T*)((char*)Object + Offset);
 	}
 };
@@ -155,6 +166,7 @@ struct FFunctionParameter {
 private:
 	friend struct TypeDescriptor_Struct;
 	friend struct TypeDescriptor_Class;
+	friend class ReflectionWrapper;
 
 	const char* Name;
 	TypeDescriptor* Type;
@@ -216,6 +228,7 @@ struct FFunction {
 private:
 	friend struct TypeDescriptor_Struct;
 	friend struct TypeDescriptor_Class;
+	friend class ReflectionWrapper;
 
 	const char* Name;
 	bool bReturnConst;

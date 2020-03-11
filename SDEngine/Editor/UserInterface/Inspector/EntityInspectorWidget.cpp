@@ -33,8 +33,8 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 	if (!SelectedEntity) {
 		return;
 	}
-
-	InspectorPanelBuilder builder(DetailsPanelListBox, SelectedEntity->StaticDescriptor(), SelectedEntity);
+	ReflectionWrapper wrapper(SelectedEntity, SelectedEntity->StaticDescriptor());
+	InspectorPanelBuilder builder(DetailsPanelListBox, wrapper);
 	IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(SelectedEntity->StaticDescriptor());
 	generator->GenerateInspector(builder);
 }

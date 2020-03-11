@@ -16,6 +16,7 @@ TextWidget::~TextWidget() {
 
 void TextWidget::SetText(const TString& Text) {
 	Renderer->SetText(Text);
+	OnTextSet(Text);
 }
 const TString& TextWidget::GetText() const {
 	return Renderer->GetText();
@@ -99,3 +100,4 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 const bool TextWidget::CanAddChild() const {
 	return false;
 }
+void TextWidget::OnTextSet(const TString& Text) {}

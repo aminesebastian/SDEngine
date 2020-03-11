@@ -26,6 +26,8 @@ public:
 	virtual const bool CanAddChild() const override;
 
 protected:
+	virtual void OnTextSet(const TString& Text);
+
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;
 	vec2 LastRenderedAbsoluteLocation;

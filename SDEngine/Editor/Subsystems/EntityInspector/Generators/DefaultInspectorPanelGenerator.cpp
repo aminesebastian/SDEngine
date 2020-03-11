@@ -3,7 +3,7 @@
 
 void DefaultInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Builder) {
 	if (IsA<const TypeDescriptor_Class>(Builder.GetTypeDescriptor())) {
-		const EngineObject* target = Builder.GetTarget<EngineObject>();
+		const EngineObject* target = Builder.GetTarget().Get<EngineObject>();
 		SArray<FProperty*> properties;
 		ReflectionHelpers::GetPropertiesOfClass(properties, target);
 

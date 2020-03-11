@@ -23,6 +23,12 @@ EditableTextWidget::~EditableTextWidget() {
 void EditableTextWidget::SetInputFormatter(ITextInputFormatter* TextFormatter) {
 	InputFormatter = TextFormatter;
 }
+void EditableTextWidget::SetPlaceholderText(const TString& PlaceholderText) {
+	this->PlaceholderText = PlaceholderText;
+	if (GetText().empty()) {
+		SwapToPlaceholderText();
+	}
+}
 void EditableTextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	CurrentBlinkTime += DeltaTime;
 	if (CurrentBlinkTime > BlinkTime) {
@@ -72,12 +78,16 @@ void EditableTextWidget::OnKeyDown(SDL_Scancode KeyCode) {
 	} else if (KeyCode == SDL_SCANCODE_RETURN) {
 		SubmitInput();
 	}
+	if (GetText().empty()) {
+		SwapToPlaceholderText();
+	}
 }
 void EditableTextWidget::OnTextInput(const TString& Text) {
 	TString currentText = GetText();
 	currentText = currentText.insert(CursorStartIndex, Text);
 	SetText(currentText);
 	CursorStartIndex++;
+	OnTextChangedDelegate.Broadcast(this, Text);
 }
 void EditableTextWidget::OnRecievedFocus() {
 	// We can assume that when this widget gains focus, it is in a valid state. Therefore, we
@@ -117,5 +127,15 @@ void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
 
 	DrawBox(Geometry, *CursorDrawInstruction);
 }
-
+void EditableTextWidget::SwapToPlaceholderText() {
+	if (!PlaceholderText.empty()) {
+		SetText(PlaceholderText);
+		SetTextColor(FColor(0.4f, 0.4f, 0.4f));
+	}
+}
+void EditableTextWidget::OnTextSet(const TString& Text) {
+	if (Text.empty()) {
+		SwapToPlaceholderText();
+	}
+}
 void EditableTextWidget::OnTextSubmitted(const TString& SubmittedText) {}

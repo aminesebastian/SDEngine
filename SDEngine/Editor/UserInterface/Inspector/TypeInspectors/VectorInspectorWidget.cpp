@@ -37,19 +37,19 @@ void VectorInspectorWidget::OnCreated() {
 void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 	Labels = LabelsIn;
 }
-void VectorInspectorWidget::OnTargetSet(const FProperty* TargetProperty, const void* TargetObject) {
+void VectorInspectorWidget::OnTargetSet(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) {
 	Values.Clear();
 	if (TargetProperty->GetType() == TypeResolver<Vector2D>::Get()) {
 		for (uint8 i = 0; i < 2; i++) {
-			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector2D>(TargetObject))[i], i);
+			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector2D>(TargetProperty))[i], i);
 		}
 	} else if (TargetProperty->GetType() == TypeResolver<Vector3D>::Get()) {
 		for (uint8 i = 0; i < 3; i++) {
-			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector3D>(TargetObject))[i], i);
+			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector3D>(TargetProperty))[i], i);
 		}
 	} else if (TargetProperty->GetType() == TypeResolver<Vector4D>::Get()) {
 		for (uint8 i = 0; i < 4; i++) {
-			AddEntry(Labels[i], &(*TargetProperty->GetValue<Vector4D>(TargetObject))[i], i);
+			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector4D>(TargetProperty))[i], i);
 		}
 	}
 }
@@ -122,9 +122,10 @@ void VectorInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& M
 }
 void VectorInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (MouseDownEntry >= 0) {
-		Vector3D vec = *InspectedProperty->GetValue<Vector3D>(InspectionObject);
+		// MUST FIX AS THIS IS VEC3D ONLY.
+		Vector3D vec = *InspectionTarget.GetPropertyValue<Vector3D>(InspectedProperty);
 		vec[MouseDownEntry] += Delta.x / 10.0f;
-		InspectedProperty->SetValue(InspectionObject, vec);
+		InspectionTarget.SetPropertyValue(InspectedProperty, vec);
 		ValueWidgets[MouseDownEntry]->SetText(StringUtilities::ToStringWithPrecision(*Values[MouseDownEntry], 2));
 	}
 }
@@ -136,9 +137,10 @@ void VectorInspectorWidget::ValueSubmitted(PictorumWidget* Widget, const TString
 	char* endCharacter = nullptr;
 	for (int32 i = 0; i < ValueWidgets.Count(); i++) {
 		if (ValueWidgets[i] == Widget) {
-			Vector3D vec = *InspectedProperty->GetValue<Vector3D>(InspectedProperty);
+			// MUST FIX AS THIS IS VEC3D ONLY.
+			Vector3D vec = *InspectionTarget.GetPropertyValue<Vector3D>(InspectedProperty);
 			vec[i] = strtof(cString, &endCharacter);
-			InspectedProperty->SetValue(InspectionObject, vec);
+			InspectionTarget.SetPropertyValue(InspectedProperty, vec);
 			break;
 		}
 	}
