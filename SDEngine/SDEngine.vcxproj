@@ -233,6 +233,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Reflection\Handles\PropertyHandle.cpp" />
+    <ClCompile Include="Core\Reflection\Handles\ReflectionHandle.cpp" />
     <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp" />
     <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp" />
     <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp" />
@@ -335,17 +337,18 @@
     <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.cpp" />
     <ClCompile Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.cpp" />
     <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.cpp" />
-    <ClCompile Include="Core\Reflection\ReflectionHelpers.cpp" />
+    <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp" />
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
-    <ClInclude Include="Core\Reflection\ComplexReflectableTypes.h" />
-    <ClInclude Include="Core\Reflection\ReflectionDataTypes.h" />
+    <ClInclude Include="Core\Reflection\Types\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Handles\PropertyHandle.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
-    <ClInclude Include="Core\Reflection\ReflectionWrapper.h" />
+    <ClInclude Include="Core\Reflection\Handles\ReflectionHandle.h" />
     <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
     <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
     <ClInclude Include="Core\Objects\IEngineModule.h" />
@@ -372,8 +375,8 @@
     <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumHorizontalBox.h" />
     <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
-    <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
-    <ClInclude Include="Core\Reflection\TypeResolver.h" />
+    <ClInclude Include="Core\Reflection\Types\ReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Runtime\TypeResolver.h" />
     <ClInclude Include="Core\Utilities\StringUtilities.h" />
     <ClInclude Include="Core\Utilities\FileUtilities.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
@@ -436,7 +439,7 @@
     <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
     <ClInclude Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.h" />
     <ClInclude Include="Core\Reflection\Reflection.h" />
-    <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionHelpers.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
     <ClInclude Include="Core\DataStructures\HashMap.h" />
@@ -466,7 +469,7 @@
     <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
     <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.h" />
     <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.h" />
-    <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
+    <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
     <ClInclude Include="Test\ReflectionTest.h" />
   </ItemGroup>
   <ItemGroup>

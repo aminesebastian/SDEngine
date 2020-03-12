@@ -1,10 +1,8 @@
 #pragma once
 #include "Core/DataStructures/DataStructures.h"
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Core/Reflection/ReflectionDataTypes.h"
-#include "Core/Reflection/TypeDescriptor.h"
-
-class EngineObject;
+#include "Core/Reflection/Utilities/ReflectionDataTypes.h"
+#include "Core/Reflection/Utilities/TypeDescriptor.h"
 
 enum class ETypeMemoryType : uint8 {
 	VALUE, REFERENCE, POINTER
@@ -29,14 +27,14 @@ struct FPropertyMetadata {
 		return false;
 	}
 private:
-	friend struct TypeDescriptor_Struct;
-	friend struct TypeDescriptor_Class;
+	friend class TypeDescriptor_Struct;
+	friend class TypeDescriptor_Class;
 
 	bool bInspectorHidden;
 	const char* Category;
 };
 struct FProperty {
-	FProperty(const char* Name, const char* InspectorName, const size_t& Offset, TypeDescriptor* Type, const FPropertyMetadata& Metadata) {
+	FProperty(const char* Name, const char* InspectorName, const size_t& Offset, ITypeDescriptor* Type, const FPropertyMetadata& Metadata) {
 		this->Name = Name;
 		this->InspectorName = InspectorName;
 		this->Offset = Offset;
@@ -49,7 +47,7 @@ struct FProperty {
 	const TString GetInspectorName() const {
 		return InspectorName;
 	}
-	const TypeDescriptor* GetType() const {
+	const ITypeDescriptor* GetType() const {
 		return Type;
 	}
 	const FPropertyMetadata& GetMetadata() const {
@@ -71,65 +69,47 @@ struct FProperty {
 		return false;
 	}
 private:
-	friend struct TypeDescriptor_Struct;
-	friend struct TypeDescriptor_Class;
-	friend class ReflectionWrapper;
+	friend class TypeDescriptor_Struct;
+	friend class TypeDescriptor_Class;
+	friend class PropertyHandle;
 
 	const char* Name;
 	const char* InspectorName;
 	size_t Offset;
-	TypeDescriptor* Type;
+	ITypeDescriptor* Type;
 	FPropertyMetadata Metadata;
 
 	template<typename T>
-	const T* GetValue(const EngineObject* Object) const {
-		return GetInternalValue<T>(Object);
+	const T* GetValue(const void* Target) const {
+		return GetInternalValue<T>(Target);
 	}
 	template<typename T>
-	const T* GetValue(const void* Struct) const {
-		return GetInternalValue<T>(Struct);
+	const T* GetValue(void* Target) const {
+		return GetInternalValue<T>(Target);
 	}
 	template<typename T>
-	const T* GetValue(EngineObject* Object) const {
-		return GetInternalValue<T>(Object);
-	}
-	template<typename T>
-	const T* GetValue(void* Struct) const {
-		return GetInternalValue<T>(Struct);
-	}
-	template<typename T>
-	void SetValue(const EngineObject* Object, const T& Value) const {
-		T* target = GetInternalValue<T>(Object);
-		*target = Value;
-	}
-	template<typename T>
-	void SetValue(const void* Struct, const T& Value) const {
-		T* target = GetInternalValue<T>(Struct);
+	void SetValue(const void* Target, const T& Value) const {
+		T* target = GetInternalValue<T>(Target);
 		*target = Value;
 	}
 
 	template<typename T>
-	void SetValue(const EngineObject* Object, T* Value) const {
-		T* target = GetInternalValue<T>(Object);
-		target = Value;
-	}
-	template<typename T>
-	void SetValue(const void* Struct, T* Value) const {
+	void SetValue(const void* Target, T* Value) const {
 		T* target = GetInternalValue<T>(Struct);
 		target = Value;
 	}
 	template<typename T>
-	T* GetInternalValue(const void* Object) const {
-		return (T*)((char*)Object + Offset);
+	T* GetInternalValue(const void* Target) const {
+		return (T*)((char*)Target + Offset);
 	}
 	template<typename T>
-	T* GetInternalValue(void* Object) const {
-		return (T*)((char*)Object + Offset);
+	T* GetInternalValue(void* Target) const {
+		return (T*)((char*)Target + Offset);
 	}
 };
 struct FFunctionParameter {
 	FFunctionParameter() { }
-	FFunctionParameter(const char* Name, TypeDescriptor* Type, const bool& Const, const ETypeMemoryType& PassByType) {
+	FFunctionParameter(const char* Name, ITypeDescriptor* Type, const bool& Const, const ETypeMemoryType& PassByType) {
 		this->Name = Name;
 		this->Type = Type;
 		this->Const = Const;
@@ -138,7 +118,7 @@ struct FFunctionParameter {
 	const TString GetName() const {
 		return Name;
 	}
-	const TypeDescriptor* GetType() const {
+	const ITypeDescriptor* GetType() const {
 		return Type;
 	}
 	const bool& IsConst() const {
@@ -164,17 +144,17 @@ struct FFunctionParameter {
 	}
 
 private:
-	friend struct TypeDescriptor_Struct;
-	friend struct TypeDescriptor_Class;
-	friend class ReflectionWrapper;
+	friend class TypeDescriptor_Struct;
+	friend class TypeDescriptor_Class;
+	friend class ReflectionHandle;
 
 	const char* Name;
-	TypeDescriptor* Type;
+	ITypeDescriptor* Type;
 	bool Const;
 	ETypeMemoryType PassByType;
 };
 struct FFunction {
-	FFunction(const char* Name, const bool& ReturnConst, TypeDescriptor* bReturnConst, const ETypeMemoryType& ReturnMemoryType, const bool& bConstFunction, const std::initializer_list<FFunctionParameter>& InitializationList) {
+	FFunction(const char* Name, const bool& ReturnConst, ITypeDescriptor* bReturnConst, const ETypeMemoryType& ReturnMemoryType, const bool& bConstFunction, const std::initializer_list<FFunctionParameter>& InitializationList) {
 		this->Name = Name;
 		this->bReturnConst = bReturnConst;
 		this->ReturnType = ReturnType;
@@ -188,7 +168,7 @@ struct FFunction {
 	const bool& GetReturnsConst() const {
 		return bReturnConst;
 	}
-	const TypeDescriptor* GetReturnType() const {
+	const ITypeDescriptor* GetReturnType() const {
 		return ReturnType;
 	}
 	const ETypeMemoryType& GetReturnMemoryType() const {
@@ -226,13 +206,13 @@ struct FFunction {
 	}
 
 private:
-	friend struct TypeDescriptor_Struct;
-	friend struct TypeDescriptor_Class;
-	friend class ReflectionWrapper;
+	friend class TypeDescriptor_Struct;
+	friend class TypeDescriptor_Class;
+	friend class ReflectionHandle;
 
 	const char* Name;
 	bool bReturnConst;
-	TypeDescriptor* ReturnType;
+	ITypeDescriptor* ReturnType;
 	ETypeMemoryType ReturnMemoryType;
 	bool bConstFunction;
 	std::vector<FFunctionParameter> Parameters;

@@ -182,14 +182,13 @@ namespace SuburbanDigitalEnginePreprocessor {
                 if (enc.Type == EReflectionTarget.CLASS) {
                     fileContents.Add($"//Reflection for class {enc.Name}");
                     fileContents.Add($"REFLECT_CLASS_BEGIN({enc.Name})");
+
                     // Parent Classes
-                    fileContents.Add($"REFLECT_CLASS_BEGIN_PARENTS()");
                     foreach (string parent in enc.ParentClasses) {
                         if (Globals.ReflectedObjects.ContainsKey(parent)) {
                             fileContents.Add($"REFLECT_CLASS_PARENT({parent})");
                         }
                     }
-                    fileContents.Add($"REFLECT_CLASS_PARENT_END()");
 
                     // Members
                     foreach (FProperty property in enc.Properties.Values.OrderBy(i => i.GetCategory())) {
@@ -205,18 +204,18 @@ namespace SuburbanDigitalEnginePreprocessor {
                 } else if (enc.Type == EReflectionTarget.STRUCT) {
                     fileContents.Add($"//Reflection for struct {enc.Name}");
                     fileContents.Add($"REFLECT_STRUCT_BEGIN({enc.Name})");
-                    fileContents.Add($"REFLECT_STRUCT_BEGIN_PARENTS()");
+
+                    // Parents
                     foreach (string parent in enc.ParentClasses) {
                         if (Globals.ReflectedObjects.ContainsKey(parent)) {
                             fileContents.Add($"REFLECT_STRUCT_PARENT({parent})");
                         }
                     }
-                    fileContents.Add($"REFLECT_STRUCT_PARENT_END()");
-                    fileContents.Add($"REFLECT_STRUCT_MEMBERS_BEGIN()");
+
+                    // Properties
                     foreach (FProperty property in enc.Properties.Values.OrderBy(i => i.GetCategory())) {
                         fileContents.Add($"REFLECT_STRUCT_MEMBER({property.GetMacroInternals()})");
                     }
-                    fileContents.Add($"REFLECT_STRUCT_MEMBERS_END()");
                     fileContents.Add($"REFLECT_STRUCT_END()");
                 }
             }

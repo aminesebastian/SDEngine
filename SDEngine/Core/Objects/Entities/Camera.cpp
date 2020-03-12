@@ -67,7 +67,8 @@ void Camera::UpdateMatricies() {
 	OrthographicMatrix = ortho(0.0f, RenderTargetDimensions.x, RenderTargetDimensions.y, 0.0f, NearClipPlane, FarClipPlane);
 	ProjectionMatrix = perspective(glm::radians(FieldOfView), CachedAspectRatio, NearClipPlane, FarClipPlane);
 }
-void Camera::OnPropertyUpdated(FProperty* Property) {
+void Camera::OnPropertyUpdated(const FProperty* Property) {
+	Actor::OnPropertyUpdated(Property);
 	if (Property->GetName() == "FieldOfView") {
 		UpdateMatricies();
 	}

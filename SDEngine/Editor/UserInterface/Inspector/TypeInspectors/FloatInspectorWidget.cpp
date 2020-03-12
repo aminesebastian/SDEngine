@@ -1,12 +1,4 @@
 #include "FloatInspectorWidget.h"
-#include "Core/Engine/Window.h"
-#include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
-#include "Core/Pictorum/PictorumRenderer.h"
-#include "Core/Pictorum/Widgets/ImageWidget.h"
-#include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Core/Pictorum/Widgets/SolidWidget.h"
-#include "Core/Pictorum/Widgets/TextWidget.h"
-#include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/StringUtilities.h"
 #include "Editor/UserInterface/EngineUIStyle.h"
 
@@ -22,7 +14,7 @@ void FloatInspectorWidget::OnCreated() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseUpAnywhere>(this);
 	GetOwningRenderer()->OnMouseMoveAnywhereDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::MouseMoveAnywhere>(this);
 }
-void FloatInspectorWidget::OnTargetSet(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) {
+void FloatInspectorWidget::OnTargetSet(const PropertyHandle& Property) {
 	AssignNewToChild(this, SolidWidget, ValueBackgroundWidget, "ValueBg");
 	ValueBackgroundWidget->OnHoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueHovered>(this);
 	ValueBackgroundWidget->OnUnhoveredDelegate.Add<FloatInspectorWidget, & FloatInspectorWidget::ValueUnhovered>(this);
@@ -32,7 +24,7 @@ void FloatInspectorWidget::OnTargetSet(const ReflectionWrapper& Wrapper, const F
 	ValueBackgroundWidget->SetVisibility(EPictorumVisibilityState::VISIBLE);
 
 	AssignNewToChild(ValueBackgroundWidget, EditableTextWidget, ValueWidget, "Value");
-	ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*Wrapper.GetPropertyValue<float>(TargetProperty), 2));
+	ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*Property.GetValue<float>(), 2));
 	ValueWidget->SetFontSize(9);
 	ValueWidget->SetTextColor(EngineUIStyles::LIGHT_TEXT_COLOR);
 	ValueWidget->SetFontWeight(EFontWeight::Bold);
@@ -56,9 +48,10 @@ void FloatInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& Mo
 }
 void FloatInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (bMouseWasDownInside) {
-		float value = *InspectionTarget.GetPropertyValue<float>(InspectedProperty) + Delta.x / 10.0f;
-		InspectionTarget.SetPropertyValue(InspectedProperty, value);
-		ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*InspectionTarget.GetPropertyValue<float>(InspectedProperty), 2));
+		float value = *InspectedProperty.GetValue<float>() + Delta.x / 10.0f;
+		InspectedProperty.SetValue(value);
+		ValueWidget->SetText(StringUtilities::ToStringWithPrecision(*InspectedProperty.GetValue<float>(), 2));
+		RaiseOnPropertyUpdatedDelegate();
 	}
 }
 void FloatInspectorWidget::MouseUpAnywhere(const vec2& MouseLocation) {

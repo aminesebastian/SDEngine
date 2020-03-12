@@ -1,71 +1,80 @@
 #pragma once
-#include "Core/Reflection/TypeDescriptor.h"
 #include "Core/DataStructures/DataStructures.h"
 #include "Core/DataTypes/TypeDefenitions.h"
+#include "Core/Reflection/Utilities/TypeDescriptor.h"
 
-struct TypeDescriptor_Vector4D : public TypeDescriptor {
-	TypeDescriptor_Vector4D() : TypeDescriptor{ "Vector4D", sizeof(Vector4D) } {}
+class TypeDescriptor_Vector4D : public ITypeDescriptor {
+public:
+	TypeDescriptor_Vector4D() : ITypeDescriptor("Vector4D", sizeof(Vector4D), EPrimitiveDataType::Vector4D) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		Vector4D vec = *(const Vector4D*)Instance;
 		return Name + "{x:" + std::to_string(vec.x) + " y:" + std::to_string(vec.y) + " z:" + std::to_string(vec.z) + " w:" + std::to_string(vec.w) + "}";
 	}
 };
-struct TypeDescriptor_Vector3D : public TypeDescriptor {
-	TypeDescriptor_Vector3D() : TypeDescriptor{ "Vector3D", sizeof(Vector3D) } {}
+class TypeDescriptor_Vector3D : public ITypeDescriptor {
+public:
+	TypeDescriptor_Vector3D() : ITypeDescriptor("Vector3D", sizeof(Vector3D), EPrimitiveDataType::Vector3D) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		Vector3D vec = *(const Vector3D*)Instance;
 		return Name + "{x:" + std::to_string(vec.x) + " y:" + std::to_string(vec.y) + " z:" + std::to_string(vec.z) + "}";
 	}
 };
-struct TypeDescriptor_Vector2D : public TypeDescriptor {
-	TypeDescriptor_Vector2D() : TypeDescriptor{ "Vector2D", sizeof(Vector2D) } {}
+class TypeDescriptor_Vector2D : public ITypeDescriptor {
+public:
+	TypeDescriptor_Vector2D() : ITypeDescriptor("Vector2D", sizeof(Vector2D), EPrimitiveDataType::Vector2D) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		Vector2D vec = *(const Vector2D*)Instance;
 		return Name + "{x:" + std::to_string(vec.x) + " y:" + std::to_string(vec.y) + "}";
 	}
 };
 
-struct TypeDescriptor_Float : public TypeDescriptor {
-	TypeDescriptor_Float() : TypeDescriptor{ "float", sizeof(float) } {}
+class TypeDescriptor_Float : public ITypeDescriptor {
+public:
+	TypeDescriptor_Float() : ITypeDescriptor("float", sizeof(float), EPrimitiveDataType::Float) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		return Name + "{" + std::to_string(*(const float*)Instance) + "}";
 	}
 };
 
-struct TypeDescriptor_Int32 : public TypeDescriptor {
-	TypeDescriptor_Int32() : TypeDescriptor{ "int32", sizeof(int32) } {}
+class TypeDescriptor_Int32 : public ITypeDescriptor {
+public:
+	TypeDescriptor_Int32() : ITypeDescriptor("int32", sizeof(int32), EPrimitiveDataType::Integer) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		return Name + "{" + std::to_string(*(const int32*)Instance) + "}";
 	}
 };
 
-struct TypeDescriptor_Bool : public TypeDescriptor {
-	TypeDescriptor_Bool() : TypeDescriptor{ "bool", sizeof(bool) } {}
+class TypeDescriptor_Bool : public ITypeDescriptor {
+public:
+	TypeDescriptor_Bool() : ITypeDescriptor("bool", sizeof(bool), EPrimitiveDataType::Bool) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		return Name + "{" + (*(const bool*)Instance ? "true" : "false") + "}";
 	}
 };
 
-struct TypeDescriptor_Void : public TypeDescriptor {
-	TypeDescriptor_Void() : TypeDescriptor{ "void", 0 } {}
+class TypeDescriptor_Void : public ITypeDescriptor {
+public:
+	TypeDescriptor_Void() : ITypeDescriptor("void", 0, EPrimitiveDataType::Void) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		return Name + "{VOID}";
 	}
 };
 
-struct TypeDescriptor_TString : public TypeDescriptor {
-	TypeDescriptor_TString() : TypeDescriptor{ "String", sizeof(TString) } {}
+class TypeDescriptor_TString : public ITypeDescriptor {
+public:
+	TypeDescriptor_TString() : ITypeDescriptor("String", sizeof(TString), EPrimitiveDataType::String) {}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
 		return Name + "{" + *(const TString*)Instance + "}";
 	}
 };
 template<typename T>
-struct TypeDescriptor_SArray : public TypeDescriptor {
-	TypeDescriptor_SArray() : TypeDescriptor{ "Array", sizeof(SArray<T>) } {
+class TypeDescriptor_SArray : public ITypeDescriptor {
+public:
+	TypeDescriptor_SArray() : ITypeDescriptor("Array", sizeof(SArray<T>), EPrimitiveDataType::Array) {
 		ContainerType = TypeResolver<T>::Get();
 	}
 	virtual const TString ToString(const void* Instance, const int32 Indent = 0) const override {
-		return Name + "{ }";
+		return Name + "{}";
 	}
-	TypeDescriptor* ContainerType;
+	ITypeDescriptor* ContainerType;
 };

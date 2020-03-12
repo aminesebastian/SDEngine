@@ -1,4 +1,4 @@
-//LastModifiedTime:637195019153877878
+//LastModifiedTime:637195879499305897
 #pragma once
 #include "Core/Reflection/Reflection.h"
 #include "./Test\ReflectionTest.h"
@@ -6,9 +6,7 @@
 
 //Reflection for class FReflectionTest
 REFLECT_CLASS_BEGIN(FReflectionTest)
-REFLECT_CLASS_BEGIN_PARENTS()
 REFLECT_CLASS_PARENT(EngineObject)
-REFLECT_CLASS_PARENT_END()
 REFLECT_CLASS_MEMBER(testFloat, "test Float",  "Default", false)
 REFLECT_CLASS_MEMBER(testString, "test String",  "Default", false)
 REFLECT_CLASS_MEMBER(testInt, "test Int",  "Default", false)

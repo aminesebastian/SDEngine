@@ -331,9 +331,6 @@
     <ClCompile Include="Test\ReflectionTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Reflection\ReflectionHelpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -389,6 +386,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\DataStructures\HashMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Handles\ReflectionHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Handles\PropertyHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -547,11 +553,7 @@
     <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
     <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
     <ClInclude Include="Core\Reflection\Reflection.h" />
-    <ClInclude Include="Core\Reflection\TypeResolver.h" />
-    <ClInclude Include="Core\Reflection\TypeDescriptor.h" />
-    <ClInclude Include="Core\Reflection\ReflectableTypes.h" />
     <ClInclude Include="Test\ReflectionTest.h" />
-    <ClInclude Include="Core\Reflection\ReflectionHelpers.h" />
     <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
     <ClInclude Include="Core\Pictorum\Widgets\CheckboxWidget.h" />
     <ClInclude Include="Editor\EditorModule.h" />
@@ -577,9 +579,14 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
-    <ClInclude Include="Core\Reflection\ReflectionDataTypes.h" />
-    <ClInclude Include="Core\Reflection\ComplexReflectableTypes.h" />
-    <ClInclude Include="Core\Reflection\ReflectionWrapper.h" />
+    <ClInclude Include="Core\Reflection\Handles\ReflectionHandle.h" />
+    <ClInclude Include="Core\Reflection\Handles\PropertyHandle.h" />
+    <ClInclude Include="Core\Reflection\Types\ReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Types\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Runtime\TypeResolver.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionHelpers.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
+    <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

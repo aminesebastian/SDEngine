@@ -1,4 +1,4 @@
-//LastModifiedTime:637195019153897818
+//LastModifiedTime:637195879499325859
 #pragma once
 #include "Core/Reflection/Reflection.h"
 #include "./Core\Objects\Entities\Entity.h"
@@ -6,9 +6,7 @@
 
 //Reflection for class Entity
 REFLECT_CLASS_BEGIN(Entity)
-REFLECT_CLASS_BEGIN_PARENTS()
 REFLECT_CLASS_PARENT(EngineObject)
-REFLECT_CLASS_PARENT_END()
 REFLECT_CLASS_MEMBER(LastFrameTransform, "Last Frame Transform",  "Default", true)
 REFLECT_CLASS_MEMBER(bVisible, "Visible",  "Entity", false)
 REFLECT_CLASS_MEMBER(bHiddenInGame, "Hidden In Game",  "Entity", false)

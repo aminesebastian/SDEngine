@@ -8,10 +8,10 @@ public:
 	virtual ~InspectorPanelManager();
 	static InspectorPanelManager* Get();
 
-	void RegisterCustomization(TypeDescriptor* Descriptor, IInspectorPanelGenerator* Customization);
-	IInspectorPanelGenerator* GetGenerator(const TypeDescriptor* Descriptor) const;
+	void RegisterCustomization(ITypeDescriptor* Descriptor, IInspectorPanelGenerator* Customization);
+	IInspectorPanelGenerator* GetGenerator(const ITypeDescriptor* Descriptor) const;
 private:
-	SHashMap<const TypeDescriptor*, IInspectorPanelGenerator*> Generators;
+	SHashMap<const ITypeDescriptor*, IInspectorPanelGenerator*> Generators;
 	IInspectorPanelGenerator* Default;
 
 	InspectorPanelManager();

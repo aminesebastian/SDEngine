@@ -149,13 +149,14 @@ PictorumGridSlot* PictorumGrid::GetSlotForWidgetInSlot(const int32& Row, const i
 		return nullptr;
 	}
 }
-const EMouseCursorStyle PictorumGrid::GetMouseCursor(const vec2& MousePosition) {
+const EMouseCursorStyle PictorumGrid::GetMouseCursor(const vec2& MousePosition, bool& Override) {
 	if (bCanResize) {
 		if (ShrinkTarget) {
+			Override = true;
 			return ShrinkTarget->bIsRow ? EMouseCursorStyle::SizeVertical : EMouseCursorStyle::SizeHorizontal;
 		}
 	}
-	return PictorumWidget::GetMouseCursor(MousePosition);
+	return PictorumWidget::GetMouseCursor(MousePosition, Override);
 }
 
 void PictorumGrid::OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) {

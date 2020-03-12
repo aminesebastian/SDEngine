@@ -27,7 +27,7 @@ public:
 	float GetFOV() const;
 	float GetAspect() const;
 	Vector2D GetRenderTargetDimensions() const;
-	void OnPropertyUpdated(FProperty* Property);
+	virtual void OnPropertyUpdated(const FProperty* Property) override;
 protected:
 	SD_PROPERTY();
 	float FieldOfView;

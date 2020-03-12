@@ -7,7 +7,7 @@ EngineObject::~EngineObject() {}
 const TString& EngineObject::GetObjectName() const {
 	return EngineObjectName;
 }
-void EngineObject::OnPropertyUpdated(FProperty* Property) {
+void EngineObject::OnPropertyUpdated(const FProperty* Property) {
 
 }
 void EngineObject::Destroy() {

@@ -1,19 +1,16 @@
 #include "ActorInspectorPanelGenerator.h"
 #include "Core/Objects/Entities/Actor.h"
-#include "Core/Reflection/ReflectionHelpers.h"
+#include "Core/Reflection/Utilities/ReflectionHelpers.h"
 
 void ActorInspectorPanelGenerator::GenerateInspector(InspectorPanelBuilder& Builder) {
-	const Actor* target = Builder.GetTarget().Get<Actor>();
+	ReflectionHandle handle = Builder.GetTarget();
 
-	Builder.AddControlForProperty(ReflectionHelpers::GetPropertyHandle("Transform", target));
+	// Ensure transform appears at the top.
+	Builder.AddControlForProperty(handle.GetPropertyHandle("Transform"));
 
-	SArray<FProperty*> properties;
-	ReflectionHelpers::GetPropertiesOfClass(properties, target);
-
-	for (const FProperty* prop : properties) {
-		if (prop->GetMetadata().GetHiddenInInspector()) {
-			continue;
+	for (PropertyHandle prop : handle) {
+		if (!prop.GetMetadata().GetHiddenInInspector()) {
+			Builder.AddControlForProperty(prop);
 		}
-		Builder.AddControlForProperty(prop);
 	}
 }

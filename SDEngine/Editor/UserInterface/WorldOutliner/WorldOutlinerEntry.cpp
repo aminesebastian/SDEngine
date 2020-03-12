@@ -32,6 +32,6 @@ void WorldOutlinerEntry::OnCreated() {
 }
 void WorldOutlinerEntry::Initialize(Entity* EntityIn) {
 	EntityNameWidget->SetText(EntityIn->GetObjectName());
-	EntityTypeWidget->SetText(EntityIn->StaticDescriptor()->Name);
+	EntityTypeWidget->SetText(EntityIn->StaticDescriptor()->GetName());
 	VisibilityWidget->SetImage(VisibleIcon);
 }

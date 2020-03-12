@@ -1,15 +1,6 @@
 #include "VectorInspectorWidget.h"
-#include "Core/Engine/Window.h"
-#include "Core/Pictorum/Containers/PictorumHorizontalBox.h"
-#include "Core/Pictorum/PictorumRenderer.h"
-#include "Core/Pictorum/Widgets/ImageWidget.h"
-#include "Core/Pictorum/Widgets/SeparatorWidget.h"
-#include "Core/Pictorum/Widgets/SolidWidget.h"
-#include "Core/Pictorum/Widgets/TextWidget.h"
-#include "Core/Utilities/EngineFunctionLibrary.h"
-#include "Core/Utilities/StringUtilities.h"
-#include "Core/Reflection/ReflectionHelpers.h"
 #include "Editor/UserInterface/EngineUIStyle.h"
+#include "Core/Utilities/StringUtilities.h"
 
 VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : BaseInspectorWidget(Name) {
 	Colors.Add(EngineUIStyles::X_COLOR);
@@ -37,19 +28,19 @@ void VectorInspectorWidget::OnCreated() {
 void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 	Labels = LabelsIn;
 }
-void VectorInspectorWidget::OnTargetSet(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) {
+void VectorInspectorWidget::OnTargetSet(const PropertyHandle& Property) {
 	Values.Clear();
-	if (TargetProperty->GetType() == TypeResolver<Vector2D>::Get()) {
+	if (Property.GetType() == TypeResolver<Vector2D>::Get()) {
 		for (uint8 i = 0; i < 2; i++) {
-			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector2D>(TargetProperty))[i], i);
+			AddEntry(Labels[i], &(*Property.GetValue<Vector2D>())[i], i);
 		}
-	} else if (TargetProperty->GetType() == TypeResolver<Vector3D>::Get()) {
+	} else if (Property.GetType() == TypeResolver<Vector3D>::Get()) {
 		for (uint8 i = 0; i < 3; i++) {
-			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector3D>(TargetProperty))[i], i);
+			AddEntry(Labels[i], &(*Property.GetValue<Vector3D>())[i], i);
 		}
-	} else if (TargetProperty->GetType() == TypeResolver<Vector4D>::Get()) {
+	} else if (Property.GetType() == TypeResolver<Vector4D>::Get()) {
 		for (uint8 i = 0; i < 4; i++) {
-			AddEntry(Labels[i], &(*Wrapper.GetPropertyValue<Vector4D>(TargetProperty))[i], i);
+			AddEntry(Labels[i], &(*Property.GetValue<Vector4D>())[i], i);
 		}
 	}
 }
@@ -123,10 +114,11 @@ void VectorInspectorWidget::ValueUnhovered(PictorumWidget* Widget, const vec2& M
 void VectorInspectorWidget::MouseMoveAnywhere(const vec2& MouseLocation, const vec2& Delta) {
 	if (MouseDownEntry >= 0) {
 		// MUST FIX AS THIS IS VEC3D ONLY.
-		Vector3D vec = *InspectionTarget.GetPropertyValue<Vector3D>(InspectedProperty);
+		Vector3D vec = *InspectedProperty.GetValue<Vector3D>();
 		vec[MouseDownEntry] += Delta.x / 10.0f;
-		InspectionTarget.SetPropertyValue(InspectedProperty, vec);
+		InspectedProperty.SetValue(vec);
 		ValueWidgets[MouseDownEntry]->SetText(StringUtilities::ToStringWithPrecision(*Values[MouseDownEntry], 2));
+		RaiseOnPropertyUpdatedDelegate();
 	}
 }
 void VectorInspectorWidget::MouseUpAnywhere(const vec2& MouseLocation) {
@@ -138,9 +130,10 @@ void VectorInspectorWidget::ValueSubmitted(PictorumWidget* Widget, const TString
 	for (int32 i = 0; i < ValueWidgets.Count(); i++) {
 		if (ValueWidgets[i] == Widget) {
 			// MUST FIX AS THIS IS VEC3D ONLY.
-			Vector3D vec = *InspectionTarget.GetPropertyValue<Vector3D>(InspectedProperty);
+			Vector3D vec = *InspectedProperty.GetValue<Vector3D>();
 			vec[i] = strtof(cString, &endCharacter);
-			InspectionTarget.SetPropertyValue(InspectedProperty, vec);
+			InspectedProperty.SetValue(vec);
+			RaiseOnPropertyUpdatedDelegate();
 			break;
 		}
 	}

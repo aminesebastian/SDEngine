@@ -28,7 +28,7 @@ public:
 	 *
 	 * @param [in,out]	Property	If non-null, the property.
 	 */
-	void OnPropertyUpdated(FProperty* Property);
+	virtual void OnPropertyUpdated(const FProperty* Property);
 
 	void Destroy();
 	virtual void OnDestroyed();

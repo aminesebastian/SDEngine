@@ -141,11 +141,22 @@ void PictorumRenderer::OnMouseButtonUp(vec2 ScreenPosition, EMouseButton Button)
 void PictorumRenderer::OnMouseAxis(vec2 ScreenPosition, vec2 Delta) {
 	OnMouseMoveAnywhereDelegate.Broadcast(ScreenPosition, Delta);
 
+	bool wasCursorOverriden = false;
+
 	// Raise mouse move events.
 	FUserInterfaceEvent eventHandle;
 	for (PictorumWidget* candidate : WidgetsUnderMouse) {
 		candidate->MouseMove(ScreenPosition, Delta, eventHandle);
-		Engine::GetInputSubsystem()->SetMouseCursorStyle(candidate->GetMouseCursor(ScreenPosition));
+		bool overrideCursor = false;
+		EMouseCursorStyle cursor = candidate->GetMouseCursor(ScreenPosition, overrideCursor);
+		if (overrideCursor) {
+			wasCursorOverriden = true;
+			Engine::GetInputSubsystem()->SetMouseCursorStyle(cursor);
+		}
+	}
+
+	if (!wasCursorOverriden) {
+		Engine::GetInputSubsystem()->SetMouseCursorStyle(EMouseCursorStyle::Arrow);
 	}
 }
 void PictorumRenderer::OnMouseScrollAxis(float Delta) {

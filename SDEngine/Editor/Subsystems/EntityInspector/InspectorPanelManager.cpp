@@ -11,10 +11,10 @@ InspectorPanelManager* InspectorPanelManager::Get() {
 	static InspectorPanelManager* Instance = new InspectorPanelManager(); // only initialized once!
 	return Instance;
 }
-void InspectorPanelManager::RegisterCustomization(TypeDescriptor* Descriptor, IInspectorPanelGenerator* Customization) {
+void InspectorPanelManager::RegisterCustomization(ITypeDescriptor* Descriptor, IInspectorPanelGenerator* Customization) {
 	Generators.emplace(Descriptor, Customization);
 }
-IInspectorPanelGenerator* InspectorPanelManager::GetGenerator(const TypeDescriptor* Descriptor) const {
+IInspectorPanelGenerator* InspectorPanelManager::GetGenerator(const ITypeDescriptor* Descriptor) const {
 	if (Generators.find(Descriptor) != Generators.end()) {
 		return Generators.at(Descriptor);
 	}
@@ -35,7 +35,7 @@ IInspectorPanelGenerator* InspectorPanelManager::GetClosestMatchingGeneratorForC
 	if (Generators.find(Type) != Generators.end()) {
 		return Generators.at(Type);
 	}
-	for (TypeDescriptor_Class* desc : Type->ParentDescriptors) {
+	for (const TypeDescriptor_Class* desc : Type->GetParentClasses()) {
 		IInspectorPanelGenerator* parentGen = GetClosestMatchingGeneratorForClass(desc);
 		if (parentGen) {
 			return parentGen;

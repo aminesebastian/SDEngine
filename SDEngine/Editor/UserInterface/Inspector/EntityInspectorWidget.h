@@ -3,7 +3,7 @@
 #include "Core/Objects/Entities/Entity.h"
 #include "Core/DataStructures/Array.h"
 
-class VectorInspectorWidget;
+class InspectorPanelBuilder;
 
 class EntityInspector : public PictorumWidget {
 public:
@@ -15,5 +15,6 @@ public:
 private:
 	Entity* DisplayedEntity;
 	PictorumVerticalBox* DetailsPanelListBox;
+	InspectorPanelBuilder* LatestBuilder;
 };
 

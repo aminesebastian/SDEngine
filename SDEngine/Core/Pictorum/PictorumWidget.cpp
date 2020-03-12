@@ -103,7 +103,8 @@ IWidgetSlot* PictorumWidget::CreateSlotForWidget(PictorumWidget* WidgetForSlot) 
 	return new IWidgetSlot();
 }
 
-const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition) {
+const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition, bool& Override) {
+	Override = false;
 	return EMouseCursorStyle::Arrow;
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {

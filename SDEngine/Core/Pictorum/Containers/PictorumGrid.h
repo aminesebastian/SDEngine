@@ -73,7 +73,7 @@ protected:
 	PictorumWidget* GetWidgetInSlot(const int32& Row, const int32& Column);
 	PictorumGridSlot* GetSlotForWidgetInSlot(const int32& Row, const int32& Column);
 
-	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition) override;
+	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition, bool& Override) override;
 	virtual void OnMouseExit(const vec2& MousePosition, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseMove(const vec2& MousePosition, const vec2& MouseDelta, FUserInterfaceEvent& EventIn) override;
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;

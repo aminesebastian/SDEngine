@@ -1,6 +1,5 @@
 #include "EntityInspectorWidget.h"
 #include "Core/Engine/Window.h"
-#include "Core/Reflection/ReflectionHelpers.h"
 #include "Core/Utilities/EngineFunctionLibrary.h"
 #include "Core/Utilities/Logger.h"
 #include "Core/Utilities/StringUtilities.h"
@@ -10,7 +9,8 @@
 
 EntityInspector::EntityInspector(const TString& Name) : PictorumWidget(Name) {
 	DetailsPanelListBox = nullptr;
-	DisplayedEntity = nullptr;
+	DisplayedEntity     = nullptr;
+	LatestBuilder       = nullptr;
 }
 EntityInspector::~EntityInspector() {
 
@@ -33,8 +33,11 @@ void EntityInspector::SetSelectedEntity(Entity* SelectedEntity) {
 	if (!SelectedEntity) {
 		return;
 	}
-	ReflectionWrapper wrapper(SelectedEntity, SelectedEntity->StaticDescriptor());
-	InspectorPanelBuilder builder(DetailsPanelListBox, wrapper);
+	if (LatestBuilder) {
+		delete LatestBuilder;
+	}
+	ReflectionHandle wrapper(SelectedEntity);
+	LatestBuilder = new InspectorPanelBuilder(DetailsPanelListBox, wrapper);
 	IInspectorPanelGenerator* generator = InspectorPanelManager::Get()->GetGenerator(SelectedEntity->StaticDescriptor());
-	generator->GenerateInspector(builder);
+	generator->GenerateInspector(*LatestBuilder);
 }

@@ -1,12 +1,12 @@
 #pragma once
 #include "Core/DataTypes/TypeDefenitions.h"
-#include "Core/Reflection/ComplexReflectableTypes.h"
-#include "Core/Reflection/ReflectableTypes.h"
-#include "Core/Reflection/ReflectionDataTypes.h"
-#include "Core/Reflection/TypeResolver.h"
+#include "Core/Reflection/Runtime/TypeResolver.h"
+#include "Core/Reflection/Types/ComplexReflectableTypes.h"
+#include "Core/Reflection/Types/ReflectableTypes.h"
+#include "Core/Reflection/Utilities/ReflectionDataTypes.h"
 
 template <typename T>
-TypeDescriptor* GetPrimitiveDescriptor();
+ITypeDescriptor* GetPrimitiveDescriptor();
 
 #define SD_STRUCT()
 #define SD_CLASS()
@@ -25,24 +25,15 @@ TypeDescriptor* GetPrimitiveDescriptor();
 	const TypeDescriptor_Struct* Type::StaticDescriptor() const {\
 		return &Type::Reflection; \
 	}\
-    TypeDescriptor_Struct Type::Reflection{Type::InitializeReflection}; \
+    TypeDescriptor_Struct Type::Reflection{#Type, sizeof(Type), Type::InitializeReflection}; \
     void Type::InitializeReflection(TypeDescriptor_Struct* TypeDescriptorIn) { \
         using T = Type; \
-        TypeDescriptorIn->Name = #Type; \
-        TypeDescriptorIn->Size = sizeof(T); \
 
-#define REFLECT_STRUCT_BEGIN_PARENTS() 
 #define REFLECT_STRUCT_PARENT(Parent)
-#define REFLECT_STRUCT_PARENT_END()
-
-#define REFLECT_STRUCT_MEMBERS_BEGIN() \
-        TypeDescriptorIn->Properties = { \
 
 #define REFLECT_STRUCT_MEMBER(Name, InspectorName, Category, InspectorHidden) \
-            FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), FPropertyMetadata(Category, InspectorHidden)), \
-
-#define REFLECT_STRUCT_MEMBERS_END() \
-	    }; \
+		FPropertyMetadata metadata##Name(Category, InspectorHidden); \
+        TypeDescriptorIn->AddProperty(new FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), metadata##Name)); \
 
 #define REFLECT_STRUCT_END() \
     }
@@ -60,27 +51,19 @@ TypeDescriptor* GetPrimitiveDescriptor();
 	const TypeDescriptor_Class* Type::StaticDescriptor() const {\
 		return &Type::Reflection; \
 	}\
-    TypeDescriptor_Class Type::Reflection{Type::InitializeReflection}; \
+    TypeDescriptor_Class Type::Reflection{#Type, sizeof(Type), Type::InitializeReflection}; \
     void Type::InitializeReflection(TypeDescriptor_Class* TypeDescriptorIn) { \
         using T = Type; \
-        TypeDescriptorIn->Name = #Type; \
-        TypeDescriptorIn->Size = sizeof(T); 
-
-#define REFLECT_CLASS_BEGIN_PARENTS() \
-		TypeDescriptorIn->ParentDescriptors = { 
 
 #define REFLECT_CLASS_PARENT(Parent) \
-			{(TypeDescriptor_Class*)TypeResolver<Parent>::Get()},
-
-#define REFLECT_CLASS_PARENT_END() \
-        }; \
+		TypeDescriptorIn->AddParent((TypeDescriptor_Class*)TypeResolver<Parent>::Get());
 
 #define REFLECT_CLASS_MEMBER(Name, InspectorName, Category, InspectorHidden) \
 		FPropertyMetadata metadata##Name(Category, InspectorHidden); \
-        TypeDescriptorIn->Properties.push_back(FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), metadata##Name)); \
+        TypeDescriptorIn->AddProperty(new FProperty(#Name, InspectorName, offsetof(T, Name), TypeResolver<decltype(T::Name)>::Get(), metadata##Name)); \
 
 #define REFLECT_CLASS_FUNCTION(MethodName, ConstReturn, ReturnType, ReturnMemoryType, ConstFunction, ...) \
-		TypeDescriptorIn->Functions.push_back(FFunction(#MethodName, ConstReturn, TypeResolver<ReturnType>::Get(), static_cast<ETypeMemoryType>(ReturnMemoryType), ConstFunction, { })); \
+		TypeDescriptorIn->AddFunction(new FFunction(#MethodName, ConstReturn, TypeResolver<ReturnType>::Get(), static_cast<ETypeMemoryType>(ReturnMemoryType), ConstFunction, { })); \
 
 #define REFLECT_CLASS_END() \
     }

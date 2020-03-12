@@ -128,7 +128,16 @@ protected:
 
 	virtual IWidgetSlot* AddChildInternal(PictorumWidget* Widget);
 	virtual IWidgetSlot* CreateSlotForWidget(PictorumWidget* WidgetForSlot) const;
-	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition);
+
+	/**
+	 * Gets mouse cursor this widget should render when hovered.
+	 *
+	 * @param 		  	MousePosition	The mouse position.
+	 * @param [in,out]	Override	 	This value should be set to false if this widget doesn't care what kind of cursor is hovering over it.
+	 *
+	 * @returns	The mouse cursor.
+	 */
+	virtual const EMouseCursorStyle GetMouseCursor(const vec2& MousePosition, bool& Override);
 	/**
 	* This method is raised either when this widget is added to the viewport (if this is a top
 	* level widget) or when it is added to a parent After this point, it is safe to reference all

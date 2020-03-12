@@ -8,7 +8,7 @@ public:
 	virtual ~VectorInspectorWidget();
 	virtual void OnCreated() override;
 	virtual void SetLabels(SArray<TString> LabelsIn);
-	virtual void OnTargetSet(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) override;
+	virtual void OnTargetSet(const PropertyHandle& Property) override;
 
 private:
 	PictorumHorizontalBox* Container;

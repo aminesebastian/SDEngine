@@ -1,40 +1,44 @@
 #pragma once
 #include "Core/Objects/EngineObject.h"
 #include "Core/Pictorum/Containers/PictorumVerticalBox.h"
+#include "Core/Reflection/Handles/ReflectionHandle.h"
 #include "Core/Reflection/Reflection.h"
-#include "Core/Reflection/ReflectionWrapper.h"
 #include "Editor/UserInterface/CollapsingCategoryWidget.h"
 
 class PictorumWidget;
 
 class InspectorPanelBuilder {
 public:
-	InspectorPanelBuilder(PictorumVerticalBox* Owner, const ReflectionWrapper& Target, InspectorPanelBuilder* Parent =  nullptr);
+	InspectorPanelBuilder(PictorumVerticalBox* Owner, const ReflectionHandle& Target);
+	virtual ~InspectorPanelBuilder();
 
-	const ReflectionWrapper& GetTarget() const;
-	const TypeDescriptor* GetTypeDescriptor() const;
-	void AddControlForProperty(const FProperty* Property);
+	const ReflectionHandle& GetTarget() const;
+	const ITypeDescriptor* GetTypeDescriptor() const;
+	void AddControlForProperty(const PropertyHandle& Property);
 
 protected:
-	virtual void AddControlForFloatProperty(const FProperty* Property);
-	virtual void AddControlForVector2DProperty(const FProperty* Property);
-	virtual void AddControlForVector3DProperty(const FProperty* Property);
-	virtual void AddControlForVector4DProperty(const FProperty* Property);
-	virtual void AddControlForBoolProperty(const FProperty* Property);
-	PictorumHorizontalBox* GetPropertyContainer(const FProperty* Property);
+	InspectorPanelBuilder(PictorumVerticalBox* Owner, const ReflectionHandle& Target, InspectorPanelBuilder* OwningBuilder);
+
+	virtual void AddControlForFloatProperty(const PropertyHandle& Property);
+	virtual void AddControlForVector2DProperty(const PropertyHandle& Property);
+	virtual void AddControlForVector3DProperty(const PropertyHandle& Property);
+	virtual void AddControlForVector4DProperty(const PropertyHandle& Property);
+	virtual void AddControlForBoolProperty(const PropertyHandle& Property);
+	PictorumHorizontalBox* GetPropertyContainer(const PropertyHandle& Property);
 
 	const bool IsNested() const;
 private:
-	InspectorPanelBuilder* ParentBuilder;
+	InspectorPanelBuilder* OwningBuilder;
 	PictorumVerticalBox* OwningContainer;
 	PictorumVerticalBox* DefaultCategory;
 	PictorumVerticalBox* CurrentCategoryContainer;
 
 	SHashMap<TString, PictorumVerticalBox*> Categories;
-
-	const ReflectionWrapper TargetWrapper;
+	SArray<InspectorPanelBuilder*> ChildBuilders;
+	const ReflectionHandle TargetWrapper;
 	SArray<const FProperty*> AddedProperties;
 	SHashMap<const FProperty*, PictorumHorizontalBox*> TotalPropertiesList;
 
 	PictorumVerticalBox* GetCategoryWidgetContainer(const TString& Category);
+	void PropertyUpdatedCallback(const FProperty* Property);
 };

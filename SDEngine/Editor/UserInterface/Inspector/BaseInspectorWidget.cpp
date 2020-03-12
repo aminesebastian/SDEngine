@@ -2,17 +2,18 @@
 
 BaseInspectorWidget::BaseInspectorWidget(const TString& Name) : PictorumWidget(Name) {
 	bInitialized      = false;
-	InspectedProperty = nullptr;
 }
 BaseInspectorWidget::~BaseInspectorWidget() {
 
 }
-void BaseInspectorWidget::SetTarget(const ReflectionWrapper& Wrapper, const FProperty* TargetProperty) {
-	InspectionTarget  = Wrapper;
-	InspectedProperty = TargetProperty;
+void BaseInspectorWidget::SetTarget(const PropertyHandle& Property) {
+	InspectedProperty  = Property;
 	bInitialized      = true;
-	OnTargetSet(InspectionTarget, InspectedProperty);
+	OnTargetSet(InspectedProperty);
 }
 const bool& BaseInspectorWidget::IsInitialized() const {
 	return bInitialized;
+}
+void BaseInspectorWidget::RaiseOnPropertyUpdatedDelegate() {
+	OnPropertyUpdatedDelegate.Broadcast(InspectedProperty.GetRawProperty());
 }
