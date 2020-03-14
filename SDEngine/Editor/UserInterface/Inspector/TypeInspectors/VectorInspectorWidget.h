@@ -18,7 +18,9 @@ private:
 	SArray<FColor> Colors;
 	SArray<TString> Labels;
 	SArray<const float*> Values;
+	SArray<float> CachedValues;
 	int32 MouseDownEntry;
+	int32 Degree;
 	float ContentPadding;
 
 	void ValueMouseDown(PictorumWidget* Widget, const vec2& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& EventIn);

@@ -72,6 +72,9 @@ void TextRenderer::AddLine(const TString& Line) {
 			TextBlockCache->GetCurrentLine()->AddCharacter(dfChar);
 		}
 	}
+
+	// Make sure we complete the final line.
+	TextBlockCache->CompleteLine();
 }
 
 void TextRenderer::SetFontSize(const int32& Size) {
@@ -130,79 +133,56 @@ const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vecto
 	MinBounds = LastFrameMinBounds;
 	MaxBounds = LastFrameMaxBounds;
 }
-const Vector2D TextRenderer::GetCursorLocationForCharacterIndex(const int32& Index, const bool& LeftSide) {
-	int32 internalIndex = MathLibrary::Clamp(Index, 0, (int32)Text.length());
-	Vector2D vertPos;
+const void TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& RightSide) const {
+	//Vector2D mouseLocationAdjusted = MouseLocation / ScreenResolution;
+	//mouseLocationAdjusted          = (mouseLocationAdjusted - 0.5f) * 2.0f;
+	//Index                          = -1;
+	//RightSide                      = false;
 
-	if (LeftSide) {
-		vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) - 1)];
-	} else {
-		vertPos = TextBlockCache->Verticies[MathLibrary::Max(0, (internalIndex * 4) + 3)];
-	}
+	//Vector2D bottomLeft, topRight;
+	//int32 lineStartIndex = 0;
+	//bool wasInLine = false;
 
-	if (internalIndex > 0 || (internalIndex == 0 && !LeftSide)) {
-		vertPos.x += Tracking;
-	}
-	vertPos *= LastFrameScale;
-	vertPos += LastFrameRenderPosition;
-	return (vertPos + 1.0f) / 2.0f;
-}
-const void TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& LeftSide) const {
-	Vector2D mouseLocationAdjusted = MouseLocation / ScreenResolution;
-	mouseLocationAdjusted          = (mouseLocationAdjusted - 0.5f) * 2.0f;
-	Index                          = -1;
-	LeftSide                       = true;
+	//SArray<FTextLine*> Lines;
+	//TextBlockCache->GetLines(Lines);
 
-	Vector2D bottomLeft, topRight;
-	int32 lineStartIndex = 0;
-	bool wasInLine = false;
+	//for (const FTextLine* line : Lines) {
+	//	for (int32 i = 0; i < line->CharacterCount; i++) {
+	//		const char character = line->Characters[i];
 
-	SArray<FTextLine*> Lines;
-	TextBlockCache->GetLines(Lines);
-
-
-
-	for (const FTextLine* line : Lines) {
-		for (int32 i = 0; i < line->CharacterCount; i++) {
-			const char character = line->Characters[i];
-
-			GetAbsoluteCharacterBounds(lineStartIndex + i, bottomLeft, topRight);
-			if (mouseLocationAdjusted.y >= bottomLeft.y && mouseLocationAdjusted.y <= topRight.y) {
-				wasInLine = true;
-				if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
-					float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
-					if (mouseLocationAdjusted.x >= xMidpoint) {
-						LeftSide = false;
-					} else {
-						LeftSide = true;
-					}
-					Index = lineStartIndex + i;
-					return;
-				}
-			}
-		}
-		if (wasInLine) {
-			if (mouseLocationAdjusted.x > topRight.x) {
-				Index = lineStartIndex + line->CharacterCount - 1;
-				LeftSide = false;
-				return;
-			} else {
-				Index = lineStartIndex;
-				LeftSide = true;
-				return;
-			}
-		}
-		lineStartIndex = lineStartIndex + line->CharacterCount;
-	}
-}
-const void TextRenderer::GetAbsoluteCharacterBounds(const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const {
-	BottomLeft = TextBlockCache->Verticies[Index * 4];
-	BottomLeft *= LastFrameScale;
-	BottomLeft += LastFrameRenderPosition;
-
-	TopRight = TextBlockCache->Verticies[(Index * 4) + 2];
-	TopRight *= LastFrameScale;
-	TopRight += LastFrameRenderPosition;
+	//		GetAbsoluteCharacterBounds(lineStartIndex + i, bottomLeft, topRight);
+	//		if (mouseLocationAdjusted.y >= bottomLeft.y && mouseLocationAdjusted.y <= topRight.y) {
+	//			wasInLine = true;
+	//			if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
+	//				float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
+	//				bool shouldBeLeftSize = mouseLocationAdjusted.x < xMidpoint;
+	//				if (shouldBeLeftSize) {
+	//					Index = lineStartIndex + i;
+	//				} else {
+	//					if (i < line->CharacterCount - 1) {
+	//						Index = lineStartIndex + i + 1;
+	//					} else {
+	//						Index = lineStartIndex + i;
+	//						RightSide = true;
+	//					}
+	//				}					
+	//				return;
+	//			}
+	//		}
+	//	}
+	//	if (wasInLine) {
+	//		if (mouseLocationAdjusted.x > topRight.x) {
+	//			Index = lineStartIndex + line->CharacterCount - 1;
+	//			RightSide = true;
+	//			return;
+	//		} else {
+	//			Index = lineStartIndex;
+	//			RightSide = false;
+	//			return;
+	//		}
+	//	}
+	//	lineStartIndex = lineStartIndex + line->CharacterCount;
+	//}
 }
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.
@@ -221,4 +201,113 @@ void TextRenderer::BindToGPU() {
 void TextRenderer::Flush() {
 	TextBlockCache->Flush();
 	bBoundToGPU = false;
+}
+
+const void TextRenderer::MoveCursorRight() {
+	const FTextLine* line = TextBlockCache->GetLine(Cursor.LineIndex);
+	// If we are not at the end of the line, move towards the end.
+	if (Cursor.CharacterIndex < line->CharacterCount - 1) {
+		Cursor.CharacterIndex++;
+	} else if (Cursor.CharacterIndex == line->CharacterCount - 1 && !Cursor.bRightSide) {
+		Cursor.bRightSide = true;
+	} else {
+		// If we are not at the bottom right of the text block, move down a line and to the start of it.
+		if (Cursor.LineIndex < TextBlockCache->UsedLines - 1) {
+			Cursor.LineIndex++;
+			Cursor.CharacterIndex = 0;
+			Cursor.bRightSide = false;
+		}
+	}
+	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", Cursor.LineIndex, Cursor.CharacterIndex);
+}
+const void TextRenderer::MoveCursorLeft() {
+	const FTextLine* line = TextBlockCache->GetLine(Cursor.LineIndex);
+	// If we are not at the beginning of the line, move towards the beginning.
+
+	if (Cursor.CharacterIndex == line->CharacterCount - 1 && Cursor.bRightSide) {
+		Cursor.bRightSide = false;
+	} else if (Cursor.CharacterIndex > 0) {
+		Cursor.CharacterIndex--;
+	} else {
+		// If we are not at the top line, move up one line and move the cursor to the end of that line.
+		if (Cursor.LineIndex > 0) {
+			Cursor.LineIndex--;
+			Cursor.CharacterIndex = TextBlockCache->GetLine(Cursor.LineIndex)->CharacterCount - 1;
+			Cursor.bRightSide = false;
+		}
+	}
+	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", Cursor.LineIndex, Cursor.CharacterIndex);
+}
+const Vector2D TextRenderer::GetCursorRelativePosition() const {
+	// Get the character bounds for the absolute character index and return the bottom left corner.
+	Vector2D bottomLeft, topRight;
+	GetNdcCharacterBounds(Cursor.LineIndex, Cursor.CharacterIndex, bottomLeft, topRight);
+
+	// Capture the bottom left coordinate in relative coordinates since both left and right paths need this value.
+	Vector2D relativeBottomLeft = MathLibrary::ConvertNdcToRelativeScreenCoordinates(bottomLeft);
+
+	// If on the right side, shift the X coord to be the right of the character quad, otherwise, use the left side.
+	// Additionally, if on the right side, undo the adjustment for tracking.
+	if (Cursor.bRightSide) {
+		topRight.x += Tracking * LastFrameScale.x;
+		Vector2D relativeTopRight = MathLibrary::ConvertNdcToRelativeScreenCoordinates(topRight);
+		return Vector2D(relativeTopRight.x, relativeBottomLeft.y);
+	} else {
+		return relativeBottomLeft;
+	}
+}
+const int32 TextRenderer::GetAbsoluteIndexFromLineRelative(const int32& LineIndex, const int32& CharacterIndex) const {
+	// Return a -1 if the LineIndex is out of bounds.
+	if (LineIndex > TextBlockCache->UsedLines) {
+		return -1;
+	}
+
+	// Return a -1 if the CharacterIndex is out of bounds.
+	if (CharacterIndex > TextBlockCache->GetLine(LineIndex)->CharacterCount) {
+		return -1;
+	}
+
+	// Get all the lines of text.
+	SArray<FTextLine*> lines;
+	TextBlockCache->GetLines(lines);
+
+	// Get the absolute character index from the line relative.
+	int32 characterIndex = Cursor.CharacterIndex;
+	for (int32 i = 0; i < Cursor.LineIndex; i++) {
+		characterIndex += lines[i]->CharacterCount;
+	}
+	return characterIndex;
+}
+const void TextRenderer::GetNdcCharacterBounds(const int32& LineIndex, const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const {
+	if (LineIndex < TextBlockCache->UsedLines) {
+		// Get the overall character index.
+		int32 characterIndex = GetAbsoluteIndexFromLineRelative(LineIndex, Index);
+
+		// Ensure we recieved a valid character index.
+		if (characterIndex == -1) {
+			SD_ENGINE_WARN("Attempting to get the NDC bounds for an out of bounds character. Values provided were LineIndex={0} and CharacterIndex={1}.", LineIndex, Index);
+			return;
+		}
+
+		// Capture the current line.
+		const FTextLine* line = TextBlockCache->GetLine(LineIndex);
+
+		// Capture the text space coordinates.
+		BottomLeft = TextBlockCache->Verticies[Index * 4];
+		TopRight = TextBlockCache->Verticies[(Index * 4) + 2];
+
+		// Add the tracking if we are beyond the first character.
+		if (Index > 0 && Index < line->CharacterCount - 1) {
+			BottomLeft.x -= Tracking;
+			TopRight.x -= Tracking;
+		}
+
+		// Transform from text space to ndc coordinates.
+		BottomLeft *= LastFrameScale;
+		BottomLeft += LastFrameRenderPosition;
+		TopRight *= LastFrameScale;
+		TopRight += LastFrameRenderPosition;
+	} else {
+		SD_ENGINE_WARN("Attempting to get the NDC bounds for a character with either invalid LineIndex or Index. Values provided were LineIndex={0} and CharacterIndex={1}.", LineIndex, Index);
+	}
 }

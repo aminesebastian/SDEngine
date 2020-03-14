@@ -12,6 +12,8 @@ VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : BaseInspecto
 
 	MouseDownEntry = -1;
 	ContentPadding = 3.0f;
+
+	Degree = 0;
 }
 VectorInspectorWidget::~VectorInspectorWidget() {
 	GetOwningRenderer()->OnMouseUpAnywhereDelegate.Remove<VectorInspectorWidget, & VectorInspectorWidget::MouseUpAnywhere>(this);
@@ -31,14 +33,17 @@ void VectorInspectorWidget::SetLabels(SArray<TString> LabelsIn) {
 void VectorInspectorWidget::OnTargetSet(const PropertyHandle& Property) {
 	Values.Clear();
 	if (Property.GetType() == TypeResolver<Vector2D>::Get()) {
+		Degree = 2;
 		for (uint8 i = 0; i < 2; i++) {
 			AddEntry(Labels[i], &(*Property.GetValue<Vector2D>())[i], i);
 		}
 	} else if (Property.GetType() == TypeResolver<Vector3D>::Get()) {
+		Degree = 3;
 		for (uint8 i = 0; i < 3; i++) {
 			AddEntry(Labels[i], &(*Property.GetValue<Vector3D>())[i], i);
 		}
 	} else if (Property.GetType() == TypeResolver<Vector4D>::Get()) {
+		Degree = 4;
 		for (uint8 i = 0; i < 4; i++) {
 			AddEntry(Labels[i], &(*Property.GetValue<Vector4D>())[i], i);
 		}

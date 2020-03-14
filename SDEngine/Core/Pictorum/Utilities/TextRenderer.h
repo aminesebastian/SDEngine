@@ -28,7 +28,7 @@ private:
 	int32 IndexCount;
 	SArray<int32> Indices;
 	bool bChanged;
-
+	bool bSealed;
 
 	friend class TextRenderer;
 	friend struct FTextBlock;
@@ -51,70 +51,71 @@ private:
 		}
 		// If the character is a space, skip it and just advance.
 
-			if (CharacterCount == 0) {
-				FirstCharacterOffset.x = Character.GetOffsets().x;
-				//FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
-			}
-			
-			// Extend allocation if needed.
-			if (CharacterCount > Characters.LastIndex()) {
-				ExtendAllocation(5);
-			}
+		if (CharacterCount == 0) {
+			FirstCharacterOffset.x = Character.GetOffsets().x;
+			//FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
+		}
 
-			// Only generate new geometry if the character in that index has changed.
-			//if (Character.GetCharacter() != Characters[CharacterCount]) {
-				// Capture the indices of the first and last changed character.
-				if (FirstChangedIndex == 0) {
-					FirstChangedIndex = CharacterCount;
-				}
-				LastChangedIndex = CharacterCount;
+		// Extend allocation if needed.
+		if (CharacterCount > Characters.LastIndex()) {
+			ExtendAllocation(5);
+		}
 
-				// Set the character.
-				Characters[CharacterCount] = Character.GetCharacter();
+		// Only generate new geometry if the character in that index has changed.
+		//if (Character.GetCharacter() != Characters[CharacterCount]) {
+			// Capture the indices of the first and last changed character.
+		if (FirstChangedIndex == 0) {
+			FirstChangedIndex = CharacterCount;
+		}
+		LastChangedIndex = CharacterCount;
 
-				// Set the texture coordinates.
-				for (int32 i = 0; i < Character.GetTextureCoordinates().Count(); i++) {
-					TexCoords[TexCoordCount + i] = Character.GetTextureCoordinates()[i];
-				}
+		// Set the character.
+		Characters[CharacterCount] = Character.GetCharacter();
 
-				// Set the indices.
-				for (int32 i = 0; i < Character.GetIndices().Count(); i++) {
-					Indices[IndexCount + i] = Character.GetIndices()[i] + CurrentIndex;
-				}
+		// Set the texture coordinates.
+		for (int32 i = 0; i < Character.GetTextureCoordinates().Count(); i++) {
+			TexCoords[TexCoordCount + i] = Character.GetTextureCoordinates()[i];
+		}
 
-				// Set the vertices.
-				for (int32 i = 0; i < Character.GetVerticies().Count(); i++) {
-					const Vector2D& vert = Character.GetVerticies()[i];
-					Verticies[VertexCount + i] = Vector2D(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
-				}
-				bChanged = true;
-			//}
+		// Set the indices.
+		for (int32 i = 0; i < Character.GetIndices().Count(); i++) {
+			Indices[IndexCount + i] = Character.GetIndices()[i] + CurrentIndex;
+		}
 
-			// Increment the counts for all state tracking values.
-			IncrementCounts();
+		// Set the vertices.
+		for (int32 i = 0; i < Character.GetVerticies().Count(); i++) {
+			const Vector2D& vert = Character.GetVerticies()[i];
+			Verticies[VertexCount + i] = Vector2D(vert.x + CursorPosition, vert.y) - FirstCharacterOffset;
+		}
+		bChanged = true;
+		//}
 
-			// Capture the max offset.
-			if (Character.GetOffsets().y < MaxYBaselineOffset) {
-				MaxYBaselineOffset = Character.GetOffsets().y;
-			}
+		// Increment the counts for all state tracking values.
+		IncrementCounts();
+
+		// Capture the max offset.
+		if (Character.GetOffsets().y < MaxYBaselineOffset) {
+			MaxYBaselineOffset = Character.GetOffsets().y;
+		}
 
 
 		// Advance the cursor.
 		CursorPosition += Character.GetAdvance() + Tracking;
 	}
 	void Flush() {
-		CursorPosition        = 0.0f;
-		MaxYBaselineOffset    = 0.0f;
+		CursorPosition = 0.0f;
+		MaxYBaselineOffset = 0.0f;
 		FirstCharacterOffset.x = 0.0;
 		FirstCharacterOffset.y = 0.0f;
-		CurrentIndex          = 0;
-		CharacterCount        = 0;
-		VertexCount           = 0;
-		IndexCount            = 0;
-		TexCoordCount         = 0;
-		FirstChangedIndex     = -1;
-		LastChangedIndex      = -1;
-		bChanged              = false;
+		CurrentIndex = 0;
+		CharacterCount = 0;
+		VertexCount = 0;
+		IndexCount = 0;
+		TexCoordCount = 0;
+		FirstChangedIndex = -1;
+		LastChangedIndex = -1;
+		bChanged = false;
+		bSealed = false;
 	}
 	const bool HasChanged() {
 		return FirstChangedIndex >= 0;
@@ -179,7 +180,7 @@ private:
 		return Lines[UsedLines];
 	}
 	const int32 GetLineCount() {
-		return UsedLines+1;
+		return UsedLines;
 	}
 	void GetChangedIndices(int32& FirstChanged, int32& LastChanged) const {
 		FirstChanged = FirstChangedIndex;
@@ -191,6 +192,9 @@ private:
 	const SArray<FTextLine*>& GetLines() const {
 		return Lines;
 	}
+	const FTextLine* GetLine(const int32& LineIndex) {
+		return Lines[LineIndex];
+	}
 	const SArray<Vector2D>& GetVerticies() const {
 		return Verticies;
 	}
@@ -201,6 +205,7 @@ private:
 		return Indices;
 	}
 	void CompleteLine() {
+		GetCurrentLine()->bSealed = true;
 		UsedLines++;
 		if (UsedLines > Lines.LastIndex()) {
 			Lines.Add(new FTextLine(Tracking));
@@ -209,7 +214,7 @@ private:
 	void Finalize() {
 		// Capture the max line length for use when calculating the alignment offset.
 		float maxLength = 0.0f;
-		for (int32 i = 0; i <= UsedLines; i++) {
+		for (int32 i = 0; i < UsedLines; i++) {
 			FTextLine* line = Lines[i];
 			if (line->CharacterCount == 0) {
 				continue;
@@ -234,15 +239,15 @@ private:
 
 			// Calculate the alignment offset.
 			float alignmentOffset = maxLength - line->CursorPosition;
-	
+
 			// Add texture coordinates.
-			for (int32 i = line->TexCoordCount; i >= 0 ; i--) {
+			for (int32 i = line->TexCoordCount; i >= 0; i--) {
 				TexCoords[TexCoordCount + i] = line->TexCoords[i];
 			}
 
 			// Add Indices and capture the max index.
 			int32 maxIndex = 0;
-			for (int32 i = line->IndexCount - 1; i >= 0 ; i--) {
+			for (int32 i = line->IndexCount - 1; i >= 0; i--) {
 				int32& index = line->Indices[i];
 				Indices[IndexCount + i] = index + CurrentIndex;
 				if (index > maxIndex) {
@@ -253,7 +258,7 @@ private:
 			// Add vertices and offset for the alignment.
 			for (int32 i = line->VertexCount - 1; i >= 0; i--) {
 				const Vector2D& vert = line->Verticies[i];
-				Vector2D& blockVert  = Verticies[VertexCount + i];
+				Vector2D& blockVert = Verticies[VertexCount + i];
 
 				if (Alignment == ETextAlignment::LEFT) {
 					blockVert.x = vert.x;
@@ -286,10 +291,10 @@ private:
 			//CurrentYPosition -= line->MaxYBaselineOffset;
 
 			// Increment state keeping values.
-			CurrentIndex                += (maxIndex + 1);
-			VertexCount                 += line->VertexCount;
-			TexCoordCount               += line->TexCoordCount;
-			IndexCount                  += line->IndexCount;
+			CurrentIndex += (maxIndex + 1);
+			VertexCount += line->VertexCount;
+			TexCoordCount += line->TexCoordCount;
+			IndexCount += line->IndexCount;
 			CurrentlyUsedCharacterSpace += line->CharacterCount;
 		}
 		MaxPosition.y = -CurrentYPosition;
@@ -336,7 +341,17 @@ private:
 		Indices.Resize(Indices.Count() + allocationAmount * 6);
 	}
 };
+struct FTextCursor {
+	int32 CharacterIndex;
+	int32 LineIndex;
+	bool bRightSide;
 
+	FTextCursor() {
+		CharacterIndex = 0;
+		LineIndex = 0;
+		bRightSide = false;
+	}
+};
 /**
  * Class responsible for rendering text to the screen.
  * Supports any distance field font and exposes basic customization options.
@@ -461,29 +476,18 @@ public:
 	const FTextBlock* GetInternalDataStructure() const;
 
 	/**
-	 * Gets the relative cursor location for character index.
-	 *
-	 * @param 	Index   	Zero-based index of the.
-	 * @param 	LeftSide	True to left side.
-	 *
-	 * @returns	The relative cursor location for character index.
-	 */
-
-	const Vector2D GetCursorLocationForCharacterIndex(const int32& Index, const bool& LeftSide);
-
-	/**
 	 * Gets character index at mouse location
 	 *
 	 * @param 		  	MouseLocation   	The mouse location in absolute coordinates.
 	 * @param 		  	ScreenResolution	The screen resolution.
 	 * @param [in,out]	Index				The character index at mouse location, -1 if mouse it
 	 * 										outside string.
-	 * @param [in,out]	LeftSide			True to left side.
+	 * @param [in,out]	RightSide			If true, the cursor should be on the right side of the index (only relevant for the end of a line).
 	 *
 	 * @returns	the character index at mouse location, -1 if mouse it outside string.
 	 */
 
-	const void GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& LeftSide) const;
+	const void GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& RightSide) const;
 	/**
 	 * Gets text bounding box dimensions
 	 *
@@ -493,11 +497,33 @@ public:
 	 * @returns	The text bounding box dimensions.
 	 */
 	const void GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const;
-	const void GetAbsoluteCharacterBounds(const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const;
+
+	/**
+	 * Moves the cursor right.
+	 *
+	 * @returns	A const void.
+	 */
+	const void MoveCursorRight();
+
+	/**
+	 * Moves the cursor left.
+	 *
+	 * @returns	A const void.
+	 */
+	const void MoveCursorLeft();
+
+	/**
+	 * Gets the cursor's relative screen coordinates.
+	 *
+	 * @returns	The cursor's relative screen position.
+	 */
+	const Vector2D GetCursorRelativePosition() const;
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
 	virtual void AddLine(const TString& Line);
+	const int32 GetAbsoluteIndexFromLineRelative(const int32& LineIndex, const int32& CharacterIndex) const;
+	const void GetNdcCharacterBounds(const int32& LineIndex, const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const;
 private:
 	/*****************/
 	/*Text Properties*/
@@ -510,6 +536,7 @@ private:
 	float DistanceFieldEdge;
 	float Tracking;
 	float Leading;
+	FTextCursor Cursor;
 
 	/*****************/
 	/*State Properties*/

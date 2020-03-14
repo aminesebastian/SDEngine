@@ -196,3 +196,22 @@ bool MathLibrary::LineTraceAgainstAABB(vec3 RayOrigin, vec3 RayDirection, vec3 A
 bool MathLibrary::PointIntersect2DBox(const Vector2D& Point, const Vector2D& BoxMinExtent, const Vector2D& BoxMaxExtent) {
 	return Point.x >= BoxMinExtent.x && Point.y >= BoxMinExtent.y && Point.x <= BoxMaxExtent.x && Point.y <= BoxMaxExtent.y;
 }
+
+Vector2D MathLibrary::ConvertAbsoluteToRelativeScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution) {
+	return Coordinates / ScreenResolution;
+}
+Vector2D MathLibrary::ConvertAbsoluteToNdcScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution) {
+	return ((Coordinates / ScreenResolution) - 0.5f) * 2.0f;
+}
+Vector2D MathLibrary::ConvertNdcToRelativeScreenCoordinates(const Vector2D& Coordinates) {
+	return (Coordinates + 1.0f) / 2.0f;
+}
+Vector2D MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution) {
+	return ((Coordinates + 1.0f) / 2.0f) * ScreenResolution;
+}
+Vector2D MathLibrary::ConvertRelativeToNdcScreenCoordinates(const Vector2D& Coordinates) {
+	return (Coordinates - 0.5f) * 2.0f;
+}
+Vector2D MathLibrary::ConvertRelativeToAbsoluteScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution) {
+	return Coordinates * ScreenResolution;
+}

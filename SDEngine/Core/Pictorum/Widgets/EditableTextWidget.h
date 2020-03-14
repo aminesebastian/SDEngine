@@ -23,13 +23,12 @@ protected:
 
 	virtual void OnTextSubmitted(const TString& SubmittedText);
 	virtual void SubmitInput();
+
 private:
 	TString PlaceholderText;
 	FBoxDrawInstruction* CursorDrawInstruction;
 	ITextInputFormatter* InputFormatter;
-	int32 CursorStartIndex;
-	bool CursorStartLeftSide;
-	int32 CursorEndIndex;
+
 	float BlinkTime;
 	float CurrentBlinkTime;
 	bool bCursorFlashOn;

@@ -84,5 +84,12 @@ public:
 	static inline TString LocationToString(vec3 Position) { return "X: " + std::to_string(Position.x) + " Y: " + std::to_string(Position.y) + " Z: " + std::to_string(Position.z); }
 	static inline TString RotationToString(vec3 EulerRotation) { return "P: " + std::to_string(degrees(EulerRotation.x)) + " Y: " + std::to_string(degrees(EulerRotation.y)) + " R: " + std::to_string(degrees(EulerRotation.z)); }
 	static inline TString ScaleToString(vec3 Scale) { return "X: " + std::to_string(Scale.x) + " Y: " + std::to_string(Scale.y) + " Z: " + std::to_string(Scale.z); }
+
+	static Vector2D ConvertAbsoluteToRelativeScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution);
+	static Vector2D ConvertAbsoluteToNdcScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution);
+	static Vector2D ConvertNdcToRelativeScreenCoordinates(const Vector2D& Coordinates);
+	static Vector2D ConvertNdcToAbsoluteScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution);
+	static Vector2D ConvertRelativeToNdcScreenCoordinates(const Vector2D& Coordinates);
+	static Vector2D ConvertRelativeToAbsoluteScreenCoordinates(const Vector2D& Coordinates, const Vector2D& ScreenResolution);
 };
 
