@@ -34,11 +34,11 @@ void MainViewportUserInterface::OnCreated() {
 	leftSlot->Row = 0;
 	leftSlot->RowSpan = 2;
 
-	FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
-	PictorumGridSlot* middleSlot = grid->AddChild(FrameStatistics);
-	middleSlot->Column = 1;
-	middleSlot->Row = 0;
-	middleSlot->RowSpan = 2;
+	//FrameStatistics = new FrameStatisticsWidget("FrameStatistics");
+	//PictorumGridSlot* middleSlot = grid->AddChild(FrameStatistics);
+	//middleSlot->Column = 1;
+	//middleSlot->Row = 0;
+	//middleSlot->RowSpan = 2;
 
 	WorldOutliner = new WorldOutlinerWidget("WorldOutliner");
 	PictorumGridSlot* scrollSlot = grid->AddChild(WorldOutliner);

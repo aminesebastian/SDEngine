@@ -11,7 +11,7 @@ VectorInspectorWidget::VectorInspectorWidget(const TString& Name) : BaseInspecto
 	Container = nullptr;
 
 	MouseDownEntry = -1;
-	ContentPadding = 3.0f;
+	ContentPadding = 2.0f;
 
 	Degree = 0;
 }

@@ -5,7 +5,7 @@ MultiLineTestWidget::MultiLineTestWidget(const TString& Name) : PictorumWidget(N
 }
 void MultiLineTestWidget::OnCreated() {
 	AssignNewChildLocal(SolidWidget, bg, "Background");
-	bg->SetBackgroundColor(FColor(0.2));
+	bg->SetBackgroundColor(FColor(0.2f));
 
 	AssignNewToChildLocal(bg, EditableTextWidget, testText, "TestTextInput");
 	testText->SetFontSize(12);

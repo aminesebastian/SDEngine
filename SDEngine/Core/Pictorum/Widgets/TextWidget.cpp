@@ -69,15 +69,15 @@ void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	LastRenderedAbsoluteLocation = location;
 
 	// Translate to NDC.
-	location /= Geometry.GetRenderResolution();
-	location = (location - 0.5f) * 2.0f;
+	location = MathLibrary::ConvertAbsoluteToNdcScreenCoordinates(location, Geometry.GetRenderResolution());
 
+	// Draw the text.
 	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI());
 }
 vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 min, max;
 	Renderer->GetTextBoundingBoxDimensions(min, max);
-	return max + min;
+	return max - min;
 }
 void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const {
 	vec2 lastLocation = LastRenderedGeometry.GetLocation(EPictorumLocationBasis::ABSOLUTE);
@@ -90,12 +90,6 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 	MinBounds.y = MathLibrary::Max(MinBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y);
 	MaxBounds.x = MathLibrary::Min(MaxBounds.x,  LastRenderedGeometry.GetMinimumClipPoint().x + LastRenderedGeometry.GetMaximumClipPoint().x);
 	MaxBounds.y = MathLibrary::Min(MaxBounds.y, LastRenderedGeometry.GetMinimumClipPoint().y + LastRenderedGeometry.GetMaximumClipPoint().y);
-
-	/*vec2 min, max;
-	Renderer->GetTextBoundingBoxDimensions(min, max);
-
-	MinBounds.y -= min.y;
-	MaxBounds.y -= min.y;*/
 }
 const bool TextWidget::CanAddChild() const {
 	return false;

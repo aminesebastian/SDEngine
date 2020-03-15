@@ -6,9 +6,9 @@
 
 
 TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font(Font) {
-	TextBlockCache = new FTextBlock(Leading, Tracking, Alignment);
+	TextBlockCache = new TextGeometryCache(Font, Leading, Tracking, Alignment);
 
-	SetLeading(0.85f);
+	SetLeading(0.05f);
 	SetTracking(-0.15f);
 	SetColor(FColor(1.0f, 1.0f, 1.0f, 1.0f));
 	SetFontSize(FontSize);
@@ -34,49 +34,57 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 		BindToGPU();
 	}
 
-	LastFrameScale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
-	LastFrameMinBounds = LastFrameScale * (TextBlockCache->MinPosition) * RenderTargetResolution;
-	LastFrameMaxBounds = LastFrameScale * (TextBlockCache->MaxPosition) * RenderTargetResolution;
-	LastFrameRenderPosition = Position + (LastFrameScale * (TextBlockCache->MinPosition));
+	CalculatedRenderScale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
+	LastFrameMinBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMinimumPosition(), RenderTargetResolution);
+	LastFrameMaxBounds =  MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMaximumPosition(), RenderTargetResolution);
+	LastFrameRenderPosition = Position - Vector2D(CalculatedRenderScale.x * TextBlockCache->GetMinimumPosition().x, -CalculatedRenderScale.y * TextBlockCache->GetMinimumPosition().y); // Subtract the minimum position as the min position is usually negative.
 
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
 	Font->BindAtlas(fontShader, "Atlas", 0);
 
 	fontShader->SetShaderVector2("LOCATION", LastFrameRenderPosition);
-	fontShader->SetShaderVector2("SCALE", LastFrameScale);
+	fontShader->SetShaderVector2("SCALE", CalculatedRenderScale);
 	fontShader->SetShaderVector4("COLOR", Color);
 	fontShader->SetShaderVector2("RENDER_TARGET_RESOLUTION", RenderTargetResolution);
 	fontShader->SetShaderFloat("WIDTH", DistanceFieldWidth);
 	fontShader->SetShaderFloat("EDGE", DistanceFieldEdge);
 
-	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
+	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->GetInidices().Count());
 }
-void TextRenderer::SetText(const TString& Text) {
+void TextRenderer::BindToGPU() {
+	// Do not bind if there is no data.
+	if (TextBlockCache->GetVerticies().Count() == 0 || TextBlockCache->GetTextureCoordinates().Count() == 0 || TextBlockCache->GetInidices().Count() == 0) {
+		SD_ENGINE_ERROR("There was an attempt to bind text geometry to the GPU where no geometry was defined!");
+		return;
+	}
+
+	VertexArrayBuffer->SetBufferData(0, TextBlockCache->GetVerticies());
+	VertexArrayBuffer->SetBufferData(1, TextBlockCache->GetTextureCoordinates());
+	VertexArrayBuffer->SetBufferData(2, TextBlockCache->GetInidices());
+	VertexArrayBuffer->Update();
+
+	bBoundToGPU = true;
+}
+void TextRenderer::Flush() {
+	TextBlockCache->Flush();
+	bBoundToGPU = false;
+}
+
+void TextRenderer::SetText(const TString& TextIn) {
 	Flush();
-	AddLine(Text);
+	Text = TextIn;
+	SArray<TString> split;
+	StringUtilities::SplitString(Text, '\n', split);
+	for (const TString& line : split) {
+		TextBlockCache->AddLine(line +'\n');
+	}
+
 	TextBlockCache->Finalize();
-	RawText = Text;
-	this->Text = StringUtilities::RemoveCharactersFromString(Text, "\n\t");
 }
 const TString& TextRenderer::GetText() const {
 	return Text;
 }
-void TextRenderer::AddLine(const TString& Line) {
-	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
-	for (const char& character : Line) {
-		if (character == '\n') {
-			TextBlockCache->CompleteLine();
-		} else {
-			const FDistanceFieldCharacter& dfChar = Font->GetDistanceFieldCharacter(character);
-			TextBlockCache->GetCurrentLine()->AddCharacter(dfChar);
-		}
-	}
-
-	// Make sure we complete the final line.
-	TextBlockCache->CompleteLine();
-}
-
 void TextRenderer::SetFontSize(const int32& Size) {
 	FontSize = (float)Size / DOTS_PER_POINT;
 }
@@ -98,7 +106,7 @@ const float& TextRenderer::GetTracking() const {
 }
 void TextRenderer::SetLeading(const float& TextLeading) {
 	Leading = TextLeading;
-	TextBlockCache->Leading = TextLeading;
+	TextBlockCache->SetLeading(TextLeading);
 }
 const float& TextRenderer::GetLeading() const {
 	return Leading;
@@ -121,180 +129,60 @@ const EFontWeight& TextRenderer::GetFontWeight() const {
 }
 void TextRenderer::SetTextAlignment(const ETextAlignment& AlignmentIn) {
 	Alignment = AlignmentIn;
-	TextBlockCache->Alignment = AlignmentIn;
+	TextBlockCache->SetAligment(AlignmentIn);
 }
 const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
 }
-const FTextBlock* TextRenderer::GetInternalDataStructure() const {
-	return TextBlockCache;
+const Vector2D& TextRenderer::GetNdcScale() const {
+	return CalculatedRenderScale;
+}
+const Vector2D& TextRenderer::GetNdcPosition() const {
+	return LastFrameRenderPosition;
 }
 const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const {
 	MinBounds = LastFrameMinBounds;
 	MaxBounds = LastFrameMaxBounds;
 }
-const void TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& RightSide) const {
+const void TextRenderer::GetNdcCharacterBounds(const int32& CharacterIndex, Vector2D& BottomLeft, Vector2D& TopRight) const {
+	// Capture the text space coordinates.
+	BottomLeft = TextBlockCache->GetVerticies()[CharacterIndex * 4];
+	TopRight = TextBlockCache->GetVerticies()[(CharacterIndex * 4) + 2];
 
-}
-void TextRenderer::BindToGPU() {
-	// Do not bind if there is no data.
-	if (TextBlockCache->Verticies.Count() == 0 || TextBlockCache->TexCoords.Count() == 0 || TextBlockCache->Indices.Count() == 0) {
-		SD_ENGINE_ERROR("There was an attempt to bind text geometry to the GPU where no geometry was defined!");
-		return;
-	}
+	// Get the relative coordinates.
+	int32 lineIndex, relativeIndex;
+	GetLineForCharacterIndex(CharacterIndex, lineIndex, relativeIndex);
 
-	VertexArrayBuffer->SetBufferData(0, TextBlockCache->Verticies, TextBlockCache->VertexCount);
-	VertexArrayBuffer->SetBufferData(1, TextBlockCache->TexCoords, TextBlockCache->TexCoordCount);
-	VertexArrayBuffer->SetBufferData(2, TextBlockCache->Indices, TextBlockCache->IndexCount);
-	VertexArrayBuffer->Update();
-
-	bBoundToGPU = true;
-}
-void TextRenderer::Flush() {
-	TextBlockCache->Flush();
-	bBoundToGPU = false;
-}
-
-const void TextRenderer::MoveCursorRight(const int32& CursorIndex) {
-	// Get the cursor.
-	FTextCursor& cursor = Cursors[CursorIndex];
-
-	// Get the line.
-	const FTextLine* line = TextBlockCache->GetLine(cursor.LineIndex);
-
-	// If we are not at the end of the line, move towards the end.
-	if (cursor.CharacterIndex < line->CharacterCount - 1) {
-		cursor.CharacterIndex++;
-	} else if (cursor.CharacterIndex == line->CharacterCount - 1 && !cursor.bRightSide) {
-		cursor.bRightSide = true;
-	} else {
-		// If we are not at the bottom right of the text block, move down a line and to the start of it.
-		if (cursor.LineIndex < TextBlockCache->UsedLines - 1) {
-			cursor.LineIndex++;
-			cursor.CharacterIndex = 0;
-			cursor.bRightSide = false;
-		}
-	}
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", cursor.LineIndex, cursor.CharacterIndex);
-}
-const void TextRenderer::MoveCursorLeft(const int32& CursorIndex) {
-	// Get the cursor.
-	FTextCursor& cursor = Cursors[CursorIndex];
-
-	const FTextLine* line = TextBlockCache->GetLine(cursor.LineIndex);
-	// If we are not at the beginning of the line, move towards the beginning.
-
-	if (cursor.CharacterIndex == line->CharacterCount - 1 && cursor.bRightSide) {
-		cursor.bRightSide = false;
-	} else if (cursor.CharacterIndex > 0) {
-		cursor.CharacterIndex--;
-	} else {
-		// If we are not at the top line, move up one line and move the cursor to the end of that line.
-		if (cursor.LineIndex > 0) {
-			cursor.LineIndex--;
-			cursor.CharacterIndex = TextBlockCache->GetLine(cursor.LineIndex)->CharacterCount - 1;
-			cursor.bRightSide = false;
-		}
-	}
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", cursor.LineIndex, cursor.CharacterIndex);
-}
-const Vector2D TextRenderer::GetCursorRelativePosition(const int32& CursorIndex) const {
-	// Get the cursor.
-	const FTextCursor& cursor = Cursors[CursorIndex];
-
-	// Get the character bounds for the absolute character index and return the bottom left corner.
-	Vector2D bottomLeft, topRight;
-	GetNdcCharacterBounds(cursor.LineIndex, cursor.CharacterIndex, bottomLeft, topRight);
-
-	// Capture the bottom left coordinate in relative coordinates since both left and right paths need this value.
-	Vector2D relativeBottomLeft = MathLibrary::ConvertNdcToRelativeScreenCoordinates(bottomLeft);
-
-	// If on the right side, shift the X coord to be the right of the character quad, otherwise, use the left side.
-	// Additionally, if on the right side, undo the adjustment for tracking.
-	if (cursor.bRightSide) {
-		topRight.x += Tracking * LastFrameScale.x;
-		Vector2D relativeTopRight = MathLibrary::ConvertNdcToRelativeScreenCoordinates(topRight);
-		return Vector2D(relativeTopRight.x, relativeBottomLeft.y);
-	} else {
-		return relativeBottomLeft;
-	}
-}
-const int32 TextRenderer::GetAbsoluteIndexFromLineRelative(const int32& LineIndex, const int32& CharacterIndex) const {
-	// Return a -1 if the LineIndex is out of bounds.
-	if (LineIndex > TextBlockCache->UsedLines) {
-		return -1;
-	}
-
-	// Return a -1 if the CharacterIndex is out of bounds.
-	if (CharacterIndex > TextBlockCache->GetLine(LineIndex)->CharacterCount) {
-		return -1;
-	}
-
-	// Get all the lines of text.
-	SArray<FTextLine*> lines;
-	TextBlockCache->GetLines(lines);
-
-	// Get the absolute character index from the line relative.
-	int32 characterIndex = CharacterIndex;
-	for (int32 i = 0; i < LineIndex; i++) {
-		characterIndex += lines[i]->CharacterCount;
-	}
-	return characterIndex;
-}
-const void TextRenderer::GetNdcCharacterBounds(const int32& LineIndex, const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const {
-	if (LineIndex < TextBlockCache->UsedLines) {
-		// Get the overall character index.
-		int32 characterIndex = GetAbsoluteIndexFromLineRelative(LineIndex, Index);
-
-		// Ensure we recieved a valid character index.
-		if (characterIndex == -1) {
-			SD_ENGINE_WARN("Attempting to get the NDC bounds for an out of bounds character. Values provided were LineIndex={0} and CharacterIndex={1}.", LineIndex, Index);
-			return;
-		}
-
-		// Capture the current line.
-		const FTextLine* line = TextBlockCache->GetLine(LineIndex);
-
-		// Capture the text space coordinates.
-		BottomLeft = TextBlockCache->Verticies[Index * 4];
-		TopRight = TextBlockCache->Verticies[(Index * 4) + 2];
-
-		// Add the tracking if we are beyond the first character.
-		if (Index > 0 && Index < line->CharacterCount - 1) {
-			BottomLeft.x -= Tracking;
+	// Add the tracking if we are beyond the first character.
+	if (relativeIndex > 0) {
+		BottomLeft.x -= Tracking;
+		if (relativeIndex < TextBlockCache->GetLine(lineIndex)->GetLength() - 1) {
 			TopRight.x -= Tracking;
 		}
-
-		// Transform from text space to ndc coordinates.
-		BottomLeft *= LastFrameScale;
-		BottomLeft += LastFrameRenderPosition;
-		TopRight *= LastFrameScale;
-		TopRight += LastFrameRenderPosition;
-	} else {
-		SD_ENGINE_WARN("Attempting to get the NDC bounds for a character with either invalid LineIndex or Index. Values provided were LineIndex={0} and CharacterIndex={1}.", LineIndex, Index);
 	}
-}
-const float TextRenderer::GetCursorHeight() const {
-	return GetFontSize(); // Use the getter to get the real font size and not the one adjusted for DPI.
-}
-const int32 TextRenderer::AddCursor() {
-	Cursors.Add(FTextCursor());
-	return Cursors.LastIndex();
-}
-const FTextCursor& TextRenderer::GetCursorAtIndex(const int32& CursorIndex) const {
-	return Cursors[CursorIndex];
-}
-const void TextRenderer::AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text) {
-	// Get the cursor.
-	const FTextCursor& cursor = Cursors[CursorIndex];
-	int32 absoluteIndex = GetAbsoluteIndexFromLineRelative(cursor.LineIndex, cursor.CharacterIndex);
 
-	TString currentText = RawText;
-	if (cursor.bRightSide) {
-		currentText = currentText.insert(absoluteIndex + 1, Text);
-	} else {
-		currentText = currentText.insert(absoluteIndex, Text);
+	// Transform from text space to ndc coordinates.
+	BottomLeft *= CalculatedRenderScale;
+	BottomLeft += LastFrameRenderPosition;
+	TopRight *= CalculatedRenderScale;
+	TopRight += LastFrameRenderPosition;
+}
+const TextGeometryCache* TextRenderer::GetGeometryCache() const {
+	return TextBlockCache;
+}
+void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& CharacterIndex) const {
+	int32 counter = AbsoluteIndex;
+	LineIndex = 0;
+	CharacterIndex = 0;
+
+	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
+		const TextLine* line = TextBlockCache->GetLine(i);
+		if (counter >= line->GetLength()) {
+			counter -= line->GetLength();
+		} else {
+			LineIndex = i;
+			CharacterIndex = counter;
+			return;
+		}
 	}
-	SetText(currentText);
-	MoveCursorRight(CursorIndex);
 }

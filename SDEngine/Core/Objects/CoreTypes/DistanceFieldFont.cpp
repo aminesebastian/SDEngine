@@ -11,6 +11,7 @@ DistanceFieldFont::DistanceFieldFont(const TString& DistanceFieldFontName) : Eng
 	OfflineFontSize = 0;
 	LineHeight = 0;
 	Base = 0;
+	MaxCharacterHeight = 0.0f;
 	FontName = DistanceFieldFontName;
 }
 DistanceFieldFont::~DistanceFieldFont() {
@@ -18,8 +19,8 @@ DistanceFieldFont::~DistanceFieldFont() {
 		delete DistanceFieldTexture;
 	}
 }
-const FDistanceFieldCharacter& DistanceFieldFont::GetDistanceFieldCharacter(const char& Character) const {
-	return *CharacterCache[Character];
+const FDistanceFieldCharacter* DistanceFieldFont::GetDistanceFieldCharacter(const char& Character) const {
+	return CharacterCache[Character];
 }
 const vec2& DistanceFieldFont::GetTextureAtlasDimensions() const {
 	if (DistanceFieldTexture) {
@@ -32,6 +33,9 @@ void DistanceFieldFont::BindAtlas(Shader* ShaderIn, TString ParameterName, int32
 }
 const int32& DistanceFieldFont::GetGeneratedFontSize() const {
 	return OfflineFontSize;
+}
+const float& DistanceFieldFont::GetMaximumCharacterHeight() const {
+	return MaxCharacterHeight;
 }
 SArray<TString> DistanceFieldFont::SplitLineIntoKeyValuePairs(const TString& Line) {
 	SArray<TString> splitByWhitespace;
@@ -118,11 +122,14 @@ bool DistanceFieldFont::ImportAsset(const TString& FilePath) {
 
 		if (character >= 0 && character <= 255) {
 			CharacterCache[character] = characterEntry;
+			if (characterEntry->GetTotalRequiredSpace().y > MaxCharacterHeight) {
+				MaxCharacterHeight = characterEntry->GetTotalRequiredSpace().y;
+			}
 			SupportedCharacterCount++;
 		}
 	}
-	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, fontFilePath, maxWidth, maxWidthChar)
-		return true;
+	SD_ENGINE_INFO("Loaded Distance Field Font: {0} from File: {1} with maximum width of: {2} on character: {3}.", FontName, fontFilePath, maxWidth, maxWidthChar);
+	return true;
 }
 bool DistanceFieldFont::SerializeToBuffer(SerializationStream& Stream) const {
 	Stream.SerializeString(FontName);
@@ -130,6 +137,7 @@ bool DistanceFieldFont::SerializeToBuffer(SerializationStream& Stream) const {
 	Stream.SerializeInteger32(LineHeight);
 	Stream.SerializeInteger32(Base);
 	Stream.SerializeVec4(Padding);
+	Stream.SerializeFloat(MaxCharacterHeight);
 
 	DistanceFieldTexture->SerializeToBuffer(Stream);
 
@@ -149,6 +157,7 @@ bool DistanceFieldFont::DeserializeFromBuffer(DeserializationStream& Stream) {
 	Stream.DeserializeInteger32(LineHeight);
 	Stream.DeserializeInteger32(Base);
 	Stream.DeserializeVec4(Padding);
+	Stream.DeserializeFloat(MaxCharacterHeight);
 
 	DistanceFieldTexture = new Texture2D(FontName);
 	DistanceFieldTexture->DeserializeFromBuffer(Stream);

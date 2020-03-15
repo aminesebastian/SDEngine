@@ -400,6 +400,12 @@
     <ClCompile Include="Editor\MultiLineTestWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -591,6 +597,8 @@
     <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
     <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
     <ClInclude Include="Editor\MultiLineTestWidget.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

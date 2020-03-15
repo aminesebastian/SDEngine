@@ -130,18 +130,19 @@ public:
 	 * @returns	{const FDistanceFieldCharacter*}	Null if it fails, else the distance field
 	 * 												character.
 	 */
-	const FDistanceFieldCharacter& GetDistanceFieldCharacter(const char& Character) const;
+	const FDistanceFieldCharacter* GetDistanceFieldCharacter(const char& Character) const;
 	const vec2& GetTextureAtlasDimensions() const;
 	void BindAtlas(Shader* ShaderIn, TString ParameterName, int32 TextureOffset) const;
 
 	const int32& GetGeneratedFontSize() const;
+	const float& GetMaximumCharacterHeight() const;
 
 	bool ImportAsset(const TString& FilePath) override;
 	bool SerializeToBuffer(SerializationStream& Stream) const override;
 	bool DeserializeFromBuffer(DeserializationStream& Stream) override;
 private:
 	TString FontName;
-
+	float MaxCharacterHeight;
 	int32 SupportedCharacterCount;
 	int32 OfflineFontSize;
 	int32 LineHeight;
