@@ -4,11 +4,12 @@
 #include "Editor/UserInterface/FrameStatisticsWidget.h"
 #include "Editor/UserInterface/Inspector/EntityInspectorWidget.h"
 #include "Editor/UserInterface/WorldOutliner/WorldOutlinerWidget.h"
+#include "Editor/MultiLineTestWidget.h"
 
 MainViewportUserInterface::MainViewportUserInterface(const TString& Name) : EngineWindowUserInterface(Name) {
 	FrameStatistics = nullptr;
-	DetailsPanel    = nullptr;
-	WorldOutliner   = nullptr;
+	DetailsPanel = nullptr;
+	WorldOutliner = nullptr;
 }
 MainViewportUserInterface::~MainViewportUserInterface() {
 
@@ -25,9 +26,10 @@ void MainViewportUserInterface::OnCreated() {
 	PictorumCanvasSlot* canvasSlot = MainContainer->AddChild(grid);
 	canvasSlot->Offsets.SetTop(30.0f);
 
-	SolidWidget* leftSolid = new SolidWidget("leftSolid");
-	leftSolid->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
-	PictorumGridSlot* leftSlot = grid->AddChild(leftSolid);
+	MultiLineTestWidget* test = new MultiLineTestWidget("Test");
+	//SolidWidget* leftSolid = new SolidWidget("leftSolid");
+	//leftSolid->SetBackgroundColor(EngineUIStyles::DARK_BACKGROUND_COLOR);
+	PictorumGridSlot* leftSlot = grid->AddChild(test);
 	leftSlot->Column = 0;
 	leftSlot->Row = 0;
 	leftSlot->RowSpan = 2;

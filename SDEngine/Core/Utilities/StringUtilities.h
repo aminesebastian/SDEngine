@@ -11,6 +11,9 @@ public:
 	static void SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output);
 	static void SplitStringByWhitespace(const TString& String, SArray<TString>& Output);
 
+	static const TString RemoveCharacterFromString(const TString& String, const char& Character);
+	static const TString RemoveCharactersFromString(const TString& String, const TString& Characters);
+
 	static const TString LeftTrim(const TString& String);
 	static const TString RightTrim(const TString& String);
 	static const TString Trim(const TString& String);

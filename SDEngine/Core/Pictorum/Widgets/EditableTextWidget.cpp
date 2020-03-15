@@ -13,6 +13,9 @@ EditableTextWidget::EditableTextWidget(const TString& Name) : TextWidget(Name) {
 	CursorDrawInstruction->Size.x = 1.0f;
 	CursorDrawInstruction->BorderRadius = FBorderRadius(0.5f);
 	CursorDrawInstruction->BackgroundColor = FColor(1.0f);
+
+	Renderer->AddCursor();
+	Renderer->AddCursor();
 }
 EditableTextWidget::~EditableTextWidget() {
 	delete CursorDrawInstruction;
@@ -53,9 +56,9 @@ void EditableTextWidget::OnMouseDown(const vec2& MousePosition, const EMouseButt
 }
 void EditableTextWidget::OnKeyDown(SDL_Scancode KeyCode) {
 	if (KeyCode == SDL_SCANCODE_RIGHT) {
-		Renderer->MoveCursorRight();
+		Renderer->MoveCursorRight(0);
 	} else if (KeyCode == SDL_SCANCODE_LEFT) {
-		Renderer->MoveCursorLeft();
+		Renderer->MoveCursorLeft(0);
 	} else if (KeyCode == SDL_SCANCODE_BACKSPACE) {
 		//if (CursorStartIndex > 0) {
 		//	CursorStartIndex--;
@@ -77,10 +80,7 @@ void EditableTextWidget::OnKeyDown(SDL_Scancode KeyCode) {
 	}
 }
 void EditableTextWidget::OnTextInput(const TString& Text) {
-	/*TString currentText = GetText();
-	currentText = currentText.insert(CursorStartIndex, Text);
-	SetText(currentText);
-	CursorStartIndex++;*/
+	Renderer->AddTextToRightOfCursor(0, Text);
 	OnTextChangedDelegate.Broadcast(this, Text);
 }
 void EditableTextWidget::OnRecievedFocus() {
@@ -115,9 +115,9 @@ void EditableTextWidget::SubmitInput() {
 	}
 }
 void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
-	CursorDrawInstruction->Location = Renderer->GetCursorRelativePosition() * Geometry.GetRenderResolution();
-	CursorDrawInstruction->Location.y = Geometry.GetLocation().y;
-	CursorDrawInstruction->Size.y = Geometry.GetAllotedSpace().y;
+	CursorDrawInstruction->Location = Renderer->GetCursorRelativePosition(0) * Geometry.GetRenderResolution();
+	//CursorDrawInstruction->Location.y = Geometry.GetLocation().y;
+	CursorDrawInstruction->Size.y = Renderer->GetCursorHeight();
 
 	DrawBox(Geometry, *CursorDrawInstruction);
 }

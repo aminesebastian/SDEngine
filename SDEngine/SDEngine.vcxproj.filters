@@ -397,6 +397,9 @@
     <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\MultiLineTestWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -587,6 +590,7 @@
     <ClInclude Include="Core\Reflection\Utilities\ReflectionHelpers.h" />
     <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
     <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
+    <ClInclude Include="Editor\MultiLineTestWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

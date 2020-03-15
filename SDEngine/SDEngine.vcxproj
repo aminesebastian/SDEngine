@@ -338,6 +338,7 @@
     <ClCompile Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.cpp" />
     <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.cpp" />
     <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp" />
+    <ClCompile Include="Editor\MultiLineTestWidget.cpp" />
     <ClCompile Include="Test\ReflectionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +444,7 @@
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
     <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
     <ClInclude Include="Core\DataStructures\HashMap.h" />
+    <ClInclude Include="Editor\MultiLineTestWidget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
     <ClInclude Include="Core\Objects\Entities\Entity.h" />

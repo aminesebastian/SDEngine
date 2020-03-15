@@ -50,10 +50,8 @@ private:
 			return;
 		}
 		// If the character is a space, skip it and just advance.
-
 		if (CharacterCount == 0) {
 			FirstCharacterOffset.x = Character.GetOffsets().x;
-			//FirstCharacterOffset.y = -Character.GetOffsets().y/2.0f;
 		}
 
 		// Extend allocation if needed.
@@ -351,6 +349,16 @@ struct FTextCursor {
 		LineIndex = 0;
 		bRightSide = false;
 	}
+	bool operator==(const FTextCursor& Other) const {
+		if (CharacterIndex == Other.CharacterIndex) {
+			if (LineIndex == Other.LineIndex) {
+				if (bRightSide == Other.bRightSide) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 };
 /**
  * Class responsible for rendering text to the screen.
@@ -503,27 +511,32 @@ public:
 	 *
 	 * @returns	A const void.
 	 */
-	const void MoveCursorRight();
+	const void MoveCursorRight(const int32& CursorIndex);
 
 	/**
 	 * Moves the cursor left.
 	 *
 	 * @returns	A const void.
 	 */
-	const void MoveCursorLeft();
+	const void MoveCursorLeft(const int32& CursorIndex);
 
 	/**
 	 * Gets the cursor's relative screen coordinates.
 	 *
 	 * @returns	The cursor's relative screen position.
 	 */
-	const Vector2D GetCursorRelativePosition() const;
+	const Vector2D GetCursorRelativePosition(const int32& CursorIndex) const;
+	const float GetCursorHeight() const;
+	const int32 AddCursor();
+	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
+	const void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
 	virtual void AddLine(const TString& Line);
 	const int32 GetAbsoluteIndexFromLineRelative(const int32& LineIndex, const int32& CharacterIndex) const;
 	const void GetNdcCharacterBounds(const int32& LineIndex, const int32& Index, Vector2D& BottomLeft, Vector2D& TopRight) const;
+
 private:
 	/*****************/
 	/*Text Properties*/
@@ -536,7 +549,7 @@ private:
 	float DistanceFieldEdge;
 	float Tracking;
 	float Leading;
-	FTextCursor Cursor;
+	SArray<FTextCursor> Cursors;
 
 	/*****************/
 	/*State Properties*/
@@ -544,6 +557,7 @@ private:
 	const DistanceFieldFont* Font;
 	Vector2D LastFrameMinBounds;
 	Vector2D LastFrameMaxBounds;
+	TString RawText;
 	TString Text;
 
 	/*****************/

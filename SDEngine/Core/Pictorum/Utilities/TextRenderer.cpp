@@ -53,18 +53,18 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 	VertexArrayBuffer->DrawTriangleElements(2, TextBlockCache->IndexCount);
 }
 void TextRenderer::SetText(const TString& Text) {
-	this->Text = Text;
 	Flush();
 	AddLine(Text);
 	TextBlockCache->Finalize();
+	RawText = Text;
+	this->Text = StringUtilities::RemoveCharactersFromString(Text, "\n\t");
 }
 const TString& TextRenderer::GetText() const {
 	return Text;
 }
 void TextRenderer::AddLine(const TString& Line) {
 	TextBlockCache->GetCurrentLine()->SetLineSize((int32)Line.length());
-	for (int32 i = 0; i < Line.length(); i++) {
-		const char& character = Line[i];
+	for (const char& character : Line) {
 		if (character == '\n') {
 			TextBlockCache->CompleteLine();
 		} else {
@@ -134,55 +134,7 @@ const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vecto
 	MaxBounds = LastFrameMaxBounds;
 }
 const void TextRenderer::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation, const Vector2D ScreenResolution, int32& Index, bool& RightSide) const {
-	//Vector2D mouseLocationAdjusted = MouseLocation / ScreenResolution;
-	//mouseLocationAdjusted          = (mouseLocationAdjusted - 0.5f) * 2.0f;
-	//Index                          = -1;
-	//RightSide                      = false;
 
-	//Vector2D bottomLeft, topRight;
-	//int32 lineStartIndex = 0;
-	//bool wasInLine = false;
-
-	//SArray<FTextLine*> Lines;
-	//TextBlockCache->GetLines(Lines);
-
-	//for (const FTextLine* line : Lines) {
-	//	for (int32 i = 0; i < line->CharacterCount; i++) {
-	//		const char character = line->Characters[i];
-
-	//		GetAbsoluteCharacterBounds(lineStartIndex + i, bottomLeft, topRight);
-	//		if (mouseLocationAdjusted.y >= bottomLeft.y && mouseLocationAdjusted.y <= topRight.y) {
-	//			wasInLine = true;
-	//			if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
-	//				float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
-	//				bool shouldBeLeftSize = mouseLocationAdjusted.x < xMidpoint;
-	//				if (shouldBeLeftSize) {
-	//					Index = lineStartIndex + i;
-	//				} else {
-	//					if (i < line->CharacterCount - 1) {
-	//						Index = lineStartIndex + i + 1;
-	//					} else {
-	//						Index = lineStartIndex + i;
-	//						RightSide = true;
-	//					}
-	//				}					
-	//				return;
-	//			}
-	//		}
-	//	}
-	//	if (wasInLine) {
-	//		if (mouseLocationAdjusted.x > topRight.x) {
-	//			Index = lineStartIndex + line->CharacterCount - 1;
-	//			RightSide = true;
-	//			return;
-	//		} else {
-	//			Index = lineStartIndex;
-	//			RightSide = false;
-	//			return;
-	//		}
-	//	}
-	//	lineStartIndex = lineStartIndex + line->CharacterCount;
-	//}
 }
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.
@@ -203,52 +155,63 @@ void TextRenderer::Flush() {
 	bBoundToGPU = false;
 }
 
-const void TextRenderer::MoveCursorRight() {
-	const FTextLine* line = TextBlockCache->GetLine(Cursor.LineIndex);
+const void TextRenderer::MoveCursorRight(const int32& CursorIndex) {
+	// Get the cursor.
+	FTextCursor& cursor = Cursors[CursorIndex];
+
+	// Get the line.
+	const FTextLine* line = TextBlockCache->GetLine(cursor.LineIndex);
+
 	// If we are not at the end of the line, move towards the end.
-	if (Cursor.CharacterIndex < line->CharacterCount - 1) {
-		Cursor.CharacterIndex++;
-	} else if (Cursor.CharacterIndex == line->CharacterCount - 1 && !Cursor.bRightSide) {
-		Cursor.bRightSide = true;
+	if (cursor.CharacterIndex < line->CharacterCount - 1) {
+		cursor.CharacterIndex++;
+	} else if (cursor.CharacterIndex == line->CharacterCount - 1 && !cursor.bRightSide) {
+		cursor.bRightSide = true;
 	} else {
 		// If we are not at the bottom right of the text block, move down a line and to the start of it.
-		if (Cursor.LineIndex < TextBlockCache->UsedLines - 1) {
-			Cursor.LineIndex++;
-			Cursor.CharacterIndex = 0;
-			Cursor.bRightSide = false;
+		if (cursor.LineIndex < TextBlockCache->UsedLines - 1) {
+			cursor.LineIndex++;
+			cursor.CharacterIndex = 0;
+			cursor.bRightSide = false;
 		}
 	}
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", Cursor.LineIndex, Cursor.CharacterIndex);
+	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", cursor.LineIndex, cursor.CharacterIndex);
 }
-const void TextRenderer::MoveCursorLeft() {
-	const FTextLine* line = TextBlockCache->GetLine(Cursor.LineIndex);
+const void TextRenderer::MoveCursorLeft(const int32& CursorIndex) {
+	// Get the cursor.
+	FTextCursor& cursor = Cursors[CursorIndex];
+
+	const FTextLine* line = TextBlockCache->GetLine(cursor.LineIndex);
 	// If we are not at the beginning of the line, move towards the beginning.
 
-	if (Cursor.CharacterIndex == line->CharacterCount - 1 && Cursor.bRightSide) {
-		Cursor.bRightSide = false;
-	} else if (Cursor.CharacterIndex > 0) {
-		Cursor.CharacterIndex--;
+	if (cursor.CharacterIndex == line->CharacterCount - 1 && cursor.bRightSide) {
+		cursor.bRightSide = false;
+	} else if (cursor.CharacterIndex > 0) {
+		cursor.CharacterIndex--;
 	} else {
 		// If we are not at the top line, move up one line and move the cursor to the end of that line.
-		if (Cursor.LineIndex > 0) {
-			Cursor.LineIndex--;
-			Cursor.CharacterIndex = TextBlockCache->GetLine(Cursor.LineIndex)->CharacterCount - 1;
-			Cursor.bRightSide = false;
+		if (cursor.LineIndex > 0) {
+			cursor.LineIndex--;
+			cursor.CharacterIndex = TextBlockCache->GetLine(cursor.LineIndex)->CharacterCount - 1;
+			cursor.bRightSide = false;
 		}
 	}
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", Cursor.LineIndex, Cursor.CharacterIndex);
+	SD_ENGINE_DEBUG("Cursor is on line: {0} at character index: {1}.", cursor.LineIndex, cursor.CharacterIndex);
 }
-const Vector2D TextRenderer::GetCursorRelativePosition() const {
+const Vector2D TextRenderer::GetCursorRelativePosition(const int32& CursorIndex) const {
+	// Get the cursor.
+	const FTextCursor& cursor = Cursors[CursorIndex];
+
 	// Get the character bounds for the absolute character index and return the bottom left corner.
 	Vector2D bottomLeft, topRight;
-	GetNdcCharacterBounds(Cursor.LineIndex, Cursor.CharacterIndex, bottomLeft, topRight);
+	GetNdcCharacterBounds(cursor.LineIndex, cursor.CharacterIndex, bottomLeft, topRight);
 
 	// Capture the bottom left coordinate in relative coordinates since both left and right paths need this value.
 	Vector2D relativeBottomLeft = MathLibrary::ConvertNdcToRelativeScreenCoordinates(bottomLeft);
 
 	// If on the right side, shift the X coord to be the right of the character quad, otherwise, use the left side.
 	// Additionally, if on the right side, undo the adjustment for tracking.
-	if (Cursor.bRightSide) {
+	if (cursor.bRightSide) {
 		topRight.x += Tracking * LastFrameScale.x;
 		Vector2D relativeTopRight = MathLibrary::ConvertNdcToRelativeScreenCoordinates(topRight);
 		return Vector2D(relativeTopRight.x, relativeBottomLeft.y);
@@ -272,8 +235,8 @@ const int32 TextRenderer::GetAbsoluteIndexFromLineRelative(const int32& LineInde
 	TextBlockCache->GetLines(lines);
 
 	// Get the absolute character index from the line relative.
-	int32 characterIndex = Cursor.CharacterIndex;
-	for (int32 i = 0; i < Cursor.LineIndex; i++) {
+	int32 characterIndex = CharacterIndex;
+	for (int32 i = 0; i < LineIndex; i++) {
 		characterIndex += lines[i]->CharacterCount;
 	}
 	return characterIndex;
@@ -310,4 +273,28 @@ const void TextRenderer::GetNdcCharacterBounds(const int32& LineIndex, const int
 	} else {
 		SD_ENGINE_WARN("Attempting to get the NDC bounds for a character with either invalid LineIndex or Index. Values provided were LineIndex={0} and CharacterIndex={1}.", LineIndex, Index);
 	}
+}
+const float TextRenderer::GetCursorHeight() const {
+	return GetFontSize(); // Use the getter to get the real font size and not the one adjusted for DPI.
+}
+const int32 TextRenderer::AddCursor() {
+	Cursors.Add(FTextCursor());
+	return Cursors.LastIndex();
+}
+const FTextCursor& TextRenderer::GetCursorAtIndex(const int32& CursorIndex) const {
+	return Cursors[CursorIndex];
+}
+const void TextRenderer::AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text) {
+	// Get the cursor.
+	const FTextCursor& cursor = Cursors[CursorIndex];
+	int32 absoluteIndex = GetAbsoluteIndexFromLineRelative(cursor.LineIndex, cursor.CharacterIndex);
+
+	TString currentText = RawText;
+	if (cursor.bRightSide) {
+		currentText = currentText.insert(absoluteIndex + 1, Text);
+	} else {
+		currentText = currentText.insert(absoluteIndex, Text);
+	}
+	SetText(currentText);
+	MoveCursorRight(CursorIndex);
 }

@@ -1,4 +1,5 @@
 #include "StringUtilities.h"
+#include <algorithm>
 #include <sstream>
 
 void StringUtilities::SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output) {
@@ -14,6 +15,18 @@ void StringUtilities::SplitStringByWhitespace(const TString& String, SArray<TStr
 	for (const std::string& val : ret) {
 		Output.Add(val);
 	}
+}
+const TString StringUtilities::RemoveCharacterFromString(const TString& String, const char& Character) {
+	TString output = String;
+	output.erase(std::remove(output.begin(), output.end(), Character), output.end());
+	return output;
+}
+const TString StringUtilities::RemoveCharactersFromString(const TString& String, const TString& Characters) {
+	TString output = String;
+	for (const char& character : Characters) {
+		output.erase(std::remove(output.begin(), output.end(), character), output.end());
+	}
+	return output;
 }
 const TString StringUtilities::LeftTrim(const TString& String) {
 	string copy = String;
