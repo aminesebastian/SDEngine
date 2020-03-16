@@ -10,7 +10,7 @@ const float& TextLine::GetCursorPosition() const {
 	return CursorPosition;
 }
 const int32 TextLine::GetLength() const {
-	return Text.length() + 1;
+	return Text.length();
 }
 const TString& TextLine::GetText() const {
 	return Text;

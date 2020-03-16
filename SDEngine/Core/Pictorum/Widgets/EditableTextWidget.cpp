@@ -138,42 +138,12 @@ void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
 
 	DrawBox(Geometry, *CursorDrawInstruction);
 }
-const int32 EditableTextWidget::GetCharacterIndexOfCursor(const int32& CursorIndex) const {
-	// Get the cursor.
-	const FTextCursor& cursor = Cursors[CursorIndex];
-
-	// Capture the line index and character index for the cursor.
-	int32 lineIndex, characterIndex;
-	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
-
-	if (cursor.bRightSide) {
-		return cursor.CharacterIndex + lineIndex + 1;
-	} else {
-		return cursor.CharacterIndex + lineIndex;
-	}
-
-	return cursor.CharacterIndex;
-}
 const void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
-	// Capture the line index and character index for the cursor.
-	int32 lineIndex, characterIndex;
-	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
-	const TextLine* line = Renderer->GetGeometryCache()->GetLine(lineIndex);
-
-	// If the cursor can still move on the current line, do so. If the cursor is at the end of the
-	// line, move it to the right of the final character if it is not there. If the cursor is at
-	// the end of the line AND at the right AND there is another line, move and set the cursor back
-	// to the left.
-	if (characterIndex < line->GetLength() - 1) {
+	if (cursor.CharacterIndex < GetText().length() - 1) {
 		cursor.CharacterIndex++;
-	} else if (characterIndex == line->GetLength() - 1 && !cursor.bRightSide) {
-		cursor.bRightSide = true;
-	} else if (lineIndex < Renderer->GetGeometryCache()->GetLineCount() - 1) {
-		cursor.CharacterIndex++;
-		cursor.bRightSide = false;
 	}
 	DebugCursorState(CursorIndex);
 }
@@ -181,19 +151,8 @@ const void EditableTextWidget::MoveCursorLeft(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
-	// If the cursor is to the right of a character (only occurs at the end of the line) move it to the left.
-	// If the cursor is to the left and not at the beginning of the text, move it back one spot.
-	if (cursor.bRightSide) {
-		cursor.bRightSide = false;
-	} else if (cursor.CharacterIndex > 0) {
+	if (cursor.CharacterIndex > 0) {
 		cursor.CharacterIndex--;
-
-		// Capture the line index and character index for the cursor.
-		int32 lineIndex, characterIndex;
-		Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
-		if (characterIndex == Renderer->GetGeometryCache()->GetLine(lineIndex)->GetLength() - 1) {
-			cursor.bRightSide = true;
-		}
 	}
 	DebugCursorState(CursorIndex);
 }
@@ -307,14 +266,11 @@ const void EditableTextWidget::AddTextToRightOfCursor(const int32& CursorIndex, 
 	// Get the cursor.
 	const FTextCursor& cursor = Cursors[CursorIndex];
 
-	// Get the text index.
-	const int32 textIndex = GetCharacterIndexOfCursor(CursorIndex);
-
 	TString currentText = GetText();
-	if (textIndex >= currentText.length() - 1) {
+	if (cursor.CharacterIndex >= currentText.length() - 1) {
 		currentText += Text;
 	} else {
-		currentText = currentText.insert(textIndex+1, Text);
+		currentText = currentText.insert(cursor.CharacterIndex, Text);
 		MoveCursorRight(CursorIndex);
 	}
 	SetText(currentText);
@@ -329,6 +285,5 @@ void EditableTextWidget::DebugCursorState(const int32& CursorIndex) {
 	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
 
 	// Log the results.
-	int32 index = GetCharacterIndexOfCursor(CursorIndex);
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at index: {1} with absolute index: {2} to the left of character: {3}.", lineIndex, cursor.CharacterIndex, index, GetText()[index]);
+	SD_ENGINE_DEBUG("Cursor is on line: {0} at index: {1} to the left of character: {2}.", lineIndex, cursor.CharacterIndex, GetText()[cursor.CharacterIndex]);
 }

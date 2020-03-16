@@ -42,7 +42,6 @@ protected:
 	virtual void SubmitInput();
 
 	void DrawCursor(const FRenderGeometry& Geometry);
-	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex) const;
 	const void MoveCursorRight(const int32& CursorIndex);
 	const void MoveCursorLeft(const int32& CursorIndex);
 	const void MoveCursorUp(const int32& CursorIndex);
