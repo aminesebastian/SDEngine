@@ -17,6 +17,9 @@ const SArray<TextLine*>& TextGeometryCache::GetLines() const {
 const TextLine* TextGeometryCache::GetLine(const int32& Index) const {
 	return Lines[Index];
 }
+const float TextGeometryCache::GetLineYOffset(const int32& Index) const {
+	return (Index + 1) * Font->GetMaximumCharacterHeight();
+}
 const SArray<Vector2D>& TextGeometryCache::GetVerticies() const {
 	return Verticies;
 }
@@ -64,7 +67,10 @@ void TextGeometryCache::Finalize() {
 	}
 
 	// Iterate through all the used lines and add them to the buffer.
-	for (const TextLine* line : Lines) {
+	for (int32 i = 0; i < Lines.Count(); i++) {
+		// Get the line.
+		const TextLine* line = Lines[i];
+
 		// Calculate the alignment offset.
 		float alignmentOffset = maxLength - line->GetCursorPosition();
 
@@ -108,7 +114,7 @@ void TextGeometryCache::Finalize() {
 		}
 
 		// Offset the cursor to the next line.
-		CurrentYPosition -= Font->GetMaximumCharacterHeight();
+		CurrentYPosition = -GetLineYOffset(i);
 
 		// Increment state keeping values.
 		CurrentIndex += (maxIndex + 1);

@@ -14,6 +14,7 @@ public:
 	const int32 GetLineCount() const;
 	const SArray<TextLine*>& GetLines() const;
 	const TextLine* GetLine(const int32& Index) const;
+	const float GetLineYOffset(const int32& Index) const;
 	const SArray<Vector2D>& GetVerticies() const;
 	const SArray<Vector2D>& GetTextureCoordinates() const;
 	const SArray<int32>& GetInidices() const;

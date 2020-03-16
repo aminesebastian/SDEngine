@@ -31,7 +31,6 @@ public:
 protected:
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
-	void DrawCursor(const FRenderGeometry& Geometry);
 	virtual void OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) override;
 	virtual void OnKeyDown(SDL_Scancode KeyCode) override;
 	virtual void OnTextInput(const TString& Text) override;
@@ -42,6 +41,8 @@ protected:
 	virtual void OnTextSubmitted(const TString& SubmittedText);
 	virtual void SubmitInput();
 
+	void DrawCursor(const FRenderGeometry& Geometry);
+	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex) const;
 	const void MoveCursorRight(const int32& CursorIndex);
 	const void MoveCursorLeft(const int32& CursorIndex);
 	const void MoveCursorUp(const int32& CursorIndex);
@@ -52,6 +53,7 @@ protected:
 	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
 	const void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);
 
+	void DebugCursorState(const int32& CursorIndex);
 private:
 	TString PlaceholderText;
 	FBoxDrawInstruction* CursorDrawInstruction;

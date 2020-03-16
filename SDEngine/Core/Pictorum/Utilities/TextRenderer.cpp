@@ -77,7 +77,7 @@ void TextRenderer::SetText(const TString& TextIn) {
 	SArray<TString> split;
 	StringUtilities::SplitString(Text, '\n', split);
 	for (const TString& line : split) {
-		TextBlockCache->AddLine(line +'\n');
+		TextBlockCache->AddLine(line);
 	}
 
 	TextBlockCache->Finalize();
@@ -177,8 +177,20 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
 		const TextLine* line = TextBlockCache->GetLine(i);
-		if (counter >= line->GetLength()) {
-			counter -= line->GetLength();
+
+		// If we are on a line other that the first one and the line's length 0, force it to be 1 for
+		// the purpose of this algorithm as there was a hidden \n there.
+		int32 adjustedLength = 0;
+		if (line->GetLength() > 0) {
+			adjustedLength = line->GetLength();
+		} else {
+			if (i > 0) {
+				adjustedLength = 1;
+			}
+		}
+
+		if (counter >= adjustedLength) {
+			counter -= adjustedLength;
 		} else {
 			LineIndex = i;
 			CharacterIndex = counter;
