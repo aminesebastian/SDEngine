@@ -260,7 +260,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 		maxBounds = (maxBounds * Renderer->GetNdcScale()) + Renderer->GetNdcPosition();
 
 		// Check to see if we are in this line.
-		if (mouseLocationAdjusted.y <= maxBounds.y && mouseLocationAdjusted.y >= minBounds.y) {
+		if (mouseLocationAdjusted.y >= minBounds.y  && mouseLocationAdjusted.y <= maxBounds.y) {
 			const TString& text = line->GetText();
 			const SArray<Vector2D>& verticies = line->GetVerticies();
 
