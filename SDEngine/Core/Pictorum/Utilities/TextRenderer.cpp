@@ -18,10 +18,6 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	LastFrameMinBounds = ZERO_VECTOR2D;
 	LastFrameMaxBounds = ZERO_VECTOR2D;
 
-	VertexArrayBuffer = new GPUVertexBufferArray();
-	VertexArrayBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
-	VertexArrayBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
-	VertexArrayBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
 	Flush();
 }
 TextRenderer::~TextRenderer() {
@@ -55,9 +51,13 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 void TextRenderer::BindToGPU() {
 	// Do not bind if there is no data.
 	if (TextBlockCache->GetVerticies().Count() == 0 || TextBlockCache->GetTextureCoordinates().Count() == 0 || TextBlockCache->GetInidices().Count() == 0) {
-		SD_ENGINE_ERROR("There was an attempt to bind text geometry to the GPU where no geometry was defined!");
 		return;
 	}
+
+	VertexArrayBuffer = new GPUVertexBufferArray();
+	VertexArrayBuffer->AddBuffer("Vertex", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	VertexArrayBuffer->AddBuffer("TexCoord", EGPUBufferType::ArrayBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Float);
+	VertexArrayBuffer->AddBuffer("Index", EGPUBufferType::ElementBuffer, EGPUBufferUsage::StaticDraw, EGPUBufferDataType::Index);
 
 	VertexArrayBuffer->SetBufferData(0, TextBlockCache->GetVerticies());
 	VertexArrayBuffer->SetBufferData(1, TextBlockCache->GetTextureCoordinates());
@@ -74,16 +74,29 @@ void TextRenderer::Flush() {
 void TextRenderer::SetText(const TString& TextIn) {
 	Flush();
 	Text = TextIn;
-	SArray<TString> split;
-	StringUtilities::SplitString(Text, '\n', split);
-	for (const TString& line : split) {
-		TextBlockCache->AddLine(line + '\n');
+
+	if (TextIn.length() > 0) {
+		SArray<TString> split;
+		StringUtilities::SplitString(Text, '\n', split);
+
+		for (const TString& line : split) {
+			TextBlockCache->AddLine(line + '\n');
+		}
+
+		InternalText = TextIn + '\n';
+	} else {
+		Text = "";
+		InternalText = "\n";
+		TextBlockCache->AddLine("\n");
 	}
 
 	TextBlockCache->Finalize();
 }
 const TString& TextRenderer::GetText() const {
 	return Text;
+}
+const TString& TextRenderer::GetInternalText() const {
+	return InternalText;
 }
 void TextRenderer::SetFontSize(const int32& Size) {
 	FontSize = (float)Size / DOTS_PER_POINT;
@@ -174,12 +187,15 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 	int32 counter = AbsoluteIndex;
 	LineIndex = 0;
 	CharacterIndex = 0;
+	int32 lineLength = 0;
+	const TextLine* line = nullptr;
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
-		const TextLine* line = TextBlockCache->GetLine(i);
+		line = TextBlockCache->GetLine(i);
+		lineLength = line->GetLength();
 
-		if (counter >= line->GetLength()) {
-			counter -= line->GetLength();
+		if (counter >= lineLength) {
+			counter -= lineLength;
 		} else {
 			LineIndex = i;
 			CharacterIndex = counter;

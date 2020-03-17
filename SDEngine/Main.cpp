@@ -25,6 +25,9 @@ void serializeFont(TString FontName, TString FontPath, TString AssetPath, AssetM
 
 
 int main(int argc, char* argv[]) {
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
+	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+
 	S_Engine = Engine::Get();
 
 	AssetManager* manager = Engine::Get()->GetAssetManager();

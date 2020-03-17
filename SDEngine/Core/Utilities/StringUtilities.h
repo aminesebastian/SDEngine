@@ -18,6 +18,8 @@ public:
 	static const TString RightTrim(const TString& String);
 	static const TString Trim(const TString& String);
 
+	static const TString InsertAtIndex(TString& Source, const int32& Index, const TString& TextToIndex);
+	static const TString RemoveAtIndex(TString& Source, const int32& Index, const int32& CharacterToErase);
 	template <typename T>
 	static TString ToStringWithPrecision(const T& Value, const int32& Precision) {
 		std::ostringstream out;

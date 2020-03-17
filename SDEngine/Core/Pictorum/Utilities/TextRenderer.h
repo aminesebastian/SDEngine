@@ -157,9 +157,12 @@ public:
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
+	const TString& GetInternalText() const;
 
 
 private:
+	friend class EditableTextWidget;
+
 	/*****************/
 	/*Text Properties*/
 	/*****************/
@@ -179,6 +182,7 @@ private:
 	Vector2D LastFrameMinBounds;
 	Vector2D LastFrameMaxBounds;
 	TString Text;
+	TString InternalText;
 
 	/*****************/
 	/*Render Properties*/

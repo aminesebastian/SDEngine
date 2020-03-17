@@ -55,3 +55,10 @@ const TString StringUtilities::Trim(const TString& String) {
 
 	return copy;
 }
+
+const TString StringUtilities::InsertAtIndex(TString& Source, const int32& Index, const TString& TextToIndex) {
+	return Source.insert(Index, TextToIndex);
+}
+const TString StringUtilities::RemoveAtIndex(TString& Source, const int32& Index, const int32& CharacterToErase) {
+	return Source.erase(Index, CharacterToErase);
+}

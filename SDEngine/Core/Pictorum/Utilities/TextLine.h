@@ -16,6 +16,7 @@ public:
 	const SArray<Vector2D>& GetVerticies() const;
 	const SArray<Vector2D>& GetTextureCoordinates() const;
 	const SArray<int32>& GetInidices() const;
+	void GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const;
 	void SetText(const TString& LineText);
 	void Flush();
 private:
@@ -26,7 +27,9 @@ private:
 	SArray<Vector2D> Verticies;
 	SArray<Vector2D> TexCoords;
 	SArray<int32> Indices;
+	Vector2D MinimumBounds;
+	Vector2D MaximumBounds;
 
-	void AddCharacter(const FDistanceFieldCharacter& Character);
+	void AddCharacter(const FDistanceFieldCharacter* Character);
 };
 

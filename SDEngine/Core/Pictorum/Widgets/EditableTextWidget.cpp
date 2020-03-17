@@ -37,22 +37,15 @@ void EditableTextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) 
 	}
 }
 void EditableTextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	//if (bCursorFlashOn && HasFocus()) {
-	DrawCursor(Geometry);
-	//}
+	if (bCursorFlashOn && HasFocus()) {
+		DrawCursor(Geometry);
+	}
 	TextWidget::Draw(DeltaTime, Geometry);
 }
 void EditableTextWidget::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {
-	//// Capture the character index at the mouse location.
-	//int32 index;
-	//bool right;
-	//Renderer->GetCharacterIndexAtMouseLocation(MousePosition, LastRenderedGeometry.GetRenderResolution(), index, right);
-
-	//// Only update the cursor start index if the index is greater than 0.
-	//if (index >= 0) {
-	//	SetCursorLocation(index, index, index);
-	//	EventIn.Handled();
-	//}
+	const int32 index = GetCharacterIndexAtMouseLocation(MousePosition);
+	SD_ENGINE_DEBUG("Mouse clicked at location: {0}.", index);
+	MoveCursorToIndex(0, index);
 }
 void EditableTextWidget::OnKeyDown(SDL_Scancode KeyCode) {
 	if (KeyCode == SDL_SCANCODE_RIGHT) {
@@ -64,19 +57,13 @@ void EditableTextWidget::OnKeyDown(SDL_Scancode KeyCode) {
 	} else if (KeyCode == SDL_SCANCODE_DOWN) {
 		MoveCursorDown(0);
 	} else if (KeyCode == SDL_SCANCODE_BACKSPACE) {
-		//if (CursorStartIndex > 0) {
-		//	CursorStartIndex--;
-		//	TString currentText = GetText();
-		//	currentText = currentText.erase(CursorStartIndex, 1);
-		//	SetText(currentText);
-		//}
+		EraseLeftOfCursor(0);
 	} else if (KeyCode == SDL_SCANCODE_DELETE) {
-		//if (CursorStartIndex < GetText().length() - 1) {
-		//	TString currentText = GetText();
-		//	currentText = currentText.erase(CursorStartIndex + 1, 1);
-		//	SetText(currentText);
-		//}
+		EraseRightOfCursor(0);
 	} else if (KeyCode == SDL_SCANCODE_RETURN) {
+		AddNewLineAfterCursor(0);
+		SubmitInput();
+	} else if (KeyCode == SDL_SCANCODE_KP_ENTER) {
 		SubmitInput();
 	}
 	if (GetText().empty()) {
@@ -133,30 +120,35 @@ void EditableTextWidget::OnTextSubmitted(const TString& SubmittedText) {}
 
 void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
 	CursorDrawInstruction->Location = GetCursorRelativePosition(0) * Geometry.GetRenderResolution();
-	//CursorDrawInstruction->Location.y = Geometry.GetLocation().y;
-	CursorDrawInstruction->Size.y = GetCursorHeight();
+	CursorDrawInstruction->Size.y = (float)GetCursorHeight();
 
 	DrawBox(Geometry, *CursorDrawInstruction);
 }
-const void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
+void EditableTextWidget::MoveCursorToIndex(const int32& CursorIndex, const int32& CharacterIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
-	if (cursor.CharacterIndex < GetText().length() - 1) {
+	if (CharacterIndex >= 0 && CharacterIndex <= Renderer->GetInternalText().length() - 1) {
+		cursor.CharacterIndex = CharacterIndex;
+	}
+}
+void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
+	// Get the cursor.
+	FTextCursor& cursor = Cursors[CursorIndex];
+
+	if (cursor.CharacterIndex < MathLibrary::Max(0, (int32)Renderer->GetInternalText().length() - 1)) {
 		cursor.CharacterIndex++;
 	}
-	DebugCursorState(CursorIndex);
 }
-const void EditableTextWidget::MoveCursorLeft(const int32& CursorIndex) {
+void EditableTextWidget::MoveCursorLeft(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
 	if (cursor.CharacterIndex > 0) {
 		cursor.CharacterIndex--;
 	}
-	DebugCursorState(CursorIndex);
 }
-const void EditableTextWidget::MoveCursorUp(const int32& CursorIndex) {
+void EditableTextWidget::MoveCursorUp(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
@@ -182,9 +174,8 @@ const void EditableTextWidget::MoveCursorUp(const int32& CursorIndex) {
 			cursor.bRightSide = false;
 		}
 	}
-	DebugCursorState(CursorIndex);
 }
-const void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
+void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
 
@@ -205,7 +196,7 @@ const void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
 		if (characterIndex > nextLine->GetLength() - 1) {
 
 			// Perform the max as this may be an empty line with a hidden \n.
-			cursor.CharacterIndex += MathLibrary::Max(1, nextLine->GetLength());
+			cursor.CharacterIndex += MathLibrary::Max(1, nextLine->GetLength() - 1);
 
 			// Only go to the right if the line has a real character and not just a \n.
 			if (nextLine->GetLength() > 0) {
@@ -216,15 +207,15 @@ const void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
 			cursor.bRightSide = false;
 		}
 	}
-	DebugCursorState(CursorIndex);
 }
 const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& CursorIndex) const {
 	// Get the cursor.
 	const FTextCursor& cursor = Cursors[CursorIndex];
+	int32 adjustedIndex = cursor.CharacterIndex > Renderer->GetInternalText().length() - 1 ? Renderer->GetInternalText().length() - 1 : cursor.CharacterIndex;
 
 	// Capture the line index and character index for the cursor.
 	int32 lineIndex, characterIndex;
-	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
+	Renderer->GetLineForCharacterIndex(adjustedIndex, lineIndex, characterIndex);
 
 	// Calculate the position.
 	Vector2D position = Renderer->GetNdcPosition();
@@ -238,20 +229,88 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 
 		// Get the bottom left and top right for the character.
 		Vector2D bottomLeft = verticies[characterIndex * 4];
-		Vector2D topRight = verticies[(characterIndex * 4) + 2];
 
-		// If on the right side, move the cursor there.
-		// If on the left, move the cursor there and apply the tracking as well.
-		if (cursor.bRightSide) {
-			position.x += (topRight.x + Renderer->GetTracking()) * Renderer->GetNdcScale().x;
-		} else {
-			position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
-		}
+		position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
 	} else {
 		position.x += Renderer->GetTracking() * Renderer->GetNdcScale().x;
 	}
 	return MathLibrary::ConvertNdcToRelativeScreenCoordinates(position);
 }
+const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation) const {
+	// Capture the mouse location in NDC space.
+	const Vector2D mouseLocationAdjusted = MathLibrary::ConvertAbsoluteToNdcScreenCoordinates(MouseLocation, LastRenderedGeometry.GetRenderResolution());
+
+	// Get a list of the lines.
+	const SArray<TextLine*>& lines = Renderer->GetGeometryCache()->GetLines();
+
+	// Keep track of the index offset as we traverse down the text block.
+	int32 indexOffset = 0;
+	for (int32 i = 0; i < lines.Count(); i++) {
+		const TextLine* line = lines[i];
+
+		// Capture the bounds in text space.
+		Vector2D minBounds, maxBounds;
+		line->GetBounds(minBounds, maxBounds);
+
+		// Perform line index offset in text space.
+		const float lineOffset = Renderer->GetGeometryCache()->GetLineYOffset(i - 1);
+		minBounds.y -= lineOffset;
+		maxBounds.y -= lineOffset;
+
+		// Move into NDC space.
+		minBounds = (minBounds * Renderer->GetNdcScale()) + Renderer->GetNdcPosition();
+		maxBounds = (maxBounds * Renderer->GetNdcScale()) + Renderer->GetNdcPosition();
+
+		// Check to see if we are in this line.
+		if (mouseLocationAdjusted.y <= maxBounds.y && mouseLocationAdjusted.y >= minBounds.y) {
+			const TString& text = line->GetText();
+			const SArray<Vector2D>& verticies = line->GetVerticies();
+
+			// Capture the start location of the line.
+			Vector2D startLocation = verticies[0];
+			startLocation *= Renderer->GetNdcScale();
+			startLocation += Renderer->GetNdcPosition();
+
+			// If the mouse location is to the left of the line's start location, assume we are at index 0.
+			// Otherwise, iterate through all the characters of the line and see if we are inside their
+			// respective quad. If we reach the end of the line having not entered a character quad, assume
+			// we are at the end of the line.
+			if (mouseLocationAdjusted.x < startLocation.x) {
+				return indexOffset;
+			} else {
+				for (int32 i = 0; i < line->GetLength(); i++) {
+					// Skip new line.
+					if (text[i] == '\n') {
+						continue;
+					}
+
+					Vector2D bottomLeft = verticies[i * 4];
+					bottomLeft *= Renderer->GetNdcScale();
+					bottomLeft += Renderer->GetNdcPosition();
+
+					Vector2D topRight = verticies[(i * 4) + 2];
+					topRight *= Renderer->GetNdcScale();
+					topRight += Renderer->GetNdcPosition();
+
+					if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
+						float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
+						if (mouseLocationAdjusted.x > xMidpoint) {
+							return indexOffset + i + 1;
+						} else {
+							return indexOffset + i;
+						}
+					}
+				}
+				return indexOffset + line->GetLength() - 1;
+			}
+		} else {
+			// If we were not in the line, move one line down and increment the index offset.
+			indexOffset += line->GetLength();
+		}
+	}
+	return 0;
+}
+
 const int32 EditableTextWidget::GetCursorHeight() const {
 	return Font->GetMaximumCharacterHeight() / 2.0f * Renderer->GetNdcScale().y * LastRenderedGeometry.GetRenderResolution().y;
 }
@@ -262,20 +321,52 @@ const int32 EditableTextWidget::AddCursor() {
 const FTextCursor& EditableTextWidget::GetCursorAtIndex(const int32& CursorIndex) const {
 	return Cursors[CursorIndex];
 }
-const void EditableTextWidget::AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text) {
+
+void EditableTextWidget::AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text) {
+	// Get the cursor.
+	const FTextCursor& cursor = Cursors[CursorIndex];
+
+	// Modify the text (three cases for start of string, middle of string, end of string).
+	TString currentText = GetText();
+	if (cursor.CharacterIndex >= currentText.length() - 1) {
+		currentText += Text;
+	} else if (currentText.length() == 0) {
+		currentText = Text;
+	} else {
+		currentText = StringUtilities::InsertAtIndex(currentText, cursor.CharacterIndex, Text);
+	}
+
+	// Set the text and then move the cursor to the right one spot.
+	SetText(currentText);
+	MoveCursorRight(CursorIndex);
+}
+void EditableTextWidget::EraseLeftOfCursor(const int32& CursorIndex) {
 	// Get the cursor.
 	const FTextCursor& cursor = Cursors[CursorIndex];
 
 	TString currentText = GetText();
-	if (cursor.CharacterIndex >= currentText.length() - 1) {
-		currentText += Text;
-	} else {
-		currentText = currentText.insert(cursor.CharacterIndex, Text);
-		MoveCursorRight(CursorIndex);
+	if (cursor.CharacterIndex > 0) {
+		currentText = StringUtilities::RemoveAtIndex(currentText, cursor.CharacterIndex - 1, 1);
+		MoveCursorLeft(CursorIndex);
 	}
 	SetText(currentText);
 }
+void EditableTextWidget::EraseRightOfCursor(const int32& CursorIndex) {
+	// Get the cursor.
+	const FTextCursor& cursor = Cursors[CursorIndex];
 
+	TString currentText = GetText();
+	if (cursor.CharacterIndex <= currentText.length() - 1) {
+		currentText = StringUtilities::RemoveAtIndex(currentText, cursor.CharacterIndex, 1);
+		if (cursor.CharacterIndex > Renderer->GetInternalText().length() - 1) {
+			MoveCursorLeft(CursorIndex);
+		}
+	}
+	SetText(currentText);
+}
+void EditableTextWidget::AddNewLineAfterCursor(const int32& CursorIndex) {
+	AddTextToRightOfCursor(CursorIndex, "\n");
+}
 void EditableTextWidget::DebugCursorState(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
@@ -285,5 +376,11 @@ void EditableTextWidget::DebugCursorState(const int32& CursorIndex) {
 	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
 
 	// Log the results.
-	SD_ENGINE_DEBUG("Cursor is on line: {0} at index: {1} to the left of character: {2}.", lineIndex, cursor.CharacterIndex, GetText()[cursor.CharacterIndex]);
+	int32 lastIndex = Renderer->GetText().length() - 1;
+	if (cursor.CharacterIndex > lastIndex) {
+		SD_ENGINE_DEBUG("Cursor is on line: {0} at index: {1} at the end of the text.", lineIndex, cursor.CharacterIndex);
+	} else {
+		SD_ENGINE_DEBUG("Cursor is on line: {0} at index: {1} to the left of character: {2}.", lineIndex, cursor.CharacterIndex, Renderer->GetText()[cursor.CharacterIndex]);
+	}
+
 }

@@ -9,5 +9,5 @@ void MultiLineTestWidget::OnCreated() {
 
 	AssignNewToChildLocal(bg, EditableTextWidget, testText, "TestTextInput");
 	testText->SetFontSize(12);
-	testText->SetText("abcd\nfgthis is a test of some\nmulti line text will this support\nthat feature very well? who knows let us\nsee if that is true\n\n\n");
+	testText->SetText("abcd\nfgt");
 }

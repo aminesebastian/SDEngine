@@ -42,15 +42,20 @@ protected:
 	virtual void SubmitInput();
 
 	void DrawCursor(const FRenderGeometry& Geometry);
-	const void MoveCursorRight(const int32& CursorIndex);
-	const void MoveCursorLeft(const int32& CursorIndex);
-	const void MoveCursorUp(const int32& CursorIndex);
-	const void MoveCursorDown(const int32& CursorIndex);
+	void MoveCursorToIndex(const int32& CursorIndex, const int32& CharacterIndex);
+	void MoveCursorRight(const int32& CursorIndex);
+	void MoveCursorLeft(const int32& CursorIndex);
+	void MoveCursorUp(const int32& CursorIndex);
+	void MoveCursorDown(const int32& CursorIndex);
 	const Vector2D GetCursorRelativePosition(const int32& CursorIndex) const;
+	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation) const;
 	const int32 GetCursorHeight() const;
 	const int32 AddCursor();
 	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
-	const void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);
+	void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);
+	void EraseLeftOfCursor(const int32& CursorIndex);
+	void EraseRightOfCursor(const int32& CursorIndex);
+	void AddNewLineAfterCursor(const int32& CursorIndex);
 
 	void DebugCursorState(const int32& CursorIndex);
 private:
