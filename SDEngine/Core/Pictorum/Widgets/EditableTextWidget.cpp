@@ -121,13 +121,11 @@ void EditableTextWidget::OnTextSubmitted(const TString& SubmittedText) {}
 void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
 	CursorDrawInstruction->Location = GetCursorRelativePosition(0) * Geometry.GetRenderResolution();
 	CursorDrawInstruction->Size.y = (float)GetCursorHeight();
-
 	DrawBox(Geometry, *CursorDrawInstruction);
 }
 void EditableTextWidget::MoveCursorToIndex(const int32& CursorIndex, const int32& CharacterIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-
 	if (CharacterIndex >= 0 && CharacterIndex <= Renderer->GetInternalText().length() - 1) {
 		cursor.CharacterIndex = CharacterIndex;
 	}
@@ -135,7 +133,6 @@ void EditableTextWidget::MoveCursorToIndex(const int32& CursorIndex, const int32
 void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-
 	if (cursor.CharacterIndex < MathLibrary::Max(0, (int32)Renderer->GetInternalText().length() - 1)) {
 		cursor.CharacterIndex++;
 	}
@@ -143,7 +140,6 @@ void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
 void EditableTextWidget::MoveCursorLeft(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-
 	if (cursor.CharacterIndex > 0) {
 		cursor.CharacterIndex--;
 	}
@@ -165,6 +161,8 @@ void EditableTextWidget::MoveCursorUp(const int32& CursorIndex) {
 		// well do that first.
 		cursor.CharacterIndex -= characterIndex;
 
+		// Get the previous line and if our character index is greater than that, simply move to the end of that line.
+		// Otherwise, move to the equivalent position in the previous line.
 		const TextLine* prevLine = Renderer->GetGeometryCache()->GetLine(lineIndex - 1);
 		if (characterIndex > prevLine->GetLength() - 1) {
 			cursor.CharacterIndex -= 1;
@@ -228,7 +226,7 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 		const SArray<Vector2D>& verticies = line->GetVerticies();
 
 		// Get the bottom left and top right for the character.
-		Vector2D bottomLeft = verticies[characterIndex * 4];
+		Vector2D bottomLeft = verticies[(int64)characterIndex * 4];
 
 		position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
 	} else {
@@ -284,6 +282,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 						continue;
 					}
 
+					// Capture the NDC space bottom left and top right of the quad.
 					Vector2D bottomLeft = verticies[i * 4];
 					bottomLeft *= Renderer->GetNdcScale();
 					bottomLeft += Renderer->GetNdcPosition();
@@ -292,6 +291,8 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 					topRight *= Renderer->GetNdcScale();
 					topRight += Renderer->GetNdcPosition();
 
+					// Check to see if we're inside the quad in the X dimension.
+					// Then, check if we're on the left or the right of the midpoint.
 					if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
 						float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
 						if (mouseLocationAdjusted.x > xMidpoint) {
