@@ -122,7 +122,7 @@ struct FRenderGeometry {
 		MaxClipPoint = RenderResolution;
 	}
 
-	vec2 GetLocation(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
+	Vector2D GetLocation(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
 			return Location;
 		} else if (Basis == EPictorumLocationBasis::RELATIVE) {
@@ -137,7 +137,7 @@ struct FRenderGeometry {
 	*
 	* @param 	{vec2}	LocationIn	The location in absolute coordinates.
 	*/
-	void SetLocation(vec2 LocationIn, EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) {
+	void SetLocation(const Vector2D& LocationIn, EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
 			Location = LocationIn;
 		} else {
@@ -167,7 +167,7 @@ struct FRenderGeometry {
 	*
 	* @returns	{vec2}	The allocated space.
 	*/
-	vec2 GetAllotedSpace(EPictorumScaleBasis Basis = EPictorumScaleBasis::ABSOLUTE) const {
+	Vector2D GetAllotedSpace(EPictorumScaleBasis Basis = EPictorumScaleBasis::ABSOLUTE) const {
 		if (Basis == EPictorumScaleBasis::ABSOLUTE) {
 			return AllotedSpace;
 		} else if (Basis == EPictorumScaleBasis::RELATIVE) {
@@ -180,7 +180,7 @@ struct FRenderGeometry {
 	*
 	* @param 	{vec2}	AllotedSpace	The space in absolute coordinates.
 	*/
-	void SetAllotedSpace(vec2 Space, EPictorumScaleBasis Basis = EPictorumScaleBasis::ABSOLUTE) {
+	void SetAllotedSpace(const Vector2D& Space, EPictorumScaleBasis Basis = EPictorumScaleBasis::ABSOLUTE) {
 		if (Basis == EPictorumScaleBasis::ABSOLUTE) {
 			AllotedSpace = Space;
 		} else {
@@ -210,7 +210,7 @@ struct FRenderGeometry {
 	 *
 	 * @param 	MinimumClip	The minimum clip point.
 	 */
-	void SetMinimumClipPoint(const vec2& MinimumClip) {
+	void SetMinimumClipPoint(const Vector2D& MinimumClip) {
 		MinClipPoint = MinimumClip;
 	}
 	/**
@@ -221,7 +221,7 @@ struct FRenderGeometry {
 	 *
 	 * @returns	The minimum clip point.
 	 */
-	const vec2 GetMinimumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
+	const Vector2D GetMinimumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
 			return MinClipPoint;
 		} else {
@@ -234,7 +234,7 @@ struct FRenderGeometry {
 	 *
 	 * @param 	MaximumClip	The maximum clip point.
 	 */
-	void SetMaximumClipPoint(const vec2& MaximumClip) {
+	void SetMaximumClipPoint(const Vector2D& MaximumClip) {
 		MaxClipPoint = MaximumClip;
 	}
 	/**
@@ -245,7 +245,7 @@ struct FRenderGeometry {
 	 *
 	 * @returns	The maximum clip point.
 	 */
-	const vec2 GetMaximumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
+	const Vector2D GetMaximumClipPoint(EPictorumLocationBasis Basis = EPictorumLocationBasis::ABSOLUTE) const {
 		if (Basis == EPictorumLocationBasis::ABSOLUTE) {
 			return MaxClipPoint;
 		} else {
@@ -256,17 +256,17 @@ struct FRenderGeometry {
 	/**
 	* Gets render resolution in absolute coordinates.
 	*
-	* @returns	{const vec2&}	The render resolution in absolute coordinates.
+	* @returns	{const Vector2D&}	The render resolution in absolute coordinates.
 	*/
-	const vec2& GetRenderResolution() const {
+	const Vector2D& GetRenderResolution() const {
 		return RenderResolution;
 	}
 	/**
 	* Sets render resolution in absolute coordinates.
 	*
-	* @param 	{const vec2&}	Resolution	The resolution in absolute coordinates.
+	* @param 	{const Vector2D&}	Resolution	The resolution in absolute coordinates.
 	*/
-	void SetRenderResolution(const vec2& Resolution) {
+	void SetRenderResolution(const Vector2D& Resolution) {
 		RenderResolution = Resolution;
 	}
 	const Vector2D GetTopLeft() const {
@@ -284,25 +284,63 @@ struct FRenderGeometry {
 	const float GetRenderResolutionAspectRatio() const {
 		return RenderResolution.x / RenderResolution.y;
 	}
-	const vec2& GetDPI() const {
+	const Vector2D& GetDPI() const {
 		return RenderTargetDPI;
 	}
-	void SetDPI(const vec2& DPI) {
+	void SetDPI(const Vector2D& DPI) {
 		RenderTargetDPI = DPI;
+	}
+	bool operator==(const FRenderGeometry& Other) const {
+		if (AllotedSpace == Other.AllotedSpace) {
+			if (Location == Other.Location) {
+				if (MinClipPoint == Other.MinClipPoint) {
+					if (MaxClipPoint == Other.MaxClipPoint) {
+						if (RenderResolution == Other.RenderResolution) {
+							if (RenderTargetDPI == Other.RenderTargetDPI) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	bool operator!=(const FRenderGeometry& Other) const {
+		return !(*this == Other);
+	}
+	bool operator==(FRenderGeometry& Other) const {
+		if (AllotedSpace == Other.AllotedSpace) {
+			if (Location == Other.Location) {
+				if (MinClipPoint == Other.MinClipPoint) {
+					if (MaxClipPoint == Other.MaxClipPoint) {
+						if (RenderResolution == Other.RenderResolution) {
+							if (RenderTargetDPI == Other.RenderTargetDPI) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	bool operator!=(FRenderGeometry& Other) const {
+		return !(*this == Other);
 	}
 private:
 	/** The render resolution of the total render target. */
-	vec2 RenderResolution;
+	Vector2D RenderResolution;
 	/** The render target DPI. */
-	vec2 RenderTargetDPI;
+	Vector2D RenderTargetDPI;
 	/** The alloted space for this widget to be rendered in (in absolute pixel space). */
-	vec2 AllotedSpace;
+	Vector2D AllotedSpace;
 	/** The location this space exists at (int absolute pixel space). */
-	vec2 Location;
+	Vector2D Location;
 	/** Any point to the Left or Bottom of the line should be clipped. */
-	vec2 MinClipPoint;
+	Vector2D MinClipPoint;
 	/** Any point to the Right or Top of this line should be clipped. */
-	vec2 MaxClipPoint;
+	Vector2D MaxClipPoint;
 };
 SD_STRUCT()
 struct FAnchors {

@@ -94,4 +94,7 @@ void TextWidget::CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, v
 const bool TextWidget::CanAddChild() const {
 	return false;
 }
+void TextWidget::OnRenderGeometryChanged(const FRenderGeometry& NewRenderGeometry) {
+
+}
 void TextWidget::OnTextSet(const TString& Text) {}

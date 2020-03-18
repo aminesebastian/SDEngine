@@ -108,6 +108,9 @@ const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition
 	return EMouseCursorStyle::Arrow;
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
+	if (LastRenderedGeometry != Geometry) {
+		OnRenderGeometryChanged(Geometry);
+	}
 	LastRenderedGeometry = Geometry;
 	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
@@ -130,8 +133,6 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 	glScissor((GLuint)Geometry.GetMinimumClipPoint().x, (GLuint)Geometry.GetMinimumClipPoint().y, (GLuint)Geometry.GetMaximumClipPoint().x, (GLuint)Geometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
-	LastRenderedGeometry = Geometry;
-
 	Tick(DeltaTime, Geometry);
 
 	for (int i = 0; i < Children.Count(); i++) {
@@ -316,3 +317,4 @@ void PictorumWidget::OnKeyHeld(SDL_Scancode KeyCode, float HeldTime) {}
 void PictorumWidget::OnTextInput(const TString& Text) {}
 void PictorumWidget::OnRecievedFocus() {}
 void PictorumWidget::OnFocusLost() {}
+void PictorumWidget::OnRenderGeometryChanged(const FRenderGeometry& NewRenderGeometry) {}

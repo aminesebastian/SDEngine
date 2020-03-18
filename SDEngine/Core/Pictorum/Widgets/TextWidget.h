@@ -27,6 +27,7 @@ public:
 
 protected:
 	virtual void OnTextSet(const TString& Text);
+	virtual void OnRenderGeometryChanged(const FRenderGeometry& NewRenderGeometry) override;
 
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;

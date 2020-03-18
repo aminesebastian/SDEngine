@@ -40,6 +40,7 @@ void EditableTextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) 
 	if (bCursorFlashOn && HasFocus()) {
 		DrawCursor(Geometry);
 	}
+
 	TextWidget::Draw(DeltaTime, Geometry);
 }
 void EditableTextWidget::OnMouseDown(const vec2& MousePosition, const EMouseButton& Button, FUserInterfaceEvent& EventIn) {

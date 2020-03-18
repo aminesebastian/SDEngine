@@ -1,6 +1,6 @@
 #include "TextLine.h"
 
-TextLine::TextLine(const DistanceFieldFont* Font, float& Tracking) : Font(Font), Tracking(Tracking) {
+TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking) : Font(Font), Tracking(Tracking) {
 	Flush();
 }
 TextLine::~TextLine() {

@@ -7,7 +7,7 @@
 
 class TextLine {
 public:
-	TextLine(const DistanceFieldFont* Font, float& Tracking);
+	TextLine(const DistanceFieldFont* Font, const float& Tracking);
 	~TextLine();
 
 	const float& GetCursorPosition() const;

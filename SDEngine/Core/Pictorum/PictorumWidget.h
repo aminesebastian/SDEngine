@@ -188,6 +188,8 @@ protected:
 	virtual void OnRecievedFocus();
 	virtual void OnFocusLost();
 
+	virtual void OnRenderGeometryChanged(const FRenderGeometry& NewRenderGeometry);
+
 	void DrawBox(const FRenderGeometry& Geometry, const FBoxDrawInstruction& Instruction) const;
 	void DrawImage(const FRenderGeometry& Geometry, const FImageDrawInstruction& Instruction) const;
 
