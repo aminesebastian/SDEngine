@@ -406,6 +406,9 @@
     <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
@@ -599,6 +602,7 @@
     <ClInclude Include="Editor\MultiLineTestWidget.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextWord.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />

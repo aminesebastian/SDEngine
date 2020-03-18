@@ -26,6 +26,9 @@ TextRenderer::~TextRenderer() {
 }
 
 void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetResolution, const Vector2D& DisplayDPI) {
+	if (Text.length() == 0) {
+		return;
+	}
 	if (!bBoundToGPU) {
 		BindToGPU();
 	}
@@ -74,32 +77,14 @@ void TextRenderer::Flush() {
 void TextRenderer::SetText(const TString& TextIn) {
 	Flush();
 	Text = TextIn;
-
-	if (TextIn.length() > 0) {
-		SArray<TString> split;
-		StringUtilities::SplitString(Text, '\n', split);
-
-		for (const TString& line : split) {
-			TextBlockCache->AddLine(line + '\n');
-		}
-
-		InternalText = TextIn + '\n';
-	} else {
-		Text = "";
-		InternalText = "\n";
-		TextBlockCache->AddLine("\n");
-	}
-
-	TextBlockCache->Finalize();
+	TextBlockCache->SetText(TextIn);
 }
 const TString& TextRenderer::GetText() const {
 	return Text;
 }
-const TString& TextRenderer::GetInternalText() const {
-	return InternalText;
-}
 void TextRenderer::SetFontSize(const int32& Size) {
 	FontSize = (float)Size / DOTS_PER_POINT;
+	bBoundToGPU = false;
 }
 const int32 TextRenderer::GetFontSize() const {
 	return (int32)(FontSize * DOTS_PER_POINT);
@@ -113,6 +98,7 @@ const FColor& TextRenderer::GetColor() const {
 void TextRenderer::SetTracking(const float& TextTracking) {
 	Tracking = TextTracking;
 	TextBlockCache->SetTracking(TextTracking);
+	bBoundToGPU = false;
 }
 const float& TextRenderer::GetTracking() const {
 	return Tracking;
@@ -120,6 +106,7 @@ const float& TextRenderer::GetTracking() const {
 void TextRenderer::SetLeading(const float& TextLeading) {
 	Leading = TextLeading;
 	TextBlockCache->SetLeading(TextLeading);
+	bBoundToGPU = false;
 }
 const float& TextRenderer::GetLeading() const {
 	return Leading;
@@ -143,9 +130,19 @@ const EFontWeight& TextRenderer::GetFontWeight() const {
 void TextRenderer::SetTextAlignment(const ETextAlignment& AlignmentIn) {
 	Alignment = AlignmentIn;
 	TextBlockCache->SetAligment(AlignmentIn);
+	bBoundToGPU = false;
 }
 const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
+}
+void TextRenderer::SetWordWrapWidth(const float& Width) {
+	float ndcWidth = Width * 2.0f;
+	TextBlockCache->SetWordWrapWidth(ndcWidth / GetNdcScale().x);
+	bBoundToGPU = false;
+}
+const float TextRenderer::GetWordWrapWidth() const {
+	float ndcWidth = TextBlockCache->GetWordWrapWidth() * GetNdcScale().x;
+	return ndcWidth / 2.0f;
 }
 const Vector2D& TextRenderer::GetNdcScale() const {
 	return CalculatedRenderScale;

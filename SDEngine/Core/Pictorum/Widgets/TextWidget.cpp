@@ -95,6 +95,6 @@ const bool TextWidget::CanAddChild() const {
 	return false;
 }
 void TextWidget::OnRenderGeometryChanged(const FRenderGeometry& NewRenderGeometry) {
-
+	Renderer->SetWordWrapWidth(NewRenderGeometry.GetAllotedSpace().x / NewRenderGeometry.GetRenderResolution().x);
 }
 void TextWidget::OnTextSet(const TString& Text) {}

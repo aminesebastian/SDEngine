@@ -1,65 +1,83 @@
 #include "TextLine.h"
 
-TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking) : Font(Font), Tracking(Tracking) {
+TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaximumWidth) : Font(Font), Tracking(Tracking), MaximumWidth(MaximumWidth) {
 	Flush();
+	SpaceWidth = GetWordWidthInTextSpace(" ");
 }
 TextLine::~TextLine() {
 	Flush();
 }
-const float& TextLine::GetCursorPosition() const {
-	return CursorPosition;
-}
-const int32 TextLine::GetLength() const {
+const int32& TextLine::GetLength() const {
 	return Text.length();
 }
 const TString& TextLine::GetText() const {
 	return Text;
 }
-const SArray<Vector2D>& TextLine::GetVerticies() const {
-	return Verticies;
-}
-const SArray<Vector2D>& TextLine::GetTextureCoordinates() const {
-	return TexCoords;
-}
-const SArray<int32>& TextLine::GetInidices() const {
-	return Indices;
-}
-void TextLine::SetText(const TString& LineText) {
-	Text = LineText;
-
-	// If we have real text, then add it. If the provided text is empty, still add one quad's worth
-	// of data so as to keep track of this line's location.
-	if (LineText.length() > 0) {
-		for (const char& character : Text) {
-			const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(character);
-			//if (character == '\n') {
-			//	dfChar = Font->GetDistanceFieldCharacter('!');
-			//}
-			AddCharacter(dfChar);
-		}
-	} else {
-		// This will add a quad with 0 size at the right bound of the previous character.
-		AddCharacter(nullptr);
-	}
-}
 void TextLine::GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const {
 	MinBounds = MinimumBounds;
 	MaxBounds = MaximumBounds;
 }
+const float TextLine::GetCursorPosition() const {
+	return CursorPosition;
+}
+const SArray<Vector2D>& TextLine::GetVerticies() const {
+	return Verticies;
+}
+const SArray<Vector2D>& TextLine::GetTextureCoordinates() const {
+	return TextureCoordinates;
+}
+const SArray<int32>& TextLine::GetInidices() const {
+	return Indices;
+}
+
+bool TextLine::AddWord(const TString& Word, const bool& ForceFit) {
+	// If this is the first word, no need to prepend a space, otherwise, prepend a space.
+	bool firstWord = GetLength() == 0;
+
+	// If this word is not request to force fit, get the width of the word in text space. If the
+	// word will not fit, return false.
+	if (!ForceFit) {
+		float wordWidth = GetWordWidthInTextSpace(Word);
+		if (CursorPosition + (firstWord ? 0.0f : SpaceWidth) + wordWidth > MaximumWidth) {
+			return false;
+		}
+	}
+
+	// If this is the first word, simply set this line's text to it.
+	// Otherwise, append a space, followed by the word.
+	if (firstWord) {
+		Text = Word;
+	} else {
+		AddCharacter(Font->GetDistanceFieldCharacter(' '));
+		Text += (' ' + Word);
+	}
+
+	// Add the characters of the word as geometry.
+	for (const char& character : Word) {
+		AddCharacter(Font->GetDistanceFieldCharacter(character));
+	}
+
+	return true;
+}
+void TextLine::Finalize() {
+	// If this has already been finalized, skip it, otherwise mark it as finalized.
+	if (bFinialized) {
+		return;
+	}
+	bFinialized = true;
+
+	// Add a null character to the end of the line.
+	Text += '\0';
+	AddCharacter(nullptr);
+}
 void TextLine::Flush() {
 	CursorPosition = 0.0f;
-	Verticies.Clear();
-	TexCoords.Clear();
-	Indices.Clear();
-	Text.clear();
-
-	MaximumBounds = Vector2D(-FLT_MAX, -FLT_MAX);
-	MinimumBounds = Vector2D(FLT_MAX, FLT_MAX);
+	Text = "";
 }
 void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 	if (Character) {
 		// Add the texture coordinates.
-		TexCoords.AddAll(Character->GetTextureCoordinates());
+		TextureCoordinates.AddAll(Character->GetTextureCoordinates());
 
 		// Add the indices.
 		for (int32 i = 0; i < Character->GetIndices().Count(); i++) {
@@ -74,11 +92,27 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 
 		// Advance the cursor.
 		CursorPosition += Character->GetAdvance() + Tracking;
+
+		// Update the bounds.
+		Vector2D& bottomLeft = Verticies[(int64)Verticies.Count() - 4];
+		Vector2D& topRight = Verticies[(int64)Verticies.Count() - 2];
+		if (topRight.x > MaximumBounds.x) {
+			MaximumBounds.x = topRight.x;
+		}
+		if (topRight.y > MaximumBounds.y) {
+			MaximumBounds.y = topRight.y;
+		}
+		if (bottomLeft.x < MinimumBounds.x) {
+			MinimumBounds.x = bottomLeft.x;
+		}
+		if (bottomLeft.y < MinimumBounds.y) {
+			MinimumBounds.y = bottomLeft.y;
+		}
 	} else {
-		TexCoords.Add(Vector2D(0.0f, 0.0f));
-		TexCoords.Add(Vector2D(0.0f, 0.0f));
-		TexCoords.Add(Vector2D(0.0f, 0.0f));
-		TexCoords.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
 
 		Indices.Add(Verticies.Count() + 2);
 		Indices.Add(Verticies.Count() + 1);
@@ -92,20 +126,45 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		Verticies.Add(Vector2D(CursorPosition, 0.0f));
 		Verticies.Add(Vector2D(CursorPosition, 0.0f));
 	}
+}
+const float TextLine::GetWordWidthInTextSpace(const TString& Word) const {
+	// If the word is empty, return 0 width.
+	if (Word.length() == 0) {
+		return 0.0f;
+	}
 
-	// Update the bounds.
-	Vector2D& bottomLeft = Verticies[Verticies.Count() - 4];
-	Vector2D& topRight = Verticies[Verticies.Count() - 2];
-	if (topRight.x > MaximumBounds.x) {
-		MaximumBounds.x = topRight.x;
+	float width = 0.0f;
+	// Increment the cursor position.
+	for (const char& character : Word) {
+		const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(character);
+		if (dfChar) {
+			width += dfChar->GetAdvance() + Tracking;
+		}
 	}
-	if (topRight.y > MaximumBounds.y) {
-		MaximumBounds.y = topRight.y;
+
+	// If the last character has dimensions, add it to the width.
+	const FDistanceFieldCharacter* lastChar = Font->GetDistanceFieldCharacter(Word[Word.length() - 1]);
+	if (lastChar) {
+		return width - (Tracking / 2.0f);
+	} else {
+		return width;
 	}
-	if (bottomLeft.x < MinimumBounds.x) {
-		MinimumBounds.x = bottomLeft.x;
+}
+const int32 TextLine::GetAmountOfCharactersThatFit(const TString& Word, const float& WidthLimit) const {
+	float width = 0.0f;
+	int32 count = 0;
+
+	// Count how many characters can fit.
+	for (const char& character : Word) {
+		const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(character);
+		if (dfChar) {
+			width += dfChar->GetAdvance() + Tracking;
+		}
+		if (width = WidthLimit) {
+			return count;
+		} else {
+			count++;
+		}
 	}
-	if (bottomLeft.y < MinimumBounds.y) {
-		MinimumBounds.y = bottomLeft.y;
-	}
+	return count;
 }

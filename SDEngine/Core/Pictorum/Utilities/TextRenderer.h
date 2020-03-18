@@ -129,6 +129,20 @@ public:
 	 * @returns	{const ETextAlignment&}	The alignment.
 	 */
 	const ETextAlignment& GetTextAlignment() const;
+
+	/**
+	 * Sets word wrap width in relative space.
+	 *
+	 * @param 	Width	The width in relative space.
+	 */
+	void SetWordWrapWidth(const float& Width);
+
+	/**
+	 * Gets word wrap width in relative space.
+	 *
+	 * @returns	The word wrap width in relative space.
+	 */
+	const float GetWordWrapWidth() const;
 	/**
 	 * Gets text bounding box dimensions
 	 *
@@ -157,8 +171,6 @@ public:
 protected:
 	virtual void BindToGPU();
 	virtual void Flush();
-	const TString& GetInternalText() const;
-
 
 private:
 	friend class EditableTextWidget;
@@ -182,7 +194,6 @@ private:
 	Vector2D LastFrameMinBounds;
 	Vector2D LastFrameMaxBounds;
 	TString Text;
-	TString InternalText;
 
 	/*****************/
 	/*Render Properties*/

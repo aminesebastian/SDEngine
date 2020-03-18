@@ -1,5 +1,6 @@
 #include "TextGeometryCache.h"
 #include "Core/Utilities/Math/MathLibrary.h"
+#include "Core/Utilities/StringUtilities.h"
 #include <limits>
 
 TextGeometryCache::TextGeometryCache(const DistanceFieldFont* Font, const float& Leading, const float& Tracking, const ETextAlignment& Alignment) : Font(Font), Leading(Leading), Tracking(Tracking), Alignment(Alignment) {
@@ -35,6 +36,13 @@ const Vector2D TextGeometryCache::GetMinimumPosition() const {
 const Vector2D TextGeometryCache::GetMaximumPosition() const {
 	return MaxPosition;
 }
+void TextGeometryCache::SetWordWrapWidth(const float& Width) {
+	WordWrapWidth = Width;
+	SetText(TString(Text)); // Make a copy of the Text as the call to SetText resets it.
+}
+const float& TextGeometryCache::GetWordWrapWidth() const {
+	return WordWrapWidth;
+}
 void TextGeometryCache::SetAligment(const ETextAlignment& AlignmentIn) {
 	Alignment = AlignmentIn;
 }
@@ -44,10 +52,39 @@ void TextGeometryCache::SetTracking(const float& TrackingIn) {
 void TextGeometryCache::SetLeading(const float& LeadingIn) {
 	Leading = LeadingIn;
 }
-void TextGeometryCache::AddLine(const TString& Text) {
-	TextLine* line = new TextLine(Font, Tracking);
-	line->SetText(Text);
-	Lines.Add(line);
+void TextGeometryCache::SetText(const TString& TextIn) {
+	Flush();
+
+	Text = TextIn;
+
+	SArray<TString> words;
+	StringUtilities::SplitStringByWhitespace(Text, words);
+	int32 wordCount = 0;
+
+	TextLine* currentLine = new TextLine(Font, Tracking, WordWrapWidth);
+	Lines.Add(currentLine);
+
+	while (wordCount <= words.Count() - 1) {
+		if (currentLine->AddWord(words[wordCount])) {
+			wordCount++;
+		} else {
+			// This condition will only occur if we have a word TOO big to fit on a single line by itself.
+			if (currentLine->GetLength() == 0) {
+				currentLine->AddWord(words[wordCount], true);
+				wordCount++;
+			}
+			// If the above condition was met, check to see if there are still more words left to add.
+			if (wordCount <= words.Count() - 1) {
+				currentLine->Finalize();
+				currentLine = new TextLine(Font, Tracking, WordWrapWidth);
+				Lines.Add(currentLine);
+			}
+		}
+	}
+
+	// Finalize the last line again JUST IN CASE. If it has already been finalized, this call will do nothing.
+	currentLine->Finalize();
+	Finalize();
 }
 void TextGeometryCache::Finalize() {
 	// Do not finalize twice without a flush in between.
@@ -88,15 +125,13 @@ void TextGeometryCache::Finalize() {
 
 		// Add vertices and offset for the alignment.
 		for (Vector2D vert : line->GetVerticies()) {
-			if (Alignment == ETextAlignment::LEFT) {
-				vert.y = vert.y + CurrentYPosition;
-			} else if (Alignment == ETextAlignment::RIGHT) {
+			if (Alignment == ETextAlignment::RIGHT) {
 				vert.x = vert.x + alignmentOffset;
-				vert.y = vert.y + CurrentYPosition;
 			} else if (Alignment == ETextAlignment::CENTER) {
 				vert.x = vert.x + (alignmentOffset / 2.0f);
-				vert.y = vert.y + CurrentYPosition;
 			}
+
+			vert.y += CurrentYPosition;
 
 			// Add the vertex.
 			Verticies.Add(vert);
@@ -130,6 +165,7 @@ void TextGeometryCache::Flush() {
 	Verticies.Clear();
 	TexCoords.Clear();
 	Indices.Clear();
+	Text = "";
 	for (TextLine* line : Lines) {
 		delete line;
 	}

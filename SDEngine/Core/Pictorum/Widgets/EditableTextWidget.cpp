@@ -127,14 +127,14 @@ void EditableTextWidget::DrawCursor(const FRenderGeometry& Geometry) {
 void EditableTextWidget::MoveCursorToIndex(const int32& CursorIndex, const int32& CharacterIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-	if (CharacterIndex >= 0 && CharacterIndex <= Renderer->GetInternalText().length() - 1) {
+	if (CharacterIndex >= 0 && CharacterIndex <= Renderer->GetText().length() - 1) {
 		cursor.CharacterIndex = CharacterIndex;
 	}
 }
 void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-	if (cursor.CharacterIndex < MathLibrary::Max(0, (int32)Renderer->GetInternalText().length() - 1)) {
+	if (cursor.CharacterIndex < MathLibrary::Max(0, (int32)Renderer->GetText().length() - 1)) {
 		cursor.CharacterIndex++;
 	}
 }
@@ -210,7 +210,7 @@ void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
 const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& CursorIndex) const {
 	// Get the cursor.
 	const FTextCursor& cursor = Cursors[CursorIndex];
-	int32 adjustedIndex = cursor.CharacterIndex > Renderer->GetInternalText().length() - 1 ? Renderer->GetInternalText().length() - 1 : cursor.CharacterIndex;
+	int32 adjustedIndex = cursor.CharacterIndex > Renderer->GetText().length() - 1 ? Renderer->GetText().length() - 1 : cursor.CharacterIndex;
 
 	// Capture the line index and character index for the cursor.
 	int32 lineIndex, characterIndex;
@@ -360,7 +360,7 @@ void EditableTextWidget::EraseRightOfCursor(const int32& CursorIndex) {
 	TString currentText = GetText();
 	if (cursor.CharacterIndex <= currentText.length() - 1) {
 		currentText = StringUtilities::RemoveAtIndex(currentText, cursor.CharacterIndex, 1);
-		if (cursor.CharacterIndex > Renderer->GetInternalText().length() - 1) {
+		if (cursor.CharacterIndex > Renderer->GetText().length() - 1) {
 			MoveCursorLeft(CursorIndex);
 		}
 	}

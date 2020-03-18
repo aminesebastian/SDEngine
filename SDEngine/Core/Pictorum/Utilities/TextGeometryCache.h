@@ -20,19 +20,22 @@ public:
 	const SArray<int32>& GetInidices() const;
 	const Vector2D GetMinimumPosition() const;
 	const Vector2D GetMaximumPosition() const;
-
+	
+	void SetWordWrapWidth(const float& Width);
+	const float& GetWordWrapWidth() const;
 	void SetAligment(const ETextAlignment& AlignmentIn);
 	void SetTracking(const float& TrackingIn);
 	void SetLeading(const float& LeadingIn);
-	void AddLine(const TString& Text);
-	void Finalize();
+	void SetText(const TString& TextIn);
 	void Flush();
 private:
 	const DistanceFieldFont* Font;
 	ETextAlignment Alignment;
 	float Leading;
 	float Tracking;
+	float WordWrapWidth;
 
+	TString Text;
 	SArray<TextLine*> Lines;
 
 	Vector2D MaxPosition;
@@ -46,4 +49,6 @@ private:
 	int32 CurrentIndex;
 
 	bool bFinialized;
+
+	void Finalize();
 };

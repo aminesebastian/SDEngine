@@ -7,29 +7,41 @@
 
 class TextLine {
 public:
-	TextLine(const DistanceFieldFont* Font, const float& Tracking);
+	TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaximumWidth);
 	~TextLine();
 
-	const float& GetCursorPosition() const;
-	const int32 GetLength() const;
+	const int32& GetLength() const;
 	const TString& GetText() const;
+	void GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const;
+	const float GetCursorPosition() const;
 	const SArray<Vector2D>& GetVerticies() const;
 	const SArray<Vector2D>& GetTextureCoordinates() const;
 	const SArray<int32>& GetInidices() const;
-	void GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const;
-	void SetText(const TString& LineText);
+
+	bool AddWord(const TString& Word, const bool& ForceFit = false);
+
+	void Finalize();
 	void Flush();
 private:
 	const DistanceFieldFont* Font;
-	float Tracking;
-	float CursorPosition;
 	TString Text;
+
+	float CursorPosition;
+	float Tracking;
+	float MaximumWidth;
+	float SpaceWidth;
+
+	bool bFinialized;
+
 	SArray<Vector2D> Verticies;
-	SArray<Vector2D> TexCoords;
+	SArray<Vector2D> TextureCoordinates;
 	SArray<int32> Indices;
+
 	Vector2D MinimumBounds;
 	Vector2D MaximumBounds;
 
-	void AddCharacter(const FDistanceFieldCharacter* Character);
+	void TextLine::AddCharacter(const FDistanceFieldCharacter* Character);
+	const float GetWordWidthInTextSpace(const TString& Word) const;
+	const int32 GetAmountOfCharactersThatFit(const TString& Word, const float& WidthLimit) const;
 };
 

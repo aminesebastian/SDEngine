@@ -342,6 +342,7 @@
     <ClCompile Include="Test\ReflectionTest.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\TextLine.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\TextWord.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
@@ -477,6 +478,7 @@
     <ClInclude Include="Test\ReflectionTest.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextWord.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
