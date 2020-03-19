@@ -37,9 +37,9 @@ public:
 		if (Other.Count() == 0) {
 			return;
 		}
-		int32 initialCount = Count();
-		Resize(initialCount + Other.Count());
-		memcpy(&(*this)[0] + initialCount, &Other[0], sizeof(Type) * Other.Count());
+		for (const Type& oth : Other) {
+			Add(oth);
+		}
 	}
 	template <typename Type>
 	void AddAll(const Type* Other, int32 Count) {

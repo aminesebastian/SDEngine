@@ -57,24 +57,44 @@ void TextGeometryCache::SetText(const TString& TextIn) {
 
 	Text = TextIn;
 
-	SArray<TString> words;
-	StringUtilities::SplitStringByWhitespace(Text, words);
+	SArray<TString> initialWords;
+	StringUtilities::SplitString(Text, ' ', initialWords);
+
+	SArray<TString> finalWords;
+	for (const TString& compoundWord : initialWords) {
+		SArray<TString> newLineSplit;
+		StringUtilities::SplitString(compoundWord, '\n', newLineSplit);
+		for (int i = 0; i < newLineSplit.Count(); i++) {
+			finalWords.Add(newLineSplit[i]);
+			if (i < newLineSplit.Count() - 1) {
+				finalWords.Add("\n");
+			}
+		}
+	}
+
 	int32 wordCount = 0;
 
 	TextLine* currentLine = new TextLine(Font, Tracking, WordWrapWidth);
 	Lines.Add(currentLine);
 
-	while (wordCount <= words.Count() - 1) {
-		if (currentLine->AddWord(words[wordCount])) {
+	while (wordCount <= finalWords.Count() - 1) {
+		if (finalWords[wordCount] == "\n") {
+			wordCount++;
+			currentLine->Finalize();
+			currentLine = new TextLine(Font, Tracking, WordWrapWidth);
+			Lines.Add(currentLine);
+			continue;
+		}
+		if (currentLine->AddWord(finalWords[wordCount])) {
 			wordCount++;
 		} else {
 			// This condition will only occur if we have a word TOO big to fit on a single line by itself.
 			if (currentLine->GetLength() == 0) {
-				currentLine->AddWord(words[wordCount], true);
+				currentLine->AddWord(finalWords[wordCount], true);
 				wordCount++;
 			}
 			// If the above condition was met, check to see if there are still more words left to add.
-			if (wordCount <= words.Count() - 1) {
+			if (wordCount <= finalWords.Count() - 1) {
 				currentLine->Finalize();
 				currentLine = new TextLine(Font, Tracking, WordWrapWidth);
 				Lines.Add(currentLine);

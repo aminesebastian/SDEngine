@@ -73,6 +73,7 @@ void TextLine::Finalize() {
 void TextLine::Flush() {
 	CursorPosition = 0.0f;
 	Text = "";
+	bFinialized = false;
 }
 void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 	if (Character) {
@@ -121,10 +122,10 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		Indices.Add(Verticies.Count() + 2);
 		Indices.Add(Verticies.Count() + 0);
 
-		Verticies.Add(Vector2D(CursorPosition, 0.0f));
-		Verticies.Add(Vector2D(CursorPosition, 0.0f));
-		Verticies.Add(Vector2D(CursorPosition, 0.0f));
-		Verticies.Add(Vector2D(CursorPosition, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
 	}
 }
 const float TextLine::GetWordWidthInTextSpace(const TString& Word) const {

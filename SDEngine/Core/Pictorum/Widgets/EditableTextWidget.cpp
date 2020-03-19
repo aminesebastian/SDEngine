@@ -37,7 +37,7 @@ void EditableTextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) 
 	}
 }
 void EditableTextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
-	if (bCursorFlashOn && HasFocus()) {
+	if (/*bCursorFlashOn && */HasFocus()) {
 		DrawCursor(Geometry);
 	}
 
@@ -134,7 +134,12 @@ void EditableTextWidget::MoveCursorToIndex(const int32& CursorIndex, const int32
 void EditableTextWidget::MoveCursorRight(const int32& CursorIndex) {
 	// Get the cursor.
 	FTextCursor& cursor = Cursors[CursorIndex];
-	if (cursor.CharacterIndex < MathLibrary::Max(0, (int32)Renderer->GetText().length() - 1)) {
+
+	// Capture the line index and character index for the cursor.
+	int32 lineIndex, characterIndex;
+	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
+
+	if (characterIndex < Renderer->GetGeometryCache()->GetLine(lineIndex)->GetLength() - 1) {
 		cursor.CharacterIndex++;
 	}
 }
@@ -210,7 +215,7 @@ void EditableTextWidget::MoveCursorDown(const int32& CursorIndex) {
 const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& CursorIndex) const {
 	// Get the cursor.
 	const FTextCursor& cursor = Cursors[CursorIndex];
-	int32 adjustedIndex = cursor.CharacterIndex > Renderer->GetText().length() - 1 ? Renderer->GetText().length() - 1 : cursor.CharacterIndex;
+	int32 adjustedIndex = cursor.CharacterIndex;
 
 	// Capture the line index and character index for the cursor.
 	int32 lineIndex, characterIndex;
@@ -229,7 +234,11 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 		// Get the bottom left and top right for the character.
 		Vector2D bottomLeft = verticies[(int64)characterIndex * 4];
 
-		position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
+		if (characterIndex >= line->GetLength() - 1) {
+			position.x += (bottomLeft.x + Renderer->GetTracking()) * Renderer->GetNdcScale().x;
+		} else {
+			position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
+		}
 	} else {
 		position.x += Renderer->GetTracking() * Renderer->GetNdcScale().x;
 	}
@@ -261,7 +270,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 		maxBounds = (maxBounds * Renderer->GetNdcScale()) + Renderer->GetNdcPosition();
 
 		// Check to see if we are in this line.
-		if (mouseLocationAdjusted.y >= minBounds.y  && mouseLocationAdjusted.y <= maxBounds.y) {
+		if (mouseLocationAdjusted.y >= minBounds.y && mouseLocationAdjusted.y <= maxBounds.y) {
 			const TString& text = line->GetText();
 			const SArray<Vector2D>& verticies = line->GetVerticies();
 
@@ -277,18 +286,18 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 			if (mouseLocationAdjusted.x < startLocation.x) {
 				return indexOffset;
 			} else {
-				for (int32 i = 0; i < line->GetLength(); i++) {
+				for (int32 j = 0; j < line->GetLength(); j++) {
 					// Skip new line.
-					if (text[i] == '\n') {
+					if (text[j] == '\n') {
 						continue;
 					}
 
 					// Capture the NDC space bottom left and top right of the quad.
-					Vector2D bottomLeft = verticies[i * 4];
+					Vector2D bottomLeft = verticies[j * 4];
 					bottomLeft *= Renderer->GetNdcScale();
 					bottomLeft += Renderer->GetNdcPosition();
 
-					Vector2D topRight = verticies[(i * 4) + 2];
+					Vector2D topRight = verticies[(j * 4) + 2];
 					topRight *= Renderer->GetNdcScale();
 					topRight += Renderer->GetNdcPosition();
 
@@ -297,9 +306,9 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 					if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
 						float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
 						if (mouseLocationAdjusted.x > xMidpoint) {
-							return indexOffset + i + 1;
+							return indexOffset + j + 1 + i;
 						} else {
-							return indexOffset + i;
+							return indexOffset + j + i;
 						}
 					}
 				}
@@ -330,7 +339,7 @@ void EditableTextWidget::AddTextToRightOfCursor(const int32& CursorIndex, const 
 
 	// Modify the text (three cases for start of string, middle of string, end of string).
 	TString currentText = GetText();
-	if (cursor.CharacterIndex >= currentText.length() - 1) {
+	if (cursor.CharacterIndex > currentText.length() - 1) {
 		currentText += Text;
 	} else if (currentText.length() == 0) {
 		currentText = Text;

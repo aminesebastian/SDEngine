@@ -189,7 +189,7 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
 		line = TextBlockCache->GetLine(i);
-		lineLength = line->GetLength();
+		lineLength = line->GetLength() + 1;
 
 		if (counter >= lineLength) {
 			counter -= lineLength;

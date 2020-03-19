@@ -3,9 +3,9 @@
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
-#include "Core/Utilities/Logger.h"
-#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
 #include "Core/Pictorum/Utilities/TextGeometryCache.h"
+#include "Core/Rendering/OpenGL/GPUVertexBufferArray.h"
+#include "Core/Utilities/Logger.h"
 
 /* Defines how dots for each point in font size.*/
 #define DOTS_PER_POINT 5.0f
