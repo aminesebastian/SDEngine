@@ -13,7 +13,7 @@ struct FDistanceFieldCharacter : public ISerializeableAsset {
 		Advance   = 0.0f;
 		Character = 0;
 	}
-	FDistanceFieldCharacter(char Character, vec2 MinTexCoords, vec2 MaxTexCoords, vec2 Dimensions, vec2 Offsets, float Advance) :
+	FDistanceFieldCharacter(const char& Character, const Vector2D& MinTexCoords, const Vector2D& MaxTexCoords, const Vector2D& Dimensions, const Vector2D& Offsets, const float& Advance) :
 		Character(Character),
 		MinTextureCoords(MinTexCoords),
 		MaxTextureCoord(MaxTexCoords),
@@ -21,21 +21,17 @@ struct FDistanceFieldCharacter : public ISerializeableAsset {
 		Offsets(Offsets),
 		Advance(Advance) {
 
-		vec2 minTexCoords = GetMinTextureCoords();
-		vec2 maxTexCoords = GetMaxTextureCoords();
-		vec2 glyphSize = GetDimensions();
-		vec2 offsets = GetOffsets();
-		vec2 topLeftVert = vec2(offsets.x, -offsets.y);
-		vec2 bottomRightVert = topLeftVert + vec2(glyphSize.x, -glyphSize.y);
+		vec2 topLeftVert = vec2(Offsets.x, -Offsets.y);
+		vec2 bottomRightVert = topLeftVert + vec2(Dimensions.x, -Dimensions.y);
 
-		TextureCoordinates.Add(vec2(minTexCoords.x, maxTexCoords.y));
-		TextureCoordinates.Add(minTexCoords);
-		TextureCoordinates.Add(vec2(maxTexCoords.x, minTexCoords.y));
-		TextureCoordinates.Add(maxTexCoords);
+		TextureCoordinates.Add(vec2(MinTexCoords.x, MaxTexCoords.y));
+		TextureCoordinates.Add(MinTexCoords);
+		TextureCoordinates.Add(vec2(MaxTexCoords.x, MinTexCoords.y));
+		TextureCoordinates.Add(MaxTexCoords);
 
-		Verticies.Add(topLeftVert + vec2(0.0, -glyphSize.y));
+		Verticies.Add(topLeftVert + vec2(0.0, -Dimensions.y));
 		Verticies.Add(topLeftVert);
-		Verticies.Add(topLeftVert + vec2(glyphSize.x, 0.0f));
+		Verticies.Add(topLeftVert + vec2(Dimensions.x, 0.0f));
 		Verticies.Add(bottomRightVert);
 
 		Indices.Add(2);
@@ -63,9 +59,6 @@ struct FDistanceFieldCharacter : public ISerializeableAsset {
 	}
 	const float& GetAdvance() const {
 		return Advance;
-	}
-	const vec2 GetTotalRequiredSpace() const {
-		return Offsets + Dimensions + vec2(Advance, 0.0f);
 	}
 	const SArray<vec2>& GetVerticies() const {
 		return Verticies;

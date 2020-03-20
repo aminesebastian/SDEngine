@@ -35,7 +35,7 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 
 	CalculatedRenderScale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
 	LastFrameMinBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMinimumPosition(), RenderTargetResolution);
-	LastFrameMaxBounds =  MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMaximumPosition(), RenderTargetResolution);
+	LastFrameMaxBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMaximumPosition(), RenderTargetResolution);
 	LastFrameRenderPosition = Position - Vector2D(CalculatedRenderScale.x * TextBlockCache->GetMinimumPosition().x, -CalculatedRenderScale.y * TextBlockCache->GetMinimumPosition().y); // Subtract the minimum position as the min position is usually negative.
 
 	Shader* fontShader = EngineStatics::GetFontShader();
@@ -135,6 +135,12 @@ void TextRenderer::SetTextAlignment(const ETextAlignment& AlignmentIn) {
 const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
 }
+void TextRenderer::SetWordWrapRule(const ETextWrapRule& Rule) {
+	WordWrapRule = Rule;
+}
+const ETextWrapRule& TextRenderer::GetWordWrapRule() const {
+	return WordWrapRule;
+}
 void TextRenderer::SetWordWrapWidth(const float& Width) {
 	float ndcWidth = Width * 2.0f;
 	TextBlockCache->SetWordWrapWidth(ndcWidth / GetNdcScale().x);
@@ -166,7 +172,7 @@ const void TextRenderer::GetNdcCharacterBounds(const int32& CharacterIndex, Vect
 	// Add the tracking if we are beyond the first character.
 	if (relativeIndex > 0) {
 		BottomLeft.x -= Tracking;
-		if (relativeIndex < TextBlockCache->GetLine(lineIndex)->GetLength() - 1) {
+		if (relativeIndex < TextBlockCache->GetLine(lineIndex)->GetGlyphCount() - 1) {
 			TopRight.x -= Tracking;
 		}
 	}
@@ -180,22 +186,25 @@ const void TextRenderer::GetNdcCharacterBounds(const int32& CharacterIndex, Vect
 const TextGeometryCache* TextRenderer::GetGeometryCache() const {
 	return TextBlockCache;
 }
-void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& CharacterIndex) const {
-	int32 counter = AbsoluteIndex;
+const int32 TextRenderer::GetMaximumIndex() const {
+	return Text.length() + TextBlockCache->GetLines().Count();
+}
+void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& LineRelativeCharacterIndex) const {
 	LineIndex = 0;
-	CharacterIndex = 0;
+	LineRelativeCharacterIndex = 0;
+	int32 counter = AbsoluteIndex;
 	int32 lineLength = 0;
 	const TextLine* line = nullptr;
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
 		line = TextBlockCache->GetLine(i);
-		lineLength = line->GetLength() + 1;
+		lineLength = line->GetGlyphCount();
 
 		if (counter >= lineLength) {
 			counter -= lineLength;
 		} else {
 			LineIndex = i;
-			CharacterIndex = counter;
+			LineRelativeCharacterIndex = counter;
 			return;
 		}
 	}

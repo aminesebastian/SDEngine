@@ -122,8 +122,8 @@ bool DistanceFieldFont::ImportAsset(const TString& FilePath) {
 
 		if (character >= 0 && character <= 255) {
 			CharacterCache[character] = characterEntry;
-			if (characterEntry->GetTotalRequiredSpace().y > MaxCharacterHeight) {
-				MaxCharacterHeight = characterEntry->GetTotalRequiredSpace().y;
+			if (characterEntry->GetDimensions().y > MaxCharacterHeight) {
+				MaxCharacterHeight = characterEntry->GetDimensions().y;
 			}
 			SupportedCharacterCount++;
 		}

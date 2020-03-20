@@ -131,6 +131,20 @@ public:
 	const ETextAlignment& GetTextAlignment() const;
 
 	/**
+	 * Sets word wrap rule
+	 *
+	 * @param 	Rule	The rule.
+	 */
+	void SetWordWrapRule(const ETextWrapRule& Rule);
+
+	/**
+	 * Gets word wrap rule
+	 *
+	 * @returns	The word wrap rule.
+	 */
+	const ETextWrapRule& GetWordWrapRule() const;
+
+	/**
 	 * Sets word wrap width in relative space.
 	 *
 	 * @param 	Width	The width in relative space.
@@ -165,7 +179,8 @@ public:
 	 */
 	const void GetNdcCharacterBounds(const int32& CharacterIndex, Vector2D& BottomLeft, Vector2D& TopRight) const;
 	const TextGeometryCache* GetGeometryCache() const;
-	void GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& CharacterIndex) const;
+	const int32 GetMaximumIndex() const;
+	void GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& LineRelativeCharacterIndex) const;
 	const Vector2D& GetNdcScale() const;
 	const Vector2D& GetNdcPosition() const;
 protected:
@@ -181,6 +196,9 @@ private:
 	float FontSize;
 	EFontWeight FontWeight;
 	ETextAlignment Alignment;
+	ETextWrapRule WordWrapRule;
+	ETextWrapValueType WordWrapValueType;
+	float WordWrap;
 	FColor Color;
 	float DistanceFieldWidth;
 	float DistanceFieldEdge;

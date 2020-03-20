@@ -34,9 +34,6 @@ static const Vector2D ZERO_VECTOR2D = Vector2D(0.0f, 0.0f);
 static const Vector3D ZERO_VECTOR3D = Vector3D(0.0f, 0.0f, 0.0f);
 static const Vector4D ZERO_VECTOR4D = Vector4D(0.0f, 0.0f, 0.0f, 0.0f);
 
-template <typename  N>
-using SStack = std::stack<N>;
-
 template <typename  K, typename V>
 using SPair = std::pair<K, V>;
 

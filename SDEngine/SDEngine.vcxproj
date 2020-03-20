@@ -269,7 +269,6 @@
     <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp" />
     <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp" />
     <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp" />
-    <ClCompile Include="Core\DataStructures\Array.cpp" />
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
     <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp" />
@@ -315,7 +314,6 @@
     <ClCompile Include="Core\Objects\Entities\Actors\Grid.cpp" />
     <ClCompile Include="Core\Objects\Entities\Light.cpp" />
     <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.cpp" />
-    <ClCompile Include="Core\DataStructures\HashMap.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\Engine\Engine.cpp" />
     <ClCompile Include="Core\Objects\CoreTypes\Material.cpp" />
@@ -342,7 +340,6 @@
     <ClCompile Include="Test\ReflectionTest.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\TextLine.cpp" />
     <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp" />
-    <ClCompile Include="Core\Pictorum\Utilities\TextWord.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
@@ -475,10 +472,10 @@
     <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.h" />
     <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.h" />
     <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
+    <ClInclude Include="Core\DataStructures\Stack.h" />
     <ClInclude Include="Test\ReflectionTest.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
-    <ClInclude Include="Core\Pictorum\Utilities\TextWord.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

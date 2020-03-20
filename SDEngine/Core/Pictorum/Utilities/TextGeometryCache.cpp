@@ -54,50 +54,43 @@ void TextGeometryCache::SetLeading(const float& LeadingIn) {
 }
 void TextGeometryCache::SetText(const TString& TextIn) {
 	Flush();
-
 	Text = TextIn;
 
-	SArray<TString> initialWords;
-	StringUtilities::SplitString(Text, ' ', initialWords);
+	// Generate a list of the words. 
+	SStack<TString> words;
+	GenerateWords(Text, words);
 
-	SArray<TString> finalWords;
-	for (const TString& compoundWord : initialWords) {
-		SArray<TString> newLineSplit;
-		StringUtilities::SplitString(compoundWord, '\n', newLineSplit);
-		for (int i = 0; i < newLineSplit.Count(); i++) {
-			finalWords.Add(newLineSplit[i]);
-			if (i < newLineSplit.Count() - 1) {
-				finalWords.Add("\n");
-			}
-		}
-	}
-
+	// Keep track of how many words we have populated into the cache. When this == the last index
+	// of 'words', we have finished populating.
 	int32 wordCount = 0;
 
-	TextLine* currentLine = new TextLine(Font, Tracking, WordWrapWidth);
-	Lines.Add(currentLine);
+	TextLine* currentLine = GetNewLine();
 
-	while (wordCount <= finalWords.Count() - 1) {
-		if (finalWords[wordCount] == "\n") {
-			wordCount++;
-			currentLine->Finalize();
-			currentLine = new TextLine(Font, Tracking, WordWrapWidth);
-			Lines.Add(currentLine);
+	while (!words.IsEmpty()) {
+		const TString word = words.Peek();
+		if (word == "\n") {
+			words.Pop();
+			currentLine = GetNewLine();
 			continue;
 		}
-		if (currentLine->AddWord(finalWords[wordCount])) {
-			wordCount++;
+
+		// Attempt to add the word. If only partially added, add the remaining back to the stack.
+		int32 addedChars = currentLine->AddWord(word);
+		if (addedChars > 0) {
+			words.Pop();
+			if (addedChars < word.length()) {
+				words.Push(word.substr(addedChars));
+				currentLine = GetNewLine();
+			}
 		} else {
 			// This condition will only occur if we have a word TOO big to fit on a single line by itself.
-			if (currentLine->GetLength() == 0) {
-				currentLine->AddWord(finalWords[wordCount], true);
-				wordCount++;
+			if (currentLine->IsEmpty()) {
+				currentLine->AddWord(word, true);
+				words.Pop();
 			}
 			// If the above condition was met, check to see if there are still more words left to add.
-			if (wordCount <= finalWords.Count() - 1) {
-				currentLine->Finalize();
-				currentLine = new TextLine(Font, Tracking, WordWrapWidth);
-				Lines.Add(currentLine);
+			if (!words.IsEmpty()) {
+				currentLine = GetNewLine();
 			}
 		}
 	}
@@ -175,6 +168,33 @@ void TextGeometryCache::Finalize() {
 		CurrentIndex += (maxIndex + 1);
 	}
 	MaxPosition.y = -CurrentYPosition;
+}
+TextLine* TextGeometryCache::GetNewLine() {
+	if (Lines.Count() > 0) {
+		Lines[Lines.LastIndex()]->Finalize();
+	}
+	TextLine* newLine = new TextLine(Font, Tracking, WordWrapWidth);
+	Lines.Add(newLine);
+	return newLine;
+}
+void TextGeometryCache::GenerateWords(const TString& SourceText, SStack<TString>& Words) const {
+	// First split the string into 'words' through whitespace.
+	SArray<TString> initialWords;
+	StringUtilities::SplitString(SourceText, ' ', initialWords);
+
+	// Then, for each 'word', separate out any newline characters and split that string into sub
+	// words.
+	for (const TString& compoundWord : initialWords) {
+		SArray<TString> newLineSplit;
+		StringUtilities::SplitString(compoundWord, '\n', newLineSplit);
+		for (int i = 0; i < newLineSplit.Count(); i++) {
+			Words.Push(newLineSplit[i]);
+			if (i < newLineSplit.Count() - 1) {
+				Words.Push("\n");
+			}
+		}
+	}
+	Words.Reverse();
 }
 void TextGeometryCache::Flush() {
 	bFinialized = false;

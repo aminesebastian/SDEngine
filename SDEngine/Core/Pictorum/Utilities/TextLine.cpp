@@ -1,17 +1,29 @@
 #include "TextLine.h"
+#include "Core/Utilities/Math/MathLibrary.h"
 
-TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaximumWidth) : Font(Font), Tracking(Tracking), MaximumWidth(MaximumWidth) {
+TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaxLineWidth) : Font(Font), Tracking(Tracking) {
 	Flush();
-	SpaceWidth = GetWordWidthInTextSpace(" ");
+	SpaceWidth = GetCharacterWidth(' ');
+	HyphenWidth = GetCharacterWidth('-');
+	MaximumWidth = MathLibrary::Max(0.0f, MaxLineWidth);
 }
 TextLine::~TextLine() {
 	Flush();
 }
-const int32& TextLine::GetLength() const {
-	return Text.length();
+const int32& TextLine::GetGlyphCount() const {
+	return Text.length() + 1;
+}
+const int32& TextLine::GetCursorInteractableGlyphCount() const {
+	return RawText.length() + 1;
 }
 const TString& TextLine::GetText() const {
 	return Text;
+}
+const bool& TextLine::IsEmpty() const {
+	return Text.empty();
+}
+const bool& TextLine::EndsWithIncompleteWord() const {
+	return bEndsWithIncompleteWord;
 }
 void TextLine::GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const {
 	MinBounds = MinimumBounds;
@@ -30,34 +42,75 @@ const SArray<int32>& TextLine::GetInidices() const {
 	return Indices;
 }
 
-bool TextLine::AddWord(const TString& Word, const bool& ForceFit) {
-	// If this is the first word, no need to prepend a space, otherwise, prepend a space.
-	bool firstWord = GetLength() == 0;
+int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
+	// If provided with an empty word, do nothing.
+	if (Word.length() == 0) {
+		return 0;
+	}
 
-	// If this word is not request to force fit, get the width of the word in text space. If the
-	// word will not fit, return false.
+	// If this is the first word, no need to prepend a space, otherwise, prepend a space.
+	bool firstWord = IsEmpty();
+
+	// If force fitting, charsThatFit should be the length of the Word.
+	int32 charsThatFit = ForceFit ? (int32)Word.length() : 0;
+
+	// If not being forced to fit, calculate if and how many characters we can fit.
 	if (!ForceFit) {
-		float wordWidth = GetWordWidthInTextSpace(Word);
-		if (CursorPosition + (firstWord ? 0.0f : SpaceWidth) + wordWidth > MaximumWidth) {
-			return false;
+		// Calculate how much remaining space we have.
+		float remainingSpace = MaximumWidth - CursorPosition + (2.0f * Tracking);
+
+		// If this is not the first word, compensate for the space width.
+		if (!firstWord) {
+			remainingSpace -= SpaceWidth;
+		}
+
+		// Calculate how many characters fit.
+		for (const char& character : Word) {
+			float characterWidth = GetCharacterWidth(character);
+			remainingSpace -= characterWidth;
+			if (remainingSpace >= 0) {
+				charsThatFit++;
+			} else {
+				remainingSpace += characterWidth;
+				break;
+			}
+		}
+
+		// If the characters that fit is less than the length of the word, then we are in a hyphenating
+		// situation. Reduce the count of characters that can fit by one, to account for the hyphen.
+		if (charsThatFit < Word.length()) {
+			charsThatFit--;
+		}
+
+		// If we can fit 0 characters, return.
+		if (charsThatFit <= 0) {
+			return 0;
 		}
 	}
 
+
 	// If this is the first word, simply set this line's text to it.
 	// Otherwise, append a space, followed by the word.
-	if (firstWord) {
-		Text = Word;
-	} else {
+	if (!firstWord) {
 		AddCharacter(Font->GetDistanceFieldCharacter(' '));
-		Text += (' ' + Word);
+		RawText += " ";
 	}
 
 	// Add the characters of the word as geometry.
-	for (const char& character : Word) {
-		AddCharacter(Font->GetDistanceFieldCharacter(character));
+	for (int32 i = 0; i < charsThatFit; i++) {
+		AddCharacter(Font->GetDistanceFieldCharacter(Word[i]));
+		RawText += Word[i];
 	}
 
-	return true;
+	// Add the hyphen if needed.
+	if (charsThatFit != Word.length()) {
+		AddCharacter(Font->GetDistanceFieldCharacter('-'));
+		bEndsWithIncompleteWord = true;
+	}
+
+
+	// Return how many characters fit.
+	return charsThatFit;
 }
 void TextLine::Finalize() {
 	// If this has already been finalized, skip it, otherwise mark it as finalized.
@@ -67,13 +120,14 @@ void TextLine::Finalize() {
 	bFinialized = true;
 
 	// Add a null character to the end of the line.
-	Text += '\0';
 	AddCharacter(nullptr);
 }
 void TextLine::Flush() {
 	CursorPosition = 0.0f;
 	Text = "";
+	RawText = "";
 	bFinialized = false;
+	bEndsWithIncompleteWord = false;
 }
 void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 	if (Character) {
@@ -109,6 +163,7 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		if (bottomLeft.y < MinimumBounds.y) {
 			MinimumBounds.y = bottomLeft.y;
 		}
+		Text += Character->GetCharacter();
 	} else {
 		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
 		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
@@ -126,24 +181,31 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
 		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
 		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Text += 3; // End of text character.
 	}
 }
-const float TextLine::GetWordWidthInTextSpace(const TString& Word) const {
+const float TextLine::GetCharacterWidth(const char& Character) const {
+	// Increment the cursor position.
+	const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(Character);
+	if (dfChar) {
+		return dfChar->GetAdvance() + Tracking;
+	} else {
+		return 0;
+	}
+}
+const float TextLine::GetWordWidth(const TString& Word) const {
 	// If the word is empty, return 0 width.
 	if (Word.length() == 0) {
 		return 0.0f;
 	}
 
 	float width = 0.0f;
-	// Increment the cursor position.
+	// Increment the width.
 	for (const char& character : Word) {
-		const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(character);
-		if (dfChar) {
-			width += dfChar->GetAdvance() + Tracking;
-		}
+		width += GetCharacterWidth(character);
 	}
 
-	// If the last character has dimensions, add it to the width.
+	// Compensate for the tracking.
 	const FDistanceFieldCharacter* lastChar = Font->GetDistanceFieldCharacter(Word[Word.length() - 1]);
 	if (lastChar) {
 		return width - (Tracking / 2.0f);
@@ -157,11 +219,9 @@ const int32 TextLine::GetAmountOfCharactersThatFit(const TString& Word, const fl
 
 	// Count how many characters can fit.
 	for (const char& character : Word) {
-		const FDistanceFieldCharacter* dfChar = Font->GetDistanceFieldCharacter(character);
-		if (dfChar) {
-			width += dfChar->GetAdvance() + Tracking;
-		}
-		if (width = WidthLimit) {
+
+		width += GetCharacterWidth(character);
+		if (width >= WidthLimit) {
 			return count;
 		} else {
 			count++;

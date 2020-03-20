@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/DataStructures/Array.h"
+#include "Core/DataStructures/DataStructures.h"
 #include "Core/DataTypes/TypeDefenitions.h"
 #include "Core/Objects/CoreTypes/DistanceFieldFont.h"
 #include "Core/Pictorum/PictorumDataTypes.h"
@@ -28,6 +28,7 @@ public:
 	void SetLeading(const float& LeadingIn);
 	void SetText(const TString& TextIn);
 	void Flush();
+
 private:
 	const DistanceFieldFont* Font;
 	ETextAlignment Alignment;
@@ -49,6 +50,8 @@ private:
 	int32 CurrentIndex;
 
 	bool bFinialized;
-
+	TextLine* GetNewLine();
+	void GenerateWords(const TString& SourceText, SStack<TString>& Words) const;
 	void Finalize();
+
 };

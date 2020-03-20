@@ -54,6 +54,16 @@ enum class EFontWeight : uint8 {
 	Normal,
 	Bold
 };
+enum class ETextWrapRule : uint8 {
+	NoWrap,
+	SplitHyphenate,
+	MaintainWholeWords
+};
+enum class ETextWrapValueType: uint8 {
+	Auto,
+	Custom
+};
+
 struct FUserInterfaceEvent {
 
 	FUserInterfaceEvent() {

@@ -85,9 +85,6 @@
     <ClCompile Include="Core\DataStructures\Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\DataStructures\Array.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -385,9 +382,6 @@
     <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\DataStructures\HashMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Reflection\Handles\ReflectionHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -603,6 +597,7 @@
     <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
     <ClInclude Include="Core\Pictorum\Utilities\TextWord.h" />
+    <ClInclude Include="Core\DataStructures\Stack.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\UI\UIImageShader.frag" />
