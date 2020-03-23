@@ -45,6 +45,7 @@ void TextWidget::SetFontWeight(const EFontWeight& Weight) {
 const EFontWeight& TextWidget::GetWeight() const {
 	return Renderer->GetFontWeight();
 }
+
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	//FBoxDrawInstruction instruction;
 	//instruction.Location = Geometry.GetLocation();

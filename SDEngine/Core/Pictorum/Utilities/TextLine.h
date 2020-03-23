@@ -28,7 +28,6 @@ public:
 private:
 	const DistanceFieldFont* Font;
 	TString Text;
-	TString RawText;
 
 	float CursorPosition;
 	float Tracking;

@@ -19,7 +19,7 @@ public:
 	const ETextAlignment& GetAlignment() const; 
 	void SetFontWeight(const EFontWeight& Weight);
 	const EFontWeight& GetWeight() const;
-
+	
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const override;

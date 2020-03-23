@@ -187,7 +187,11 @@ const TextGeometryCache* TextRenderer::GetGeometryCache() const {
 	return TextBlockCache;
 }
 const int32 TextRenderer::GetMaximumIndex() const {
-	return Text.length() + TextBlockCache->GetLines().Count();
+	int32 maxIndex = 0;
+	for (const TextLine* line : TextBlockCache->GetLines()) {
+		maxIndex += line->GetCursorInteractableGlyphCount();
+	}
+	return maxIndex - 1;
 }
 void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& LineRelativeCharacterIndex) const {
 	LineIndex = 0;
@@ -197,8 +201,7 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 	const TextLine* line = nullptr;
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
-		line = TextBlockCache->GetLine(i);
-		lineLength = line->GetGlyphCount();
+		lineLength = TextBlockCache->GetLine(i)->GetCursorInteractableGlyphCount()-1;
 
 		if (counter >= lineLength) {
 			counter -= lineLength;

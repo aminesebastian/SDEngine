@@ -50,6 +50,7 @@ protected:
 	const Vector2D GetCursorRelativePosition(const int32& CursorIndex) const;
 	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation) const;
 	const int32 GetCursorHeight() const;
+	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex = 0);
 	const int32 AddCursor();
 	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
 	void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);

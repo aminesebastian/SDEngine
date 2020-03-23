@@ -14,7 +14,7 @@ const int32& TextLine::GetGlyphCount() const {
 	return Text.length() + 1;
 }
 const int32& TextLine::GetCursorInteractableGlyphCount() const {
-	return RawText.length() + 1;
+	return GetGlyphCount() - (bEndsWithIncompleteWord ? 1 : 0);
 }
 const TString& TextLine::GetText() const {
 	return Text;
@@ -93,13 +93,11 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 	// Otherwise, append a space, followed by the word.
 	if (!firstWord) {
 		AddCharacter(Font->GetDistanceFieldCharacter(' '));
-		RawText += " ";
 	}
 
 	// Add the characters of the word as geometry.
 	for (int32 i = 0; i < charsThatFit; i++) {
 		AddCharacter(Font->GetDistanceFieldCharacter(Word[i]));
-		RawText += Word[i];
 	}
 
 	// Add the hyphen if needed.
@@ -125,7 +123,6 @@ void TextLine::Finalize() {
 void TextLine::Flush() {
 	CursorPosition = 0.0f;
 	Text = "";
-	RawText = "";
 	bFinialized = false;
 	bEndsWithIncompleteWord = false;
 }
@@ -165,23 +162,24 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		}
 		Text += Character->GetCharacter();
 	} else {
-		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		AddCharacter(Font->GetDistanceFieldCharacter('!'));
+		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
 
-		Indices.Add(Verticies.Count() + 2);
-		Indices.Add(Verticies.Count() + 1);
-		Indices.Add(Verticies.Count() + 0);
-		Indices.Add(Verticies.Count() + 3);
-		Indices.Add(Verticies.Count() + 2);
-		Indices.Add(Verticies.Count() + 0);
+		//Indices.Add(Verticies.Count() + 2);
+		//Indices.Add(Verticies.Count() + 1);
+		//Indices.Add(Verticies.Count() + 0);
+		//Indices.Add(Verticies.Count() + 3);
+		//Indices.Add(Verticies.Count() + 2);
+		//Indices.Add(Verticies.Count() + 0);
 
-		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		Text += 3; // End of text character.
+		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		//Text += 3; // End of text character.
 	}
 }
 const float TextLine::GetCharacterWidth(const char& Character) const {
