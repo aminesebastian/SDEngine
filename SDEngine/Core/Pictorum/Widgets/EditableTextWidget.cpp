@@ -228,7 +228,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 			}
 		} else {
 			// If we were not in the line, move one line down and increment the index offset.
-			indexOffset += line->GetGlyphCount();
+			indexOffset += line->GetCursorInteractableGlyphCount();
 		}
 	}
 	return 0;

@@ -47,16 +47,19 @@ protected:
 	void MoveCursorLeft(const int32& CursorIndex);
 	void MoveCursorUp(const int32& CursorIndex);
 	void MoveCursorDown(const int32& CursorIndex);
+
+	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
 	const Vector2D GetCursorRelativePosition(const int32& CursorIndex) const;
 	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation) const;
 	const int32 GetCursorHeight() const;
 	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex = 0);
+
 	const int32 AddCursor();
-	const FTextCursor& GetCursorAtIndex(const int32& CursorIndex) const;
 	void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);
+	void AddNewLineAfterCursor(const int32& CursorIndex);
+
 	void EraseLeftOfCursor(const int32& CursorIndex);
 	void EraseRightOfCursor(const int32& CursorIndex);
-	void AddNewLineAfterCursor(const int32& CursorIndex);
 
 	void DebugCursorState(const int32& CursorIndex);
 private:
