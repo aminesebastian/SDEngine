@@ -20,6 +20,7 @@ public:
 	void SetFontWeight(const EFontWeight& Weight);
 	const EFontWeight& GetWeight() const;
 	
+	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 	virtual void CalculateBounds(vec2 RenderTargetResolution, vec2& MinBounds, vec2& MaxBounds) const override;
@@ -31,6 +32,5 @@ protected:
 
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;
-	vec2 LastRenderedAbsoluteLocation;
 };
 

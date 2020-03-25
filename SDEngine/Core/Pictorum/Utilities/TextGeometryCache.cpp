@@ -68,8 +68,16 @@ void TextGeometryCache::SetText(const TString& TextIn) {
 
 	while (!words.IsEmpty()) {
 		const TString word = words.Peek();
+		// Skip empty words.
+		if (word.empty()) {
+			words.Pop();
+			continue;
+		}
+
+		// If this is a new line, add it and then create a new line.
 		if (word == "\n") {
 			words.Pop();
+			currentLine->AddWord("\n", true);
 			currentLine = GetNewLine();
 			continue;
 		}
@@ -180,18 +188,15 @@ TextLine* TextGeometryCache::GetNewLine() {
 void TextGeometryCache::GenerateWords(const TString& SourceText, SStack<TString>& Words) const {
 	// First split the string into 'words' through whitespace.
 	SArray<TString> initialWords;
-	StringUtilities::SplitString(SourceText, ' ', initialWords);
+	StringUtilities::SplitString(SourceText, ' ', initialWords, true);
 
 	// Then, for each 'word', separate out any newline characters and split that string into sub
 	// words.
 	for (const TString& compoundWord : initialWords) {
 		SArray<TString> newLineSplit;
-		StringUtilities::SplitString(compoundWord, '\n', newLineSplit);
+		StringUtilities::SplitString(compoundWord, '\n', newLineSplit, true);
 		for (int i = 0; i < newLineSplit.Count(); i++) {
 			Words.Push(newLineSplit[i]);
-			if (i < newLineSplit.Count() - 1) {
-				Words.Push("\n");
-			}
 		}
 	}
 	Words.Reverse();

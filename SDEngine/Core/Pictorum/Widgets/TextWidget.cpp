@@ -7,7 +7,6 @@
 TextWidget::TextWidget(const TString& Name) : PictorumWidget(Name) {
 	Font                         = Engine::GetAssetManager()->FindAsset<DistanceFieldFont>("./Res/Assets/Editor/Fonts/Arial.sasset");
 	Renderer                     = new TextRenderer(24, Font);
-	LastRenderedAbsoluteLocation = vec2(0.0f, 0.0f);
 	SetVisibility(EPictorumVisibilityState::VISIBLE);
 }
 TextWidget::~TextWidget() {
@@ -45,7 +44,26 @@ void TextWidget::SetFontWeight(const EFontWeight& Weight) {
 const EFontWeight& TextWidget::GetWeight() const {
 	return Renderer->GetFontWeight();
 }
+void TextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
+	// Reposition such that the text always renders from the top.
+	Vector2D location = Geometry.GetLocation();
+	location.y += Geometry.GetAllotedSpace().y;
 
+	// Adjust for the text alignment.
+	if (Renderer->GetTextAlignment() == ETextAlignment::RIGHT) {
+		Vector2D requiredSpace = GetDesiredDrawSpace(Geometry);
+		location.x += Geometry.GetAllotedSpace().x - requiredSpace.x;
+	} else if (Renderer->GetTextAlignment() == ETextAlignment::CENTER) {
+		Vector2D requiredSpace = GetDesiredDrawSpace(Geometry);
+		location.x += (Geometry.GetAllotedSpace().x - requiredSpace.x) / 2.0f;
+	}
+
+	// Translate to NDC.
+	location = MathLibrary::ConvertAbsoluteToNdcScreenCoordinates(location, Geometry.GetRenderResolution());
+
+	// Tick the text renderer.
+	Renderer->Tick(DeltaTime, location, Geometry.GetRenderResolution(), Geometry.GetDPI());
+}
 void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	//FBoxDrawInstruction instruction;
 	//instruction.Location = Geometry.GetLocation();
@@ -53,27 +71,8 @@ void TextWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 	//instruction.BackgroundColor = FColor(0.7f, 0.1f, 1.0f, 0.25f);
 	//DrawBox(Geometry, instruction);
 
-	// Reposition such that the text always renders from the top.
-	vec2 location = Geometry.GetLocation();
-	location.y += Geometry.GetAllotedSpace().y;
-
-	// Adjust for the text alignment.
-	if (Renderer->GetTextAlignment() == ETextAlignment::RIGHT) {
-		vec2 requiredSpace = GetDesiredDrawSpace(Geometry);
-		location.x += Geometry.GetAllotedSpace().x - requiredSpace.x;
-	} else if (Renderer->GetTextAlignment() == ETextAlignment::CENTER) {
-		vec2 requiredSpace = GetDesiredDrawSpace(Geometry);
-		location.x += (Geometry.GetAllotedSpace().x - requiredSpace.x) / 2.0f;
-	}
-
-	// Capture the last render location with respect to the text.
-	LastRenderedAbsoluteLocation = location;
-
-	// Translate to NDC.
-	location = MathLibrary::ConvertAbsoluteToNdcScreenCoordinates(location, Geometry.GetRenderResolution());
-
 	// Draw the text.
-	Renderer->Draw(location, Geometry.GetRenderResolution(), Geometry.GetDPI());
+	Renderer->Draw();
 }
 vec2 TextWidget::GetDesiredDrawSpace(const FRenderGeometry& Geometry) const {
 	vec2 min, max;

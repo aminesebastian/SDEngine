@@ -15,6 +15,7 @@ public:
 	const TString& GetText() const;
 	const bool& IsEmpty() const;
 	const bool& EndsWithIncompleteWord() const;
+	const bool& EndWithManualNewLine() const;
 	void GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const;
 	const float GetCursorPosition() const;
 	const SArray<Vector2D>& GetVerticies() const;
@@ -25,9 +26,11 @@ public:
 
 	void Finalize();
 	void Flush();
-private:
-	const DistanceFieldFont* Font;
+private:	
 	TString Text;
+	int32 CursorInteractableGlyphs;
+	int32 TotalGlyphCount;
+	const DistanceFieldFont* Font;
 
 	float CursorPosition;
 	float Tracking;
@@ -36,6 +39,7 @@ private:
 	float HyphenWidth;
 
 	bool bEndsWithIncompleteWord;
+	bool bEndsWithManualNewLine;
 	bool bFinialized;
 
 	SArray<Vector2D> Verticies;

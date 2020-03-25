@@ -51,7 +51,7 @@ void CollapsingCategoryWidget::Draw(float DeltaTime, const FRenderGeometry& Geom
 		DrawBox(Geometry, *ContentBackground);
 	}
 }
-void CollapsingCategoryWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
+void CollapsingCategoryWidget::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	CollapseIconDrawInstruction->Location.x = Geometry.GetLocation().x + 4.0f;
 	CollapseIconDrawInstruction->Location.y = Geometry.GetTopLeft().y - CollapseIconDrawInstruction->Size.y - GetHeaderHeight() / 4.0f - 2.0f;
 	DrawImage(Geometry, *CollapseIconDrawInstruction);

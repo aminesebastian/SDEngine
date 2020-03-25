@@ -8,7 +8,7 @@
 
 class StringUtilities {
 public:
-	static void SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output);
+	static void SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output, const bool& IncludeDelimieter = false);
 	static void SplitStringByWhitespace(const TString& String, SArray<TString>& Output);
 
 	static const TString RemoveCharacterFromString(const TString& String, const char& Character);

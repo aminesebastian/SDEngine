@@ -12,7 +12,7 @@ public:
 	const TString& GetLabel() const;
 protected:
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
-	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) override;
+	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void OnCreated() override;
 	virtual Vector2D GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
 	void CategoryClicked(PictorumWidget* Widget, const Vector2D& MouseLocation, const EMouseButton& Button, FUserInterfaceEvent& Event);

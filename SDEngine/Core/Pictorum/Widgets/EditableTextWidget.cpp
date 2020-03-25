@@ -30,6 +30,7 @@ void EditableTextWidget::SetPlaceholderText(const TString& PlaceholderText) {
 	}
 }
 void EditableTextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
+	TextWidget::Tick(DeltaTime, Geometry);
 	CurrentBlinkTime += DeltaTime;
 	if (CurrentBlinkTime > BlinkTime) {
 		bCursorFlashOn = !bCursorFlashOn;
@@ -148,7 +149,7 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 		// Get the bottom left and top right for the character.
 		Vector2D bottomLeft = verticies[(int64)characterIndex * 4];
 
-		if (characterIndex >= line->GetCursorInteractableGlyphCount() - 1) {
+		if (characterIndex >= line->GetCursorInteractableGlyphCount()) {
 			position.x += (bottomLeft.x + Renderer->GetTracking()) * Renderer->GetNdcScale().x;
 		} else {
 			position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
@@ -218,9 +219,9 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 					if (mouseLocationAdjusted.x >= bottomLeft.x && mouseLocationAdjusted.x <= topRight.x) {
 						float xMidpoint = bottomLeft.x + ((topRight.x - bottomLeft.x) / 2.0f);
 						if (mouseLocationAdjusted.x > xMidpoint) {
-							return indexOffset + j + 1 - i;
+							return indexOffset + j + 1;
 						} else {
-							return indexOffset + j - i;
+							return indexOffset + j;
 						}
 					}
 				}
@@ -340,10 +341,9 @@ const int32 EditableTextWidget::GetCharacterIndexOfCursor(const int32& CursorInd
 	for (int32 i = 0; i <= (lineIndex-1); i++) {
 		totalIndex += lines[i]->GetGlyphCount() - 1;
 		if (i > 0 && lines[i]->EndsWithIncompleteWord()) {
-			totalIndex -= 2;
+			totalIndex -= 1;
 		}
 	}
-
 	if (totalIndex < GetText().length() - 1) {
 		SD_ENGINE_DEBUG("Charcter at cursor is: {0}.", GetText()[totalIndex]);
 	}

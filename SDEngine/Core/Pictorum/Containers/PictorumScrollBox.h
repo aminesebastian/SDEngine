@@ -47,7 +47,7 @@ protected:
 	SArray<int32> SelectedIndices;
 
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
-	virtual void PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) override;
+	virtual void OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) override;
 
 	const float GetOffsetForChild(const int32& ChildIndex) const;
 	const vec2 CalculateSizeOfContents(const FRenderGeometry& Geometry) const;

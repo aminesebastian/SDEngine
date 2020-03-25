@@ -1,12 +1,36 @@
 #include "StringUtilities.h"
+#include "Core/DataStructures/StringBuilder.h"
 #include <algorithm>
 #include <sstream>
 
-void StringUtilities::SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output) {
-	std::stringstream stringStream(String);
-	TString splitItem;
-	while (std::getline(stringStream, splitItem, Delimeter)) {
-		Output.Add(splitItem);
+void StringUtilities::SplitString(const TString& String, const char& Delimeter, SArray<TString>& Output, const bool& IncludeDelimieter) {
+	// Allocate a string builder.
+	StringBuilder builder;
+
+	// Iterate through every character. If it is not the delimiter, add it to the builder. If it is
+	// the delimiter, finish the builder, add the result to the output, and clear it. If we are
+	// keeping the delimiters, add a string of that as well.
+	for (const char& character : String) {
+
+		// Are we at a delimiter? If so, build the string, add it to the output, then clear the
+		// builder.
+		if (character == Delimeter) {
+			Output.Add(builder.ToString());
+			builder.Clear();
+
+			// If we are keeping the delimiter, include that as well.
+			if (IncludeDelimieter) {
+				Output.Add(TString(1, character));
+			}
+		} else {
+			// Add the character.
+			builder << character;
+		}
+	}
+
+	// Ensure whatever remains in the builder is also added to the output.
+	if (!builder.IsEmpty()) {
+		Output.Add(builder.ToString());
 	}
 }
 void StringUtilities::SplitStringByWhitespace(const TString& String, SArray<TString>& Output) {

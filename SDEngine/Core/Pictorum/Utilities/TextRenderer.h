@@ -30,16 +30,22 @@ public:
 	virtual ~TextRenderer();
 
 	/**
+	 * Updates the renderer from some tick method. This needs to be called before the Draw() method.
+	 *
+	 * @param 	DeltaTime					The delta time.
+	 * @param 	Position					Vector2D&amp;}	Position			  	The position of the text in
+	 * 										NDC coordinates.
+	 * @param 	RenderTargetResolutionIn	Vector2D&amp;}	RenderTargetResolution	The render target
+	 * 										resolution.
+	 * @param 	DisplayDPI					Vector2D&amp;}	DisplayDPI			  	The display DPI.
+	 */
+	void Tick(const float& DeltaTime, const Vector2D& Position, const Vector2D& RenderTargetResolutionIn, const Vector2D& DisplayDPI);
+
+	/**
 	 * Draws the text to the screen at the provided NDC position. Automatically adjusts for the
 	 * provided render target resolution.
-	 *
-	 * @param 	Position			  	Vector2D&amp;}	Position			  	The position of the text in NDC
-	 * 									coordinates.
-	 * @param 	RenderTargetResolution	Vector2D&amp;}	RenderTargetResolution	The render target
-	 * 									resolution.
-	 * @param 	DisplayDPI			  	Vector2D&amp;}	DisplayDPI			  	The display DPI.
 	 */
-	void Draw(const Vector2D& Position, const Vector2D& RenderTargetResolution, const Vector2D& DisplayDPI);
+	void Draw();
 
 	/**
 	 * Sets the text lines for this text renderer to render. Lines can be split by including a \n
@@ -157,15 +163,16 @@ public:
 	 * @returns	The word wrap width in relative space.
 	 */
 	const float GetWordWrapWidth() const;
+
 	/**
 	 * Gets text bounding box dimensions
 	 *
-	 * @param [in,out]	MinBounds	The minimum bounds.
-	 * @param [in,out]	MaxBounds	The maximum bounds.
+	 * @param [out]	MinimumBounds	The minimum bounds.
+	 * @param [out]	MaximumBounds	The maximum bounds.
 	 *
 	 * @returns	The text bounding box dimensions.
 	 */
-	const void GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const;
+	const void GetTextBoundingBoxDimensions(Vector2D& MinimumBounds, Vector2D& MaximumBounds) const;
 
 	/**
 	 * Gets the screen NDC character bounds.
@@ -209,8 +216,8 @@ private:
 	/*State Properties*/
 	/*****************/
 	const DistanceFieldFont* Font;
-	Vector2D LastFrameMinBounds;
-	Vector2D LastFrameMaxBounds;
+	Vector2D MinimumBounds;
+	Vector2D MaximumBounds;
 	TString Text;
 
 	/*****************/
@@ -218,7 +225,9 @@ private:
 	/*****************/
 	bool bBoundToGPU;
 	Vector2D CalculatedRenderScale;
-	Vector2D LastFrameRenderPosition;
+	Vector2D NDCPosition;
+	Vector2D RenderTargetResolution;
+	Vector2D RenderTargetDPI;
 	TextGeometryCache* TextBlockCache;
 	GPUVertexBufferArray* VertexArrayBuffer;
 };

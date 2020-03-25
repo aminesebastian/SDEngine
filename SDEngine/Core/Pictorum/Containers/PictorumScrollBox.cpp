@@ -42,7 +42,7 @@ void PictorumScrollBox::Draw(float DeltaTime, const FRenderGeometry& Geometry) {
 		}
 	}
 }
-void PictorumScrollBox::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {
+void PictorumScrollBox::OnDrawCompleted(const float& DeltaTime, const FRenderGeometry& Geometry) {
 	if (ShouldRenderScrollBar()) {
 		// Draw the line behind the scroll bar.
 		ScrollBarLineDrawInstruction->Size.y = Geometry.GetAllotedSpace().y - 10.0f;

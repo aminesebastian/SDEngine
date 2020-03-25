@@ -15,8 +15,8 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	SetFontWeight(EFontWeight::Normal);
 	SetTextAlignment(ETextAlignment::LEFT);
 
-	LastFrameMinBounds = ZERO_VECTOR2D;
-	LastFrameMaxBounds = ZERO_VECTOR2D;
+	MinimumBounds = ZERO_VECTOR2D;
+	MaximumBounds = ZERO_VECTOR2D;
 
 	Flush();
 }
@@ -24,8 +24,16 @@ TextRenderer::~TextRenderer() {
 	delete VertexArrayBuffer;
 	delete TextBlockCache;
 }
+void TextRenderer::Tick(const float& DeltaTime, const Vector2D& Position, const Vector2D& RenderTargetResolutionIn, const Vector2D& DisplayDPI) {
+	RenderTargetResolution = RenderTargetResolutionIn;
+	RenderTargetDPI = DisplayDPI;
+	CalculatedRenderScale = (FontSize / RenderTargetResolution) * (RenderTargetDPI / DOTS_PER_POINT);
+	MinimumBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMinimumPosition(), RenderTargetResolution);
+	MaximumBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMaximumPosition(), RenderTargetResolution);
+	NDCPosition = Position - Vector2D(CalculatedRenderScale.x * TextBlockCache->GetMinimumPosition().x, -CalculatedRenderScale.y * TextBlockCache->GetMinimumPosition().y); // Subtract the minimum position as the min position is usually negative.
 
-void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetResolution, const Vector2D& DisplayDPI) {
+}
+void TextRenderer::Draw() {
 	if (Text.length() == 0) {
 		return;
 	}
@@ -33,16 +41,11 @@ void TextRenderer::Draw(const Vector2D& Position, const Vector2D& RenderTargetRe
 		BindToGPU();
 	}
 
-	CalculatedRenderScale = (FontSize / RenderTargetResolution) * (DisplayDPI / DOTS_PER_POINT);
-	LastFrameMinBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMinimumPosition(), RenderTargetResolution);
-	LastFrameMaxBounds = MathLibrary::ConvertNdcToAbsoluteScreenCoordinates(CalculatedRenderScale * TextBlockCache->GetMaximumPosition(), RenderTargetResolution);
-	LastFrameRenderPosition = Position - Vector2D(CalculatedRenderScale.x * TextBlockCache->GetMinimumPosition().x, -CalculatedRenderScale.y * TextBlockCache->GetMinimumPosition().y); // Subtract the minimum position as the min position is usually negative.
-
 	Shader* fontShader = EngineStatics::GetFontShader();
 	fontShader->Bind();
 	Font->BindAtlas(fontShader, "Atlas", 0);
 
-	fontShader->SetShaderVector2("LOCATION", LastFrameRenderPosition);
+	fontShader->SetShaderVector2("LOCATION", NDCPosition);
 	fontShader->SetShaderVector2("SCALE", CalculatedRenderScale);
 	fontShader->SetShaderVector4("COLOR", Color);
 	fontShader->SetShaderVector2("RENDER_TARGET_RESOLUTION", RenderTargetResolution);
@@ -154,16 +157,16 @@ const Vector2D& TextRenderer::GetNdcScale() const {
 	return CalculatedRenderScale;
 }
 const Vector2D& TextRenderer::GetNdcPosition() const {
-	return LastFrameRenderPosition;
+	return NDCPosition;
 }
-const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinBounds, Vector2D& MaxBounds) const {
-	MinBounds = LastFrameMinBounds;
-	MaxBounds = LastFrameMaxBounds;
+const void TextRenderer::GetTextBoundingBoxDimensions(Vector2D& MinimumBounds, Vector2D& MaximumBounds) const {
+	MinimumBounds = this->MinimumBounds;
+	MaximumBounds = this->MaximumBounds;
 }
 const void TextRenderer::GetNdcCharacterBounds(const int32& CharacterIndex, Vector2D& BottomLeft, Vector2D& TopRight) const {
 	// Capture the text space coordinates.
-	BottomLeft = TextBlockCache->GetVerticies()[CharacterIndex * 4];
-	TopRight = TextBlockCache->GetVerticies()[(CharacterIndex * 4) + 2];
+	BottomLeft = TextBlockCache->GetVerticies()[(int64)CharacterIndex * 4];
+	TopRight = TextBlockCache->GetVerticies()[((int64)CharacterIndex * 4) + 2];
 
 	// Get the relative coordinates.
 	int32 lineIndex, relativeIndex;
@@ -179,9 +182,9 @@ const void TextRenderer::GetNdcCharacterBounds(const int32& CharacterIndex, Vect
 
 	// Transform from text space to ndc coordinates.
 	BottomLeft *= CalculatedRenderScale;
-	BottomLeft += LastFrameRenderPosition;
+	BottomLeft += NDCPosition;
 	TopRight *= CalculatedRenderScale;
-	TopRight += LastFrameRenderPosition;
+	TopRight += NDCPosition;
 }
 const TextGeometryCache* TextRenderer::GetGeometryCache() const {
 	return TextBlockCache;
@@ -201,7 +204,7 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 	const TextLine* line = nullptr;
 
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
-		lineLength = TextBlockCache->GetLine(i)->GetCursorInteractableGlyphCount()-1;
+		lineLength = TextBlockCache->GetLine(i)->GetCursorInteractableGlyphCount();
 
 		if (counter >= lineLength) {
 			counter -= lineLength;

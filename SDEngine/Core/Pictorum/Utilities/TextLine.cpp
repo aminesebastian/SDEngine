@@ -11,10 +11,10 @@ TextLine::~TextLine() {
 	Flush();
 }
 const int32& TextLine::GetGlyphCount() const {
-	return Text.length() + 1;
+	return TotalGlyphCount;
 }
 const int32& TextLine::GetCursorInteractableGlyphCount() const {
-	return GetGlyphCount() - (bEndsWithIncompleteWord ? 1 : 0);
+	return CursorInteractableGlyphs;
 }
 const TString& TextLine::GetText() const {
 	return Text;
@@ -24,6 +24,9 @@ const bool& TextLine::IsEmpty() const {
 }
 const bool& TextLine::EndsWithIncompleteWord() const {
 	return bEndsWithIncompleteWord;
+}
+const bool& TextLine::EndWithManualNewLine() const {
+	return bEndsWithManualNewLine;
 }
 void TextLine::GetBounds(Vector2D& MinBounds, Vector2D& MaxBounds) const {
 	MinBounds = MinimumBounds;
@@ -48,9 +51,6 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 		return 0;
 	}
 
-	// If this is the first word, no need to prepend a space, otherwise, prepend a space.
-	bool firstWord = IsEmpty();
-
 	// If force fitting, charsThatFit should be the length of the Word.
 	int32 charsThatFit = ForceFit ? (int32)Word.length() : 0;
 
@@ -59,10 +59,6 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 		// Calculate how much remaining space we have.
 		float remainingSpace = MaximumWidth - CursorPosition + (2.0f * Tracking);
 
-		// If this is not the first word, compensate for the space width.
-		if (!firstWord) {
-			remainingSpace -= SpaceWidth;
-		}
 
 		// Calculate how many characters fit.
 		for (const char& character : Word) {
@@ -88,24 +84,27 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 		}
 	}
 
-
-	// If this is the first word, simply set this line's text to it.
-	// Otherwise, append a space, followed by the word.
-	if (!firstWord) {
-		AddCharacter(Font->GetDistanceFieldCharacter(' '));
-	}
-
 	// Add the characters of the word as geometry.
 	for (int32 i = 0; i < charsThatFit; i++) {
 		AddCharacter(Font->GetDistanceFieldCharacter(Word[i]));
+	}
+
+	// Set the counts.
+	TotalGlyphCount += charsThatFit;
+	CursorInteractableGlyphs += charsThatFit;
+
+	// Check if we end with a manual new line.
+	if (Word[charsThatFit - 1] == '\n') {
+		bEndsWithManualNewLine = true;
 	}
 
 	// Add the hyphen if needed.
 	if (charsThatFit != Word.length()) {
 		AddCharacter(Font->GetDistanceFieldCharacter('-'));
 		bEndsWithIncompleteWord = true;
+		CursorInteractableGlyphs++;
+		TotalGlyphCount++;
 	}
-
 
 	// Return how many characters fit.
 	return charsThatFit;
@@ -119,12 +118,16 @@ void TextLine::Finalize() {
 
 	// Add a null character to the end of the line.
 	AddCharacter(nullptr);
+	TotalGlyphCount++;
 }
 void TextLine::Flush() {
 	CursorPosition = 0.0f;
 	Text = "";
 	bFinialized = false;
 	bEndsWithIncompleteWord = false;
+	bEndsWithManualNewLine = false;
+	CursorInteractableGlyphs = 0;
+	TotalGlyphCount = 0;
 }
 void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 	if (Character) {
@@ -160,26 +163,27 @@ void TextLine::AddCharacter(const FDistanceFieldCharacter* Character) {
 		if (bottomLeft.y < MinimumBounds.y) {
 			MinimumBounds.y = bottomLeft.y;
 		}
+
 		Text += Character->GetCharacter();
 	} else {
-		AddCharacter(Font->GetDistanceFieldCharacter('!'));
-		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
-		//TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		//AddCharacter(Font->GetDistanceFieldCharacter('!'));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
+		TextureCoordinates.Add(Vector2D(0.0f, 0.0f));
 
-		//Indices.Add(Verticies.Count() + 2);
-		//Indices.Add(Verticies.Count() + 1);
-		//Indices.Add(Verticies.Count() + 0);
-		//Indices.Add(Verticies.Count() + 3);
-		//Indices.Add(Verticies.Count() + 2);
-		//Indices.Add(Verticies.Count() + 0);
+		Indices.Add(Verticies.Count() + 2);
+		Indices.Add(Verticies.Count() + 1);
+		Indices.Add(Verticies.Count() + 0);
+		Indices.Add(Verticies.Count() + 3);
+		Indices.Add(Verticies.Count() + 2);
+		Indices.Add(Verticies.Count() + 0);
 
-		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		//Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
-		//Text += 3; // End of text character.
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Verticies.Add(Vector2D(MaximumBounds.x, 0.0f));
+		Text += 3; // End of text character.
 	}
 }
 const float TextLine::GetCharacterWidth(const char& Character) const {

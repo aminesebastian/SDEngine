@@ -108,9 +108,6 @@ const EMouseCursorStyle PictorumWidget::GetMouseCursor(const vec2& MousePosition
 	return EMouseCursorStyle::Arrow;
 }
 void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
-	if (LastRenderedGeometry != Geometry) {
-		OnRenderGeometryChanged(Geometry);
-	}
 	LastRenderedGeometry = Geometry;
 	OnDrawStart(DeltaTime, Geometry);
 	Draw(DeltaTime, Geometry);
@@ -128,12 +125,18 @@ void PictorumWidget::DrawContents(const float& DeltaTime, const FRenderGeometry&
 		OnChildDrawn(DeltaTime, Geometry, widget);
 	}
 
-	PostChildrenDraw(DeltaTime, Geometry);
 	OnDrawCompleted(DeltaTime, Geometry);
 	glScissor((GLuint)Geometry.GetMinimumClipPoint().x, (GLuint)Geometry.GetMinimumClipPoint().y, (GLuint)Geometry.GetMaximumClipPoint().x, (GLuint)Geometry.GetMaximumClipPoint().y);
 }
 void PictorumWidget::TickContents(const float& DeltaTime, const FRenderGeometry& Geometry) {
+	// Set the last rendered geometry here only so that methods that rely on it function properly.
+	// The one set in the DrawConetents() method is the authoritative value.
 	Tick(DeltaTime, Geometry);
+
+	if (LastRenderedGeometry != Geometry) {
+		OnRenderGeometryChanged(Geometry);
+	}
+	LastRenderedGeometry = Geometry;
 
 	for (int i = 0; i < Children.Count(); i++) {
 		PictorumWidget* widget = Children[i];
@@ -293,7 +296,6 @@ void PictorumWidget::DrawImage(const FRenderGeometry& Geometry, const FImageDraw
 
 void PictorumWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {}
 void PictorumWidget::Draw(float DeltaTime, const FRenderGeometry& Geometry) {}
-void PictorumWidget::PostChildrenDraw(float DeltaTime, const FRenderGeometry& Geometry) {}
 void PictorumWidget::OnCreated() {}
 void PictorumWidget::OnDestroyed() {}
 void PictorumWidget::OnAddedToViewport(PictorumRenderer* Owner) {}
