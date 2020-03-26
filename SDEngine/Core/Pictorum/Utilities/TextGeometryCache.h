@@ -27,11 +27,14 @@ public:
 	void SetTracking(const float& TrackingIn);
 	void SetLeading(const float& LeadingIn);
 	void SetText(const TString& TextIn);
+	void SetWordWrapRule(const ETextWrapRule& Rule);
+	const ETextWrapRule& GetWordWrapRule() const;
 	void Flush();
 
 private:
 	const DistanceFieldFont* Font;
 	ETextAlignment Alignment;
+	ETextWrapRule WordWrapRule;
 	float Leading;
 	float Tracking;
 	float WordWrapWidth;

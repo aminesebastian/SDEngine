@@ -19,7 +19,9 @@ public:
 	const ETextAlignment& GetAlignment() const; 
 	void SetFontWeight(const EFontWeight& Weight);
 	const EFontWeight& GetWeight() const;
-	
+	void SetWordWrapRule(const ETextWrapRule& Rule);
+	const ETextWrapRule& GetWordWrapRule() const;
+
 	virtual void Tick(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual void Draw(float DeltaTime, const FRenderGeometry& Geometry) override;
 	virtual vec2 GetDesiredDrawSpace(const FRenderGeometry& Geometry) const override;
@@ -32,5 +34,6 @@ protected:
 
 	TextRenderer* Renderer;
 	DistanceFieldFont* Font;
+	ETextWrapValueType WordWrapValueType;
 };
 

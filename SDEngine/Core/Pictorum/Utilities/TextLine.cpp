@@ -1,7 +1,7 @@
 #include "TextLine.h"
 #include "Core/Utilities/Math/MathLibrary.h"
 
-TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaxLineWidth) : Font(Font), Tracking(Tracking) {
+TextLine::TextLine(const DistanceFieldFont* Font, const float& Tracking, const ETextWrapRule& WordWrapRule, const float& MaxLineWidth) : Font(Font), Tracking(Tracking), WordWrapRule(WordWrapRule) {
 	Flush();
 	SpaceWidth = GetCharacterWidth(' ');
 	HyphenWidth = GetCharacterWidth('-');
@@ -51,14 +51,21 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 		return 0;
 	}
 
-	// If force fitting, charsThatFit should be the length of the Word.
-	int32 charsThatFit = ForceFit ? (int32)Word.length() : 0;
+	// At first, assume we can fit the whole word.
+	int32 charsThatFit = (int32)Word.length();
 
-	// If not being forced to fit, calculate if and how many characters we can fit.
-	if (!ForceFit) {
+	// If not being forced to fit and with wrapping is enabled, calculate if and how many characters we can fit.
+	if (!ForceFit && WordWrapRule != ETextWrapRule::NoWrap) {
+		// Now being by assuming we can fit no part of the word.
+		charsThatFit = 0;
+
 		// Calculate how much remaining space we have.
-		float remainingSpace = MaximumWidth - CursorPosition + (2.0f * Tracking);
+		float remainingSpace = MaximumWidth - CursorPosition + Tracking;
 
+		// If we are prepared to hyphenate, include that as part of the remaining size.
+		if (WordWrapRule == ETextWrapRule::SplitHyphenate) {
+			remainingSpace -= HyphenWidth;
+		}
 
 		// Calculate how many characters fit.
 		for (const char& character : Word) {
@@ -72,14 +79,13 @@ int32 TextLine::AddWord(const TString& Word, const bool& ForceFit) {
 			}
 		}
 
-		// If the characters that fit is less than the length of the word, then we are in a hyphenating
-		// situation. Reduce the count of characters that can fit by one, to account for the hyphen.
-		if (charsThatFit < Word.length()) {
-			charsThatFit--;
-		}
-
 		// If we can fit 0 characters, return.
 		if (charsThatFit <= 0) {
+			return 0;
+		}
+
+		// If we want to maintain whole words, return 0 if less than the full word fits.
+		if (WordWrapRule == ETextWrapRule::MaintainWholeWords && charsThatFit < Word.length()) {
 			return 0;
 		}
 	}

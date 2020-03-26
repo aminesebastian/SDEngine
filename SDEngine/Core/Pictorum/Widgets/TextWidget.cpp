@@ -44,6 +44,12 @@ void TextWidget::SetFontWeight(const EFontWeight& Weight) {
 const EFontWeight& TextWidget::GetWeight() const {
 	return Renderer->GetFontWeight();
 }
+void TextWidget::SetWordWrapRule(const ETextWrapRule& Rule) {
+	Renderer->SetWordWrapRule(Rule);
+}
+const ETextWrapRule& TextWidget::GetWordWrapRule() const {
+	return Renderer->GetWordWrapRule();
+}
 void TextWidget::Tick(float DeltaTime, const FRenderGeometry& Geometry) {
 	// Reposition such that the text always renders from the top.
 	Vector2D location = Geometry.GetLocation();

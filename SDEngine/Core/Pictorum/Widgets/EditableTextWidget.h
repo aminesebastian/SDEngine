@@ -52,7 +52,9 @@ protected:
 	const Vector2D GetCursorRelativePosition(const int32& CursorIndex) const;
 	const int32 GetCharacterIndexAtMouseLocation(const Vector2D& MouseLocation) const;
 	const int32 GetCursorHeight() const;
-	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex = 0);
+	const int32 GetCharacterIndexOfCursor(const int32& CursorIndex);
+	const bool IsCursorAtBeginingOfLine(const int32& CursorIndex);
+	const bool IsCursorAtEndOfLine(const int32& CursorIndex);
 
 	const int32 AddCursor();
 	void AddTextToRightOfCursor(const int32& CursorIndex, const TString& Text);

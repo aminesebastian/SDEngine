@@ -7,7 +7,7 @@
 
 class TextLine {
 public:
-	TextLine(const DistanceFieldFont* Font, const float& Tracking, const float& MaxLineWidth);
+	TextLine(const DistanceFieldFont* Font, const float& Tracking, const ETextWrapRule& WordWrapRule, const float& MaxLineWidth);
 	~TextLine();
 
 	const int32& GetGlyphCount() const;
@@ -30,7 +30,10 @@ private:
 	TString Text;
 	int32 CursorInteractableGlyphs;
 	int32 TotalGlyphCount;
+
 	const DistanceFieldFont* Font;
+
+	ETextWrapRule WordWrapRule;
 
 	float CursorPosition;
 	float Tracking;

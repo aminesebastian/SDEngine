@@ -149,7 +149,6 @@ public:
 	 * @returns	The word wrap rule.
 	 */
 	const ETextWrapRule& GetWordWrapRule() const;
-
 	/**
 	 * Sets word wrap width in relative space.
 	 *
@@ -203,8 +202,6 @@ private:
 	float FontSize;
 	EFontWeight FontWeight;
 	ETextAlignment Alignment;
-	ETextWrapRule WordWrapRule;
-	ETextWrapValueType WordWrapValueType;
 	float WordWrap;
 	FColor Color;
 	float DistanceFieldWidth;

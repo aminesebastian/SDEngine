@@ -14,6 +14,7 @@ TextRenderer::TextRenderer(int32 FontSize, const DistanceFieldFont* Font) : Font
 	SetFontSize(FontSize);
 	SetFontWeight(EFontWeight::Normal);
 	SetTextAlignment(ETextAlignment::LEFT);
+	SetWordWrapRule(ETextWrapRule::MaintainWholeWords);
 
 	MinimumBounds = ZERO_VECTOR2D;
 	MaximumBounds = ZERO_VECTOR2D;
@@ -139,10 +140,10 @@ const ETextAlignment& TextRenderer::GetTextAlignment() const {
 	return Alignment;
 }
 void TextRenderer::SetWordWrapRule(const ETextWrapRule& Rule) {
-	WordWrapRule = Rule;
+	TextBlockCache->SetWordWrapRule(Rule);
 }
 const ETextWrapRule& TextRenderer::GetWordWrapRule() const {
-	return WordWrapRule;
+	return TextBlockCache->GetWordWrapRule();
 }
 void TextRenderer::SetWordWrapWidth(const float& Width) {
 	float ndcWidth = Width * 2.0f;
@@ -194,7 +195,7 @@ const int32 TextRenderer::GetMaximumIndex() const {
 	for (const TextLine* line : TextBlockCache->GetLines()) {
 		maxIndex += line->GetCursorInteractableGlyphCount();
 	}
-	return maxIndex - 1;
+	return maxIndex;
 }
 void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& LineIndex, int32& LineRelativeCharacterIndex) const {
 	LineIndex = 0;
@@ -206,7 +207,12 @@ void TextRenderer::GetLineForCharacterIndex(const int32& AbsoluteIndex, int32& L
 	for (int32 i = 0; i < TextBlockCache->GetLineCount(); i++) {
 		lineLength = TextBlockCache->GetLine(i)->GetCursorInteractableGlyphCount();
 
-		if (counter >= lineLength) {
+		// If this is the last line, just return what remains.
+		if (i == TextBlockCache->GetLineCount() - 1) {
+			LineIndex = i;
+			LineRelativeCharacterIndex = counter;
+			return;
+		}else if (counter >= lineLength) {
 			counter -= lineLength;
 		} else {
 			LineIndex = i;

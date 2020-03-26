@@ -349,6 +349,26 @@ const int32 EditableTextWidget::GetCharacterIndexOfCursor(const int32& CursorInd
 	}
 	return totalIndex;
 }
+const bool EditableTextWidget::IsCursorAtBeginingOfLine(const int32& CursorIndex) {
+	// Get the cursor.
+	FTextCursor& cursor = Cursors[CursorIndex];
+
+	// Capture the line index and character index for the cursor.
+	int32 lineIndex, characterIndex;
+	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
+
+	return characterIndex == 0;
+}
+const bool EditableTextWidget::IsCursorAtEndOfLine(const int32& CursorIndex) {
+	// Get the cursor.
+	FTextCursor& cursor = Cursors[CursorIndex];
+
+	// Capture the line index and character index for the cursor.
+	int32 lineIndex, characterIndex;
+	Renderer->GetLineForCharacterIndex(cursor.CharacterIndex, lineIndex, characterIndex);
+
+	return characterIndex == Renderer->GetGeometryCache()->GetLine(lineIndex)->GetCursorInteractableGlyphCount() - 1;
+}
 const int32 EditableTextWidget::GetCursorHeight() const {
 	return (int32)(Font->GetMaximumCharacterHeight() / 2.0f * Renderer->GetNdcScale().y * LastRenderedGeometry.GetRenderResolution().y);
 }
@@ -377,6 +397,12 @@ void EditableTextWidget::AddTextToRightOfCursor(const int32& CursorIndex, const 
 	// Set the text and then move the cursor to the right one spot.
 	SetText(currentText);
 	MoveCursorRight(CursorIndex);
+
+	// If moving to the right placed the cursor at the begining of a new line, that means we were
+	// at the end of one and should move right again.
+	if (IsCursorAtBeginingOfLine(0)) {
+		MoveCursorRight(CursorIndex);
+	}
 }
 void EditableTextWidget::EraseLeftOfCursor(const int32& CursorIndex) {
 	// Get the cursor index.

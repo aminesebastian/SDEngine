@@ -181,7 +181,7 @@ TextLine* TextGeometryCache::GetNewLine() {
 	if (Lines.Count() > 0) {
 		Lines[Lines.LastIndex()]->Finalize();
 	}
-	TextLine* newLine = new TextLine(Font, Tracking, WordWrapWidth);
+	TextLine* newLine = new TextLine(Font, Tracking, WordWrapRule, WordWrapWidth);
 	Lines.Add(newLine);
 	return newLine;
 }
@@ -215,4 +215,10 @@ void TextGeometryCache::Flush() {
 		delete line;
 	}
 	Lines.Clear();
+}
+void TextGeometryCache::SetWordWrapRule(const ETextWrapRule& Rule) {
+	WordWrapRule = Rule;
+}
+const ETextWrapRule& TextGeometryCache::GetWordWrapRule() const {
+	return WordWrapRule;
 }
