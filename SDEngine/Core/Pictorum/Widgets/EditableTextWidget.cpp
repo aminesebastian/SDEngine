@@ -138,8 +138,11 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 	position.y -= Renderer->GetGeometryCache()->GetLineYOffset(lineIndex) * Renderer->GetNdcScale().y;
 	position.y += (GetCursorHeight() / LastRenderedGeometry.GetRenderResolution().y) / 2.0f;
 
-	// Get the line
+	// Get the line.
 	const TextLine* line = Renderer->GetGeometryCache()->GetLine(lineIndex);
+
+	// Gets the length of the line.
+	int32 lineLength = line->GetGlyphCount();
 
 	// Add the x offset for the character if we are not on at character 0.
 	if (characterIndex > 0 && characterIndex < line->GetGlyphCount()) {
@@ -149,7 +152,11 @@ const Vector2D EditableTextWidget::GetCursorRelativePosition(const int32& Cursor
 		// Get the bottom left and top right for the character.
 		Vector2D bottomLeft = verticies[(int64)characterIndex * 4];
 
-		if (characterIndex >= line->GetCursorInteractableGlyphCount()) {
+		// Make sure on the last line that we compensate.
+		int32 glyphCount = line->GetCursorInteractableGlyphCount();
+
+		// The last character should not have tracking applied.
+		if (characterIndex >= glyphCount) {
 			position.x += (bottomLeft.x + Renderer->GetTracking()) * Renderer->GetNdcScale().x;
 		} else {
 			position.x += (bottomLeft.x - Renderer->GetTracking()) * Renderer->GetNdcScale().x;
@@ -202,7 +209,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 				return indexOffset;
 			} else {
 				for (int32 j = 0; j < line->GetCursorInteractableGlyphCount(); j++) {
-					if(j * 4 > verticies.LastIndex()) {
+					if (j * 4 > verticies.LastIndex()) {
 						continue;
 					}
 					// Capture the NDC space bottom left and top right of the quad.
@@ -225,7 +232,7 @@ const int32 EditableTextWidget::GetCharacterIndexAtMouseLocation(const Vector2D&
 						}
 					}
 				}
-				return indexOffset + line->GetCursorInteractableGlyphCount() - 1;
+				return indexOffset + line->GetCursorInteractableGlyphCount() - (i == lines.LastIndex() ? 0 : 1);
 			}
 		} else {
 			// If we were not in the line, move one line down and increment the index offset.
@@ -338,7 +345,7 @@ const int32 EditableTextWidget::GetCharacterIndexOfCursor(const int32& CursorInd
 
 	int32 totalIndex = characterIndex;
 	const SArray<TextLine*>& lines = Renderer->GetGeometryCache()->GetLines();
-	for (int32 i = 0; i <= (lineIndex-1); i++) {
+	for (int32 i = 0; i <= (lineIndex - 1); i++) {
 		totalIndex += lines[i]->GetGlyphCount() - 1;
 		if (i > 0 && lines[i]->EndsWithIncompleteWord()) {
 			totalIndex -= 1;
