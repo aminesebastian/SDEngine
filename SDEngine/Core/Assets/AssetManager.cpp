@@ -1,12 +1,13 @@
 #include "AssetManager.h"
-#include "Utilities/Logger.h"
+#include <SDL/SDL.h>
+#include "Core/Utilities/Logger.h"
 #include "Core/Assets/AssetMetadata.h"
 
 AssetManager::AssetManager() {
 	SD_ENGINE_INFO("Asset Manager loaded.");
 }
 AssetManager::~AssetManager() {}
-bool AssetManager::SaveAssetToDisk(Asset* Target, const TString& AssetPath, const TString& AssetType) {
+const bool AssetManager::SaveAssetToDisk(Asset* Target, const TString& AssetPath, const TString& AssetType) {
 	// Capture the asset load start time.
 	Uint64 start = SDL_GetPerformanceCounter();
 	SD_ENGINE_INFO("Saving Asset: {0} To Disk.");
@@ -33,7 +34,7 @@ bool AssetManager::SaveAssetToDisk(Asset* Target, const TString& AssetPath, cons
 		return false;
 	}
 }
-bool AssetManager::IsAssetOpen(TString AssetPath) const{
+const bool AssetManager::IsAssetOpen(const TString& AssetPath) const{
 	SHashMap<TString, Asset*>::const_iterator it;
 	it = AssetCache.find(AssetPath);
 
@@ -42,16 +43,16 @@ bool AssetManager::IsAssetOpen(TString AssetPath) const{
 	}
 	return false;
 }
-const IAssetFactory* AssetManager::GetAssetFactoryForType(TString AssetType) const{
+const IAssetFactory* AssetManager::GetAssetFactoryForType(const TString& AssetType) const{
 	SHashMap<TString, const IAssetFactory*>::const_iterator it;
 	it = FactoryRecords.find(AssetType);
 
 	if (it != FactoryRecords.end()) {
 		return it->second;
 	}
-	return nullptr;;
+	return nullptr;
 }
-Asset* AssetManager::GetNewAssetTemplate(TString AssetType) const {
+Asset* AssetManager::GetNewAssetTemplate(const TString& AssetType) const {
 	SHashMap<TString, const IAssetFactory*>::const_iterator it;
 	it = FactoryRecords.find(AssetType);
 
@@ -62,7 +63,7 @@ Asset* AssetManager::GetNewAssetTemplate(TString AssetType) const {
 	}
 	return nullptr;
 }
-bool AssetManager::RegisterNewFactory(TString AssetType, const IAssetFactory* Factory) {
+const bool AssetManager::RegisterNewFactory(const TString& AssetType, const IAssetFactory* Factory) {
 	SHashMap<TString, const IAssetFactory*>::const_iterator it;
 	it = FactoryRecords.find(AssetType);
 
@@ -75,7 +76,7 @@ bool AssetManager::RegisterNewFactory(TString AssetType, const IAssetFactory* Fa
 	return true;
 }
 
-Asset* AssetManager::LoadAsset(TString AssetPath) {
+Asset* AssetManager::LoadAsset(const TString& AssetPath) {
 	// Capture the asset load start time.
 	Uint64 start = SDL_GetPerformanceCounter();
 
@@ -118,7 +119,7 @@ Asset* AssetManager::LoadAsset(TString AssetPath) {
 	// Return the result, which is either the loaded asset or a nullptr if the load failed.
 	return result;
 }
-Asset* AssetManager::GetAssetFromPool(TString AssetPath) const{
+Asset* AssetManager::GetAssetFromPool(const TString& AssetPath) const{
 	SHashMap<TString, Asset*>::const_iterator it;
 	it = AssetCache.find(AssetPath);
 

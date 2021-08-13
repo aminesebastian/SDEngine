@@ -20,8 +20,7 @@ layout (location = 0) out vec4 WorldPosOut;
 layout (location = 1) out vec4 AlbedoOut;  
 layout (location = 2) out vec4 RMAOOut;	      
 layout (location = 3) out vec3 NormalOut;     
-layout (location = 4) out vec3 TexCoordOut;	
-layout (location = 6) out vec3 Motion;
+layout (location = 4) out vec3 Motion;
 
 float linearizeDepth(float depth);
 														
@@ -31,8 +30,6 @@ void main()	{
 
 	AlbedoOut			= texture(albedo, texCoord0);	
 	AlbedoOut.a			= MAT_ID;			
-	TexCoordOut.xy		= texCoord0;
-	TexCoordOut.z		= linearizeDepth(gl_FragCoord.z);	
 
 	vec3 sampledNormal	= ((255.0/128.0) * texture(normal, texCoord0).xyz)-1;
 	NormalOut			= normalize(tbnMatrix0 * sampledNormal);	

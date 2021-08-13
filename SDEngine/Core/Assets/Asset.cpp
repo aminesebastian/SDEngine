@@ -1,17 +1,19 @@
 #include "Asset.h"
 #include "Core/Assets/AssetManager.h"
 #include "Core/Assets/AssetMetadata.h"
-#include "Engine/EngineStatics.h"
+#include "Core/Engine/EngineStatics.h"
 #include <iostream>
 #include <fstream>
-#include "Utilities/Logger.h"
+#include "Core/Utilities/Logger.h"
 
-Asset::Asset(TString AssetType, ISerializeableAsset* AssetPointer) : AssetType(AssetType), AssetPointer(AssetPointer), bInitialized(false) {
+Asset::Asset(const TString& AssetType, ISerializeableAsset* AssetPointer) : AssetType(AssetType), AssetPointer(AssetPointer), bInitialized(false) {
+	Name     = "";
+	FilePath = "";
 	Metadata = nullptr;
 }
 Asset::~Asset() {}
 
-bool Asset::Initialize(TString FilePath, TString AssetType, ByteBuffer& UncompressedAssetData) {
+const bool Asset::Initialize(const TString& FilePath, const TString& AssetType, ByteBuffer& UncompressedAssetData) {
 	this->FilePath = FilePath;
 	this->AssetType = AssetType;
 
@@ -30,7 +32,7 @@ bool Asset::Initialize(TString FilePath, TString AssetType, ByteBuffer& Uncompre
 	bInitialized = true;
 	return true;
 }
-bool Asset::SerializeForSavingToDisk(ByteBuffer& Buffer) {
+const bool Asset::SerializeForSavingToDisk(ByteBuffer& Buffer) {
 	if (!bInitialized) {
 		return nullptr;
 	}
@@ -45,15 +47,12 @@ bool Asset::SerializeForSavingToDisk(ByteBuffer& Buffer) {
 	}
 	return true;
 }
-TString Asset::GetAssetName() const {
+const TString Asset::GetAssetName() const {
 	return Name;
 }
-TString Asset::GetAssetPath() const {
+const TString Asset::GetAssetPath() const {
 	return FilePath;
 }
-TString Asset::GetAssetType() const {
+const TString Asset::GetAssetType() const {
 	return AssetType;
-}
-const SArray<char>& Asset::GetRawData() const {
-	return RawData;
 }

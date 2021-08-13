@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SuburbanDigitalEnginePreprocessor": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../TestOutputDirectory ../../../../SDEngine"
+    },
+    "MiniTesting": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../TestOutputDirectory ../../../../SDEngine/Test"
+    }
+  }
+}

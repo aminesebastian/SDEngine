@@ -1,0 +1,11 @@
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.deps.json
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.runtimeconfig.json
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.runtimeconfig.dev.json
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.dll
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.pdb
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.csproj.CoreCompileInputs.cache
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.AssemblyInfoInputs.cache
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.AssemblyInfo.cs
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.dll
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.pdb
+E:\Suburban Digital\SDEngine\SDEnginePreprocessor\obj\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.csprojAssemblyReference.cache

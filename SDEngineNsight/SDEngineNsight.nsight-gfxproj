@@ -97,8 +97,16 @@
         "platform/win32/arguments": "",
         "platform/win32/autoconnect": true,
         "platform/win32/environment": "",
-        "platform/win32/executable": "",
-        "platform/win32/workingdir": "",
+        "platform/win32/executable": "E:/Suburban Digital/SDEngine/x64/Release/SDEngine.exe",
+        "platform/win32/executable/history": [
+            "E:/Suburban Digital/SDEngine/x64/Release/SDEngine.exe",
+            "E:/Suburban Digital/SDEngine/x64/Development/SDEngine.exe",
+            "E:/Suburban Digital/SDEngine/x64/Debug/SDEngine.exe"
+        ],
+        "platform/win32/workingdir": "E:/Suburban Digital/SDEngine/SDEngine",
+        "platform/win32/workingdir/history": [
+            "E:/Suburban Digital/SDEngine/SDEngine"
+        ],
         "platform/windows/device": "localhost"
     },
     "uuid": "{d2225c90-c2c4-4751-8d28-b35714006a51}",

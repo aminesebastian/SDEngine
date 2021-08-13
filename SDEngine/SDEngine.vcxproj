@@ -5,12 +5,12 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Graphics Debug|Win32">
-      <Configuration>Graphics Debug</Configuration>
+    <ProjectConfiguration Include="Development|Win32">
+      <Configuration>Development</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Graphics Debug|x64">
-      <Configuration>Graphics Debug</Configuration>
+    <ProjectConfiguration Include="Development|x64">
+      <Configuration>Development</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -39,7 +39,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -58,7 +58,7 @@
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -79,7 +79,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,7 +88,7 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,13 +98,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +129,7 @@
       <AdditionalDependencies>glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -151,9 +151,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_GDEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./Include/Reflection;./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,16 +162,24 @@
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstaticd.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>dotnet ..\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.dll Include/Reflection ./</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Graphics Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_GDEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Custom</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>./Include/Reflection;./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalOptions>/Zo %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,6 +187,9 @@
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstaticd.lib;fmt-6.1.2-Debug.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>dotnet ..\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.dll Include/Reflection ./</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -205,7 +217,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./Include/Reflection;./;./Include/ZLIB;./Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -216,90 +228,162 @@
       <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;zlibstatic.lib;fmt-6.1.2-Release.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;openGL32.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>dotnet ..\SDEnginePreprocessor\bin\Release\netcoreapp2.1\SuburbanDigitalEnginePreprocessor.dll Include/Reflection ./</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Reflection\Handles\PropertyHandle.cpp" />
+    <ClCompile Include="Core\Reflection\Handles\ReflectionHandle.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp" />
+    <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\CheckboxWidget.cpp" />
+    <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp" />
     <ClCompile Include="Core\Input\InputSubsystem.cpp" />
-    <ClCompile Include="LayoutWidget.cpp" />
-    <ClCompile Include="SolidWidget.cpp" />
-    <ClCompile Include="UserInterface\PictorumWidget.cpp" />
-    <ClCompile Include="UserInterface\PictorumRenderer.cpp" />
-    <ClCompile Include="UserInterface\ContentBrowser.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp" />
+    <ClCompile Include="Editor\EditorModule.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.cpp" />
+    <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumConstraintBox.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumCanvas.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\PictorumWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumHorizontalBox.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp" />
+    <ClCompile Include="Core\Reflection\Reflection.cpp" />
+    <ClCompile Include="Core\Utilities\StringUtilities.cpp" />
+    <ClCompile Include="Core\Utilities\FileUtilities.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\TextRenderer.cpp" />
+    <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp" />
     <ClCompile Include="Core\Assets\AssetMetadata.cpp" />
     <ClCompile Include="Core\Assets\Asset.cpp" />
     <ClCompile Include="Core\Assets\AssetManager.cpp" />
     <ClCompile Include="Core\Assets\Factories\MaterialAssetFactory.cpp" />
     <ClCompile Include="Core\Assets\Factories\StaticMeshAssetFactory.cpp" />
     <ClCompile Include="Core\Assets\Factories\Texture2DAssetFactory.cpp" />
-    <ClCompile Include="Core\DataStructures\Array.cpp" />
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp" />
     <ClCompile Include="Core\DataStructures\Tree.cpp" />
     <ClCompile Include="Core\DataTypes\TypeDefenitions.cpp" />
     <ClCompile Include="Core\Utilities\Serialization\DeserializationStream.cpp" />
     <ClCompile Include="Core\Utilities\Serialization\SerializationStream.cpp" />
-    <ClCompile Include="Entities\Component.cpp" />
-    <ClCompile Include="Entities\EditorSpriteComponent.cpp" />
-    <ClCompile Include="Engine\EngineObject.cpp" />
-    <ClCompile Include="Engine\IRenderable.cpp" />
-    <ClCompile Include="Entities\Actors\HeadActor.cpp" />
-    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp" />
-    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp" />
-    <ClCompile Include="Utilities\EngineFunctionLibrary.cpp" />
-    <ClCompile Include="Entities\Actor.cpp" />
-    <ClCompile Include="Entities\TransformGizmo.cpp" />
-    <ClCompile Include="Utilities\Logger.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp" />
-    <ClCompile Include="Entities\Camera.cpp" />
-    <ClCompile Include="Rendering\DefferedCompositor.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\DOFPostProcessing.cpp" />
-    <ClCompile Include="Engine\Display.cpp" />
-    <ClCompile Include="Rendering\Utilities\Downsampler.cpp" />
-    <ClCompile Include="Engine\EngineStatics.cpp" />
-    <ClCompile Include="UserInterface\EngineUI.cpp" />
-    <ClCompile Include="Entities\Entity.cpp" />
-    <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp" />
-    <ClCompile Include="Rendering\RenderTarget.cpp" />
-    <ClCompile Include="Rendering\GBuffer.cpp" />
-    <ClCompile Include="Entities\Grid.cpp" />
-    <ClCompile Include="UserInterface\DetailsPanelProvider.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui_demo.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui_draw.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui_impl_sdl.cpp" />
-    <ClCompile Include="Lib\Imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Entities\Light.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Component.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Components\BillboardComponent.cpp" />
+    <ClCompile Include="Core\Objects\EngineObject.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Actors\HeadActor.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Components\StaticMeshComponent.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Actors\StaticMeshActor.cpp" />
+    <ClCompile Include="Core\Utilities\EngineFunctionLibrary.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Actor.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Actors\TransformGizmo.cpp" />
+    <ClCompile Include="Core\Utilities\Logger.cpp" />
+    <ClCompile Include="Core\Rendering\PostProcessing\BloomPostProcessing.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Camera.cpp" />
+    <ClCompile Include="Core\Rendering\DefferedCompositor.cpp" />
+    <ClCompile Include="Core\Engine\Window.cpp" />
+    <ClCompile Include="Core\Rendering\Utilities\Downsampler.cpp" />
+    <ClCompile Include="Core\Engine\EngineStatics.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\TitleBar.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp" />
+    <ClCompile Include="Editor\UserInterface\EngineWindowUserInterface.cpp" />
+    <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp" />
+    <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\FrameStatisticsWidget.cpp" />
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp" />
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\EntityInspectorWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp" />
+    <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumScrollBox.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Entity.cpp" />
+    <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\RenderTarget.cpp" />
+    <ClCompile Include="Core\Rendering\GBuffer.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Actors\Grid.cpp" />
+    <ClCompile Include="Core\Objects\Entities\Light.cpp" />
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Engine\Engine.cpp" />
-    <ClCompile Include="Rendering\Material.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\MotionBlurPostProcessing.cpp" />
-    <ClCompile Include="Utilities\ObjLoader.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\PostProcessingLayer.cpp" />
-    <ClCompile Include="Engine\RenderViewport.cpp" />
-    <ClCompile Include="Engine\Scene.cpp" />
-    <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp" />
-    <ClCompile Include="UserInterface\Widgets\DragFloat.cpp" />
-    <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp" />
-    <ClCompile Include="Rendering\Shader.cpp" />
-    <ClCompile Include="Core\Math\MathLibrary.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp" />
-    <ClCompile Include="Entities\StaticMesh.cpp" />
-    <ClCompile Include="Utilities\ImageUtils.cpp" />
-    <ClCompile Include="Rendering\Texture2D.cpp" />
-    <ClCompile Include="Engine\WorkerThread.cpp" />
-    <ClCompile Include="Engine\ThreadManager.cpp" />
-    <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp" />
-    <ClCompile Include="Utilities\Transform.cpp" />
-    <ClCompile Include="Engine\World.cpp" />
+    <ClCompile Include="Core\Engine\Engine.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\Material.cpp" />
+    <ClCompile Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.cpp" />
+    <ClCompile Include="Core\Rendering\PostProcessing\PostProcessingLayer.cpp" />
+    <ClCompile Include="Core\Rendering\RenderViewport.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\Scene.cpp" />
+    <ClCompile Include="Core\Rendering\Utilities\VariableGausianBlur.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\Shader.cpp" />
+    <ClCompile Include="Core\Utilities\Math\MathLibrary.cpp" />
+    <ClCompile Include="Core\Rendering\PostProcessing\SSAOPostProcessing.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\StaticMesh.cpp" />
+    <ClCompile Include="Core\Utilities\stbi.cpp" />
+    <ClCompile Include="Core\Objects\CoreTypes\Texture2D.cpp" />
+    <ClCompile Include="Core\Rendering\PostProcessing\ToneMapper.cpp" />
+    <ClCompile Include="Core\Utilities\Math\Transform.cpp" />
+    <ClCompile Include="Core\Engine\World.cpp" />
+    <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp" />
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.cpp" />
+    <ClCompile Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.cpp" />
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.cpp" />
+    <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp" />
+    <ClCompile Include="Editor\MultiLineTestWidget.cpp" />
+    <ClCompile Include="Test\ReflectionTest.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\TextLine.cpp" />
+    <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
+    <ClInclude Include="Core\Reflection\Types\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Handles\PropertyHandle.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
+    <ClInclude Include="Core\Reflection\Handles\ReflectionHandle.h" />
+    <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
+    <ClInclude Include="Core\Objects\IEngineModule.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\CheckboxWidget.h" />
+    <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
+    <ClInclude Include="Core\Engine\WindowDataTypes.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
-    <ClInclude Include="LayoutWidget.h" />
-    <ClInclude Include="SolidWidget.h" />
-    <ClInclude Include="UserInterface\PictorumWidget.h" />
-    <ClInclude Include="UserInterface\PictorumRenderer.h" />
-    <ClInclude Include="UserInterface\ContentBrowser.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
+    <ClInclude Include="Editor\EditorModule.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\UserInterface\EngineUIStyle.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.h" />
+    <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
+    <ClInclude Include="Core\Pictorum\Pictorum.h" />
+    <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
+    <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
+    <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumHorizontalBox.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Reflection\Types\ReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Runtime\TypeResolver.h" />
+    <ClInclude Include="Core\Utilities\StringUtilities.h" />
+    <ClInclude Include="Core\Utilities\FileUtilities.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
+    <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumCanvasSlot.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
     <ClInclude Include="Core\Assets\Asset.h" />
     <ClInclude Include="Core\Assets\AssetManager.h" />
@@ -317,120 +401,96 @@
     <ClInclude Include="Core\Utilities\SerializationStream.h" />
     <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
-    <ClInclude Include="Entities\Component.h" />
-    <ClInclude Include="Entities\EditorSpriteComponent.h" />
-    <ClInclude Include="Engine\EngineObject.h" />
-    <ClInclude Include="Entities\Actors\HeadActor.h" />
-    <ClInclude Include="Physics\CollisionChannels.h" />
-    <ClInclude Include="Engine\IRenderable.h" />
-    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
-    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
-    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
-    <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
-    <ClInclude Include="Entities\Actor.h" />
-    <ClInclude Include="Entities\TransformGizmo.h" />
-    <ClInclude Include="Utilities\Logger.h" />
-    <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h" />
-    <ClInclude Include="Entities\Camera.h" />
-    <ClInclude Include="Rendering\DefferedCompositor.h" />
-    <ClInclude Include="Rendering\PostProcessing\DOFPostProcessing.h" />
-    <ClInclude Include="Engine\Display.h" />
-    <ClInclude Include="Rendering\Utilities\Downsampler.h" />
-    <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="Engine\EngineStatics.h" />
-    <ClInclude Include="UserInterface\EngineUI.h" />
-    <ClInclude Include="Entities\Entity.h" />
-    <ClInclude Include="Physics\AxisAlignedBoundingBox.h" />
-    <ClInclude Include="Rendering\RenderTarget.h" />
-    <ClInclude Include="Rendering\GBuffer.h" />
-    <ClInclude Include="Entities\Grid.h" />
-    <ClInclude Include="UserInterface\DetailsPanelProvider.h" />
-    <ClInclude Include="Lib\Imgui\imconfig.h" />
-    <ClInclude Include="Lib\Imgui\imgui.h" />
-    <ClInclude Include="Lib\Imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="Lib\Imgui\imgui_impl_sdl.h" />
-    <ClInclude Include="Lib\Imgui\imgui_internal.h" />
-    <ClInclude Include="Lib\Imgui\imstb_rectpack.h" />
-    <ClInclude Include="Lib\Imgui\imstb_textedit.h" />
-    <ClInclude Include="Lib\Imgui\imstb_truetype.h" />
-    <ClInclude Include="Entities\Light.h" />
-    <ClInclude Include="Rendering\Material.h" />
-    <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h" />
-    <ClInclude Include="Utilities\ObjLoader.h" />
-    <ClInclude Include="Rendering\PostProcessing\PostProcessingLayer.h" />
-    <ClInclude Include="Engine\RenderViewport.h" />
-    <ClInclude Include="Engine\Scene.h" />
-    <ClInclude Include="UserInterface\UserInterface.h" />
-    <ClInclude Include="UserInterface\UserInterfaceUtilities.h" />
-    <ClInclude Include="UserInterface\Widgets\DragFloat.h" />
-    <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h" />
-    <ClInclude Include="Rendering\Shader.h" />
-    <ClInclude Include="Core\Math\MathLibrary.h" />
-    <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h" />
-    <ClInclude Include="Entities\StaticMesh.h" />
-    <ClInclude Include="Utilities\ImageUtils.h" />
-    <ClInclude Include="Rendering\Texture2D.h" />
-    <ClInclude Include="Engine\WorkerThread.h" />
-    <ClInclude Include="Engine\ThreadManager.h" />
-    <ClInclude Include="Rendering\PostProcessing\ToneMapper.h" />
-    <ClInclude Include="Utilities\Transform.h" />
-    <ClInclude Include="Engine\World.h" />
+    <ClInclude Include="Core\Objects\Entities\Component.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
+    <ClInclude Include="Core\Objects\EngineObject.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\HeadActor.h" />
+    <ClInclude Include="Core\Physics\CollisionChannels.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Core\Rendering\RenderTypeDefenitions.h" />
+    <ClInclude Include="Core\Utilities\EngineFunctionLibrary.h" />
+    <ClInclude Include="Core\Objects\Entities\Actor.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\TransformGizmo.h" />
+    <ClInclude Include="Core\Utilities\Logger.h" />
+    <ClInclude Include="Core\Rendering\PostProcessing\BloomPostProcessing.h" />
+    <ClInclude Include="Core\Objects\Entities\Camera.h" />
+    <ClInclude Include="Core\Rendering\DefferedCompositor.h" />
+    <ClInclude Include="Core\Engine\Window.h" />
+    <ClInclude Include="Core\Rendering\Utilities\Downsampler.h" />
+    <ClInclude Include="Core\Engine\Engine.h" />
+    <ClInclude Include="Core\Engine\EngineStatics.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\TitleBar.h" />
+    <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
+    <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
+    <ClInclude Include="Core\Engine\Delegates\Event.h" />
+    <ClInclude Include="Editor\UserInterface\EngineWindowUserInterface.h" />
+    <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
+    <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
+    <ClInclude Include="Editor\UserInterface\FrameStatisticsWidget.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\EntityInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
+    <ClInclude Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.h" />
+    <ClInclude Include="Core\Reflection\Reflection.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionHelpers.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
+    <ClInclude Include="Core\DataStructures\HashMap.h" />
+    <ClInclude Include="Editor\MultiLineTestWidget.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
+    <ClInclude Include="Core\Objects\Entities\Entity.h" />
+    <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\RenderTarget.h" />
+    <ClInclude Include="Core\Rendering\GBuffer.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\Grid.h" />
+    <ClInclude Include="Core\Objects\Entities\Light.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\Material.h" />
+    <ClInclude Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.h" />
+    <ClInclude Include="Core\Rendering\PostProcessing\PostProcessingLayer.h" />
+    <ClInclude Include="Core\Rendering\RenderViewport.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\Scene.h" />
+    <ClInclude Include="Core\Rendering\Utilities\VariableGausianBlur.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\Shader.h" />
+    <ClInclude Include="Core\Utilities\Math\MathLibrary.h" />
+    <ClInclude Include="Core\Rendering\PostProcessing\SSAOPostProcessing.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\StaticMesh.h" />
+    <ClInclude Include="Core\Utilities\stbi.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\Texture2D.h" />
+    <ClInclude Include="Core\Rendering\PostProcessing\ToneMapper.h" />
+    <ClInclude Include="Core\Utilities\Math\Transform.h" />
+    <ClInclude Include="Core\Engine\World.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.h" />
+    <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
+    <ClInclude Include="Core\DataStructures\Stack.h" />
+    <ClInclude Include="Core\DataStructures\StringBuilder.h" />
+    <ClInclude Include="Test\ReflectionTest.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\Shaders\DefaultGeometryPassShader.frag" />
-    <None Include="Res\Shaders\DefaultGeometryPassShader.vert" />
-    <None Include="Res\Shaders\DefferedLighting.frag" />
-    <None Include="Res\Shaders\DefferedLighting.vert" />
-    <None Include="Res\Shaders\EditorSpriteShader.frag" />
-    <None Include="Res\Shaders\EditorSpriteShader.vert" />
-    <None Include="Res\Shaders\GridShader.frag" />
-    <None Include="Res\Shaders\GridShader.vert" />
-    <None Include="Res\Shaders\HeadShader.frag" />
-    <None Include="Res\Shaders\HeadShader.vert" />
-    <None Include="Res\Shaders\LightDebugShader.frag" />
-    <None Include="Res\Shaders\LightDebugShader.vert" />
-    <None Include="Res\Shaders\LineShader.frag" />
-    <None Include="Res\Shaders\LineShader.vert" />
-    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.frag" />
-    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.vert" />
-    <None Include="Res\Shaders\PostProcessing\Bloom.frag" />
-    <None Include="Res\Shaders\PostProcessing\Bloom.vert" />
-    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.frag" />
-    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.vert" />
-    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.frag" />
-    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.vert" />
-    <None Include="Res\Shaders\PostProcessing\DOF.frag" />
-    <None Include="Res\Shaders\PostProcessing\DOF.vert" />
-    <None Include="Res\Shaders\PostProcessing\Downsample.frag" />
-    <None Include="Res\Shaders\PostProcessing\Downsample.vert" />
-    <None Include="Res\Shaders\PostProcessing\GBlur5x1.frag" />
-    <None Include="Res\Shaders\PostProcessing\GBlur5x1.vert" />
-    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.frag" />
-    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.vert" />
-    <None Include="Res\Shaders\PostProcessing\Output.frag" />
-    <None Include="Res\Shaders\PostProcessing\Output.vert" />
-    <None Include="Res\Shaders\PostProcessing\SSAO.frag" />
-    <None Include="Res\Shaders\PostProcessing\SSAO.vert" />
-    <None Include="Res\Shaders\PostProcessing\ToneMapping.frag" />
-    <None Include="Res\Shaders\PostProcessing\ToneMapping.vert" />
-    <None Include="Res\Shaders\SelectionOutlineShader.frag" />
-    <None Include="Res\Shaders\SelectionOutlineShader.vert" />
-    <None Include="Res\Shaders\ShadowShader.frag" />
-    <None Include="Res\Shaders\ShadowShader.vert" />
-    <None Include="Res\Shaders\SkySphereShader.frag" />
-    <None Include="Res\Shaders\SkySphereShader.vert" />
-    <None Include="Res\Shaders\TestEyeShader.frag" />
-    <None Include="Res\Shaders\TestEyeShader.vert" />
-    <None Include="Res\Shaders\TorusShader.frag" />
-    <None Include="Res\Shaders\TorusShader.vert" />
-    <None Include="Res\Shaders\TransformGizmoShader.frag" />
-    <None Include="Res\Shaders\TransformGizmoShader.vert" />
-    <None Include="Res\Shaders\TranslucencyCompositor.frag" />
-    <None Include="Res\Shaders\TranslucencyCompositor.vert" />
-    <None Include="Res\Shaders\TranslucentShader.frag" />
-    <None Include="Res\Shaders\TranslucentShader.vert" />
-    <None Include="Res\Shaders\UIShader.frag" />
-    <None Include="Res\Shaders\UIShader.vert" />
+    <None Include="cpp.hint" />
+    <None Include="Res\Shaders\UI\UIImageShader.frag" />
+    <None Include="Res\Shaders\UI\UIImageShader.vert" />
+    <None Include="Res\Shaders\UI\UISolidShader.frag" />
+    <None Include="Res\Shaders\UI\UISolidShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SDEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Assets\MainIcon.ico" />
+    <Image Include="..\..\Assets\MainLogo.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

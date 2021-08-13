@@ -82,169 +82,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui_impl_opengl3.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui_impl_sdl.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui_widgets.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui_demo.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\Imgui\imgui_draw.cpp">
-      <Filter>External Libraries\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Widgets\DragFloat.cpp">
-      <Filter>Source Files\UserInterface\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Engine.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\DefferedCompositor.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineStatics.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\DOFPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\BloomPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Utilities\Downsampler.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\GBuffer.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Actor.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Camera.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Display.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\EngineUI.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\DetailsPanelProvider.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Grid.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Entity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\MotionBlurPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\PostProcessingLayer.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\RenderTarget.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\ImageUtils.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Light.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Material.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\ObjLoader.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\SSAOPostProcessing.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Utilities\VariableGausianBlur.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Transform.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UserInterfaceUtilities.cpp">
-      <Filter>Source Files\UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\WorkerThread.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\World.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\PostProcessing\ToneMapper.cpp">
-      <Filter>Source Files\Rendering\PostProcessing</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Texture2D.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\StaticMesh.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering\Shader.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\ThreadManager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Scene.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\TransformGizmo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\RenderViewport.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities\EngineFunctionLibrary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\AxisAlignedBoundingBox.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\IRenderable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Actors\HeadActor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Components\StaticMeshComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\Actors\StaticMeshActor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\EditorSpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Math\MathLibrary.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Core\DataStructures\Tree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\DataStructures\Array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\DataStructures\ByteBuffer.cpp">
@@ -277,176 +115,293 @@
     <ClCompile Include="Core\Assets\AssetMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\ContentBrowser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\PictorumWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\PictorumRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Input\InputSubsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LayoutWidget.cpp">
+    <ClCompile Include="Core\Pictorum\PictorumRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SolidWidget.cpp">
+    <ClCompile Include="Core\Pictorum\PictorumWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\SolidWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\StringUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\FileUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\TextWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Math\MathLibrary.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Physics\AxisAlignedBoundingBox.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\Material.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\Shader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\StaticMesh.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\Texture2D.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\EngineObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\RenderViewport.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\PostProcessing\BloomPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\PostProcessing\PostProcessingLayer.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\PostProcessing\SSAOPostProcessing.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\PostProcessing\ToneMapper.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\Utilities\Downsampler.cpp">
+      <Filter>Source Files\Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\Utilities\VariableGausianBlur.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\DefferedCompositor.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\GBuffer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\EngineStatics.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\Scene.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\World.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\RenderTarget.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Actors\Grid.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Actors\HeadActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Actors\StaticMeshActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Actors\TransformGizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Components\StaticMeshComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Actor.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Camera.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Light.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\Math\Transform.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\EngineFunctionLibrary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Utilities\stbi.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\ImageWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Window.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Windows\EditorWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Engine\Windows\MainEditorWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\OverlayWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBufferArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Rendering\OpenGL\GPUVertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\SeparatorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\CoreTypes\DistanceFieldFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Assets\Factories\FontAssetFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumScrollBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumHorizontalBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumVerticalBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\ConstraintBoxSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\HorizontalBoxSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\PictorumCanvasSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\PictorumGridSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Slots\VerticalBoxSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\IWidgetSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\PictorumShapeDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Objects\Entities\Components\BillboardComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Containers\PictorumConstraintBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Reflection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\PictorumDataTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\ReflectionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\EditableTextWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Widgets\CheckboxWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\Inspector\EntityInspectorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\EngineWindowUserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\FrameStatisticsWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\TitleBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\Inspector\BaseInspectorWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterface\CollapsingCategoryWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Handles\ReflectionHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Handles\PropertyHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Reflection\Utilities\ReflectionHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\MultiLineTestWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pictorum\Utilities\TextGeometryCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lib\Imgui\imgui.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imgui_impl_opengl3.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imgui_impl_sdl.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imconfig.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imgui_internal.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imstb_textedit.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imstb_rectpack.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\Imgui\imstb_truetype.h">
-      <Filter>External Libraries\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Widgets\DragFloat.h">
-      <Filter>Headers\UserInterface\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Engine.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\DefferedCompositor.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineStatics.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\DOFPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\BloomPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Utilities\Downsampler.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\GBuffer.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Actor.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Camera.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Display.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\EngineUI.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\DetailsPanelProvider.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Grid.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Entity.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\MotionBlurPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\PostProcessingLayer.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\RenderTarget.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\ImageUtils.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Light.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Material.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\ObjLoader.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\SSAOPostProcessing.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Utilities\VariableGausianBlur.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Transform.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UserInterface.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UserInterfaceUtilities.h">
-      <Filter>Headers\UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\World.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WorkerThread.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\PostProcessing\ToneMapper.h">
-      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Texture2D.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\StaticMesh.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Rendering\Shader.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ThreadManager.h">
-      <Filter>Headers\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Scene.h">
-      <Filter>Headers\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Logger.h" />
-    <ClInclude Include="Entities\TransformGizmo.h" />
-    <ClInclude Include="Engine\RenderViewport.h">
-      <Filter>Headers\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\EngineFunctionLibrary.h" />
-    <ClInclude Include="Physics\CollisionChannels.h" />
-    <ClInclude Include="Physics\AxisAlignedBoundingBox.h">
-      <Filter>Headers\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineObject.h" />
-    <ClInclude Include="Entities\Component.h" />
-    <ClInclude Include="Engine\IRenderable.h" />
-    <ClInclude Include="Entities\Actors\HeadActor.h" />
-    <ClInclude Include="Entities\Components\StaticMeshComponent.h" />
-    <ClInclude Include="Entities\Actors\StaticMeshActor.h" />
-    <ClInclude Include="Rendering\RenderTypeDefenitions.h" />
-    <ClInclude Include="Entities\EditorSpriteComponent.h" />
-    <ClInclude Include="Core\Math\MathLibrary.h">
-      <Filter>Headers\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Core\DataStructures\ByteBuffer.h" />
     <ClInclude Include="Core\DataStructures\DataStructures.h" />
     <ClInclude Include="Core\DataStructures\Tree.h" />
@@ -464,169 +419,195 @@
     <ClInclude Include="Core\Utilities\Serialization\DeserializationStream.h" />
     <ClInclude Include="Core\Utilities\Serialization\SerializationStream.h" />
     <ClInclude Include="Core\Assets\AssetMetadata.h" />
-    <ClInclude Include="UserInterface\ContentBrowser.h" />
-    <ClInclude Include="UserInterface\PictorumWidget.h" />
-    <ClInclude Include="UserInterface\PictorumRenderer.h" />
     <ClInclude Include="Core\Input\IUserInputReciever.h" />
     <ClInclude Include="Core\Input\InputUtilities.h" />
     <ClInclude Include="Core\Input\InputSubsystem.h" />
-    <ClInclude Include="LayoutWidget.h" />
-    <ClInclude Include="SolidWidget.h" />
+    <ClInclude Include="Core\Pictorum\PictorumRenderer.h" />
+    <ClInclude Include="Core\Pictorum\PictorumWidget.h" />
+    <ClInclude Include="Core\Pictorum\Pictorum.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SolidWidget.h" />
+    <ClInclude Include="Core\Utilities\StringUtilities.h" />
+    <ClInclude Include="Core\Utilities\FileUtilities.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\TextWidget.h" />
+    <ClInclude Include="Core\Utilities\Math\MathLibrary.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Engine\Engine.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Physics\AxisAlignedBoundingBox.h">
+      <Filter>Headers\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Physics\CollisionChannels.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\Material.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\CoreTypes\Shader.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\CoreTypes\StaticMesh.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\CoreTypes\Texture2D.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\EngineObject.h" />
+    <ClInclude Include="Core\Rendering\RenderViewport.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\PostProcessing\BloomPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\PostProcessing\MotionBlurPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\PostProcessing\PostProcessingLayer.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\PostProcessing\SSAOPostProcessing.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\PostProcessing\ToneMapper.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\Utilities\Downsampler.h">
+      <Filter>Headers\Rendering\PostProcessingLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\Utilities\VariableGausianBlur.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\DefferedCompositor.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\GBuffer.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Rendering\RenderTypeDefenitions.h" />
+    <ClInclude Include="Core\Engine\EngineStatics.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\CoreTypes\Scene.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Engine\World.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\CoreTypes\RenderTarget.h">
+      <Filter>Headers\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\Entities\Actors\Grid.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\Entities\Actors\HeadActor.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\StaticMeshActor.h" />
+    <ClInclude Include="Core\Objects\Entities\Actors\TransformGizmo.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\StaticMeshComponent.h" />
+    <ClInclude Include="Core\Objects\Entities\Actor.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\Entities\Camera.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\Entities\Component.h" />
+    <ClInclude Include="Core\Objects\Entities\Entity.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Objects\Entities\Light.h">
+      <Filter>Headers\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\Logger.h" />
+    <ClInclude Include="Core\Utilities\Math\Transform.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Utilities\EngineFunctionLibrary.h" />
+    <ClInclude Include="Core\Utilities\stbi.h">
+      <Filter>Headers\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Pictorum\Widgets\ImageWidget.h" />
+    <ClInclude Include="Core\Engine\Delegates\EventDelegate.h" />
+    <ClInclude Include="Core\Engine\Delegates\Event.h" />
+    <ClInclude Include="Core\Engine\Window.h">
+      <Filter>Headers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Engine\Windows\EditorWindow.h" />
+    <ClInclude Include="Core\Engine\Windows\MainEditorWindow.h" />
+    <ClInclude Include="Core\Engine\WindowDataTypes.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\OverlayWidget.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBufferArray.h" />
+    <ClInclude Include="Core\Rendering\OpenGL\GPUVertexBuffer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\SeparatorWidget.h" />
+    <ClInclude Include="Core\Objects\CoreTypes\DistanceFieldFont.h" />
+    <ClInclude Include="Core\Assets\Factories\FontAssetFactory.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumGrid.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumCanvas.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumScrollBox.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumHorizontalBox.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumVerticalBox.h" />
+    <ClInclude Include="Core\Pictorum\Slots\ConstraintBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\HorizontalBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumCanvasSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\PictorumGridSlot.h" />
+    <ClInclude Include="Core\Pictorum\Slots\VerticalBoxSlot.h" />
+    <ClInclude Include="Core\Pictorum\IWidgetSlot.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextRenderer.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\PictorumShapeDrawer.h" />
+    <ClInclude Include="Core\Pictorum\PictorumDataTypes.h" />
+    <ClInclude Include="Core\Objects\Entities\Components\BillboardComponent.h" />
+    <ClInclude Include="Core\Pictorum\Containers\PictorumConstraintBox.h" />
+    <ClInclude Include="Core\Reflection\Reflection.h" />
+    <ClInclude Include="Test\ReflectionTest.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\EditableTextWidget.h" />
+    <ClInclude Include="Core\Pictorum\Widgets\CheckboxWidget.h" />
+    <ClInclude Include="Editor\EditorModule.h" />
+    <ClInclude Include="Core\Objects\IEngineModule.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\EntityInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\MainEditorViewport\MainViewportUserInterface.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerEntry.h" />
+    <ClInclude Include="Editor\UserInterface\WorldOutliner\WorldOutlinerWidget.h" />
+    <ClInclude Include="Editor\UserInterface\EngineUIStyle.h" />
+    <ClInclude Include="Editor\UserInterface\EngineWindowUserInterface.h" />
+    <ClInclude Include="Editor\UserInterface\FrameStatisticsWidget.h" />
+    <ClInclude Include="Editor\UserInterface\TitleBar.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelBuilder.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\InspectorPanelManager.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\VectorInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\TypeInspectors\FloatInspectorWidget.h" />
+    <ClInclude Include="Editor\UserInterface\Inspector\BaseInspectorWidget.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\DefaultInspectorPanelGenerator.h" />
+    <ClInclude Include="Editor\UserInterface\CollapsingCategoryWidget.h" />
+    <ClInclude Include="Editor\Subsystems\EntityInspector\Generators\ActorInspectorPanelGenerator.h" />
+    <ClInclude Include="Core\DataStructures\HashMap.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\DecimalInputTextFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\ITextInputFormatter.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextFormatters\IntegerInputTextFormatter.h" />
+    <ClInclude Include="Core\Reflection\Handles\ReflectionHandle.h" />
+    <ClInclude Include="Core\Reflection\Handles\PropertyHandle.h" />
+    <ClInclude Include="Core\Reflection\Types\ReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Types\ComplexReflectableTypes.h" />
+    <ClInclude Include="Core\Reflection\Runtime\TypeResolver.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionHelpers.h" />
+    <ClInclude Include="Core\Reflection\Utilities\ReflectionDataTypes.h" />
+    <ClInclude Include="Core\Reflection\Utilities\TypeDescriptor.h" />
+    <ClInclude Include="Editor\MultiLineTestWidget.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextLine.h" />
+    <ClInclude Include="Core\Pictorum\Utilities\TextGeometryCache.h" />
+    <ClInclude Include="Core\DataStructures\Stack.h" />
+    <ClInclude Include="Core\DataStructures\StringBuilder.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\Shaders\DefferedLighting.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\DefferedLighting.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Output.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Output.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\ToneMapping.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\ToneMapping.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\DefaultGeometryPassShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\DefaultGeometryPassShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\LightDebugShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\LightDebugShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TranslucentShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TranslucentShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TestEyeShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TestEyeShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\GridShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\GridShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TranslucencyCompositor.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\TranslucencyCompositor.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\SkySphereShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\SkySphereShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TorusShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TorusShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\HeadShader.frag">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\HeadShader.vert">
-      <Filter>Shaders\IndividualShaders</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\SSAO.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\SSAO.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\DOF.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\DOF.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\ShadowShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\ShadowShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\LineShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\LineShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.frag">
-      <Filter>Shaders\PostProcessing\Bloom</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom\BlendBloom.vert">
-      <Filter>Shaders\PostProcessing\Bloom</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.frag">
-      <Filter>Shaders\PostProcessing\Bloom</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Bloom\ClipHDR.vert">
-      <Filter>Shaders\PostProcessing\Bloom</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Downsample.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\Downsample.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.frag">
-      <Filter>Shaders\PostProcessing\MotionBlur</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\MotionBlur\MotionBlur.vert">
-      <Filter>Shaders\PostProcessing\MotionBlur</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\BlendGausBlur.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\GBlur5x1.frag">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\PostProcessing\GBlur5x1.vert">
-      <Filter>Shaders\PostProcessing</Filter>
-    </None>
-    <None Include="Res\Shaders\SelectionOutlineShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\SelectionOutlineShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TransformGizmoShader.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\TransformGizmoShader.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\EditorSpriteShader.vert" />
-    <None Include="Res\Shaders\EditorSpriteShader.frag" />
-    <None Include="Res\Shaders\UIShader.frag" />
-    <None Include="Res\Shaders\UIShader.vert" />
+    <None Include="Res\Shaders\UI\UIImageShader.frag" />
+    <None Include="Res\Shaders\UI\UIImageShader.vert" />
+    <None Include="Res\Shaders\UI\UISolidShader.frag" />
+    <None Include="Res\Shaders\UI\UISolidShader.vert" />
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SDEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Assets\MainLogo.png" />
+    <Image Include="..\..\Assets\MainIcon.ico" />
   </ItemGroup>
 </Project>
