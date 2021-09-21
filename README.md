@@ -3,6 +3,9 @@ A fully deferred PBR rendering engine complete with stacked post processing and 
 
 ## Features
 - Module based approach to engine, separating editor out into separate module.
+- Physically Based Rendering (**PBR**) using the Roughness and Metalness maps in combination with Albedo.
+- Support for Poisson sampled variance shadow maps.
+- Support for point and directional lights (*Spot and Rectangular/Shape lights coming soon!*)
 - Dynamic multicast event system for triggering calls across the system (examples being listeneing for input).
 - Stacked post processing system including implementations for:
     - Bloom (Gaussian Kernel)
