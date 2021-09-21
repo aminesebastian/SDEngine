@@ -1,9 +1,6 @@
 # SDEngine
 A fully deferred PBR rendering engine complete with stacked post processing and Poisson sampled Variance Shadows. WIP.
 
-# Preprocessor
-The preprocessor C# application parses all C++ headers and strips/generates reflection metadata. This is then fed back into the C++ compilation and used when reflecting class members.
-
 ## Features
 - Module based approach to engine, separating editor out into separate module.
 - Dynamic multicast event system for triggering calls across the system (examples being listeneing for input).
@@ -25,3 +22,6 @@ The preprocessor C# application parses all C++ headers and strips/generates refl
      - Labels/Solids
      - Images/Textures
      - And anything else you can think of using the widgets system!
+
+# Preprocessor
+The preprocessor C# application parses all C++ headers and strips/generates reflection metadata. This is then fed back into the C++ compilation and used when reflecting class members.
