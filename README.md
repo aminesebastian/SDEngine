@@ -1,5 +1,5 @@
 # SDEngine
-A fully deferred PBR rendering engine complete with stacked post processing and Poisson sampled Variance Shadows. WIP.
+A fully deferred PBR rendering engine complete with stacked post processing and Poisson sampled Variance Shadows. WIP Raytracing coming soon!
 
 ## Features
 - Module based approach to engine, separating editor out into separate module.
